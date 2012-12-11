@@ -1,0 +1,10 @@
+0.03 
+	Try to fix Teletext crash.
+	teletext start screen -> teletext/tv 50%/50%
+	Fix bug in epg time left routine.
+	Cleaned SetOSDinfo routine
+	Channellist show shortepg info / (bug?) On sky UK shortepg info = ext epg info
+	split channels.js / settings.js & settings2.js (in the future settings2.js -> cfg.custom.xxx)
+	Added switch timers (atm 1 switch timer possible and for next program only)
+		switch timer reset from mainmenu.
+
