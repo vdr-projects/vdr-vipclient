@@ -74,6 +74,7 @@ EPG[2][4] = new Array();
 EPG[2][5] = new Array();
 EPG[2][6] = new Array();
 
+var osdtimeout = 0;
 var epgactive = 0;
 var preChan = 0;
 var cds = 1;

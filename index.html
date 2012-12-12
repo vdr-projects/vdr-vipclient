@@ -15,7 +15,6 @@
 //
 // Sound mapping for AC3
 // auto epg switch language for EIT Cache
-// show full epg if avaible (atm only now/next)
 // 
 // make VDR connection
 // 	get/set/create/edit timers
@@ -222,11 +221,11 @@ function onKeyDown(event) {
 		if(NowNext) {	
 			settimer();
 			switchtimer.style.opacity = 1;
-			timerId = setTimeout("switchtimer.style.opacity = 0; ", 2000);
+			setTimeout("switchtimer.style.opacity = 0; ", 2000);
 		} else {
 			switchtimer.innerHTML = "<font color=black size=4><center> Program is running use OK to switch </center></font>";
 			switchtimer.style.opacity = 1;
-			timerId = setTimeout("switchtimer.style.opacity = 0; ", 2000);
+			setTimeout("switchtimer.style.opacity = 0; ", 2000);
 		}
 	}
         break;
@@ -240,19 +239,19 @@ function onKeyDown(event) {
 				osdlang1.style.opacity = 1;
 				osdlang2.style.opacity = 0; 
 				osdlang3.style.opacity = 0;  
-				timerId = setTimeout("osdlang1.style.opacity = 0; ", 3000);
+				setTimeout("osdlang1.style.opacity = 0; ", 3000);
 			} else if(audio == 2) {
 				is.setObject("cfg.media.audio.languagepriority","ger,deu,eng",is.STORAGE_VOLATILE);
 				osdlang1.style.opacity = 0;
 				osdlang2.style.opacity = 1; 
 				osdlang3.style.opacity = 0;  
-				timerId = setTimeout("osdlang2.style.opacity = 0; ", 3000);
+				setTimeout("osdlang2.style.opacity = 0; ", 3000);
 			} else if(audio == 3) {
 				is.setObject("cfg.media.audio.languagepriority","eng",is.STORAGE_VOLATILE);
 				osdlang1.style.opacity = 0; 
 				osdlang2.style.opacity = 0;  
 				osdlang3.style.opacity = 1; 
-				timerId = setTimeout("osdlang3.style.opacity = 0; ", 3000);
+				setTimeout("osdlang3.style.opacity = 0; ", 3000);
 				audio = 0;
 			}
 		} else {
@@ -260,7 +259,7 @@ function onKeyDown(event) {
 		osdepginfonext.style.opacity = 0;
 		}
 	} else {
-		NowNext = 0;
+		NowNext = 1 - NowNext;
 		showChannelList();
 	}
 
@@ -268,13 +267,17 @@ function onKeyDown(event) {
    case "Yellow":
 	if(isFullscreen) {
 		if(!epgactive) {
+			GetSchedule(currChan);
+			schedule.style.opacity = 1;
+			setTimeout("schedule.style.opacity = 0;", 3000);
 		} else {
-		osdepginfo.style.opacity = 0;
-		osdepginfonext.style.opacity = 0.9;
+			osdepginfo.style.opacity = 0;
+			osdepginfonext.style.opacity = 0.9;
 		}
 	} else {
-		NowNext = 1;
-		showChannelList();
+		GetSchedule(currChan);
+		schedule.style.opacity = 1;
+		setTimeout("schedule.style.opacity = 0;", 3000);
 	}
 	break;
    case "Blue":
@@ -284,7 +287,7 @@ function onKeyDown(event) {
 		SetOsdInfo();
 		osdepginfo.style.opacity = 1 - NowNext;
 		osdepginfonext.style.opacity = NowNext;
-		timerId = setTimeout("epgactive = 0; osdepginfo.style.opacity = 0; osdepginfonext.style.opacity = 0;", 5000);
+		setTimeout("epgactive = 0; osdepginfo.style.opacity = 0; osdepginfonext.style.opacity = 0;", 5000);
 	}
 	break;
    case "BrowserBack":
@@ -302,7 +305,7 @@ function onKeyDown(event) {
 		osdepginfo.style.opacity = 0.9;
 		osdepginfonext.style.opacity = 0;
 		epgactive = 1;		
-		timerId = setTimeout("epgactive = 0; osdepginfo.style.opacity = 0; osdepginfonext.style.opacity = 0;", 5000);
+		setTimeout("epgactive = 0; osdepginfo.style.opacity = 0; osdepginfonext.style.opacity = 0;", 5000);
 		} else if(!isFullscreen){
 			isFullscreen = 1;
 			FullScreen();
@@ -348,7 +351,6 @@ function onKeyDown(event) {
 		isSetupMenu = 1;
 		mainmenu.style.opacity = 1;
 		InitMenu();
-//		timerId = setTimeout("mainmenu.style.opacity = 0;", 5000);
 		}
 		break;
    case "Scroll":
@@ -451,7 +453,7 @@ function onKeyDown(event) {
 	case "MediaPlayPause":
 		break;
 	case "MediaStop":
-
+	break;
 	case "MediaRecord":
 	break;
 
@@ -520,22 +522,30 @@ function SetLed(NumLed,color,blinkfreq){
 
 
 function showOSD() {
+	if (osdtimeout) {
+		clearTimeout(osdtimeout);
+	}
 	SetOsdInfo();
 	opacity = 1;
-    osd.style.opacity = opacity;
+	OSD(opacity);
+	setTimeout("fadeOut()", 3000);
+}
+
+function OSD(opacity) {
+    osdmain.style.opacity = opacity;
     osdnr.style.opacity = opacity;
     osdtime.style.opacity = opacity;
     osdname.style.opacity = opacity;
     osdepg.style.opacity = opacity;
-      timerId = setTimeout("fadeOut()", 3000);
-	
+    osdca.style.opacity = opacity;
 }
+
 
 function SetOsdInfo() {
     OSDchannr(currChan);
     date_time();
     osdtime.innerHTML = "<font color=white size=2>" + result +"</font>";
-    osdname.innerHTML = "<font color=black size=5>" + Left(channelsnames[currChan],25) + "</font>";
+    osdname.innerHTML = "<font color=black size=5>" + Left(channelsnames[currChan],30) + "</font>";
     GetEPG(currChan);
     osdepg.innerHTML = "<font color=white size=4><p>" + EPGNow + "</p>\n<p>" + EPGNext + "<\p></font>";
     osdepginfo.innerHTML =  "<center><font color=white size=4><p>" + EPGNow + "</p>\n<p>" + EPGShortnow + "</p>\n<p>" + Left(EPGExtnow,750) + "<\p></font></center>";
@@ -573,7 +583,7 @@ function settimer() {
 		switchtimerID = setTimeout(TimerActions, StartTime);
 		switchtimer.innerHTML = "<font color=black size=4><p>  Name      : " + EPG[NowNext][1][currChan] + "</p><p>  channel   : " + channelsnames[currChan] +  "</p><p>  Starttime : " + th + ":" + tm + "</p></font>";
 		osdtimer.innerHTML = "<font color=black size=3><p>" + th + ":" + tm + "</p></font>";
-		SetLed(0,2,0);
+		SetLed(0,2,1);
 	} else {
 	//
 	// No Switch timer so send timer info to Server
@@ -605,29 +615,21 @@ function Right(str, n){
 
 function fadeIn() {
     opacity += 0.2;
-    osd.style.opacity = opacity;
-    osdnr.style.opacity = opacity;
-//    osdtime.style.opacity = opacity;
-//    osdname.style.opacity = opacity;
-//    osdepg.style.opacity = opacity;
-    if (osd.style.opacity >= 1) {
-	timerId = setTimeout("fadeOut()", 200);
+	    OSD(opcity);
+    if (opacity >= 1) {
+	setTimeout("fadeOut()", 200);
 	return;
     }
-    timerId = setTimeout("fadeIn()", 100);
+    setTimeout("fadeIn()", 100);
 }
 
 function fadeOut() {
     opacity -= 0.2;
-    osd.style.opacity = opacity;
-    osdnr.style.opacity = opacity;
-//    osdtime.style.opacity = opacity;
-//    osdname.style.opacity = opacity;
-//    osdepg.style.opacity = opacity;
-    if (osd.style.opacity <= 0) {
+	OSD(opacity);
+    if (opacity <= 0) {
 	return;
     }
-    timerId = setTimeout("fadeOut()", 100);
+    setTimeout("fadeOut()", 100);
 }
 
 function RestartPortal(){
@@ -695,19 +697,16 @@ function GetEPG(epgchan)
 		is.setObject("cfg.locale.ui","dut",is.STORAGE_VOLATILE);
 		cds = 1;
 	}
-	if (SI[0]=="T" ) {
-	is.setObject("cfg.locale.ui","ned",is.STORAGE_VOLATILE);
-	}
-	if(epgchan > 419 && epgchan < 550)
-	{
-	is.setObject("cfg.locale.ui","Deu",is.STORAGE_VOLATILE);
-	cds = 0;
-	}
-
 
 	 eitService = toi.statics.ToiDvbEitCacheServiceItem.create(SI[1],SI[2],SI[3]);
 	 eitCache.addService(eitService);
 	 event = eitCache.getPresentEvent(eitService);
+	if(event.freeCaMode){
+		osdca.innerHTML = "<img src='key.png'>";
+	} else {
+		osdca.innerHTML = "";
+	}
+
 	if (event.name)
 	{
 	 events = eitCache.getEvents(eitService, 1000000000, 2000000000);
@@ -724,6 +723,7 @@ function GetEPG(epgchan)
 	EPG[0][3][epgchan] = (event.duration/60);
 	EPG[0][4][epgchan] = "";
 	EPG[0][5][epgchan] = "";
+
 	if(EPGShortnow) {
 	EPG[0][4][epgchan] = EPGShortnow;
 	}
@@ -766,7 +766,7 @@ function GetEPG(epgchan)
 	EPG[1][4][epgchan] = "";
 	EPG[1][5][epgchan] = "";
 
-	if(EPGExtnext) {
+	if(EPGShortnext) {
 	EPG[1][4][epgchan] = EPGShortnext;
 	}
 	if(EPGExtnext) {
@@ -803,7 +803,74 @@ function GetEPG(epgchan)
   }
 } 
 
+
+
+function GetSchedule(schchan){
+  try {
+ 	SI=channels[schchan].split("-");
+	is = toi.informationService;
+	is.setObject("cfg.locale.ui","ger",is.STORAGE_VOLATILE);
+	if(SI[0]=="S28.2E") {
+		is.setObject("cfg.locale.ui","eng",is.STORAGE_VOLATILE);
+	} 
+	if((SI[0]=="S23.5E" && SI[1]=="3") || SI[2]=="1026" || SI[2]=="1097" || SI[2]=="1105" || SI[2]=="1119") {
+		is.setObject("cfg.locale.ui","dut",is.STORAGE_VOLATILE);
+		cds = 1;
+	}
+
+	 eitService = toi.statics.ToiDvbEitCacheServiceItem.create(SI[1],SI[2],SI[3]);
+	 eitCache.addService(eitService);
+	 event = eitCache.getPresentEvent(eitService);
+	 events = eitCache.getEvents(eitService, 1000000000, 2000000000);
+
+	if (event.name)	{
+	    if (events.more) {
+	      var t = eitCache.getEvents(eitService, 1000000000, 2000000000);
+	      events.infoSequence.concat(t.infoSequence);
+	      events.more = t.more;
+	    }
+
+	    var txt = "";
+	    var i = 0;
+	    for (i = 0; i < events.infoSequence.length && i < 12; i++) {
+
+		while ((i > 0) && (events.infoSequence[i].eventId == events.infoSequence[(i-1)].eventId)) {
+			i = i +1;
+		}
+
+		tijd = events.infoSequence[i].time;
+		date = new Date(tijd*1000); 
+		tijd = date.toUTCString();
+		tijd = new Date(tijd);
+		var tm = tijd.getMinutes();
+		var th = tijd.getHours();
+		if(th<10)
+	        	{
+	                th = "0"+th;
+	        	}
+	        if(tm<10)
+	        	{
+	                tm = "0"+tm;
+	        	}
+
+	      txt = txt + th + ":" + tm + "     (" + events.infoSequence[i].duration/60 + ")  " + events.infoSequence[i].name + "</p>";
+	    }
+	   txt = txt + "</table>";
+	   schedule.innerHTML = "<p>" + channelsnames[schchan] + "</p> " + txt;
+	} else {
+		schedule.innerHTML = "<p>" + channelsnames[schchan] + "</p> ";
+	}
+
+  } catch(e) {
+    alert("Get EPG problem: " + e);
+		schedule.innerHTML = "<p>" + channelsnames[schchan] + "</p><p> NO EPG </p>";
+  }
+
+}
+
 // End of EPG section
+
+
 
 // Channelslist / EPG Guide
 //
@@ -818,27 +885,26 @@ function showChannelList() {
 	var htmlstring = "<table border='0'><tr>";
 	listChan = currChan-5;
 	for(var i=currChan-5; i<=currChan+5; i++) {
-	if (listChan<1) {
+		if (listChan<1) {
 			listChan=nrChannels-2;
 			}
-	if (listChan>nrChannels-2) {
+		if (listChan>nrChannels-2) {
 			listChan=0;
 			}
-	do
-		{
-			listChan = listChan + 1;
+			do
+			{
+				listChan = listChan + 1;
+			}
+			while (!channels[listChan] && (listChan<nrChannels));
+		GetEPG(listChan);
+		if ( listChan == currChan) { 
+			liststyle = " style='background:#fc5;'";
+		}  else {
+			liststyle = "";
 		}
-	while (!channels[listChan] && (listChan<nrChannels));
-
-	GetEPG(listChan);
-	if ( listChan == currChan) { 
-		liststyle = " style='background:#fc5;'";
-	}  else {
-		liststyle = "";
-	}
-	EpgInfo[0] = EPGNow;
-	EpgInfo[1] = EPGNext;
-	htmlstring = htmlstring + "<td" + liststyle + ">" + listChan + "</td><td" +liststyle + ">" + Left(channelsnames[listChan],15) + "</td><td" +liststyle + ">"  + Left(EpgInfo[NowNext],64) + "</td></tr>";
+		EpgInfo[0] = EPGNow;
+		EpgInfo[1] = EPGNext;
+		htmlstring = htmlstring + "<td" + liststyle + ">" + listChan + "</td><td" +liststyle + ">" + Left(channelsnames[listChan],15) + "</td><td" +liststyle + ">"  + Left(EpgInfo[NowNext],64) + "</td></tr>";
 	}
 	htmlstring = htmlstring + "</table>";
 	channelList.innerHTML = htmlstring;
@@ -1063,9 +1129,9 @@ function InitMenu() {
 
 	<div id="channelList" style="background:#bbb; width:100%; position:absolute; left:50px; top:25px;"></div>
 	<div id="colorkeys" style="width:100%; position:absolute; left:75px; top:485px;">
-		<font color=red size=3> Switchtimer </font>
-		<font color=green size=3> NOW </font>
-		<font color=yellow size=3> NEXT </font>
+		<font color=red size=3> Timer </font>
+		<font color=green size=3> Now / Next</font>
+		<font color=yellow size=3> Schedule </font>
 		<font color=blue size=3> INFO </font>
 	</div>
 	<div id="chanlistepg" style="width:300; position:absolute; left:50px; top:290px;"> 	</div>
@@ -1075,26 +1141,26 @@ function InitMenu() {
 	<videoplane id='videoplane' style='position:absolute; left:0px; top:0px; height: 100%; width: 100%; z-index:500;'>
 	</videoplane>
 
-	<div id="osd" style ="opacity:0;">
 	<div id="osdmain" style="background:#3366ff;width:550px; position:absolute; left:75px; top:350px; bottom:50px;z-index:505;"></div>
 	<div id="osdtime" style="width:300px; position:absolute; left:375px; top:360px;z-index:505;"></div>
-	<div id="osdname" style="width:250px;height:25px; position:absolute; left:85px; top:375px;z-index:505;"></div>
+	<div id="osdname" style="width:500px;height:25px; position:absolute; left:85px; top:375px;z-index:505;"></div>
 	<div id="osdepg" style="width:450px; position:absolute; left:150px; top:400px;z-index:505;"></div>
 	<div id="osdtimer" style="width:50px; position:absolute; left:85px; top:400px;z-index:505;"></div>
-	</div>
+	<div id="osdca" style="width:25px; position:absolute; left:575px; top:385px;z-index:505;"></div>
 
 	<div id="osdnr" style="background:#CC0000;width:75px;height:50px; position:absolute; left:85px; top:320px;z-index:505;opacity:0;"></div>
 
 	<div id="osdepginfo" style="background:#3366ff;width:550px; position:absolute; left:100px; top:100px;z-index:510;opacity:0;"></div>
 	<div id="osdepginfonext" style="background:#3366ff;width:550px; position:absolute; left:100px; top:100px;z-index:510;opacity:0;"></div>
+	<div id="schedule" style="background:#3366ff;width:550px; position:absolute; left:100px; top:100px; z-index:510;opacity:0;"></div>
 
 	<div id="osdmute" style="width:50px; position:absolute; left:550px; top:50px;z-index:515;opacity:0;"><img src="mute.png"></div>
 	<div id="osdlang1" style="width:50px; position:absolute; left:550px; top:50px;z-index:515;opacity:0;"><img src="unmute.png"><font color=white size=3>Nederlands</font></div>
 	<div id="osdlang2" style="width:50px; position:absolute; left:550px; top:50px;z-index:515;opacity:0;"><img src="unmute.png"><font color=white size=3>Deutsch</font></div>
 	<div id="osdlang3" style="width:50px; position:absolute; left:550px; top:50px;z-index:515;opacity:0;"><img src="unmute.png"><font color=white size=3>English</font></div>
 
-	<div id="mainmenu" style="background:#3366ff;width:550px; position:absolute; left:75px; top:50px; bottom:50px;z-index:520;opacity:0;">
-	</div>
+	<div id="mainmenu" style="background:#3366ff;width:550px; position:absolute; left:75px; top:50px; bottom:50px;z-index:520;opacity:0;"></div>
+
 
 </body>
 </html>
