@@ -787,7 +787,7 @@ function GetEPG(epgchan)
 	 // CDS has short info, other providers, a little longer.
 	 EPGNext = th + ":" + tm + " (" + (event.duration/60).toFixed(0) + ")" + "          " + event.name + " " + EPGShortnext;
 	} else {
-	 EPGNext = th + ":" + tm + " (" + (event.duration/60) + ")" + "          " + event.name + " ";
+	 EPGNext = th + ":" + tm + " (" + (event.duration/60).toFixed(0) + ")" + "          " + event.name + " ";
 	}
 	if (!event.time) 
 	{
