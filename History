@@ -11,6 +11,6 @@
 	Added CA Mode to OSD key.png
 	Full schedule try.
 	In guide mode Red - switch timer next program, Green now/next, Yellow Schedule, Blue program info.
-
-
+	Speed up OSD. (In fullscreen don't need to update channellist.)
+	AudioOut can now be selected in settings.js
 

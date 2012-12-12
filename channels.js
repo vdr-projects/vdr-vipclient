@@ -1195,3 +1195,10 @@ channels[954] = "S13.0E-64511-800-1465";
 channelsnames[955] = "RTG TV (S)";
 channels[955] = "S13.0E-318-15600-10735";
 
+channelsnames[961] = "NED1 HD (S)"
+channels[961] = "S23.5E-3-3208-7035"
+channelsnames[962] = "NED2 HD (S)"
+channels[962] = "S23.5E-3-3202-6080"
+channelsnames[963] = "NED3 HD (S)"
+channels[963] = "S23.5E-3-3225-21040"
+

@@ -9,6 +9,14 @@ var channelsepglang = new Array();
 var isFullscreen = 1; // start TV(1) or guide(0)
 var StartVolume = 50;
 var Volume = StartVolume;
+var AudioOut = 3;
+// AUDIO_CONNECTION_TYPE_ANALOG = 0
+// AUDIO_CONNECTION_TYPE_SPDIF = 1
+// AUDIO_CONNECTION_TYPE_HDMI = 2
+// AUDIO_CONNECTION_TYPE_DECODER = 3
+// AUDIO_CONNECTION_TYPE_BUFFER = 4
+// AUDIO_CONNECTION_TYPE_I2S = 5
+
 var currChan = 10; // default channel
 var epgchan = currChan;
 var prevChan = currChan;

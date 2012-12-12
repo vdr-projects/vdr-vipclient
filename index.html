@@ -33,15 +33,8 @@ window.onkeydown = onKeyDown;
 function onLoad() {
  createPlayer();
  embedTeletextPlugin();
-//   AUDIO_CONNECTION_TYPE_ANALOG = 0;
-//   AUDIO_CONNECTION_TYPE_SPDIF = 1;
-//   AUDIO_CONNECTION_TYPE_HDMI = 2;
-//   AUDIO_CONNECTION_TYPE_DECODER = 3;
-//   AUDIO_CONNECTION_TYPE_BUFFER = 4;
-//   AUDIO_CONNECTION_TYPE_I2S = 5;
-	toi.audioOutputService.setVolume(0, 100);
-	toi.audioOutputService.setVolume(3, StartVolume);
-	toi.audioOutputService.setMuteState(3, false);
+	toi.audioOutputService.setVolume(AudioOut, StartVolume);
+	toi.audioOutputService.setMuteState(AudioOut, false);
 	showDisplay((currChan.toString()), false, 100, 0 );
 	play(channels[currChan]);
 	eitCache = toi.dvbEitService.createInstance();
@@ -97,7 +90,6 @@ function play(uri) {
 	showOSD();
 	}
 	showDisplay((currChan.toString()), false, 100, 0 );
-	showChannelList();
   } catch (e) {
     alert("Failed opening stream: " + e);
     return;
@@ -255,8 +247,8 @@ function onKeyDown(event) {
 				audio = 0;
 			}
 		} else {
-		osdepginfo.style.opacity = 0.9;
-		osdepginfonext.style.opacity = 0;
+		osdepginfo.style.opacity = 1 - osdepginfo.style.opacity ;
+		osdepginfonext.style.opacity = 1 - osdepginfo.style.opacity;
 		}
 	} else {
 		NowNext = 1 - NowNext;
@@ -270,9 +262,6 @@ function onKeyDown(event) {
 			GetSchedule(currChan);
 			schedule.style.opacity = 1;
 			setTimeout("schedule.style.opacity = 0;", 3000);
-		} else {
-			osdepginfo.style.opacity = 0;
-			osdepginfonext.style.opacity = 0.9;
 		}
 	} else {
 		GetSchedule(currChan);
@@ -302,7 +291,7 @@ function onKeyDown(event) {
 		if(isFullscreen) {
 		//SHOW epg info
 		SetOsdInfo();
-		osdepginfo.style.opacity = 0.9;
+		osdepginfo.style.opacity = 1;
 		osdepginfonext.style.opacity = 0;
 		epgactive = 1;		
 		setTimeout("epgactive = 0; osdepginfo.style.opacity = 0; osdepginfonext.style.opacity = 0;", 5000);
@@ -426,8 +415,8 @@ function onKeyDown(event) {
 		}
 	break;
     case "VolumeMute":
-	state = toi.audioOutputService.getMuteState(3);
-	toi.audioOutputService.setMuteState(3, !state);
+	state = toi.audioOutputService.getMuteState(AudioOut);
+	toi.audioOutputService.setMuteState(AudioOut, !state);
 	mute = 1 - state;
         osdmute.style.opacity = mute; 
 	break;
@@ -436,14 +425,14 @@ function onKeyDown(event) {
         if (Volume > 100) {
             Volume = 100;
         }
-        toi.audioOutputService.setVolume(3, Volume);
+        toi.audioOutputService.setVolume(AudioOut, Volume);
 	break;
     case "VolumeDown":
 	Volume = Volume - 10;
         if (Volume < 0) {
             Volume = 0;
         }
-        toi.audioOutputService.setVolume(3, Volume);
+        toi.audioOutputService.setVolume(AudioOut, Volume);
 	break;
 
 	case "MediaRewind":
@@ -538,24 +527,30 @@ function OSD(opacity) {
     osdname.style.opacity = opacity;
     osdepg.style.opacity = opacity;
     osdca.style.opacity = opacity;
+    osdtimer.style.opacity = opacity;
 }
 
 
 function SetOsdInfo() {
     OSDchannr(currChan);
     date_time();
-    osdtime.innerHTML = "<font color=white size=2>" + result +"</font>";
-    osdname.innerHTML = "<font color=black size=5>" + Left(channelsnames[currChan],30) + "</font>";
     GetEPG(currChan);
-    osdepg.innerHTML = "<font color=white size=4><p>" + EPGNow + "</p>\n<p>" + EPGNext + "<\p></font>";
-    osdepginfo.innerHTML =  "<center><font color=white size=4><p>" + EPGNow + "</p>\n<p>" + EPGShortnow + "</p>\n<p>" + Left(EPGExtnow,750) + "<\p></font></center>";
-    osdepginfonext.innerHTML =  "<center><font color=white size=4><p>" + EPGNext + "</p>\n<p>" + EPGShortnext + "</p>\n<p>" + Left(EPGExtnext,750) + "<\p></font></center>";
+    OSDhtml();
     return;
 }
 
 function OSDchannr(channr) {
     osdnr.innerHTML = "<center><font color=black size=6>" + channr + "</font></center>";
 }
+
+function OSDhtml(){
+    osdtime.innerHTML = "<font color=white size=2>" + result +"</font>";
+    osdname.innerHTML = "<font color=black size=5>" + Left(channelsnames[currChan],30) + "</font>";
+    osdepg.innerHTML = "<font color=white size=4><p>" + EPGNow + "</p>\n<p>" + EPGNext + "</p></font>";
+    osdepginfo.innerHTML =  "<center><font color=white size=4><p>" + EPGNow + "</p>\n<p>" + EPGShortnow + "</p>\n<p>" + Left(EPGExtnow,750) + "</p></font></center>";
+    osdepginfonext.innerHTML =  "<center><font color=white size=4><p>" + EPGNext + "</p>\n<p>" + EPGShortnext + "</p>\n<p>" + Left(EPGExtnext,750) + "</p></font></center>";
+}
+
 
 
 function settimer() {
@@ -908,7 +903,7 @@ function showChannelList() {
 	}
 	htmlstring = htmlstring + "</table>";
 	channelList.innerHTML = htmlstring;
-        chanlistepg.innerHTML = "<center><font color=black size=4><p>" + EPG[NowNext][1][currChan] + "</p></font><font color=black size=3><p>" + Left(EPG[NowNext][4][currChan],250) + "<\p></font></center>" ;
+        chanlistepg.innerHTML = "<center><font color=black size=4><p>" + EPG[NowNext][1][currChan] + "</p></font><font color=black size=3><p>" + Left(EPG[NowNext][4][currChan],250) + "</p></font></center>" ;
 
 }
 
@@ -932,9 +927,9 @@ function embedTeletextPlugin() {
 
 function setVisible(isVisible) {
   if (isVisible) {
-    document.body.appendChild(teletext);
     videoplane.style.width = "50%";
     videoplane.style.left = "50%";
+    document.body.appendChild(teletext);
     teletext.style.width = "50%";
     teletext.style.visibility = "visible";
     channelList.style.visibility = "hidden";
