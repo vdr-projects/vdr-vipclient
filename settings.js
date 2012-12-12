@@ -82,3 +82,4 @@ var timerChan = 10;
 var TimerActions = "";
 var switchtimerID = 0;
 var SwitchTimer = 1; // No other options yet
+

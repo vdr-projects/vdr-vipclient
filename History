@@ -8,7 +8,7 @@
 	Added switch timers (atm 1 switch timer possible and for next program only)
 		switch timer reset from mainmenu.
 	EPG language is now based on Satellite/ NID/ TID
-	Added CA Mode to OSD
+	Added CA Mode to OSD key.png
 	Full schedule try.
 	In guide mode Red - switch timer next program, Green now/next, Yellow Schedule, Blue program info.
 
