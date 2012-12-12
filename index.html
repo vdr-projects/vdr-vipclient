@@ -744,9 +744,9 @@ function GetEPG(epgchan)
         }
 	if(cds){
 	 // CDS has short info, other providers, a little longer.
-	 EPGNow =  th + ":" + tm + " (" + EPGminutes + " / " + ((event.duration/60)-EPGminutes) + ")" + "          " + event.name + " " + EPGShortnow;
+	 EPGNow =  th + ":" + tm + " (" + EPGminutes + " / " + ((event.duration/60)-EPGminutes).toFixed(0) + ")" + "          " + event.name + " " + EPGShortnow;
 	} else {
-	 EPGNow =  th + ":" + tm + " (" + EPGminutes + " / " + ((event.duration/60)-EPGminutes) + ")" + "          " + event.name + " ";
+	 EPGNow =  th + ":" + tm + " (" + EPGminutes + " / " + ((event.duration/60)-EPGminutes).toFixed(0) + ")" + "          " + event.name + " ";
 	}
 	if (!event.time) 
 	{
@@ -785,7 +785,7 @@ function GetEPG(epgchan)
 	
 	if(cds){
 	 // CDS has short info, other providers, a little longer.
-	 EPGNext = th + ":" + tm + " (" + (event.duration/60) + ")" + "          " + event.name + " " + EPGShortnext;
+	 EPGNext = th + ":" + tm + " (" + (event.duration/60).toFixed(0) + ")" + "          " + event.name + " " + EPGShortnext;
 	} else {
 	 EPGNext = th + ":" + tm + " (" + (event.duration/60) + ")" + "          " + event.name + " ";
 	}
