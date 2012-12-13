@@ -25,7 +25,7 @@
 //	 change IP server
 //
 
-var Version = "0.03	2012/12/xx"
+var Version = "0.03	2012/12/13"
 var nrChannels = channels.length;
 
 window.onkeydown = onKeyDown;
@@ -219,10 +219,10 @@ function onKeyDown(event) {
 			settimer();
 			switchtimer.style.opacity = 1;
 			setTimeout("switchtimer.style.opacity = 0; ", 2000);
-		} else {
-			switchtimer.innerHTML = "<font color=black size=4><center> Program is running use OK to switch </center></font>";
-			switchtimer.style.opacity = 1;
-			setTimeout("switchtimer.style.opacity = 0; ", 2000);
+//		} else {
+//			switchtimer.innerHTML = "<font color=black size=4><center> Program is running use OK to switch </center></font>";
+//			switchtimer.style.opacity = 1;
+//			setTimeout("switchtimer.style.opacity = 0; ", 2000);
 		}
 	}
         break;
@@ -256,6 +256,7 @@ function onKeyDown(event) {
 		osdepginfonext.style.opacity = 1 - osdepginfo.style.opacity;
 		}
 	} else {
+		colorkeys.innerHTML = "<font color=red size=3>" +  NN[3 + NowNext] + "</font><font color=green size=3>" + NN[NowNext] + "</font><font color=yellow size=3> Schedule </font><font color=blue size=3> INFO </font>";
 		NowNext = 1 - NowNext;
 		showChannelList();
 	}
@@ -264,15 +265,17 @@ function onKeyDown(event) {
    case "Yellow":
 	if(isFullscreen) {
 		if(!epgactive) {
-//			GetSchedule(currChan,15);
-//			schedule.style.opacity = 1;
-//			schedule.style.height = "75%";
-//			setTimeout("schedule.style.opacity = 0;schedule.style.height = '45%';", 3000);
+			GetSchedule(currChan,15);
+			schedule.style.opacity = 1;
+			schedule.style.height = "75%";
+			setTimeout("schedule.style.opacity = 0;schedule.style.height = '45%';", 3000);
 		}
 	} else {
 		GetSchedule(currChan,10);
 		schedule.style.opacity = 1 - schedule.style.opacity;
 		channelList.style.opacity = 1 - schedule.style.opacity;
+		schedkeys.style.opacity = schedule.style.opacity;
+		colorkeys.style.opacity = 1 - schedule.style.opacity;
 		isSchedule = schedule.style.opacity;
 	}
 	break;
@@ -551,6 +554,13 @@ function onCacheUpdated() {
 	GetEPG(currChan);
 	SetOsdInfo();
 	} 
+//	if (!isFullscreen) {
+//		showChannelList();
+//	}
+	if (isSchedule) {
+	GetSchedule(currChan,10);
+	}
+
 }
 
 function OSDchannr(channr) {
@@ -868,14 +878,14 @@ function GetSchedule(schchan,tablelength){
 	      txt = txt + "<td>" + th + ":" + tm + "     (" + events.infoSequence[i].duration/60 + ")  " + events.infoSequence[i].name + "</td></tr>";
 	    }
 	   txt = txt + "</table>";
-	   schedule.innerHTML = channelsnames[schchan] + txt;
+	   scheduletxt.innerHTML = channelsnames[schchan] + txt;
 	} else {
-		schedule.innerHTML = "<p>" + channelsnames[schchan] + "</p> ";
+		scheduletxt.innerHTML = "<p>" + channelsnames[schchan] + "</p> ";
 	}
 
   } catch(e) {
     alert("Get EPG problem: " + e);
-		schedule.innerHTML = "<p>" + channelsnames[schchan] + "</p><p> NO EPG </p>";
+		scheduletxt.innerHTML = "<p>" + channelsnames[schchan] + "</p><p> NO EPG </p>";
   }
 
 }
@@ -1138,14 +1148,19 @@ function InitMenu() {
     <embed type="application/x-motorola-toi" hidden="true">
 
 	<div id="channelList" style="background:#bbb; width:100%; height:45%; position:absolute; left:50px; top:25px;"></div>
-	<div id="schedule" style="background:#bbb; width:100%; height:45%; position:absolute; left:50px; top:25px;"></div>
+	<div id="schedule" style="background:#bbb; width:100%; height:45%; position:absolute; left:50px; top:25px;opacity:0;">
+	<div id="scheduletxt" style="background:#bbb; width:75%; height:45%; position:absolute; left:150px; top:0px;"></div></div>
 
 	<div id="colorkeys" style="width:100%; position:absolute; left:75px; top:485px;">
-		<font color=red size=3> Timer </font>
-		<font color=green size=3> Now / Next</font>
+		<font color=red size=3> ----- </font>
+		<font color=green size=3> Next </font>
 		<font color=yellow size=3> Schedule </font>
 		<font color=blue size=3> INFO </font>
 	</div>
+
+
+	<div id="schedkeys" style="width:100%; position:absolute; left:75px; top:485px;opacity:0;"><font color=red size=3>-----</font><font color=green size=3>----</font><font color=yellow size=3> GUIDE </font><font color=blue size=3> ---- </font></div>
+
 	<div id="chanlistepg" style="width:300; position:absolute; left:50px; top:290px;"> 	</div>
 	<div id="switchtimer" style="background:#3366ff;width:300; position:absolute; left:150px; top:150px;z-index:10;opacity:0;"></div>
 

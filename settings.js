@@ -58,6 +58,12 @@ var listChan = 0;
 var NowNext = 0;
 var EpgInfo = new Array();
 var EpgExtInfo = new Array();
+var NN = new Array();
+NN[0] = "Now";
+NN[1] = "Next";
+NN[2] = "Schedule";
+NN[3] = "TIMER";
+NN[4] = "-----";
 
 
 //

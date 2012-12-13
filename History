@@ -1,4 +1,4 @@
-0.03 
+0.03	Release date 2012/12/13
 	Try to fix Teletext crash.
 	teletext start screen -> teletext/tv 50%/50%
 	Fix bug in epg time left routine.
@@ -9,7 +9,7 @@
 		switch timer reset from mainmenu.
 	EPG language is now based on Satellite/ NID/ TID
 	Added CA Mode to OSD key.png
-	Full schedule try.
+	Full schedule.
 	In guide mode Red - switch timer next program, Green now/next, Yellow Schedule, Blue program info.
 	Speed up OSD. (In fullscreen don't need to update channellist.)
 	AudioOut can now be selected in settings.js
