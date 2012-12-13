@@ -40,6 +40,7 @@ function onLoad() {
 	eitCache = toi.dvbEitService.createInstance();
 	eitCache.setFilterMode(eitCache.FILTER_MODE_PF_AND_SCHEDULE);
 //	eitCache.setFilterMode(eitCache.FILTER_MODE_PF_ONLY);
+	eitCache.addEventListener(eitCache.ON_CACHE_UPDATED, onCacheUpdated);
 	showOSD();
 }
 
@@ -102,6 +103,9 @@ function preview(urip) {
 	play(urip);
 	}
 	showChannelList();
+	if (isSchedule) {
+	GetSchedule(currChan,10);
+	}
 }
 
 
@@ -260,14 +264,16 @@ function onKeyDown(event) {
    case "Yellow":
 	if(isFullscreen) {
 		if(!epgactive) {
-			GetSchedule(currChan);
-			schedule.style.opacity = 1;
-			setTimeout("schedule.style.opacity = 0;", 3000);
+//			GetSchedule(currChan,15);
+//			schedule.style.opacity = 1;
+//			schedule.style.height = "75%";
+//			setTimeout("schedule.style.opacity = 0;schedule.style.height = '45%';", 3000);
 		}
 	} else {
-		GetSchedule(currChan);
-		schedule.style.opacity = 1;
-		setTimeout("schedule.style.opacity = 0;", 3000);
+		GetSchedule(currChan,10);
+		schedule.style.opacity = 1 - schedule.style.opacity;
+		channelList.style.opacity = 1 - schedule.style.opacity;
+		isSchedule = schedule.style.opacity;
 	}
 	break;
    case "Blue":
@@ -518,7 +524,7 @@ function showOSD() {
 	SetOsdInfo();
 	opacity = 1;
 	OSD(opacity);
-	setTimeout("fadeOut()", 3000);
+	osdtimeout = setTimeout("fadeOut()", 3000);
 }
 
 function OSD(opacity) {
@@ -540,6 +546,13 @@ function SetOsdInfo() {
     return;
 }
 
+function onCacheUpdated() {
+	if (osdtimeout) {
+	GetEPG(currChan);
+	SetOsdInfo();
+	} 
+}
+
 function OSDchannr(channr) {
     osdnr.innerHTML = "<center><font color=black size=6>" + channr + "</font></center>";
 }
@@ -547,9 +560,9 @@ function OSDchannr(channr) {
 function OSDhtml(){
     osdtime.innerHTML = "<font color=white size=2>" + result +"</font>";
     osdname.innerHTML = "<font color=black size=5>" + Left(channelsnames[currChan],30) + "</font>";
-    osdepg.innerHTML = "<font color=white size=4><p>" + EPGNow + "</p>\n<p>" + EPGNext + "</p></font>";
-    osdepginfo.innerHTML =  "<center><font color=white size=4><p>" + EPGNow + "</p>\n<p>" + EPGShortnow + "</p>\n<p>" + Left(EPGExtnow,750) + "</p></font></center>";
-    osdepginfonext.innerHTML =  "<center><font color=white size=4><p>" + EPGNext + "</p>\n<p>" + EPGShortnext + "</p>\n<p>" + Left(EPGExtnext,750) + "</p></font></center>";
+    osdepg.innerHTML = "<font color=white size=4><p>" + EPG[0][7][currChan] + "</p>\n<p>" + EPG[1][7][currChan] + "</p></font>";
+    osdepginfo.innerHTML =  "<center><font color=white size=4><p>" + EPG[0][7][currChan] + "</p>\n<p>" + EPG[0][4][currChan] + "</p>\n<p>" + Left(EPG[0][5][epgchan],750) + "</p></font></center>";
+    osdepginfonext.innerHTML =  "<center><font color=white size=4><p>" + EPG[1][7][currChan] + "</p>\n<p>" + EPG[1][4][currChan] + "</p>\n<p>" + Left(EPG[1][5][epgchan],750) + "</p></font></center>";
 }
 
 
@@ -673,10 +686,10 @@ function date_time()
 
 function GetEPG(epgchan)
 {
-	EPGNow = "";
+	EPG[0][7][epgchan] = "";
 	EPGShortnow = "";
 	EPGExtnow = "";
-	EPGNext = "";
+	EPG[1][7][epgchan] = "";
 	EPGShortnext = "";
 	EPGExtnext = "";
 	cds = 0;
@@ -745,14 +758,15 @@ function GetEPG(epgchan)
         }
 	if(cds){
 	 // CDS has short info, other providers, a little longer.
-	 EPGNow =  th + ":" + tm + " (" + EPGminutes + " / " + ((event.duration/60)-EPGminutes).toFixed(0) + ")" + "          " + event.name + " " + EPGShortnow;
+	 EPG[0][7][epgchan] =  th + ":" + tm + " (" + EPGminutes + " / " + ((event.duration/60)-EPGminutes).toFixed(0) + ")" + "          " + event.name + " " + EPGShortnow;
 	} else {
-	 EPGNow =  th + ":" + tm + " (" + EPGminutes + " / " + ((event.duration/60)-EPGminutes).toFixed(0) + ")" + "          " + event.name + " ";
+	 EPG[0][7][epgchan] =  th + ":" + tm + " (" + EPGminutes + " / " + ((event.duration/60)-EPGminutes).toFixed(0) + ")" + "          " + event.name + " ";
 	}
 	if (!event.time) 
 	{
-		EPGNow = " ";
+		EPG[0][7][epgchan] = " ";
 	}
+
 
 	 event = eitCache.getFollowingEvent(eitService);
 
@@ -786,14 +800,16 @@ function GetEPG(epgchan)
 	
 	if(cds){
 	 // CDS has short info, other providers, a little longer.
-	 EPGNext = th + ":" + tm + " (" + (event.duration/60).toFixed(0) + ")" + "          " + event.name + " " + EPGShortnext;
+	 EPG[1][7][epgchan] = th + ":" + tm + " (" + (event.duration/60).toFixed(0) + ")" + "          " + event.name + " " + EPGShortnext;
 	} else {
-	 EPGNext = th + ":" + tm + " (" + (event.duration/60).toFixed(0) + ")" + "          " + event.name + " ";
+	 EPG[1][7][epgchan] = th + ":" + tm + " (" + (event.duration/60).toFixed(0) + ")" + "          " + event.name + " ";
 	}
 	if (!event.time) 
 	{
-		EPGNext = " ";
+		EPG[1][7][epgchan] = " ";
 	}
+
+
   } catch(e) {
     alert("Get EPG problem: " + e);
   }
@@ -801,7 +817,7 @@ function GetEPG(epgchan)
 
 
 
-function GetSchedule(schchan){
+function GetSchedule(schchan,tablelength){
   try {
  	SI=channels[schchan].split("-");
 	is = toi.informationService;
@@ -826,9 +842,9 @@ function GetSchedule(schchan){
 	      events.more = t.more;
 	    }
 
-	    var txt = "";
+	    var txt = "<table><tr>";
 	    var i = 0;
-	    for (i = 0; i < events.infoSequence.length && i < 12; i++) {
+	    for (i = 0; i < events.infoSequence.length && i < tablelength; i++) {
 
 		while ((i > 0) && (events.infoSequence[i].eventId == events.infoSequence[(i-1)].eventId)) {
 			i = i +1;
@@ -849,10 +865,10 @@ function GetSchedule(schchan){
 	                tm = "0"+tm;
 	        	}
 
-	      txt = txt + th + ":" + tm + "     (" + events.infoSequence[i].duration/60 + ")  " + events.infoSequence[i].name + "</p>";
+	      txt = txt + "<td>" + th + ":" + tm + "     (" + events.infoSequence[i].duration/60 + ")  " + events.infoSequence[i].name + "</td></tr>";
 	    }
 	   txt = txt + "</table>";
-	   schedule.innerHTML = "<p>" + channelsnames[schchan] + "</p> " + txt;
+	   schedule.innerHTML = channelsnames[schchan] + txt;
 	} else {
 		schedule.innerHTML = "<p>" + channelsnames[schchan] + "</p> ";
 	}
@@ -898,8 +914,8 @@ function showChannelList() {
 		}  else {
 			liststyle = "";
 		}
-		EpgInfo[0] = EPGNow;
-		EpgInfo[1] = EPGNext;
+		EpgInfo[0] = EPG[0][7][listChan];
+		EpgInfo[1] = EPG[1][7][listChan];
 		htmlstring = htmlstring + "<td" + liststyle + ">" + listChan + "</td><td" +liststyle + ">" + Left(channelsnames[listChan],15) + "</td><td" +liststyle + ">"  + Left(EpgInfo[NowNext],64) + "</td></tr>";
 	}
 	htmlstring = htmlstring + "</table>";
@@ -1121,7 +1137,9 @@ function InitMenu() {
 	<body style="background:#ccc;" onload="onLoad()" onunload="onUnload()">
     <embed type="application/x-motorola-toi" hidden="true">
 
-	<div id="channelList" style="background:#bbb; width:100%; position:absolute; left:50px; top:25px;"></div>
+	<div id="channelList" style="background:#bbb; width:100%; height:45%; position:absolute; left:50px; top:25px;"></div>
+	<div id="schedule" style="background:#bbb; width:100%; height:45%; position:absolute; left:50px; top:25px;"></div>
+
 	<div id="colorkeys" style="width:100%; position:absolute; left:75px; top:485px;">
 		<font color=red size=3> Timer </font>
 		<font color=green size=3> Now / Next</font>
@@ -1146,7 +1164,6 @@ function InitMenu() {
 
 	<div id="osdepginfo" style="background:#3366ff;width:550px; position:absolute; left:100px; top:100px;z-index:510;opacity:0;"></div>
 	<div id="osdepginfonext" style="background:#3366ff;width:550px; position:absolute; left:100px; top:100px;z-index:510;opacity:0;"></div>
-	<div id="schedule" style="background:#3366ff;width:550px; position:absolute; left:100px; top:100px; z-index:510;opacity:0;"></div>
 
 	<div id="osdmute" style="width:50px; position:absolute; left:550px; top:50px;z-index:515;opacity:0;"><img src="mute.png"></div>
 	<div id="osdlang1" style="width:50px; position:absolute; left:550px; top:50px;z-index:515;opacity:0;"><img src="unmute.png"><font color=white size=3>Nederlands</font></div>

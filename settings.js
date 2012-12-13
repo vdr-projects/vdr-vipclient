@@ -32,6 +32,7 @@ var prevChan = currChan;
 
 var isVisible = 0;
 var isSetupMenu = 0;
+var isSchedule = 0;
 var mediaPlayer = null;
 var Change = 0;
 var ChangeOK = 0;
@@ -66,7 +67,7 @@ var EpgExtInfo = new Array();
 //		4 = shortinfo
 //		5 = extinfo
 //		6 = eventid
-
+//		7 = EPGNow / EPGNext
 
 var EPG = new Array();
 EPG[0] = new Array();
@@ -78,18 +79,21 @@ EPG[0][3] = new Array();
 EPG[0][4] = new Array();
 EPG[0][5] = new Array();
 EPG[0][6] = new Array();
+EPG[0][7] = new Array();
 EPG[1][1] = new Array();
 EPG[1][2] = new Array();
 EPG[1][3] = new Array();
 EPG[1][4] = new Array();
 EPG[1][5] = new Array();
 EPG[1][6] = new Array();
+EPG[1][7] = new Array();
 EPG[2][1] = new Array();
 EPG[2][2] = new Array();
 EPG[2][3] = new Array();
 EPG[2][4] = new Array();
 EPG[2][5] = new Array();
 EPG[2][6] = new Array();
+EPG[2][7] = new Array();
 
 var osdtimeout = 0;
 var epgactive = 0;
