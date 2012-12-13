@@ -43,6 +43,7 @@ function onLoad() {
 	showOSD();
 }
 
+
 function onUnload() {
 	try {
 		mediaPlayer.close();
@@ -83,7 +84,7 @@ function play(uri) {
     if (mediaPlayer.getState() != mediaPlayer.STATE_IDLE) {
       mediaPlayer.close();
     }
-    uri=ServerAdres+uri;
+    uri = ServerAdres + uri;
     mediaPlayer.open(uri);
     mediaPlayer.play(1000);
 	if(isFullscreen) {
@@ -345,11 +346,11 @@ function onKeyDown(event) {
    case "Scroll":
 		if(isFullscreen) {
 			NowNext = 0;
-			showChannelList();
 			videoplane.style.width = "320px";
 			videoplane.style.height = "240px";
 			videoplane.style.left = "380px";
 			videoplane.style.top = "300px";
+			showChannelList();
 			isFullscreen = 0;
 			if(!SwitchGuide) {
 			preChan = currChan;
@@ -1110,8 +1111,6 @@ function onKeyMenu(keyCode) {
 function InitMenu() {
 	mainmenu.innerHTML = "<center><font size=7 color=white><p> SETTINGS </p><font color=red size=5><p>Frontdisplay Clock : " + showClock + "</p></font><font color=green size=5><p>Prio audio track : " + (toi.informationService.getObject("cfg.media.audio.languagepriority")) + "</p></font><font color=yellow size=5><p>Switch timer : " + Boolean(switchtimerID) + "</p></font><font color=blue size=5><p>Preview guide : " + SwitchGuide + "</p></font></center>";
 }
-
-
 
 // End of Menu section
 

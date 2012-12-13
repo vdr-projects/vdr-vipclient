@@ -17,6 +17,15 @@ var AudioOut = 3;
 // AUDIO_CONNECTION_TYPE_BUFFER = 4
 // AUDIO_CONNECTION_TYPE_I2S = 5
 
+var Scart = new Array();
+var HDMI = new Array();
+var Scart = "NO_SCART_MODE,SCART_MODE_CVBS,SCART_MODE_YC,SCART_MODE_RGB_CVBS";
+var HDMI = "OFF,VIDEO_MODE_576P50,VIDEO_MODE_576I50,VIDEO_MODE_720P50,VIDEO_MODE_1080I50";
+//
+// HDMI modes for 19x0 series, 19x3 or 1003 can do also 1080p modes
+//
+
+
 var currChan = 10; // default channel
 var epgchan = currChan;
 var prevChan = currChan;
