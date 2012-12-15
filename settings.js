@@ -6,6 +6,8 @@ var channels = new Array();
 var channelsnames = new Array();
 var channelsepglang = new Array();
 
+var recording = new Array();
+
 var isFullscreen = 1; // start TV(1) or guide(0)
 var StartVolume = 50;
 var Volume = StartVolume;
@@ -30,6 +32,10 @@ var currChan = 10; // default channel
 var epgchan = currChan;
 var prevChan = currChan;
 
+var currMed = 0;
+var listMed = 0;
+
+var isMediaMenu = 0;
 var isVisible = 0;
 var isSetupMenu = 0;
 var isSchedule = 0;
@@ -58,6 +64,7 @@ var listChan = 0;
 var NowNext = 0;
 var EpgInfo = new Array();
 var EpgExtInfo = new Array();
+var files = new Array();
 var NN = new Array();
 NN[0] = "Now";
 NN[1] = "Next";
@@ -102,6 +109,7 @@ EPG[2][6] = new Array();
 EPG[2][7] = new Array();
 
 var osdtimeout = 0;
+var osdVolumetimeout = 0;
 var epgactive = 0;
 var preChan = 0;
 var cds = 1;

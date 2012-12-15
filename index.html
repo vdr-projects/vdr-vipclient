@@ -3,6 +3,7 @@
       <script type="text/javascript" src="settings.js" />
       <script type="text/javascript" src="settings2.js" />
       <script type="text/javascript" src="channels.js" />
+      <script type="text/javascript" src="recordings.js" />
     </head>
 <script language="Javascript">
 
@@ -25,8 +26,9 @@
 //	 change IP server
 //
 
-var Version = "0.03	2012/12/13"
+var Version = "0.04	2012/12/xx"
 var nrChannels = channels.length;
+var nrMedia = recording.length;
 
 window.onkeydown = onKeyDown;
 
@@ -120,6 +122,8 @@ function FullScreen() {
 function onKeyDown(event) {
     if(isVisible) {
  	onKeyTeletext(event.keyIdentifier);
+    } else if(isMediaMenu) {
+	onKeyMedia(event.keyIdentifier);
     } else if(isSetupMenu) {
 	onKeyMenu(event.keyIdentifier);
     } else {
@@ -436,6 +440,7 @@ function onKeyDown(event) {
             Volume = 100;
         }
         toi.audioOutputService.setVolume(AudioOut, Volume);
+	showVolume();
 	break;
     case "VolumeDown":
 	Volume = Volume - 10;
@@ -443,6 +448,7 @@ function onKeyDown(event) {
             Volume = 0;
         }
         toi.audioOutputService.setVolume(AudioOut, Volume);
+	showVolume();
 	break;
 
 	case "MediaRewind":
@@ -452,6 +458,11 @@ function onKeyDown(event) {
 	case "MediaPlayPause":
 		break;
 	case "MediaStop":
+	mediaList.style.opacity = 0.8;
+	isMediaMenu = 1;
+	showDisplay("STOP", false, 100, 0 );
+	currMed = 0;
+	showMediaList();
 	break;
 	case "MediaRecord":
 	break;
@@ -461,7 +472,6 @@ function onKeyDown(event) {
     }
   }
 }
-
 
 function Makedigit() {
 	prevChan = currChan;
@@ -529,6 +539,16 @@ function showOSD() {
 	OSD(opacity);
 	osdtimeout = setTimeout("fadeOut()", 3000);
 }
+
+function showVolume() {
+	if (osdVolumetimeout) {
+		clearTimeout(osdVolumetimeout);
+	}
+	osdvolume.innerHTML = "<font color=green size=3>VOLUME : \uE007" + (new Array(Volume)).join("\uE008") + (new Array(100 - Volume)).join("\uE009") + "\uE00A</font>";
+	osdvolume.style.opacity = 1;
+	osdVolumetimeout = setTimeout("osdvolume.style.opacity = 0;", 3000);
+}
+
 
 function OSD(opacity) {
     osdmain.style.opacity = opacity;
@@ -721,9 +741,9 @@ function GetEPG(epgchan)
 	 eitCache.addService(eitService);
 	 event = eitCache.getPresentEvent(eitService);
 	if(event.freeCaMode){
-		osdca.innerHTML = "<img src='key.png'>";
+		osdca.innerHTML = "<font color=black size=6>\uE00D</font>";
 	} else {
-		osdca.innerHTML = "";
+		osdca.innerHTML = "<font color=black size=6>\uE00F</font>";
 	}
 
 	if (event.name)
@@ -768,9 +788,9 @@ function GetEPG(epgchan)
         }
 	if(cds){
 	 // CDS has short info, other providers, a little longer.
-	 EPG[0][7][epgchan] =  th + ":" + tm + " (" + EPGminutes + " / " + ((event.duration/60)-EPGminutes).toFixed(0) + ")" + "          " + event.name + " " + EPGShortnow;
+	 EPG[0][7][epgchan] =  th + ":" + tm + " (" + EPGminutes + " / " + ((event.duration/60)-EPGminutes).toFixed(0) + ")" + " " + event.name + " " + EPGShortnow;
 	} else {
-	 EPG[0][7][epgchan] =  th + ":" + tm + " (" + EPGminutes + " / " + ((event.duration/60)-EPGminutes).toFixed(0) + ")" + "          " + event.name + " ";
+	 EPG[0][7][epgchan] =  th + ":" + tm + " (" + EPGminutes + " / " + ((event.duration/60)-EPGminutes).toFixed(0) + ")" + " " + event.name + " ";
 	}
 	if (!event.time) 
 	{
@@ -1140,6 +1160,210 @@ function InitMenu() {
 
 // End of Menu section
 
+// Media Player Section
+
+function onKeyMedia(keyCode) {
+  switch(keyCode) {
+    case "BrowserBack":
+    case "TV":
+	mediaList.style.opacity = 0;
+ 	showDisplay((currChan.toString()), false, 100, 0 );
+	isMediaMenu = 0;
+        play(channels[currChan]);
+        break;
+    break;
+    case "Up":
+	if (mediaList.style.opacity != 0) {
+	do
+	{
+	        incMed(1);
+	}
+	while (!recording[currMed]);
+	showMediaList();
+	} else {
+	      speed = 1000;
+	      mediaPlayer.play(1000);
+	      showDisplay("PLAY", false, 100, 0 );
+	}
+        break;
+    case "Down":
+	if (mediaList.style.opacity != 0) {
+	do
+	{
+	        decMed(1);
+	}
+	while (!recording[currMed]);
+	showMediaList();
+	} else {
+	      speed = 0;
+	      mediaPlayer.play(0);
+	      showDisplay("PAUS", false, 100, 0 );
+	}
+	break;
+  case "Accept":
+	if (mediaList.style.opacity != 0) {
+	mediaList.style.opacity = 0;
+	speed = 1000;
+	playRec(recording[currMed]);
+	} else {
+	osdmedia.style.opacity = 1 -osdmedia.style.opacity;
+	ShowMediaOSD();
+	mediaPlayer.playFromPosition(60000,1000);
+	}
+        break;
+   case "Green":
+			audio = audio + 1;
+			is = toi.informationService;
+			if(audio == 1) {	
+				is.setObject("cfg.media.audio.languagepriority","dut,eng",is.STORAGE_VOLATILE);
+				osdlang1.style.opacity = 1;
+				osdlang2.style.opacity = 0; 
+				osdlang3.style.opacity = 0;  
+				setTimeout("osdlang1.style.opacity = 0; ", 3000);
+			} else if(audio == 2) {
+				is.setObject("cfg.media.audio.languagepriority","ger,deu,eng",is.STORAGE_VOLATILE);
+				osdlang1.style.opacity = 0;
+				osdlang2.style.opacity = 1; 
+				osdlang3.style.opacity = 0;  
+				setTimeout("osdlang2.style.opacity = 0; ", 3000);
+			} else if(audio == 3) {
+				is.setObject("cfg.media.audio.languagepriority","eng",is.STORAGE_VOLATILE);
+				osdlang1.style.opacity = 0; 
+				osdlang2.style.opacity = 0;  
+				osdlang3.style.opacity = 1; 
+				setTimeout("osdlang3.style.opacity = 0; ", 3000);
+				audio = 0;
+			}
+	break;
+    case "MediaRewind":
+	    if (mediaPlayer.getState() != mediaPlayer.STATE_IDLE) {
+	    speed = speed - 1000;
+	    if (speed < -9000) {
+		speed = -9000;
+		}
+	    mediaPlayer.play(speed);
+	    showDisplay("PL" + ((speed/1000).toString()), false, 100, 0 );
+	    }
+    break;
+    case "MediaForward":
+	    if (mediaPlayer.getState() != mediaPlayer.STATE_IDLE) {
+	    speed = speed + 1000;
+	    if (speed > 9000) {
+		speed = 9000;
+		}
+	    mediaPlayer.play(speed);
+	    showDisplay("PL" + ((speed/1000).toString()), false, 100, 0 );
+	    }
+    break;
+    case "MediaStop":
+	    if (mediaPlayer.getState() != mediaPlayer.STATE_IDLE) {
+	    mediaPlayer.close();
+	    }
+	    speed = 1000;
+	    mediaList.style.opacity = 0.8;
+	    showDisplay("STOP", false, 100, 0 );
+	    showMediaList();
+    break;
+	case "MediaPlayPause":
+	    if (mediaPlayer.getState() != mediaPlayer.STATE_PAUSED) {
+	      mediaPlayer.play(0);
+	      showDisplay("PAUS", false, 100, 0 );
+	    } else {
+	      speed = 1000;
+	      mediaPlayer.play(1000);
+	      showDisplay("PLAY", false, 100, 0 );
+    	    }
+	break;
+    case "VolumeMute":
+	state = toi.audioOutputService.getMuteState(AudioOut);
+	toi.audioOutputService.setMuteState(AudioOut, !state);
+	mute = 1 - state;
+        osdmute.style.opacity = mute; 
+	break;
+    case "VolumeUp":
+	Volume = Volume + 10;
+        if (Volume > 100) {
+            Volume = 100;
+        }
+        toi.audioOutputService.setVolume(AudioOut, Volume);
+	showVolume();
+	break;
+    case "VolumeDown":
+	Volume = Volume - 10;
+        if (Volume < 0) {
+            Volume = 0;
+        }
+        toi.audioOutputService.setVolume(AudioOut, Volume);
+	showVolume();
+	break;
+	default:
+        break;
+  }
+}
+
+function showMediaList() {
+	var liststyle = "";
+	var htmlstring = "<table border='0'><tr>";
+	listMed = currMed-7;
+	for(var i=currMed-7; i<=currMed+7; i++) {
+		if (listMed<0) {
+			listMed=nrMedia-2;
+			}
+		if (listMed>nrMedia-1) {
+			listMed= -1;
+			}
+			do
+			{
+				listMed = listMed + 1;
+			}
+			while (!recording[listMed] && (listMed<nrMedia));
+		if ( listMed == currMed) { 
+			liststyle = " style='background:#fc5;'";
+		}  else {
+			liststyle = "";
+		}
+		htmlstring = htmlstring + "<td" + liststyle + ">" + Left(recording[listMed],60) + "</td></tr>";
+	}
+	htmlstring = htmlstring + "</table>";
+	mediaList.innerHTML = htmlstring;
+}
+
+
+function incMed(step) {
+    currMed = currMed + step;
+    if (currMed == nrMedia) {
+        currMed = 0;
+    }
+}
+
+function decMed(step) {
+    currMed = currMed - step;
+    if (currMed < 0) {
+        currMed = nrMedia - 1;
+    }
+}
+
+function playRec(uri) {
+  try {
+    if (mediaPlayer.getState() != mediaPlayer.STATE_IDLE) {
+      mediaPlayer.close();
+    }
+    uri = "file://" + uri;
+    mediaPlayer.open(uri);
+    mediaPlayer.play(1000);
+	showDisplay("PLAY", false, 100, 0 );
+  } catch (e) {
+    alert("Failed opening recording: " + e);
+    return;
+  }
+}
+
+
+function ShowMediaOSD() {
+// Display Name/ length
+	osdmedia.innerHTML = " Elapsed time : " + mediaPlayer.getPosition();
+}
+
 
 </script>
 
@@ -1168,12 +1392,16 @@ function InitMenu() {
 	<videoplane id='videoplane' style='position:absolute; left:0px; top:0px; height: 100%; width: 100%; z-index:500;'>
 	</videoplane>
 
+	<div id="osdvolume" style="width:450px; position:absolute; left:150px; top:500px;z-index:501;fontFamily:VDRSymbolsSans;opacity:0;">Volume : </div>
+
+	<div id="osdmedia" style="width:450px; position:absolute; left:150px; top:400px;z-index:505;fontFamily:VDRSymbolsSans;opacity:0;"></div>
+
 	<div id="osdmain" style="background:#3366ff;width:550px; position:absolute; left:75px; top:350px; bottom:50px;z-index:505;"></div>
 	<div id="osdtime" style="width:300px; position:absolute; left:375px; top:360px;z-index:505;"></div>
 	<div id="osdname" style="width:500px;height:25px; position:absolute; left:85px; top:375px;z-index:505;"></div>
 	<div id="osdepg" style="width:450px; position:absolute; left:150px; top:400px;z-index:505;"></div>
 	<div id="osdtimer" style="width:50px; position:absolute; left:85px; top:400px;z-index:505;"></div>
-	<div id="osdca" style="width:25px; position:absolute; left:575px; top:385px;z-index:505;"></div>
+	<div id="osdca" style="width:25px; position:absolute; left:575px; top:385px;z-index:505;fontFamily:VDRSymbolsSans;"></div>
 
 	<div id="osdnr" style="background:#CC0000;width:75px;height:50px; position:absolute; left:85px; top:320px;z-index:505;opacity:0;"></div>
 
@@ -1186,7 +1414,7 @@ function InitMenu() {
 	<div id="osdlang3" style="width:50px; position:absolute; left:550px; top:50px;z-index:515;opacity:0;"><img src="unmute.png"><font color=white size=3>English</font></div>
 
 	<div id="mainmenu" style="background:#3366ff;width:550px; position:absolute; left:75px; top:50px; bottom:50px;z-index:520;opacity:0;"></div>
-
+	<div id="mediaList" style="background:#bbb; width:80%; height:75%; position:absolute; left:10%; top:10%;z-index:520;opacity:0;"></div>
 
 </body>
 </html>
