@@ -1,12 +1,3 @@
-<html>
-    <head>
-      <script type="text/javascript" src="settings.js" />
-      <script type="text/javascript" src="settings2.js" />
-      <script type="text/javascript" src="channels.js" />
-      <script type="text/javascript" src="recordings.js" />
-    </head>
-<script language="Javascript">
-
 //
 // Javascript VDR client for Motorola VIP19x0 & VIP19x3
 //
@@ -26,7 +17,7 @@
 //	 change IP server
 //
 
-var Version = "0.04	2012/12/xx"
+var Version = "0.10	2012/12/xx"
 var nrChannels = channels.length;
 var nrMedia = recording.length - 1;
 
@@ -1357,49 +1348,5 @@ function ShowMediaOSD() {
 // Display Name/ length
 	osdmedia.innerHTML = "<font size=4> Elapsed time : " + mediaPlayer.getPosition() + "</font>";
 }
-
-
-</script>
-
-
-	<body style="background:#ccc;" onload="onLoad()" onunload="onUnload()">
-    <embed type="application/x-motorola-toi" hidden="true">
-
-	<div id="channelList" style="background:#bbb; width:100%; height:45%; position:absolute; left:50px; top:25px;"></div>
-	<div id="schedule" style="background:#bbb; width:100%; height:45%; position:absolute; left:50px; top:25px;opacity:0;"></div>
-
-	<div id="colorkeys" style="width:100%; position:absolute; left:75px; top:485px;"><font color=red size=3> ----- </font><font color=green size=3> Next </font><font color=yellow size=3> Schedule </font><font color=blue size=3> INFO </font></div>
-
-
-	<div id="schedkeys" style="width:100%; position:absolute; left:75px; top:485px;opacity:0;"><font color=red size=3>-----</font><font color=green size=3>----</font><font color=yellow size=3> GUIDE </font><font color=blue size=3> ---- </font></div>
-
-	<div id="chanlistepg" style="width:300; position:absolute; left:50px; top:290px;"> 	</div>
-	<div id="switchtimer" style="background:#3366ff;width:300; position:absolute; left:150px; top:150px;z-index:10;opacity:0;"></div>
-
-
-	<videoplane id='videoplane' style='position:absolute; left:0px; top:0px; height: 100%; width: 100%; z-index:500;'></videoplane>
-
-	<div id="osdvolume" style="width:450px; position:absolute; left:150px; top:500px;z-index:501;fontFamily:VDRSymbolsSans;opacity:0;">Volume : </div>
-	<div id="osdmedia" style="width:450px; position:absolute; left:150px; top:400px;z-index:505;fontFamily:VDRSymbolsSans;opacity:0;"></div>
-
-	<div id="osdmain" style="background:#3366ff;width:550px; position:absolute; left:75px; top:350px; bottom:50px;z-index:505;"></div>
-	<div id="osdtime" style="width:300px; position:absolute; left:375px; top:360px;z-index:505;"></div>
-	<div id="osdname" style="width:500px;height:25px; position:absolute; left:85px; top:375px;z-index:505;"></div>
-	<div id="osdepg" style="width:450px; position:absolute; left:150px; top:400px;z-index:505;"></div>
-	<div id="osdtimer" style="width:50px; position:absolute; left:85px; top:400px;z-index:505;"></div>
-	<div id="osdca" style="width:25px; position:absolute; left:575px; top:385px;z-index:505;fontFamily:VDRSymbolsSans;"></div>
-
-	<div id="osdnr" style="background:red;width:75px;height:50px; position:absolute; left:85px; top:320px;z-index:505;opacity:0;"></div>
-
-	<div id="osdepginfo" style="background:#3366ff;width:550px; position:absolute; left:100px; top:100px;z-index:510;opacity:0;"></div>
-	<div id="osdepginfonext" style="background:#3366ff;width:550px; position:absolute; left:100px; top:100px;z-index:510;opacity:0;"></div>
-
-	<div id="osdmute" style="width:50px; position:absolute; left:550px; top:50px;z-index:515;opacity:0;"><img src="mute.png"></div>
-	<div id="osdlang" style="width:50px; position:absolute; left:550px; top:50px;z-index:515;opacity:0;"></div>
-	<div id="mainmenu" style="background:#3366ff;width:550px; position:absolute; left:75px; top:50px; bottom:50px;z-index:520;opacity:0;"></div>
-	<div id="mediaList" style="background:#bbb; width:80%; height:75%; position:absolute; left:10%; top:10%;z-index:520;opacity:0;"></div>
-
-</body>
-</html>
 
 

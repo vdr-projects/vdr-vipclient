@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" 
+"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+
+<svg onload="onLoad()"
+  onunload="onUnload()"
+  width="100%" 
+  height="100%" 
+  top="0"
+  left="0"
+  viewBox="0 0 1280 720"
+  id="root"
+  version="1.1"
+  preserveAspectRatio="none"
+  viewport-fill="#C0D0C0"
+  xmlns="http://www.w3.org/2000/svg"
+  xmlns:xlink="http://www.w3.org/1999/xlink"
+  xmlns:ekioh="http://www.ekioh.com/2007/ekioh"
+  cursor="no"
+  focusable="true">
+
+
+<!-- javascript functions -->
+<script type="text/ecmascript" xlink:href="settings.js" ></script>
+<script type="text/ecmascript" xlink:href="settings2.js" ></script>
+<script type="text/ecmascript" xlink:href="channels.js" ></script>
+<script type="text/ecmascript" xlink:href="recordings.js" ></script>
+<script type="text/ecmascript" xlink:href="main.js" ></script>
+
+<foreignObject requiredExtensions="application/x-motorola-toi" hidden="true">
+</foreignObject>
+
+<g transform="translate(120,80)" id="head" style="font-size:14px;">
+  <text style="font-size:20px;" x="0" y="0">Audio Track Information</text>
+  <text x="0" dy="12">This portal displays information about the audio tracks
+  found in the current stream</text>
+
+ <g fill="#ff0000">
+  <text x="0" dy="50">Press UP and DOWN to change TV channel</text>
+  <text x="0" dy="70">Press LEFT and RIGHT to change audio track</text>
+</g>
+
+  <g style="font-size:16px;">
+    <text dx="0" dy="100" >Current audio track: </text>
+    <text dx="180" dy="100" id="currAudio">-</text>
+  </g>
+
+  <g transform="translate(0,150)" id="info">
+    <text dx="0" dy="0">Encoding: </text>
+    <text dx="140" dy="0" id="encoding">-</text>
+
+    <text dx="0" dy="16">Sample rate: </text>
+    <text dx="140" dy="16" id="samplerate">-</text>
+
+    <text dx="0" dy="32">Format: </text>
+    <text dx="140" dy="32" id="format">-</text>
+
+    <text dx="0" dy="48">Mode: </text>
+    <text dx="140" dy="48" id="mode">-</text>
+
+    <text dx="0" dy="64">Language: </text>
+    <text dx="140" dy="64" id="language">-</text>
+
+    <text dx="0" dy="80">Subtitle: </text>
+    <text dx="140" dy="80" id="subs">-</text>
+
+    <text dx="0" dy="96">Audience type: </text>
+    <text dx="140" dy="96" id="audience">-</text>
+
+    <text dx="0" dy="112">Component tag: </text>
+    <text dx="140" dy="112" id="component">-</text>
+  </g>
+
+  <video id='videoplane'
+    x="500" 
+    y="40" 
+    width="608px" 
+    height="342px" 
+    preserveAspectRatio="xMidYMid">
+  </video>
+
+  <text id="videouri" dy="420" x="500">-</text>
+
+
+
+</g>
+
+
+
+
+</svg>
+
