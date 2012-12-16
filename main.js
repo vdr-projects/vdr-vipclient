@@ -21,11 +21,13 @@ var Version = "0.10	2012/12/xx"
 var nrChannels = channels.length;
 var nrMedia = recording.length - 1;
 
-window.onkeydown = onKeyDown;
 
 function onLoad() {
- createPlayer();
- embedTeletextPlugin();
+  document.addEventListener("keydown", onKeyDown, false);
+  video = document.getElementById("videoplane");
+	createPlayer();
+        getBoxSize();
+	embedTeletextElement();
 	toi.audioOutputService.setVolume(AudioOut, StartVolume);
 	toi.audioOutputService.setMuteState(AudioOut, false);
 	showDisplay((currChan.toString()), false, 100, 0 );
@@ -34,25 +36,49 @@ function onLoad() {
 	eitCache.setFilterMode(eitCache.FILTER_MODE_PF_AND_SCHEDULE);
 //	eitCache.setFilterMode(eitCache.FILTER_MODE_PF_ONLY);
 	eitCache.addEventListener(eitCache.ON_CACHE_UPDATED, onCacheUpdated);
+	FullScreen();
 	showOSD();
 }
 
 
 function onUnload() {
-	try {
-		mediaPlayer.close();
-		mediaPlayer.releaseInstance();
-	} catch(e) {
-		alert(e);
-	}
+  try {
+    if (mediaPlayer.getState() != mediaPlayer.STATE_IDLE) {
+      mediaPlayer.close();
+      alert("Has closed.");
+    }
+    mediaPlayer.releaseInstance();
+    mediaPlayer = null;
+
+    document.removeEventListener("keydown", onKeyDown, false);
+  }
+  catch (e) {
+    alert("onUnload error:" + e);
+  }
 }
+
+function getBoxSize() {
+   var w=videoWidth;
+   var h=videoHeight;
+   //get the screen size from viewBox object.
+   var viewboxstring = document.documentElement.getAttributeNS(null, "viewBox");
+   if (null != viewboxstring && "" != viewboxstring) {
+      var vbArray = viewboxstring.split(" ");
+      if (vbArray.length >= 4) {
+         w=vbArray[2];
+         h=vbArray[3];
+      }
+   }
+	videoWidth = w;
+	videoHeight = h;
+}
+
 
 function incChan(step) {
     currChan = currChan + step;
     if (currChan == nrChannels) {
         currChan = 1;
     }
-    osdnr.style.opacity = isFullscreen; 
     OSDchannr(currChan);
 }
 
@@ -61,7 +87,6 @@ function decChan(step) {
     if (currChan == 0) {
         currChan = nrChannels - 1;
     }
-    osdnr.style.opacity = isFullscreen; 
     OSDchannr(currChan);
 }
 
@@ -103,10 +128,13 @@ function preview(urip) {
 
 
 function FullScreen() {
-			videoplane.style.width = "100%";
-			videoplane.style.height = "100%";
-			videoplane.style.left = "0px";
-			videoplane.style.top = "0px";
+
+    video.setAttribute("overlay","500");
+    video.setAttribute("x", "0");
+    video.setAttribute("y", "0");
+    video.setAttribute("width", videoWidth);
+    video.setAttribute("heigth", videoHeight);
+    alert ("Display :" + videoWidth + "x" + videoHeight);
 }
 
 
@@ -284,7 +312,7 @@ function onKeyDown(event) {
    case "BrowserBack":
 	if(count) {
 		count = 0;
-		osdnr.style.opacity = 0;
+//		osdnr.style.opacity = 0;
 		if(isFullscreen) {
 			showDisplay((currChan.toString()), false, 100, 0 );
 		}
@@ -465,7 +493,7 @@ function Makedigit() {
 	prevChan = currChan;
 	Change = (Change*10) + digit;
 	count = count + 1;
-	osdnr.style.opacity = isFullscreen; 
+//	osdnr.style.opacity = isFullscreen; 
         OSDchannr(Change);
 	if(isFullscreen) {
 		showDisplay((Change.toString()), false, 100, 0 ); 
@@ -496,7 +524,7 @@ function CheckChannel(CheckThis) {
 	if(prevChan == currChan) { 
 	ChangeOK = 0 ;
 	}
-	osdnr.style.opacity = 0;
+//	osdnr.style.opacity = 0;
 	if(isFullscreen) {
 	showDisplay((currChan.toString()), false, 100, 0 );
 	}
@@ -519,13 +547,13 @@ function SetLed(NumLed,color,blinkfreq){
 
 
 function showOSD() {
-	if (osdtimeout) {
-		clearTimeout(osdtimeout);
-	}
-	SetOsdInfo();
-	opacity = 1;
-	OSD(opacity);
-	osdtimeout = setTimeout("fadeOut()", 3000);
+//	if (osdtimeout) {
+//		clearTimeout(osdtimeout);
+//	}
+//	SetOsdInfo();
+//	opacity = 1;
+//	OSD(opacity);
+//	osdtimeout = setTimeout("fadeOut()", 3000);
 }
 
 function showVolume() {
@@ -539,13 +567,13 @@ function showVolume() {
 
 
 function OSD(opacity) {
-    osdmain.style.opacity = opacity;
-    osdnr.style.opacity = opacity;
-    osdtime.style.opacity = opacity;
-    osdname.style.opacity = opacity;
-    osdepg.style.opacity = opacity;
-    osdca.style.opacity = opacity;
-    osdtimer.style.opacity = opacity;
+//    osdmain.style.opacity = opacity;
+//    osdnr.style.opacity = opacity;
+//    osdtime.style.opacity = opacity;
+//    osdname.style.opacity = opacity;
+//    osdepg.style.opacity = opacity;
+//    osdca.style.opacity = opacity;
+//    osdtimer.style.opacity = opacity;
 }
 
 
@@ -572,7 +600,7 @@ function onCacheUpdated() {
 }
 
 function OSDchannr(channr) {
-    osdnr.innerHTML = "<center><font color=black size=6>" + channr + "</font></center>";
+ //   osdnr.innerHTML = "<center><font color=black size=6>" + channr + "</font></center>";
 }
 
 function OSDhtml(){
@@ -944,121 +972,8 @@ function showChannelList() {
 
 // END of Channelslist / EPG Guide
 
-// TeleTXT section
 
-function embedTeletextPlugin() {
-  teletext = document.createElement("embed");
-  teletext.id = "teletext";
-  teletext.type = "application/motorola-teletext-plugin";
-  teletext.style.position = "absolute";
-  teletext.style.width = "100%";
-  teletext.style.height = "100%";
-  teletext.style.top = "10px"; // has to be 1 rather than 0
-  teletext.style.left = "10px"; // has to be 1 rather than 0
-  teletext.style.zIndex = "501";
-  return teletext;
-}
-
-
-function setVisible(isVisible) {
-  if (isVisible) {
-    videoplane.style.width = "50%";
-    videoplane.style.left = "50%";
-    document.body.appendChild(teletext);
-    teletext.style.width = "50%";
-    teletext.style.visibility = "visible";
-    channelList.style.visibility = "hidden";
-    colorkeys.style.visibility = "hidden";
-  } else {
-    teletext.style.visibility = "hidden";
-    channelList.style.visibility = "visible";
-    colorkeys.style.visibility = "visible";
-  }
-}
-
-
-function onKeyTeletext(keyCode) {
-  switch(keyCode) {
-    case "Left":
-      teletext.api.gotoNextPage();
-    break;
-    case "Right":
-      teletext.api.gotoPreviousPage();
-    break;
-    case "Red":
-      teletext.api.inputRedKey();
-    break;
-    case "Green":
-      teletext.api.inputGreenKey();
-    break;
-    case "Yellow":
-      teletext.api.inputYellowKey();
-    break;
-    case "Blue":
-      teletext.api.inputCyanKey();
-    break;
-    case "MediaRewind":
-      teletext.api.gotoPreviousSubpage();
-    break;
-    case "MediaForward":
-      teletext.api.gotoNextSubpage();
-    break;
-    case "MediaStop":
-	teletext.style.width = "100%";
-	teletext.api.transparent = !teletext.api.transparent;
-	FullScreen();
-    break;
-    case "BrowserBack":
-    case "Teletext":
-	isVisible = 0;
-	FullScreen();
-	setVisible(isVisible);		
-    break;
-
-    case "TV":
-      teletext.api.gotoIndexPage();
-    break;
-
-	case KEY_0:
-	    teletext.api.inputDigit(0);
-	break;
-	case KEY_1:
-	    teletext.api.inputDigit(1);
-	break;
-	case KEY_2:
-	    teletext.api.inputDigit(2);
-	break;
-	case KEY_3:
-	    teletext.api.inputDigit(3);
-	break;
-	case KEY_4:
-	    teletext.api.inputDigit(4);
-	break;
-	case KEY_5:
-	    teletext.api.inputDigit(5);
-	break;
-	case KEY_6:
-	    teletext.api.inputDigit(6);
-	break;
-	case KEY_7:
-	    teletext.api.inputDigit(7);
-	break;
-	case KEY_8:
-	    teletext.api.inputDigit(8);
-	break;
-	case KEY_9:
-	    teletext.api.inputDigit(9);
-	break;
-
-
-
-  }
-}
-
-// end of TeleTXT section
-
-
-// Menu section
+// MENU
 
 function onKeyMenu(keyCode) {
   switch(keyCode) {
@@ -1146,9 +1061,9 @@ function InitMenu() {
 	mainmenu.innerHTML = "<center><font size=7 color=white><p> SETTINGS </p><font color=red size=5><p>Frontdisplay Clock : " + showClock + "</p></font><font color=green size=5><p>Prio audio track : " + (toi.informationService.getObject("cfg.media.audio.languagepriority")) + "</p></font><font color=yellow size=5><p>Switch timer : " + Boolean(switchtimerID) + "</p></font><font color=blue size=5><p>Preview guide : " + SwitchGuide + "</p></font></center>";
 }
 
-// End of Menu section
+// END Menu
 
-// Media Player Section
+// Mediaplayer
 
 function onKeyMedia(keyCode) {
   switch(keyCode) {
@@ -1349,4 +1264,112 @@ function ShowMediaOSD() {
 	osdmedia.innerHTML = "<font size=4> Elapsed time : " + mediaPlayer.getPosition() + "</font>";
 }
 
+// END of Mediaplayer
+
+// TELETEXT
+
+function embedTeletextElement() {
+  teletext = document.createElement("foreignObject");
+  teletext.setAttribute("id", "teletext");
+  teletext.setAttribute("x", "10");
+  teletext.setAttribute("y", "10");
+  teletext.setAttribute("width", videoWidth);
+  teletext.setAttribute("height", videoHeight);
+  teletext.setAttribute("requiredExtensions", "application/motorola-teletext-plugin");
+    document.documentElement.appendChild(teletext);
+  teletext.setAttribute("display", "none");
+  return teletext;
+}
+
+
+function setVisible(isVisible) {
+  if (isVisible) {
+    video.setAttribute("width", (videoWidth/2));
+    video.setAttribute("x", (videoWidth/2));
+    teletext.setAttribute("width", (videoWidth/2));
+    teletext.setAttribute("height", videoHeight);
+    teletext.setAttribute("display", "inline");
+  } else {
+    teletext.setAttribute("display", "none");
+  }
+}
+
+function onKeyTeletext(keyCode) {
+  switch(keyCode) {
+    case "Left":
+      teletext.gotoNextPage();
+    break;
+    case "Right":
+      teletext.gotoPreviousPage();
+    break;
+    case "Red":
+      teletext.inputRedKey();
+    break;
+    case "Green":
+      teletext.inputGreenKey();
+    break;
+    case "Yellow":
+      teletext.inputYellowKey();
+    break;
+    case "Blue":
+      teletext.inputCyanKey();
+    break;
+    case "MediaRewind":
+      teletext.gotoPreviousSubpage();
+    break;
+    case "MediaForward":
+      teletext.gotoNextSubpage();
+    break;
+    case "MediaStop":
+	teletext.setAttribute("width", videoWidth);
+	teletext.setAttribute("height", videoHeight);
+	teletext.transparent = !teletext.transparent;
+	FullScreen();
+    break;
+    case "BrowserBack":
+    case "Teletext":
+	isVisible = 0;
+	setVisible(isVisible);
+	FullScreen();		
+    break;
+
+    case "TV":
+      teletext.gotoIndexPage();
+    break;
+
+	case KEY_0:
+	    teletext.inputDigit(0);
+	break;
+	case KEY_1:
+	    teletext.inputDigit(1);
+	break;
+	case KEY_2:
+	    teletext.inputDigit(2);
+	break;
+	case KEY_3:
+	    teletext.inputDigit(3);
+	break;
+	case KEY_4:
+	    teletext.inputDigit(4);
+	break;
+	case KEY_5:
+	    teletext.inputDigit(5);
+	break;
+	case KEY_6:
+	    teletext.inputDigit(6);
+	break;
+	case KEY_7:
+	    teletext.inputDigit(7);
+	break;
+	case KEY_8:
+	    teletext.inputDigit(8);
+	break;
+	case KEY_9:
+	    teletext.inputDigit(9);
+	break;
+
+
+
+  }
+}
 

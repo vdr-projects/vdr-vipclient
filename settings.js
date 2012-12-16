@@ -54,6 +54,11 @@ var KEY_7 = "U+0037";
 var KEY_8 = "U+0038";
 var KEY_9 = "U+0039";
 
+var videoWidth = "544"; // fallbacksize
+var videoHeight = "576";
+
+var video = null;
+var teletext = null;
 var eitCache = null;
 var events = null;
 var eitService = null;

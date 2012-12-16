@@ -8,7 +8,7 @@
   height="100%" 
   top="0"
   left="0"
-  viewBox="0 0 1280 720"
+  viewBox="0 0 1920 1080"
   id="root"
   version="1.1"
   preserveAspectRatio="none"
@@ -30,7 +30,7 @@
 <foreignObject requiredExtensions="application/x-motorola-toi" hidden="true">
 </foreignObject>
 
-<g transform="translate(120,80)" id="head" style="font-size:14px;">
+<g id="head" >
   <text style="font-size:20px;" x="0" y="0">Audio Track Information</text>
   <text x="0" dy="12">This portal displays information about the audio tracks
   found in the current stream</text>
@@ -71,12 +71,7 @@
     <text dx="140" dy="112" id="component">-</text>
   </g>
 
-  <video id='videoplane'
-    x="500" 
-    y="40" 
-    width="608px" 
-    height="342px" 
-    preserveAspectRatio="xMidYMid">
+  <video id='videoplane' x="0" y="0" width="1920" height="1080" preserveAspectRatio="xMidYMid">
   </video>
 
   <text id="videouri" dy="420" x="500">-</text>
