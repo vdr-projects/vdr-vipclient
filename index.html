@@ -28,7 +28,7 @@
 
 var Version = "0.04	2012/12/xx"
 var nrChannels = channels.length;
-var nrMedia = recording.length;
+var nrMedia = recording.length - 1;
 
 window.onkeydown = onKeyDown;
 
@@ -237,22 +237,19 @@ function onKeyDown(event) {
 			is = toi.informationService;
 			if(audio == 1) {	
 				is.setObject("cfg.media.audio.languagepriority","dut,eng",is.STORAGE_VOLATILE);
-				osdlang1.style.opacity = 1;
-				osdlang2.style.opacity = 0; 
-				osdlang3.style.opacity = 0;  
-				setTimeout("osdlang1.style.opacity = 0; ", 3000);
+				osdlang.style.opacity = 1;
+				osdlang.innerHTML = "<img src='unmute.png'><font color=white size=3>Nederlands</font>"
+				setTimeout("osdlang.style.opacity = 0; ", 3000);
 			} else if(audio == 2) {
 				is.setObject("cfg.media.audio.languagepriority","ger,deu,eng",is.STORAGE_VOLATILE);
-				osdlang1.style.opacity = 0;
-				osdlang2.style.opacity = 1; 
-				osdlang3.style.opacity = 0;  
-				setTimeout("osdlang2.style.opacity = 0; ", 3000);
+				osdlang.style.opacity = 1;
+				osdlang.innerHTML = "<img src='unmute.png'><font color=white size=3>Deutsch</font>"
+				setTimeout("osdlang.style.opacity = 0; ", 3000);
 			} else if(audio == 3) {
 				is.setObject("cfg.media.audio.languagepriority","eng",is.STORAGE_VOLATILE);
-				osdlang1.style.opacity = 0; 
-				osdlang2.style.opacity = 0;  
-				osdlang3.style.opacity = 1; 
-				setTimeout("osdlang3.style.opacity = 0; ", 3000);
+				osdlang.style.opacity = 1;
+				osdlang.innerHTML = "<img src='unmute.png'><font color=white size=3>English</font>"
+				setTimeout("osdlang.style.opacity = 0; ", 3000);
 				audio = 0;
 			}
 		} else {
@@ -898,14 +895,14 @@ function GetSchedule(schchan,tablelength){
 	      txt = txt + "<td>" + th + ":" + tm + "     (" + events.infoSequence[i].duration/60 + ")  " + events.infoSequence[i].name + "</td></tr>";
 	    }
 	   txt = txt + "</table>";
-	   scheduletxt.innerHTML = channelsnames[schchan] + txt;
+	   schedule.innerHTML = channelsnames[schchan] + txt;
 	} else {
-		scheduletxt.innerHTML = "<p>" + channelsnames[schchan] + "</p> ";
+		schedule.innerHTML = "<p>" + channelsnames[schchan] + "</p> ";
 	}
 
   } catch(e) {
     alert("Get EPG problem: " + e);
-		scheduletxt.innerHTML = "<p>" + channelsnames[schchan] + "</p><p> NO EPG </p>";
+		schedule.innerHTML = "<p>" + channelsnames[schchan] + "</p><p> NO EPG </p>";
   }
 
 }
@@ -1172,7 +1169,7 @@ function onKeyMedia(keyCode) {
         play(channels[currChan]);
         break;
     break;
-    case "Up":
+    case "Down":
 	if (mediaList.style.opacity != 0) {
 	do
 	{
@@ -1181,12 +1178,12 @@ function onKeyMedia(keyCode) {
 	while (!recording[currMed]);
 	showMediaList();
 	} else {
-	      speed = 1000;
-	      mediaPlayer.play(1000);
-	      showDisplay("PLAY", false, 100, 0 );
+	      speed = 0;
+	      mediaPlayer.play(0);
+	      showDisplay("PAUS", false, 100, 0 );
 	}
         break;
-    case "Down":
+    case "Up":
 	if (mediaList.style.opacity != 0) {
 	do
 	{
@@ -1195,9 +1192,9 @@ function onKeyMedia(keyCode) {
 	while (!recording[currMed]);
 	showMediaList();
 	} else {
-	      speed = 0;
-	      mediaPlayer.play(0);
-	      showDisplay("PAUS", false, 100, 0 );
+	      speed = 1000;
+	      mediaPlayer.play(1000);
+	      showDisplay("PLAY", false, 100, 0 );
 	}
 	break;
   case "Accept":
@@ -1206,9 +1203,9 @@ function onKeyMedia(keyCode) {
 	speed = 1000;
 	playRec(recording[currMed]);
 	} else {
-	osdmedia.style.opacity = 1 -osdmedia.style.opacity;
+	osdmedia.style.opacity = 1 - osdmedia.style.opacity;
 	ShowMediaOSD();
-	mediaPlayer.playFromPosition(60000,1000);
+//	mediaPlayer.playFromPosition(60000,1000);
 	}
         break;
    case "Green":
@@ -1216,22 +1213,19 @@ function onKeyMedia(keyCode) {
 			is = toi.informationService;
 			if(audio == 1) {	
 				is.setObject("cfg.media.audio.languagepriority","dut,eng",is.STORAGE_VOLATILE);
-				osdlang1.style.opacity = 1;
-				osdlang2.style.opacity = 0; 
-				osdlang3.style.opacity = 0;  
-				setTimeout("osdlang1.style.opacity = 0; ", 3000);
+				osdlang.style.opacity = 1;
+				osdlang.innerHTML = "<img src='unmute.png'><font color=white size=3>Nederlands</font>"
+				setTimeout("osdlang.style.opacity = 0; ", 3000);
 			} else if(audio == 2) {
 				is.setObject("cfg.media.audio.languagepriority","ger,deu,eng",is.STORAGE_VOLATILE);
-				osdlang1.style.opacity = 0;
-				osdlang2.style.opacity = 1; 
-				osdlang3.style.opacity = 0;  
-				setTimeout("osdlang2.style.opacity = 0; ", 3000);
+				osdlang.style.opacity = 1;
+				osdlang.innerHTML = "<img src='unmute.png'><font color=white size=3>Deutsch</font>"
+				setTimeout("osdlang.style.opacity = 0; ", 3000);
 			} else if(audio == 3) {
 				is.setObject("cfg.media.audio.languagepriority","eng",is.STORAGE_VOLATILE);
-				osdlang1.style.opacity = 0; 
-				osdlang2.style.opacity = 0;  
-				osdlang3.style.opacity = 1; 
-				setTimeout("osdlang3.style.opacity = 0; ", 3000);
+				osdlang.style.opacity = 1;
+				osdlang.innerHTML = "<img src='unmute.png'><font color=white size=3>English</font>"
+				setTimeout("osdlang.style.opacity = 0; ", 3000);
 				audio = 0;
 			}
 	break;
@@ -1303,7 +1297,7 @@ function onKeyMedia(keyCode) {
 
 function showMediaList() {
 	var liststyle = "";
-	var htmlstring = "<table border='0'><tr>";
+	var htmlstring = "<p><center><font size=4>RECORDINGS</font></center></p><table border='0'><tr>";
 	listMed = currMed-7;
 	for(var i=currMed-7; i<=currMed+7; i++) {
 		if (listMed<0) {
@@ -1322,7 +1316,7 @@ function showMediaList() {
 		}  else {
 			liststyle = "";
 		}
-		htmlstring = htmlstring + "<td" + liststyle + ">" + Left(recording[listMed],60) + "</td></tr>";
+		htmlstring = htmlstring + "<td" + liststyle + ">\uE003\uE003" + Left(recording[listMed],60) + "</td></tr>";
 	}
 	htmlstring = htmlstring + "</table>";
 	mediaList.innerHTML = htmlstring;
@@ -1331,7 +1325,7 @@ function showMediaList() {
 
 function incMed(step) {
     currMed = currMed + step;
-    if (currMed == nrMedia) {
+    if (currMed == nrMedia + 1) {
         currMed = 0;
     }
 }
@@ -1339,7 +1333,7 @@ function incMed(step) {
 function decMed(step) {
     currMed = currMed - step;
     if (currMed < 0) {
-        currMed = nrMedia - 1;
+        currMed = nrMedia;
     }
 }
 
@@ -1361,7 +1355,7 @@ function playRec(uri) {
 
 function ShowMediaOSD() {
 // Display Name/ length
-	osdmedia.innerHTML = " Elapsed time : " + mediaPlayer.getPosition();
+	osdmedia.innerHTML = "<font size=4> Elapsed time : " + mediaPlayer.getPosition() + "</font>";
 }
 
 
@@ -1372,15 +1366,9 @@ function ShowMediaOSD() {
     <embed type="application/x-motorola-toi" hidden="true">
 
 	<div id="channelList" style="background:#bbb; width:100%; height:45%; position:absolute; left:50px; top:25px;"></div>
-	<div id="schedule" style="background:#bbb; width:100%; height:45%; position:absolute; left:50px; top:25px;opacity:0;">
-	<div id="scheduletxt" style="background:#bbb; width:75%; height:45%; position:absolute; left:150px; top:0px;"></div></div>
+	<div id="schedule" style="background:#bbb; width:100%; height:45%; position:absolute; left:50px; top:25px;opacity:0;"></div>
 
-	<div id="colorkeys" style="width:100%; position:absolute; left:75px; top:485px;">
-		<font color=red size=3> ----- </font>
-		<font color=green size=3> Next </font>
-		<font color=yellow size=3> Schedule </font>
-		<font color=blue size=3> INFO </font>
-	</div>
+	<div id="colorkeys" style="width:100%; position:absolute; left:75px; top:485px;"><font color=red size=3> ----- </font><font color=green size=3> Next </font><font color=yellow size=3> Schedule </font><font color=blue size=3> INFO </font></div>
 
 
 	<div id="schedkeys" style="width:100%; position:absolute; left:75px; top:485px;opacity:0;"><font color=red size=3>-----</font><font color=green size=3>----</font><font color=yellow size=3> GUIDE </font><font color=blue size=3> ---- </font></div>
@@ -1389,11 +1377,9 @@ function ShowMediaOSD() {
 	<div id="switchtimer" style="background:#3366ff;width:300; position:absolute; left:150px; top:150px;z-index:10;opacity:0;"></div>
 
 
-	<videoplane id='videoplane' style='position:absolute; left:0px; top:0px; height: 100%; width: 100%; z-index:500;'>
-	</videoplane>
+	<videoplane id='videoplane' style='position:absolute; left:0px; top:0px; height: 100%; width: 100%; z-index:500;'></videoplane>
 
 	<div id="osdvolume" style="width:450px; position:absolute; left:150px; top:500px;z-index:501;fontFamily:VDRSymbolsSans;opacity:0;">Volume : </div>
-
 	<div id="osdmedia" style="width:450px; position:absolute; left:150px; top:400px;z-index:505;fontFamily:VDRSymbolsSans;opacity:0;"></div>
 
 	<div id="osdmain" style="background:#3366ff;width:550px; position:absolute; left:75px; top:350px; bottom:50px;z-index:505;"></div>
@@ -1403,16 +1389,13 @@ function ShowMediaOSD() {
 	<div id="osdtimer" style="width:50px; position:absolute; left:85px; top:400px;z-index:505;"></div>
 	<div id="osdca" style="width:25px; position:absolute; left:575px; top:385px;z-index:505;fontFamily:VDRSymbolsSans;"></div>
 
-	<div id="osdnr" style="background:#CC0000;width:75px;height:50px; position:absolute; left:85px; top:320px;z-index:505;opacity:0;"></div>
+	<div id="osdnr" style="background:red;width:75px;height:50px; position:absolute; left:85px; top:320px;z-index:505;opacity:0;"></div>
 
 	<div id="osdepginfo" style="background:#3366ff;width:550px; position:absolute; left:100px; top:100px;z-index:510;opacity:0;"></div>
 	<div id="osdepginfonext" style="background:#3366ff;width:550px; position:absolute; left:100px; top:100px;z-index:510;opacity:0;"></div>
 
 	<div id="osdmute" style="width:50px; position:absolute; left:550px; top:50px;z-index:515;opacity:0;"><img src="mute.png"></div>
-	<div id="osdlang1" style="width:50px; position:absolute; left:550px; top:50px;z-index:515;opacity:0;"><img src="unmute.png"><font color=white size=3>Nederlands</font></div>
-	<div id="osdlang2" style="width:50px; position:absolute; left:550px; top:50px;z-index:515;opacity:0;"><img src="unmute.png"><font color=white size=3>Deutsch</font></div>
-	<div id="osdlang3" style="width:50px; position:absolute; left:550px; top:50px;z-index:515;opacity:0;"><img src="unmute.png"><font color=white size=3>English</font></div>
-
+	<div id="osdlang" style="width:50px; position:absolute; left:550px; top:50px;z-index:515;opacity:0;"></div>
 	<div id="mainmenu" style="background:#3366ff;width:550px; position:absolute; left:75px; top:50px; bottom:50px;z-index:520;opacity:0;"></div>
 	<div id="mediaList" style="background:#bbb; width:80%; height:75%; position:absolute; left:10%; top:10%;z-index:520;opacity:0;"></div>
 
