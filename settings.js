@@ -57,6 +57,7 @@ var KEY_9 = "U+0039";
 var videoWidth = "544"; // fallbacksize
 var videoHeight = "576";
 
+var switchtimericon = "\uE003";
 var video = null;
 var teletext = null;
 var eitCache = null;
@@ -84,8 +85,7 @@ NN[4] = "-----";
 //2 = schedule	3 = lengte		event.duration (/60 = minuten)
 //		4 = shortinfo
 //		5 = extinfo
-//		6 = eventid
-//		7 = EPGNow / EPGNext
+//		6 = if (cds) -> shortinfo
 
 var EPG = new Array();
 EPG[0] = new Array();
@@ -97,21 +97,18 @@ EPG[0][3] = new Array();
 EPG[0][4] = new Array();
 EPG[0][5] = new Array();
 EPG[0][6] = new Array();
-EPG[0][7] = new Array();
 EPG[1][1] = new Array();
 EPG[1][2] = new Array();
 EPG[1][3] = new Array();
 EPG[1][4] = new Array();
 EPG[1][5] = new Array();
 EPG[1][6] = new Array();
-EPG[1][7] = new Array();
 EPG[2][1] = new Array();
 EPG[2][2] = new Array();
 EPG[2][3] = new Array();
 EPG[2][4] = new Array();
 EPG[2][5] = new Array();
 EPG[2][6] = new Array();
-EPG[2][7] = new Array();
 
 var osdtimeout = 0;
 var osdVolumetimeout = 0;

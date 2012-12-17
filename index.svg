@@ -30,57 +30,71 @@
 <foreignObject requiredExtensions="application/x-motorola-toi" hidden="true">
 </foreignObject>
 
-<g id="head" >
-  <text style="font-size:20px;" x="0" y="0">Audio Track Information</text>
-  <text x="0" dy="12">This portal displays information about the audio tracks
-  found in the current stream</text>
-
- <g fill="#ff0000">
-  <text x="0" dy="50">Press UP and DOWN to change TV channel</text>
-  <text x="0" dy="70">Press LEFT and RIGHT to change audio track</text>
-</g>
-
-  <g style="font-size:16px;">
-    <text dx="0" dy="100" >Current audio track: </text>
-    <text dx="180" dy="100" id="currAudio">-</text>
-  </g>
-
-  <g transform="translate(0,150)" id="info">
-    <text dx="0" dy="0">Encoding: </text>
-    <text dx="140" dy="0" id="encoding">-</text>
-
-    <text dx="0" dy="16">Sample rate: </text>
-    <text dx="140" dy="16" id="samplerate">-</text>
-
-    <text dx="0" dy="32">Format: </text>
-    <text dx="140" dy="32" id="format">-</text>
-
-    <text dx="0" dy="48">Mode: </text>
-    <text dx="140" dy="48" id="mode">-</text>
-
-    <text dx="0" dy="64">Language: </text>
-    <text dx="140" dy="64" id="language">-</text>
-
-    <text dx="0" dy="80">Subtitle: </text>
-    <text dx="140" dy="80" id="subs">-</text>
-
-    <text dx="0" dy="96">Audience type: </text>
-    <text dx="140" dy="96" id="audience">-</text>
-
-    <text dx="0" dy="112">Component tag: </text>
-    <text dx="140" dy="112" id="component">-</text>
-  </g>
-
+<g id="video_window">
   <video id='videoplane' x="0" y="0" width="1920" height="1080" preserveAspectRatio="xMidYMid">
   </video>
+</g>
 
-  <text id="videouri" dy="420" x="500">-</text>
+   <text x="200" y="900" id="osdvolume" style="fill:green;font-size:56px;" visibility="invisible">-</text>
+   <image xlink:href="mute.png" id="osdmute" height="120" width="120" y="100" x="1600"  visibility="invisible"/>
+
+<g id="osdlang" visibility="invisible" >
+   <image xlink:href="unmute.png" id="osdunmute" height="120" width="120" y="100" x="1600"  />
+   <text id="osdlangtxt" y="275" x="1500" style="fill:white;font-size:56px;" />
+</g>
+
+<g id="OSD"  visibility="visible" >
+   <rect height="288" width="1600" y="700" x="230" fill="#0000ff" rx="50"/>
+   <rect height="150" width="212" y="635" x="132" fill="#ff0000" rx="50"/>
+   <text id="osdnr" y="750" x="140" style="fill:white;font-size:100px;" />
+   <text id="osdtime" y="750" x="1400" style="fill:white;font-size:36px;" />
+   <text id="osdname" y="775" x="375" style="fill:white;font-size:64px;" />
+   <text id="osdca" y="825" x="1675" style="fill:white;font-size:64px;" />
+
+   <text id="osdtimenow" y="875" x="250" style="fill:white;font-size:48px;" />
+   <text id="osdpnow" y="875" x="500" style="fill:white;font-size:48px;" />
+   <text id="osddurationnow" y="875" x="1500" style="fill:white;font-size:48px;" />
+
+   <text id="osdtimenext" y="950" x="250" style="fill:white;font-size:48px;" />
+   <text id="osdpnext" y="950" x="500" style="fill:white;font-size:48px;" />
+   <text id="osddurationnext" y="950" x="1500" style="fill:white;font-size:48px;" />
+
+
+</g>
+
+<g id="EPGnow" visibility="invisible" >
+   <rect height="800" width="1300" y="100" x="300" fill="#0000ff" rx="50" />
+   <text id="epgchannel" y="275" x="350" style="fill:white;font-size:56px;" />
+   <text id="epgtime" y="350" x="350" style="fill:white;font-size:56px;" />
+   <text id="epgduration" y="350" x="550" style="fill:white;font-size:56px;" />
+   <text id="epginfo" y="425" x="350" style="fill:white;font-size:56px;" />
+   <textArea id="epgextinfo" text-align="justify" width="1200" y="500" x="350" style="fill:white;font-size:56px;" />
+</g>
+
+<g id="EPGnext" visibility="invisible" >
+   <rect height="800" width="1300" y="100" x="300" fill="#0000ff" rx="50" />
+   <text id="epgchanneln" y="275" x="350" style="fill:white;font-size:56px;" />
+   <text id="epgtimen" y="350" x="350" style="fill:white;font-size:56px;" />
+   <text id="epgdurationn" y="350" x="550" style="fill:white;font-size:56px;" />
+   <text id="epginfon" y="425" x="350" style="fill:white;font-size:56px;" />
+   <textArea id="epgextinfon" text-align="justify" width="1200" y="500" x="350" style="fill:white;font-size:56px;" />
 
 
 
 </g>
 
-
+<g id="MENU" visibility="invisible" >
+   <rect height="800" width="1300" y="100" x="300" fill="#0000ff" rx="50" />
+   <text id="menuheader" y="275" x="600" style="fill:white;font-size:88px;" />
+   <text id="menu0" y="375" x="350" style="fill:white;font-size:56px;" />
+   <text id="menu1" y="450" x="350" style="fill:white;font-size:56px;" />
+   <text id="menu2" y="525" x="350" style="fill:white;font-size:56px;" />
+   <text id="menu3" y="600" x="350" style="fill:white;font-size:56px;" />
+   <text id="menu4" y="675" x="350" style="fill:white;font-size:56px;" />
+   <text id="menu5" y="750" x="350" style="fill:white;font-size:56px;" />
+   <text id="menu6" y="825" x="350" style="fill:white;font-size:56px;" />
+   <text id="menu7" y="900" x="350" style="fill:white;font-size:56px;" />
+</g>
 
 
 </svg>

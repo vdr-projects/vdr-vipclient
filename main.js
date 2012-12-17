@@ -79,7 +79,6 @@ function incChan(step) {
     if (currChan == nrChannels) {
         currChan = 1;
     }
-    OSDchannr(currChan);
 }
 
 function decChan(step) {
@@ -87,7 +86,6 @@ function decChan(step) {
     if (currChan == 0) {
         currChan = nrChannels - 1;
     }
-    OSDchannr(currChan);
 }
 
 function createPlayer() {
@@ -242,10 +240,6 @@ function onKeyDown(event) {
 			settimer();
 			switchtimer.style.opacity = 1;
 			setTimeout("switchtimer.style.opacity = 0; ", 2000);
-//		} else {
-//			switchtimer.innerHTML = "<font color=black size=4><center> Program is running use OK to switch </center></font>";
-//			switchtimer.style.opacity = 1;
-//			setTimeout("switchtimer.style.opacity = 0; ", 2000);
 		}
 	}
         break;
@@ -256,24 +250,29 @@ function onKeyDown(event) {
 			is = toi.informationService;
 			if(audio == 1) {	
 				is.setObject("cfg.media.audio.languagepriority","dut,eng",is.STORAGE_VOLATILE);
-				osdlang.style.opacity = 1;
-				osdlang.innerHTML = "<img src='unmute.png'><font color=white size=3>Nederlands</font>"
-				setTimeout("osdlang.style.opacity = 0; ", 3000);
+				document.getElementById("osdlang").setAttribute("visibility","visible");
+				document.getElementById("osdlangtxt").textContent = "Nederlands"
+				setTimeout("document.getElementById('osdlang').setAttribute('visibility','invisible');", 3000);
 			} else if(audio == 2) {
 				is.setObject("cfg.media.audio.languagepriority","ger,deu,eng",is.STORAGE_VOLATILE);
-				osdlang.style.opacity = 1;
-				osdlang.innerHTML = "<img src='unmute.png'><font color=white size=3>Deutsch</font>"
-				setTimeout("osdlang.style.opacity = 0; ", 3000);
+				document.getElementById("osdlang").setAttribute("visibility","visible");
+				document.getElementById("osdlangtxt").textContent = "Deutsch"
+				setTimeout("document.getElementById('osdlang').setAttribute('visibility','invisible');", 3000);
 			} else if(audio == 3) {
 				is.setObject("cfg.media.audio.languagepriority","eng",is.STORAGE_VOLATILE);
-				osdlang.style.opacity = 1;
-				osdlang.innerHTML = "<img src='unmute.png'><font color=white size=3>English</font>"
-				setTimeout("osdlang.style.opacity = 0; ", 3000);
+				document.getElementById("osdlang").setAttribute("visibility","visible");
+				document.getElementById("osdlangtxt").textContent = "English"
+				setTimeout("document.getElementById('osdlang').setAttribute('visibility','invisible');", 3000);
 				audio = 0;
 			}
 		} else {
-		osdepginfo.style.opacity = 1 - osdepginfo.style.opacity ;
-		osdepginfonext.style.opacity = 1 - osdepginfo.style.opacity;
+			if (document.getElementById("EPGnow").getAttribute("visibility") == "visible" ){
+				document.getElementById("EPGnow").setAttribute("visibility","invisible");
+				document.getElementById("EPGnext").setAttribute("visibility","visible");
+			} else {
+				document.getElementById("EPGnow").setAttribute("visibility","visible");
+				document.getElementById("EPGnext").setAttribute("visibility","invisible");
+			}
 		}
 	} else {
 		colorkeys.innerHTML = "<font color=red size=3>" +  NN[3 + NowNext] + "</font><font color=green size=3>" + NN[NowNext] + "</font><font color=yellow size=3> Schedule </font><font color=blue size=3> INFO </font>";
@@ -301,30 +300,40 @@ function onKeyDown(event) {
 	break;
    case "Blue":
 	if(isFullscreen) {
-	RestartPortal();
+
 	} else {
 		SetOsdInfo();
-		osdepginfo.style.opacity = 1 - NowNext;
-		osdepginfonext.style.opacity = NowNext;
-		setTimeout("epgactive = 0; osdepginfo.style.opacity = 0; osdepginfonext.style.opacity = 0;", 5000);
+			if (NowNext){
+				document.getElementById("EPGnow").setAttribute("visibility","invisible");
+				document.getElementById("EPGnext").setAttribute("visibility","visible");
+			} else {
+				document.getElementById("EPGnow").setAttribute("visibility","visible");
+				document.getElementById("EPGnext").setAttribute("visibility","invisible");
+			}
+
+		setTimeout("epgactive = 0; document.getElementById('EPGnow').setAttribute('visibility','invisible'); document.getElementById('EPGnext').setAttribute('visibility','invisible');", 5000);
 	}
 	break;
    case "BrowserBack":
 	if(count) {
 		count = 0;
-//		osdnr.style.opacity = 0;
 		if(isFullscreen) {
 			showDisplay((currChan.toString()), false, 100, 0 );
 		}
 		Change = 0;
 	} else {
 		if(isFullscreen) {
-		//SHOW epg info
-		SetOsdInfo();
-		osdepginfo.style.opacity = 1;
-		osdepginfonext.style.opacity = 0;
-		epgactive = 1;		
-		setTimeout("epgactive = 0; osdepginfo.style.opacity = 0; osdepginfonext.style.opacity = 0;", 5000);
+			if(epgactive) {
+			epgactive = 0;
+			document.getElementById("EPGnow").setAttribute("visibility","invisible");
+			document.getElementById("EPGnext").setAttribute("visibility","invisible");
+			} else {
+			//SHOW epg info
+			SetOsdInfo();
+			document.getElementById("EPGnow").setAttribute("visibility","visible");
+			document.getElementById("EPGnext").setAttribute("visibility","invisible");
+			epgactive = 1;		
+			}
 		} else if(!isFullscreen){
 			isFullscreen = 1;
 			FullScreen();
@@ -368,17 +377,17 @@ function onKeyDown(event) {
    case "Menu":
 		if(isFullscreen) {
 		isSetupMenu = 1;
-		mainmenu.style.opacity = 1;
+		document.getElementById("MENU").setAttribute("visibility","visible");
 		InitMenu();
 		}
 		break;
    case "Scroll":
 		if(isFullscreen) {
 			NowNext = 0;
-			videoplane.style.width = "320px";
-			videoplane.style.height = "240px";
-			videoplane.style.left = "380px";
-			videoplane.style.top = "300px";
+			video.width = "320px";
+			video.height = "240px";
+			video.left = "380px";
+			video.top = "300px";
 			showChannelList();
 			isFullscreen = 0;
 			if(!SwitchGuide) {
@@ -447,8 +456,11 @@ function onKeyDown(event) {
     case "VolumeMute":
 	state = toi.audioOutputService.getMuteState(AudioOut);
 	toi.audioOutputService.setMuteState(AudioOut, !state);
-	mute = 1 - state;
-        osdmute.style.opacity = mute; 
+	if (state) {
+	document.getElementById("osdmute").setAttribute("visibility","invisible") ;
+	} else {
+	document.getElementById("osdmute").setAttribute("visibility","visible") ;
+	}
 	break;
     case "VolumeUp":
 	Volume = Volume + 10;
@@ -493,10 +505,9 @@ function Makedigit() {
 	prevChan = currChan;
 	Change = (Change*10) + digit;
 	count = count + 1;
-//	osdnr.style.opacity = isFullscreen; 
-        OSDchannr(Change);
 	if(isFullscreen) {
-		showDisplay((Change.toString()), false, 100, 0 ); 
+		showDisplay((Change.toString()), false, 100, 0 );
+//		document.getElementById("osdnr").setAttribute("visibility","visible"); 
 	}
 
     if (count>2) {
@@ -524,7 +535,6 @@ function CheckChannel(CheckThis) {
 	if(prevChan == currChan) { 
 	ChangeOK = 0 ;
 	}
-//	osdnr.style.opacity = 0;
 	if(isFullscreen) {
 	showDisplay((currChan.toString()), false, 100, 0 );
 	}
@@ -547,47 +557,34 @@ function SetLed(NumLed,color,blinkfreq){
 
 
 function showOSD() {
-//	if (osdtimeout) {
-//		clearTimeout(osdtimeout);
-//	}
-//	SetOsdInfo();
-//	opacity = 1;
-//	OSD(opacity);
-//	osdtimeout = setTimeout("fadeOut()", 3000);
+	if (osdtimeout) {
+		clearTimeout(osdtimeout);
+	}
+	SetOsdInfo();
+	document.getElementById("OSD").setAttribute("visibility","visible");
+	osdtimeout = setTimeout("document.getElementById('OSD').setAttribute('visibility','invisible');", 3000);
 }
 
 function showVolume() {
 	if (osdVolumetimeout) {
 		clearTimeout(osdVolumetimeout);
 	}
-	osdvolume.innerHTML = "<font color=green size=3>VOLUME : \uE007" + (new Array(Volume)).join("\uE008") + (new Array(100 - Volume)).join("\uE009") + "\uE00A</font>";
-	osdvolume.style.opacity = 1;
-	osdVolumetimeout = setTimeout("osdvolume.style.opacity = 0;", 3000);
+	document.getElementById("osdvolume").textContent = "VOLUME : \uE007" + (new Array(Volume)).join("\uE008") + (new Array(100 - Volume)).join("\uE009") + "\uE00A";
+	document.getElementById("osdvolume").setAttribute("visibility","visible");
+	osdVolumetimeout = setTimeout("document.getElementById('osdvolume').setAttribute('visibility','invisible');", 3000);
 }
 
-
-function OSD(opacity) {
-//    osdmain.style.opacity = opacity;
-//    osdnr.style.opacity = opacity;
-//    osdtime.style.opacity = opacity;
-//    osdname.style.opacity = opacity;
-//    osdepg.style.opacity = opacity;
-//    osdca.style.opacity = opacity;
-//    osdtimer.style.opacity = opacity;
-}
 
 
 function SetOsdInfo() {
-    OSDchannr(currChan);
     date_time();
     GetEPG(currChan);
-    OSDhtml();
+    makeOSD();
     return;
 }
 
 function onCacheUpdated() {
 	if (osdtimeout) {
-	GetEPG(currChan);
 	SetOsdInfo();
 	} 
 //	if (!isFullscreen) {
@@ -599,16 +596,63 @@ function onCacheUpdated() {
 
 }
 
-function OSDchannr(channr) {
- //   osdnr.innerHTML = "<center><font color=black size=6>" + channr + "</font></center>";
-}
+function makeOSD(){
+document.getElementById("osdnr").textContent = currChan;
+document.getElementById("osdtime").textContent = result;
+document.getElementById("osdname").textContent = Left(channelsnames[currChan],30);
+document.getElementById("epgchannel").textContent = Left(channelsnames[currChan],30);
+document.getElementById("epgchanneln").textContent = Left(channelsnames[currChan],30);
 
-function OSDhtml(){
-    osdtime.innerHTML = "<font color=white size=2>" + result +"</font>";
-    osdname.innerHTML = "<font color=black size=5>" + Left(channelsnames[currChan],30) + "</font>";
-    osdepg.innerHTML = "<font color=white size=4><p>" + EPG[0][7][currChan] + "</p>\n<p>" + EPG[1][7][currChan] + "</p></font>";
-    osdepginfo.innerHTML =  "<center><font color=white size=4><p>" + EPG[0][7][currChan] + "</p>\n<p>" + EPG[0][4][currChan] + "</p>\n<p>" + Left(EPG[0][5][epgchan],750) + "</p></font></center>";
-    osdepginfonext.innerHTML =  "<center><font color=white size=4><p>" + EPG[1][7][currChan] + "</p>\n<p>" + EPG[1][4][currChan] + "</p>\n<p>" + Left(EPG[1][5][epgchan],750) + "</p></font></center>";
+	tijd = EPG[0][2][currChan];
+	date = new Date(tijd*1000); 
+	tijd = date.toUTCString();
+	tijd = new Date(tijd);
+	dateCurrent = new Date();
+	var EPGminutes = Math.floor((dateCurrent.getTime() - date.getTime()) /1000/60);
+
+	var tm = tijd.getMinutes();
+	var th = tijd.getHours();
+	if(th<10)
+        {
+                th = "0"+th;
+        }
+        if(tm<10)
+        {
+                tm = "0"+tm;
+        }
+	document.getElementById("osdtimenow").textContent = th + ":" + tm;
+	document.getElementById("epgtime").textContent = th + ":" + tm;
+
+	tijd = EPG[1][2][currChan];
+	date = new Date(tijd*1000); 
+	tijd = date.toUTCString();
+	tijd = new Date(tijd);
+	var tm = tijd.getMinutes();
+	var th = tijd.getHours();
+	if(th<10)
+        {
+                th = "0"+th;
+        }
+        if(tm<10)
+        {
+                tm = "0"+tm;
+        }
+	document.getElementById("osdtimenext").textContent = th + ":" + tm;
+	document.getElementById("epgtimen").textContent = th + ":" + tm;
+
+document.getElementById("osdpnow").textContent = EPG[0][1][currChan] + " " +  EPG[0][6][currChan];
+document.getElementById("epginfo").textContent = EPG[0][1][currChan] + " " +  EPG[0][6][currChan];
+document.getElementById("osdpnext").textContent = EPG[1][1][currChan] + " " +  EPG[1][6][currChan];
+document.getElementById("epginfon").textContent = EPG[1][1][currChan] + " " +  EPG[1][6][currChan];
+
+document.getElementById("epgextinfo").textContent = EPG[0][4][currChan] + EPG[0][5][currChan];
+document.getElementById("epgextinfon").textContent = EPG[1][4][currChan] + EPG[1][5][currChan];
+
+document.getElementById("osddurationnow").textContent = EPGminutes + " / " + (EPG[0][3][currChan] - EPGminutes) + " min";
+document.getElementById("epgduration").textContent = EPGminutes + " / " + (EPG[0][3][currChan] - EPGminutes) + " minutes";
+document.getElementById("osddurationnext").textContent = EPG[1][3][currChan] + " min";
+document.getElementById("epgdurationn").textContent = EPG[1][3][currChan] + " minutes";
+
 }
 
 
@@ -636,8 +680,8 @@ function settimer() {
 			clearTimeout(switchtimerID);
 		}
 		switchtimerID = setTimeout(TimerActions, StartTime);
+		switchtimericon = "\uE00C";
 		switchtimer.innerHTML = "<font color=black size=4><p>  Name      : " + EPG[NowNext][1][currChan] + "</p><p>  channel   : " + channelsnames[currChan] +  "</p><p>  Starttime : " + th + ":" + tm + "</p></font>";
-		osdtimer.innerHTML = "<font color=black size=3><p>" + th + ":" + tm + "</p></font>";
 		SetLed(0,2,1);
 	} else {
 	//
@@ -668,40 +712,6 @@ function Right(str, n){
   }
 }
 
-function fadeIn() {
-    opacity += 0.2;
-	    OSD(opcity);
-    if (opacity >= 1) {
-	setTimeout("fadeOut()", 200);
-	return;
-    }
-    setTimeout("fadeIn()", 100);
-}
-
-function fadeOut() {
-    opacity -= 0.2;
-	OSD(opacity);
-    if (opacity <= 0) {
-	return;
-    }
-    setTimeout("fadeOut()", 100);
-}
-
-function RestartPortal(){
-
-    try {
-	ids = toi.applicationService.getApplicationIds();
-	for ( i = 0; i < ids.length; ++i ){
-	    info = toi.applicationService.getInfo(ids[i]);
-	    if (info.applicationName == "WebKit Portal"){
-		 dump("Killing app " + ids[i] + ": " + info.applicationName);
-		 toi.applicationService.kill(ids[i]);
-	    }
-	}
-    }
-    catch(e) { dump(e) };
-}
-
 function date_time()
 {
         date = new Date;
@@ -724,7 +734,7 @@ function date_time()
         {
                 s = "0"+s;
         }
-        result = ''+days[day]+' '+d+' '+months[month]+' '+year+' '+h+':'+m;
+        result = d + "\uE003" + months[month] + "\uE003" + h + ':' +m;
         return;
 }
 
@@ -732,10 +742,8 @@ function date_time()
 
 function GetEPG(epgchan)
 {
-	EPG[0][7][epgchan] = "";
 	EPGShortnow = "";
 	EPGExtnow = "";
-	EPG[1][7][epgchan] = "";
 	EPGShortnext = "";
 	EPGExtnext = "";
 	cds = 0;
@@ -757,9 +765,9 @@ function GetEPG(epgchan)
 	 eitCache.addService(eitService);
 	 event = eitCache.getPresentEvent(eitService);
 	if(event.freeCaMode){
-		osdca.innerHTML = "<font color=black size=6>\uE00D</font>";
+		document.getElementById("osdca").textContent = "\uE00D" + switchtimericon ;
 	} else {
-		osdca.innerHTML = "<font color=black size=6>\uE00F</font>";
+		document.getElementById("osdca").textContent = "\uE00F" + switchtimericon;
 	}
 
 	if (event.name)
@@ -775,7 +783,7 @@ function GetEPG(epgchan)
 
 	EPG[0][1][epgchan] = event.name;
 	EPG[0][2][epgchan] = event.time;
-	EPG[0][3][epgchan] = (event.duration/60);
+	EPG[0][3][epgchan] = (event.duration/60).toFixed(0);
 	EPG[0][4][epgchan] = "";
 	EPG[0][5][epgchan] = "";
 
@@ -786,39 +794,18 @@ function GetEPG(epgchan)
 	EPG[0][5][epgchan] = EPGExtnow;
 	}
 
-	tijd = event.time;
-	date = new Date(tijd*1000); 
-	tijd = date.toUTCString();
-	tijd = new Date(tijd);
-	dateCurrent = new Date();
-	var EPGminutes = Math.floor((dateCurrent.getTime() - date.getTime()) /1000/60);
-	var tm = tijd.getMinutes();
-	var th = tijd.getHours();
-	if(th<10)
-        {
-                th = "0"+th;
-        }
-        if(tm<10)
-        {
-                tm = "0"+tm;
-        }
 	if(cds){
 	 // CDS has short info, other providers, a little longer.
-	 EPG[0][7][epgchan] =  th + ":" + tm + " (" + EPGminutes + " / " + ((event.duration/60)-EPGminutes).toFixed(0) + ")" + " " + event.name + " " + EPGShortnow;
+	 EPG[0][6][epgchan] = EPGShortnow;
 	} else {
-	 EPG[0][7][epgchan] =  th + ":" + tm + " (" + EPGminutes + " / " + ((event.duration/60)-EPGminutes).toFixed(0) + ")" + " " + event.name + " ";
-	}
-	if (!event.time) 
-	{
-		EPG[0][7][epgchan] = " ";
+	 EPG[0][6][epgchan] = "";
 	}
 
-
-	 event = eitCache.getFollowingEvent(eitService);
+	event = eitCache.getFollowingEvent(eitService);
 
 	EPG[1][1][epgchan] = event.name;
 	EPG[1][2][epgchan] = event.time;
-	EPG[1][3][epgchan] = (event.duration/60);
+	EPG[1][3][epgchan] = (event.duration/60).toFixed(0);
 	EPG[1][4][epgchan] = "";
 	EPG[1][5][epgchan] = "";
 
@@ -829,30 +816,11 @@ function GetEPG(epgchan)
 	EPG[1][5][epgchan] = EPGExtnext;
 	}
 
-	tijd = event.time;
-	date = new Date(tijd*1000); 
-	tijd = date.toUTCString();
-	tijd = new Date(tijd);
-	var tm = tijd.getMinutes();
-	var th = tijd.getHours();
-	if(th<10)
-        {
-                th = "0"+th;
-        }
-        if(tm<10)
-        {
-                tm = "0"+tm;
-        }
-	
 	if(cds){
 	 // CDS has short info, other providers, a little longer.
-	 EPG[1][7][epgchan] = th + ":" + tm + " (" + (event.duration/60).toFixed(0) + ")" + "          " + event.name + " " + EPGShortnext;
+	 EPG[1][6][epgchan] = EPGShortnow;
 	} else {
-	 EPG[1][7][epgchan] = th + ":" + tm + " (" + (event.duration/60).toFixed(0) + ")" + "          " + event.name + " ";
-	}
-	if (!event.time) 
-	{
-		EPG[1][7][epgchan] = " ";
+	 EPG[1][6][epgchan] = "";
 	}
 
 
@@ -980,7 +948,7 @@ function onKeyMenu(keyCode) {
     case "Menu":
     case "BrowserBack":
 	isSetupMenu = 0;
-	mainmenu.style.opacity = 0;
+	document.getElementById("MENU").setAttribute("visibility","invisible");
     break;
     case "Left":
     break;
@@ -1058,7 +1026,11 @@ function onKeyMenu(keyCode) {
 }
 
 function InitMenu() {
-	mainmenu.innerHTML = "<center><font size=7 color=white><p> SETTINGS </p><font color=red size=5><p>Frontdisplay Clock : " + showClock + "</p></font><font color=green size=5><p>Prio audio track : " + (toi.informationService.getObject("cfg.media.audio.languagepriority")) + "</p></font><font color=yellow size=5><p>Switch timer : " + Boolean(switchtimerID) + "</p></font><font color=blue size=5><p>Preview guide : " + SwitchGuide + "</p></font></center>";
+	document.getElementById("menuheader").textContent = "SETTINGS";
+	document.getElementById("menu0").textContent = "<RED>    Frontdisplay Clock : " + showClock;
+	document.getElementById("menu1").textContent = "<GREEN>  Prio audio track : " + (toi.informationService.getObject("cfg.media.audio.languagepriority"));
+	document.getElementById("menu2").textContent = "<YELLOW> Switch timer : " + Boolean(switchtimerID);
+	document.getElementById("menu3").textContent = "<BLUE>   Preview guide : " + SwitchGuide + " ";
 }
 
 // END Menu
@@ -1119,19 +1091,19 @@ function onKeyMedia(keyCode) {
 			is = toi.informationService;
 			if(audio == 1) {	
 				is.setObject("cfg.media.audio.languagepriority","dut,eng",is.STORAGE_VOLATILE);
-				osdlang.style.opacity = 1;
-				osdlang.innerHTML = "<img src='unmute.png'><font color=white size=3>Nederlands</font>"
-				setTimeout("osdlang.style.opacity = 0; ", 3000);
+				document.getElementById("osdlang").setAttribute("visibility","visible");
+				document.getElementById("osdlangtxt").textContent = "Nederlands"
+				setTimeout("document.getElementById('osdlang').setAttribute('visibility','invisible');", 3000);
 			} else if(audio == 2) {
 				is.setObject("cfg.media.audio.languagepriority","ger,deu,eng",is.STORAGE_VOLATILE);
-				osdlang.style.opacity = 1;
-				osdlang.innerHTML = "<img src='unmute.png'><font color=white size=3>Deutsch</font>"
-				setTimeout("osdlang.style.opacity = 0; ", 3000);
+				document.getElementById("osdlang").setAttribute("visibility","visible");
+				document.getElementById("osdlangtxt").textContent = "Deutsch"
+				setTimeout("document.getElementById('osdlang').setAttribute('visibility','invisible');", 3000);
 			} else if(audio == 3) {
 				is.setObject("cfg.media.audio.languagepriority","eng",is.STORAGE_VOLATILE);
-				osdlang.style.opacity = 1;
-				osdlang.innerHTML = "<img src='unmute.png'><font color=white size=3>English</font>"
-				setTimeout("osdlang.style.opacity = 0; ", 3000);
+				document.getElementById("osdlang").setAttribute("visibility","visible");
+				document.getElementById("osdlangtxt").textContent = "English"
+				setTimeout("document.getElementById('osdlang').setAttribute('visibility','invisible');", 3000);
 				audio = 0;
 			}
 	break;
@@ -1177,8 +1149,11 @@ function onKeyMedia(keyCode) {
     case "VolumeMute":
 	state = toi.audioOutputService.getMuteState(AudioOut);
 	toi.audioOutputService.setMuteState(AudioOut, !state);
-	mute = 1 - state;
-        osdmute.style.opacity = mute; 
+	if (state) {
+	document.getElementById("osdmute").setAttribute("visibility","invisible") ;
+	} else {
+	document.getElementById("osdmute").setAttribute("visibility","visible") ;
+	}
 	break;
     case "VolumeUp":
 	Volume = Volume + 10;
