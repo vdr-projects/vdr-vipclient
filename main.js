@@ -21,7 +21,6 @@ var Version = "0.10	2012/12/xx"
 var nrChannels = channels.length;
 var nrMedia = recording.length - 1;
 
-
 function onLoad() {
   document.addEventListener("keydown", onKeyDown, false);
   video = document.getElementById("videoplane");
@@ -106,6 +105,7 @@ function play(uri) {
     mediaPlayer.open(uri);
     mediaPlayer.play(1000);
 	if(isFullscreen) {
+	GetEPG(currChan);
 	showOSD();
 	}
 	showDisplay((currChan.toString()), false, 100, 0 );
@@ -121,13 +121,12 @@ function preview(urip) {
 	}
 	showChannelList();
 	if (isSchedule) {
-	GetSchedule(currChan,10);
+//	GetSchedule(currChan);
 	}
 }
 
 
 function FullScreen() {
-//    video.setAttribute("overlay", "500");
     video.setAttribute("x", "0");
     video.setAttribute("y", "0");
     video.setAttribute("width", videoWidth);
@@ -238,8 +237,7 @@ function onKeyDown(event) {
 	} else {
 		if(NowNext) {	
 			settimer();
-			switchtimer.style.opacity = 1;
-			setTimeout("switchtimer.style.opacity = 0; ", 2000);
+			showChannelList();
 		}
 	}
         break;
@@ -281,21 +279,19 @@ function onKeyDown(event) {
 
 	break;
    case "Yellow":
+	alert ("YELLOW");
+	alert (isFullscreen);
+	alert (isSchedule);
+	alert (currChan);
 	if(isFullscreen) {
-		if(!epgactive) {
-			GetSchedule(currChan,15);
-			schedule.style.opacity = 1;
-			schedule.style.height = "75%";
-			setTimeout("schedule.style.opacity = 0;schedule.style.height = '45%';", 3000);
+		if (isSchedule) {
+			document.getElementById("SCHEDULE").setAttribute("visibility","invisible");
+		} else {
+			document.getElementById("SCHEDULE").setAttribute("visibility","visible");
+			SetSchedule();
 		}
-	} else {
-		GetSchedule(currChan,10);
-		schedule.style.opacity = 1 - schedule.style.opacity;
-		channelList.style.opacity = 1 - schedule.style.opacity;
-		schedkeys.style.opacity = schedule.style.opacity;
-		colorkeys.style.opacity = 1 - schedule.style.opacity;
-		isSchedule = schedule.style.opacity;
 	}
+		isSchedule = !isSchedule;
 	break;
    case "Blue":
 	if(isFullscreen) {
@@ -576,12 +572,23 @@ function showVolume() {
 
 function SetOsdInfo() {
     date_time();
-    GetEPG(currChan);
+//    GetEPG(currChan);
     makeOSD();
     return;
 }
 
+function SetSchedule() {
+	for (var i = 1;  i < 15; i++) {
+		document.getElementById(("schedule"+i)).textContent = schedule[i][currChan];
+	    }
+	document.getElementById("schedule0").textContent = currChan + "\uE003" + channelsnames[currChan];
+}
+
+
+
 function onCacheUpdated() {
+	GetEPG(currChan);
+
 	if (osdtimeout) {
 	SetOsdInfo();
 	} 
@@ -589,7 +596,7 @@ function onCacheUpdated() {
 //		showChannelList();
 //	}
 	if (isSchedule) {
-	GetSchedule(currChan,10);
+	SetSchedule();
 	}
 
 }
@@ -640,9 +647,9 @@ document.getElementById("epgchanneln").textContent = Left(channelsnames[currChan
 	document.getElementById("osdtimenext").textContent = th + ":" + tm;
 	document.getElementById("epgtimen").textContent = th + ":" + tm;
 
-document.getElementById("osdpnow").textContent = EPG[0][1][currChan] + " " +  EPG[0][6][currChan];
+document.getElementById("osdpnow").textContent = Left(EPG[0][1][currChan] + " " +  EPG[0][6][currChan],35);
 document.getElementById("epginfo").textContent = EPG[0][1][currChan] + " " +  EPG[0][6][currChan];
-document.getElementById("osdpnext").textContent = EPG[1][1][currChan] + " " +  EPG[1][6][currChan];
+document.getElementById("osdpnext").textContent = Left(EPG[1][1][currChan] + " " +  EPG[1][6][currChan],35);
 document.getElementById("epginfon").textContent = EPG[1][1][currChan] + " " +  EPG[1][6][currChan];
 
 document.getElementById("epgextinfo").textContent = EPG[0][4][currChan] + EPG[0][5][currChan];
@@ -674,14 +681,14 @@ function settimer() {
 		dateCurrent = new Date();
 		var StartTime = Math.floor((date.getTime() - dateCurrent.getTime()));
 		timerChan = currChan;
-		TimerActions = "isVisible = 0; isFullscreen = 1; FullScreen(); setVisible(isVisible); currChan = timerChan; play(timerChan); osdtimer.innerHTML = '';SetLed(0,0,0);"
+		TimerActions = "isVisible = 0; isFullscreen = 1; FullScreen(); setVisible(isVisible); currChan = timerChan; play(timerChan);SetLed(0,0,0);"
 		// only 1 switch timer possible
 		if(switchtimerID) {
 			clearTimeout(switchtimerID);
 		}
 		switchtimerID = setTimeout(TimerActions, StartTime);
-		switchtimericon = "\uE00C";
-		switchtimer.innerHTML = "<font color=black size=4><p>  Name      : " + EPG[NowNext][1][currChan] + "</p><p>  channel   : " + channelsnames[currChan] +  "</p><p>  Starttime : " + th + ":" + tm + "</p></font>";
+		switchicon = "\uE00C";
+		switchtimericon[0] = currChan;
 		SetLed(0,2,1);
 	} else {
 	//
@@ -766,9 +773,9 @@ function GetEPG(epgchan)
 	 eitCache.addService(eitService);
 	 event = eitCache.getPresentEvent(eitService);
 	if(event.freeCaMode){
-		document.getElementById("osdca").textContent = "\uE00D" + switchtimericon ;
+		document.getElementById("osdca").textContent = "\uE00D" + switchicon ;
 	} else {
-		document.getElementById("osdca").textContent = "\uE00F" + switchtimericon;
+		document.getElementById("osdca").textContent = "\uE00F" + switchicon;
 	}
 
 	if (event.name)
@@ -802,6 +809,37 @@ function GetEPG(epgchan)
 	 EPG[0][6][epgchan] = "";
 	}
 
+
+// schedule
+	 events = eitCache.getEvents(eitService, 1000000000, 2000000000);
+	if (event.name)	{
+	    if (events.more) {
+	      var t = eitCache.getEvents(eitService, 1000000000, 2000000000);
+	      events.infoSequence.concat(t.infoSequence);
+	      events.more = t.more;
+	    }
+
+	    for (var i = 0; i < events.infoSequence.length && i < 14; i++) {
+
+		tijd = events.infoSequence[i].time;
+		date = new Date(tijd*1000); 
+		tijd = date.toUTCString();
+		tijd = new Date(tijd);
+		var tm = tijd.getMinutes();
+		var th = tijd.getHours();
+		if(th<10)
+	        	{
+	                th = "0"+th;
+	        	}
+	        if(tm<10)
+	        	{
+	                tm = "0"+tm;
+	        	}
+	schedule[i+1][epgchan] = th + ":" + tm + "     (" + events.infoSequence[i].duration/60 + ")  " + events.infoSequence[i].name;
+	    }
+	}
+// end schedule
+
 	event = eitCache.getFollowingEvent(eitService);
 
 	EPG[1][1][epgchan] = event.name;
@@ -825,75 +863,13 @@ function GetEPG(epgchan)
 	}
 
 
+
+
   } catch(e) {
     alert("Get EPG problem: " + e);
   }
 } 
 
-
-
-function GetSchedule(schchan,tablelength){
-  try {
- 	SI=channels[schchan].split("-");
-	is = toi.informationService;
-	is.setObject("cfg.locale.ui","ger",is.STORAGE_VOLATILE);
-	if(SI[0]=="S28.2E") {
-		is.setObject("cfg.locale.ui","eng",is.STORAGE_VOLATILE);
-	} 
-	if((SI[0]=="S23.5E" && SI[1]=="3") || SI[2]=="1026" || SI[2]=="1097" || SI[2]=="1105" || SI[2]=="1119") {
-		is.setObject("cfg.locale.ui","dut",is.STORAGE_VOLATILE);
-		cds = 1;
-	}
-
-	 eitService = toi.statics.ToiDvbEitCacheServiceItem.create(SI[1],SI[2],SI[3]);
-	 eitCache.addService(eitService);
-	 event = eitCache.getPresentEvent(eitService);
-	 events = eitCache.getEvents(eitService, 1000000000, 2000000000);
-
-	if (event.name)	{
-	    if (events.more) {
-	      var t = eitCache.getEvents(eitService, 1000000000, 2000000000);
-	      events.infoSequence.concat(t.infoSequence);
-	      events.more = t.more;
-	    }
-
-	    var txt = "<table><tr>";
-	    var i = 0;
-	    for (i = 0; i < events.infoSequence.length && i < tablelength; i++) {
-
-		while ((i > 0) && (events.infoSequence[i].eventId == events.infoSequence[(i-1)].eventId)) {
-			i = i +1;
-		}
-
-		tijd = events.infoSequence[i].time;
-		date = new Date(tijd*1000); 
-		tijd = date.toUTCString();
-		tijd = new Date(tijd);
-		var tm = tijd.getMinutes();
-		var th = tijd.getHours();
-		if(th<10)
-	        	{
-	                th = "0"+th;
-	        	}
-	        if(tm<10)
-	        	{
-	                tm = "0"+tm;
-	        	}
-
-	      txt = txt + "<td>" + th + ":" + tm + "     (" + events.infoSequence[i].duration/60 + ")  " + events.infoSequence[i].name + "</td></tr>";
-	    }
-	   txt = txt + "</table>";
-	   schedule.innerHTML = channelsnames[schchan] + txt;
-	} else {
-		schedule.innerHTML = "<p>" + channelsnames[schchan] + "</p> ";
-	}
-
-  } catch(e) {
-    alert("Get EPG problem: " + e);
-		schedule.innerHTML = "<p>" + channelsnames[schchan] + "</p><p> NO EPG </p>";
-  }
-
-}
 
 // End of EPG section
 
@@ -932,7 +908,7 @@ function showChannelList() {
 			var y = 110 + (50 * yy);
 			document.getElementById("guidebar").setAttribute("y",y);
 		}
-	tijd = EPG[0][2][currChan];
+	tijd = EPG[0][2][listChan];
 	date = new Date(tijd*1000); 
 	tijd = date.toUTCString();
 	tijd = new Date(tijd);
@@ -952,21 +928,41 @@ function showChannelList() {
                 tm = "0"+tm;
         }
 
-	EpgInfo[0] = th + ":" + tm + "\uE003(" + EPGminutes + "\uE003/\uE003" + (EPG[0][3][listChan] - EPGminutes).toFixed(0) + ")" + "\uE003" + EPG[0][1][listChan] + "\uE003" + EPG[0][6][listChan];
+	EpgInfo[0] = th + ":" + tm + "\uE003(" + EPGminutes + "/" + (EPG[0][3][listChan] - EPGminutes).toFixed(0) + ")" + "\uE003" + EPG[0][1][listChan] + "\uE003" + EPG[0][6][listChan];
+
+
+	tijd = EPG[1][2][listChan];
+	date = new Date(tijd*1000); 
+	tijd = date.toUTCString();
+	tijd = new Date(tijd);
+	dateCurrent = new Date();
+	var tm = tijd.getMinutes();
+	var th = tijd.getHours();
+	if(th<10)
+        {
+                th = "0"+th;
+        }
+        if(tm<10)
+        {
+                tm = "0"+tm;
+        }
+
 	EpgInfo[1] = th + ":" + tm + "\uE003(" + (EPG[1][3][listChan]) + ")" + "\uE003" + EPG[1][1][listChan] + "\uE003" + EPG[1][6][listChan];
 
+
 	try {
-	document.getElementById(("guide"+yy)).textContent = listChan + "\uE003" + Left(channelsnames[listChan],15) + "\uE003" + Left(EpgInfo[NowNext],64);
+	if (listChan == switchtimericon[0] && NowNext == 1) {
+			document.getElementById("guide"+yy).setAttribute("style","fill:red;font-size:36px;");
+	} else {
+			document.getElementById("guide"+yy).setAttribute("style","fill:white;font-size:36px;");
+	}
+	document.getElementById(("guide"+yy)).textContent = listChan + "\uE003" + Left(channelsnames[listChan],15) + "\uE003" + Left(EpgInfo[NowNext],60);
 	  } catch (e) {
 	    alert("Error file guide list: " + e);
 	  }
 	yy = yy + 1;
 	}
 
-
-//	htmlstring = htmlstring + "</table>";
-//	channelList.innerHTML = htmlstring;
-//        chanlistepg.innerHTML = "<center><font color=black size=4><p>" + EPG[NowNext][1][currChan] + "</p></font><font color=black size=3><p>" + Left(EPG[NowNext][4][currChan],250) + "</p></font></center>" ;
 
 }
 
@@ -1014,7 +1010,8 @@ function onKeyMenu(keyCode) {
 	clearTimeout(switchtimerID);
 	switchtimerID = 0;
 	InitMenu();
-	switchtimericon = "\uE003"
+	switchtimericon[0] = 0;
+	switchicon = "\uE003";
 	SetLed(0,0,0);
     break;
     case "Blue":

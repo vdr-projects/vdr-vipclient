@@ -57,7 +57,8 @@ var KEY_9 = "U+0039";
 var videoWidth = "544"; // fallbacksize
 var videoHeight = "576";
 
-var switchtimericon = "\uE003";
+var switchtimericon = new Array();
+var switchicon = "\uE003";
 
 var guide = null;
 var video = null;
@@ -80,6 +81,7 @@ NN[1] = "Next";
 NN[2] = "Schedule";
 NN[3] = "-----";
 NN[4] = "TIMER";
+NN[5] = "TIMER";
 
 //
 //NowNext,	1 = programma naam	event.name			,currchan
@@ -111,6 +113,9 @@ EPG[2][3] = new Array();
 EPG[2][4] = new Array();
 EPG[2][5] = new Array();
 EPG[2][6] = new Array();
+
+var schedule = new Array();
+for (var i = 1;  i < 15; i++) { schedule[i] = new Array(); }
 
 var osdtimeout = 0;
 var osdVolumetimeout = 0;

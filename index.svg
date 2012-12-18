@@ -44,26 +44,26 @@
 </g>
 
 <g id="OSD"  visibility="visible" >
-   <rect height="288" width="1600" y="700" x="230" fill="#0000ff" rx="50"/>
+   <rect height="288" width="1600" y="700" x="230" fill="#000066" rx="50"/>
    <rect height="150" width="212" y="635" x="132" fill="#ff0000" rx="50"/>
    <text id="osdnr" y="750" x="140" style="fill:white;font-size:100px;" />
    <text id="osdtime" y="750" x="1400" style="fill:white;font-size:36px;" />
    <text id="osdname" y="775" x="375" style="fill:white;font-size:64px;" />
    <text id="osdca" y="825" x="1675" style="fill:white;font-size:64px;" />
 
-   <text id="osdtimenow" y="875" x="250" style="fill:white;font-size:48px;" />
+   <text id="osdtimenow" y="875" x="300" style="fill:white;font-size:48px;" />
    <text id="osdpnow" y="875" x="500" style="fill:white;font-size:48px;" />
-   <text id="osddurationnow" y="875" x="1500" style="fill:white;font-size:48px;" />
+   <text id="osddurationnow" y="875" x="1450" style="fill:white;font-size:48px;" />
 
-   <text id="osdtimenext" y="950" x="250" style="fill:white;font-size:48px;" />
+   <text id="osdtimenext" y="950" x="300" style="fill:white;font-size:48px;" />
    <text id="osdpnext" y="950" x="500" style="fill:white;font-size:48px;" />
-   <text id="osddurationnext" y="950" x="1500" style="fill:white;font-size:48px;" />
+   <text id="osddurationnext" y="950" x="1450" style="fill:white;font-size:48px;" />
 
 
 </g>
 
 <g id="MENU" visibility="invisible" >
-   <rect height="900" width="1300" y="75" x="300" fill="#0000ff" rx="50" opacity="0.6" />
+   <rect height="900" width="1300" y="75" x="300" fill="#000066" rx="50" opacity="0.6" />
    <rect height="75" width="250" y="875" x="450" fill="red" rx="50" />
    <rect height="75" width="250" y="875" x="700" fill="green" rx="50" />
    <rect height="75" width="250" y="875" x="950" fill="yellow" rx="50" />
@@ -83,29 +83,28 @@
 </g>
 
 <g id="GUIDE" visibility="invisible" >
-   <rect height="900" width="1500" y="75" x="200" fill="#0000ff" rx="50" opacity="0.6" />
+   <rect height="900" width="1500" y="75" x="200" fill="#000066" rx="50" opacity="0.8" />
    <rect id="guidebar" height="50" width="1400" y="275" x="250" fill="#0066FF" rx="50" />
    <rect height="75" width="300" y="875" x="275" fill="red" rx="50" />
    <rect height="75" width="300" y="875" x="625" fill="green" rx="50" />
    <rect height="75" width="300" y="875" x="975" fill="yellow" rx="50" />
    <rect height="75" width="300" y="875" x="1325" fill="blue" rx="50" />
-   <text id="guidename" y="175" x="600" style="fill:white;font-size:88px;" />
-   <text id="guidetime" y="175" x="600" style="fill:white;font-size:88px;" />
-   <text id="guide0" y="150" x="300" style="fill:white;font-size:38px;" />
-   <text id="guide1" y="200" x="300" style="fill:white;font-size:38px;" />
-   <text id="guide2" y="250" x="300" style="fill:white;font-size:38px;" />
-   <text id="guide3" y="300" x="300" style="fill:white;font-size:38px;" />
-   <text id="guide4" y="350" x="300" style="fill:white;font-size:38px;" />
-   <text id="guide5" y="400" x="300" style="fill:white;font-size:38px;" />
-   <text id="guide6" y="450" x="300" style="fill:white;font-size:38px;" />
-   <text id="guide7" y="500" x="300" style="fill:white;font-size:38px;" />
-   <text id="guide8" y="550" x="300" style="fill:white;font-size:38px;" />
-   <text id="guide9" y="600" x="300" style="fill:white;font-size:38px;" />
-   <text id="guide10" y="650" x="300" style="fill:white;font-size:38px;" />
-   <text id="guide11" y="700" x="300" style="fill:white;font-size:38px;" />
-   <text id="guide12" y="750" x="300" style="fill:white;font-size:38px;" />
-   <text id="guide13" y="800" x="300" style="fill:white;font-size:38px;" />
-   <text id="guide14" y="850" x="300" style="fill:white;font-size:38px;" />
+
+   <text id="guide0" y="150" x="300" />
+   <text id="guide1" y="200" x="300" />
+   <text id="guide2" y="250" x="300" />
+   <text id="guide3" y="300" x="300" />
+   <text id="guide4" y="350" x="300" />
+   <text id="guide5" y="400" x="300" />
+   <text id="guide6" y="450" x="300" />
+   <text id="guide7" y="500" x="300" />
+   <text id="guide8" y="550" x="300" />
+   <text id="guide9" y="600" x="300" />
+   <text id="guide10" y="650" x="300" />
+   <text id="guide11" y="700" x="300" />
+   <text id="guide12" y="750" x="300" />
+   <text id="guide13" y="800" x="300" />
+   <text id="guide14" y="850" x="300" />
 
    <text id="guide_red" y="930" x="325" style="fill:white;font-size:48px;"/>
    <text id="guide_green" y="930" x="675" style="fill:black;font-size:48px;"/>
@@ -113,8 +112,37 @@
    <text id="guide_blue" y="930" x="1375" style="fill:white;font-size:48px;"/>
 </g>
 
+<g id="SCHEDULE" visibility="invisible" >
+   <rect height="900" width="1500" y="75" x="200" fill="#000066" rx="50" opacity="0.8" />
+   <rect height="75" width="300" y="875" x="275" fill="red" rx="50" />
+   <rect height="75" width="300" y="875" x="625" fill="green" rx="50" />
+   <rect height="75" width="300" y="875" x="975" fill="yellow" rx="50" />
+   <rect height="75" width="300" y="875" x="1325" fill="blue" rx="50" />
+
+   <text id="schedule0" y="150" x="300" style = "fill:white;font-size:64px;"/>
+   <text id="schedule1" y="200" x="300" style = "fill:white;font-size:36px;"/>
+   <text id="schedule2" y="250" x="300" style = "fill:white;font-size:36px;"/>
+   <text id="schedule3" y="300" x="300" style = "fill:white;font-size:36px;"/>
+   <text id="schedule4" y="350" x="300" style = "fill:white;font-size:36px;"/>
+   <text id="schedule5" y="400" x="300" style = "fill:white;font-size:36px;"/>
+   <text id="schedule6" y="450" x="300" style = "fill:white;font-size:36px;"/>
+   <text id="schedule7" y="500" x="300" style = "fill:white;font-size:36px;"/>
+   <text id="schedule8" y="550" x="300" style = "fill:white;font-size:36px;"/>
+   <text id="schedule9" y="600" x="300" style = "fill:white;font-size:36px;"/>
+   <text id="schedule10" y="650" x="300" style = "fill:white;font-size:36px;"/>
+   <text id="schedule11" y="700" x="300" style = "fill:white;font-size:36px;"/>
+   <text id="schedule12" y="750" x="300" style = "fill:white;font-size:36px;"/>
+   <text id="schedule13" y="800" x="300" style = "fill:white;font-size:36px;"/>
+   <text id="schedule14" y="850" x="300" style = "fill:white;font-size:36px;"/>
+
+   <text id="schedule_red" y="930" x="325" style="fill:white;font-size:48px;"/>
+   <text id="schedule_green" y="930" x="675" style="fill:black;font-size:48px;"/>
+   <text id="schedule_yellow" y="930" x="1025" style="fill:black;font-size:48px;"/>
+   <text id="schedule_blue" y="930" x="1375" style="fill:white;font-size:48px;"/>
+</g>
+
 <g id="EPGnow" visibility="invisible" overlay="top">
-   <rect height="800" width="1300" y="100" x="300" fill="#0000ff" rx="50" />
+   <rect height="800" width="1300" y="100" x="300" fill="#000066" rx="50" />
    <text id="epgchannel" y="175" x="350" style="fill:white;font-size:64px;" />
    <text id="epgtime" y="250" x="350" style="fill:white;font-size:40px;" />
    <text id="epgduration" y="250" x="550" style="fill:white;font-size:40px;" />
@@ -123,7 +151,7 @@
 </g>
 
 <g id="EPGnext" visibility="invisible" overlay="top">
-   <rect height="800" width="1300" y="100" x="300" fill="#0000ff" rx="50" />
+   <rect height="800" width="1300" y="100" x="300" fill="#000066" rx="50" />
    <text id="epgchanneln" y="175" x="350" style="fill:white;font-size:64px;" />
    <text id="epgtimen" y="250" x="350" style="fill:white;font-size:40px;" />
    <text id="epgdurationn" y="250" x="550" style="fill:white;font-size:40px;" />
