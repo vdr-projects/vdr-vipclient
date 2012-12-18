@@ -58,7 +58,10 @@ var videoWidth = "544"; // fallbacksize
 var videoHeight = "576";
 
 var switchtimericon = "\uE003";
+
+var guide = null;
 var video = null;
+
 var teletext = null;
 var eitCache = null;
 var events = null;
@@ -75,9 +78,8 @@ var NN = new Array();
 NN[0] = "Now";
 NN[1] = "Next";
 NN[2] = "Schedule";
-NN[3] = "TIMER";
-NN[4] = "-----";
-
+NN[3] = "-----";
+NN[4] = "TIMER";
 
 //
 //NowNext,	1 = programma naam	event.name			,currchan

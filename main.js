@@ -25,6 +25,7 @@ var nrMedia = recording.length - 1;
 function onLoad() {
   document.addEventListener("keydown", onKeyDown, false);
   video = document.getElementById("videoplane");
+  guide = document.getElementById("GUIDE");
 	createPlayer();
         getBoxSize();
 	embedTeletextElement();
@@ -126,13 +127,12 @@ function preview(urip) {
 
 
 function FullScreen() {
-
-    video.setAttribute("overlay","500");
+//    video.setAttribute("overlay", "500");
     video.setAttribute("x", "0");
     video.setAttribute("y", "0");
     video.setAttribute("width", videoWidth);
     video.setAttribute("heigth", videoHeight);
-    alert ("Display :" + videoWidth + "x" + videoHeight);
+//    alert ("Display :" + videoWidth + "x" + videoHeight);
 }
 
 
@@ -251,17 +251,17 @@ function onKeyDown(event) {
 			if(audio == 1) {	
 				is.setObject("cfg.media.audio.languagepriority","dut,eng",is.STORAGE_VOLATILE);
 				document.getElementById("osdlang").setAttribute("visibility","visible");
-				document.getElementById("osdlangtxt").textContent = "Nederlands"
+				document.getElementById("osdlangtxt").textContent = "Nederlands";
 				setTimeout("document.getElementById('osdlang').setAttribute('visibility','invisible');", 3000);
 			} else if(audio == 2) {
 				is.setObject("cfg.media.audio.languagepriority","ger,deu,eng",is.STORAGE_VOLATILE);
 				document.getElementById("osdlang").setAttribute("visibility","visible");
-				document.getElementById("osdlangtxt").textContent = "Deutsch"
+				document.getElementById("osdlangtxt").textContent = "Deutsch";
 				setTimeout("document.getElementById('osdlang').setAttribute('visibility','invisible');", 3000);
 			} else if(audio == 3) {
 				is.setObject("cfg.media.audio.languagepriority","eng",is.STORAGE_VOLATILE);
 				document.getElementById("osdlang").setAttribute("visibility","visible");
-				document.getElementById("osdlangtxt").textContent = "English"
+				document.getElementById("osdlangtxt").textContent = "English";
 				setTimeout("document.getElementById('osdlang').setAttribute('visibility','invisible');", 3000);
 				audio = 0;
 			}
@@ -275,7 +275,6 @@ function onKeyDown(event) {
 			}
 		}
 	} else {
-		colorkeys.innerHTML = "<font color=red size=3>" +  NN[3 + NowNext] + "</font><font color=green size=3>" + NN[NowNext] + "</font><font color=yellow size=3> Schedule </font><font color=blue size=3> INFO </font>";
 		NowNext = 1 - NowNext;
 		showChannelList();
 	}
@@ -368,6 +367,7 @@ function onKeyDown(event) {
 				}
 		  } else {
 		isFullscreen = 1;
+		guide.setAttribute("visibility","invisible");
 		FullScreen();
 	        play(channels[currChan]);
 		}
@@ -384,16 +384,14 @@ function onKeyDown(event) {
    case "Scroll":
 		if(isFullscreen) {
 			NowNext = 0;
-			video.width = "320px";
-			video.height = "240px";
-			video.left = "380px";
-			video.top = "300px";
+			guide.setAttribute("visibility","visible");
 			showChannelList();
 			isFullscreen = 0;
 			if(!SwitchGuide) {
 			preChan = currChan;
 			}
 		} else {
+			guide.setAttribute("visibility","invisible");
 			isFullscreen = 1;
 			FullScreen();
 			if(!SwitchGuide) {
@@ -609,7 +607,9 @@ document.getElementById("epgchanneln").textContent = Left(channelsnames[currChan
 	tijd = new Date(tijd);
 	dateCurrent = new Date();
 	var EPGminutes = Math.floor((dateCurrent.getTime() - date.getTime()) /1000/60);
-
+	if (EPGminutes > 999) {
+	EPGminutes = 0;
+	}
 	var tm = tijd.getMinutes();
 	var th = tijd.getHours();
 	if(th<10)
@@ -747,6 +747,7 @@ function GetEPG(epgchan)
 	EPGShortnext = "";
 	EPGExtnext = "";
 	cds = 0;
+	
   try {
 	// streaminfo
 	// SI[x] 0-sat,1-NID,2-TID,3-SID
@@ -900,17 +901,21 @@ function GetSchedule(schchan,tablelength){
 
 // Channelslist / EPG Guide
 //
-// show currchan - 5
+// show currchan - 7
 // highlite currchan
-// show currchan + 5
+// show currchan + 7
 // 
 // check if chan is OK
 // 
+
 function showChannelList() {
-	var liststyle = "";
-	var htmlstring = "<table border='0'><tr>";
-	listChan = currChan-5;
-	for(var i=currChan-5; i<=currChan+5; i++) {
+		document.getElementById("guide_green").textContent = NN[1 - NowNext];
+		document.getElementById("guide_red").textContent = NN[3 + NowNext];
+		document.getElementById("guide_yellow").textContent = "Schedule";
+		document.getElementById("guide_blue").textContent = "INFO";
+	var yy = 0;
+	listChan = currChan-7;
+	for(var i=currChan-7; i<=currChan+7; i++) {
 		if (listChan<1) {
 			listChan=nrChannels-2;
 			}
@@ -924,19 +929,47 @@ function showChannelList() {
 			while (!channels[listChan] && (listChan<nrChannels));
 		GetEPG(listChan);
 		if ( listChan == currChan) { 
-			liststyle = " style='background:#fc5;'";
-		}  else {
-			liststyle = "";
+			var y = 110 + (50 * yy);
+			document.getElementById("guidebar").setAttribute("y",y);
 		}
-		EpgInfo[0] = EPG[0][7][listChan];
-		EpgInfo[1] = EPG[1][7][listChan];
-		htmlstring = htmlstring + "<td" + liststyle + ">" + listChan + "</td><td" +liststyle + ">" + Left(channelsnames[listChan],15) + "</td><td" +liststyle + ">"  + Left(EpgInfo[NowNext],64) + "</td></tr>";
+	tijd = EPG[0][2][currChan];
+	date = new Date(tijd*1000); 
+	tijd = date.toUTCString();
+	tijd = new Date(tijd);
+	dateCurrent = new Date();
+	var EPGminutes = Math.floor((dateCurrent.getTime() - date.getTime()) /1000/60);
+	if (EPGminutes > 999) {
+	EPGminutes = 0;
 	}
-	htmlstring = htmlstring + "</table>";
-	channelList.innerHTML = htmlstring;
-        chanlistepg.innerHTML = "<center><font color=black size=4><p>" + EPG[NowNext][1][currChan] + "</p></font><font color=black size=3><p>" + Left(EPG[NowNext][4][currChan],250) + "</p></font></center>" ;
+	var tm = tijd.getMinutes();
+	var th = tijd.getHours();
+	if(th<10)
+        {
+                th = "0"+th;
+        }
+        if(tm<10)
+        {
+                tm = "0"+tm;
+        }
+
+	EpgInfo[0] = th + ":" + tm + "\uE003(" + EPGminutes + "\uE003/\uE003" + (EPG[0][3][listChan] - EPGminutes).toFixed(0) + ")" + "\uE003" + EPG[0][1][listChan] + "\uE003" + EPG[0][6][listChan];
+	EpgInfo[1] = th + ":" + tm + "\uE003(" + (EPG[1][3][listChan]) + ")" + "\uE003" + EPG[1][1][listChan] + "\uE003" + EPG[1][6][listChan];
+
+	try {
+	document.getElementById(("guide"+yy)).textContent = listChan + "\uE003" + Left(channelsnames[listChan],15) + "\uE003" + Left(EpgInfo[NowNext],64);
+	  } catch (e) {
+	    alert("Error file guide list: " + e);
+	  }
+	yy = yy + 1;
+	}
+
+
+//	htmlstring = htmlstring + "</table>";
+//	channelList.innerHTML = htmlstring;
+//        chanlistepg.innerHTML = "<center><font color=black size=4><p>" + EPG[NowNext][1][currChan] + "</p></font><font color=black size=3><p>" + Left(EPG[NowNext][4][currChan],250) + "</p></font></center>" ;
 
 }
+
 
 // END of Channelslist / EPG Guide
 
@@ -981,7 +1014,7 @@ function onKeyMenu(keyCode) {
 	clearTimeout(switchtimerID);
 	switchtimerID = 0;
 	InitMenu();
-	osdtimer.innerHTML = "";
+	switchtimericon = "\uE003"
 	SetLed(0,0,0);
     break;
     case "Blue":
@@ -1027,10 +1060,14 @@ function onKeyMenu(keyCode) {
 
 function InitMenu() {
 	document.getElementById("menuheader").textContent = "SETTINGS";
-	document.getElementById("menu0").textContent = "<RED>    Frontdisplay Clock : " + showClock;
-	document.getElementById("menu1").textContent = "<GREEN>  Prio audio track : " + (toi.informationService.getObject("cfg.media.audio.languagepriority"));
-	document.getElementById("menu2").textContent = "<YELLOW> Switch timer : " + Boolean(switchtimerID);
-	document.getElementById("menu3").textContent = "<BLUE>   Preview guide : " + SwitchGuide + " ";
+	document.getElementById("menu0").textContent = "Frontdisplay Clock : " + showClock;
+	document.getElementById("menu1").textContent = "Prio audio track : " + (toi.informationService.getObject("cfg.media.audio.languagepriority"));
+	document.getElementById("menu2").textContent = "Switch timer : " + Boolean(switchtimerID);
+	document.getElementById("menu3").textContent = "Preview guide : " + SwitchGuide + " ";
+	document.getElementById("menu_red").textContent = " Clock ";
+	document.getElementById("menu_green").textContent = " Lang. ";
+	document.getElementById("menu_yellow").textContent = " Timer ";
+	document.getElementById("menu_blue").textContent = " Prev. ";
 }
 
 // END Menu

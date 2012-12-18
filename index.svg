@@ -31,7 +31,7 @@
 </foreignObject>
 
 <g id="video_window">
-  <video id='videoplane' x="0" y="0" width="1920" height="1080" preserveAspectRatio="xMidYMid">
+  <video id='videoplane' x="0" y="0" width="1920" height="1080" preserveAspectRatio="xMidYMid" >
   </video>
 </g>
 
@@ -62,38 +62,73 @@
 
 </g>
 
-<g id="EPGnow" visibility="invisible" >
-   <rect height="800" width="1300" y="100" x="300" fill="#0000ff" rx="50" />
-   <text id="epgchannel" y="275" x="350" style="fill:white;font-size:56px;" />
-   <text id="epgtime" y="350" x="350" style="fill:white;font-size:56px;" />
-   <text id="epgduration" y="350" x="550" style="fill:white;font-size:56px;" />
-   <text id="epginfo" y="425" x="350" style="fill:white;font-size:56px;" />
-   <textArea id="epgextinfo" text-align="justify" width="1200" y="500" x="350" style="fill:white;font-size:56px;" />
-</g>
-
-<g id="EPGnext" visibility="invisible" >
-   <rect height="800" width="1300" y="100" x="300" fill="#0000ff" rx="50" />
-   <text id="epgchanneln" y="275" x="350" style="fill:white;font-size:56px;" />
-   <text id="epgtimen" y="350" x="350" style="fill:white;font-size:56px;" />
-   <text id="epgdurationn" y="350" x="550" style="fill:white;font-size:56px;" />
-   <text id="epginfon" y="425" x="350" style="fill:white;font-size:56px;" />
-   <textArea id="epgextinfon" text-align="justify" width="1200" y="500" x="350" style="fill:white;font-size:56px;" />
-
-
-
-</g>
-
 <g id="MENU" visibility="invisible" >
+   <rect height="900" width="1300" y="75" x="300" fill="#0000ff" rx="50" opacity="0.6" />
+   <rect height="75" width="250" y="875" x="450" fill="red" rx="50" />
+   <rect height="75" width="250" y="875" x="700" fill="green" rx="50" />
+   <rect height="75" width="250" y="875" x="950" fill="yellow" rx="50" />
+   <rect height="75" width="250" y="875" x="1200" fill="blue" rx="50" />
+   <text id="menuheader" y="175" x="600" style="fill:white;font-size:88px;" />
+   <text id="menu0" y="275" x="350" style="fill:white;font-size:56px;" />
+   <text id="menu1" y="350" x="350" style="fill:white;font-size:56px;" />
+   <text id="menu2" y="425" x="350" style="fill:white;font-size:56px;" />
+   <text id="menu3" y="500" x="350" style="fill:white;font-size:56px;" />
+   <text id="menu4" y="575" x="350" style="fill:white;font-size:56px;" />
+   <text id="menu5" y="650" x="350" style="fill:white;font-size:56px;" />
+   <text id="menu6" y="725" x="350" style="fill:white;font-size:56px;" />
+   <text id="menu_red" y="930" x="500" style="fill:white;font-size:56px;"/>
+   <text id="menu_green" y="930" x="750" style="fill:black;font-size:56px;"/>
+   <text id="menu_yellow" y="930" x="1000" style="fill:black;font-size:56px;"/>
+   <text id="menu_blue" y="930" x="1250" style="fill:white;font-size:56px;"/>
+</g>
+
+<g id="GUIDE" visibility="invisible" >
+   <rect height="900" width="1500" y="75" x="200" fill="#0000ff" rx="50" opacity="0.6" />
+   <rect id="guidebar" height="50" width="1400" y="275" x="250" fill="#0066FF" rx="50" />
+   <rect height="75" width="300" y="875" x="275" fill="red" rx="50" />
+   <rect height="75" width="300" y="875" x="625" fill="green" rx="50" />
+   <rect height="75" width="300" y="875" x="975" fill="yellow" rx="50" />
+   <rect height="75" width="300" y="875" x="1325" fill="blue" rx="50" />
+   <text id="guidename" y="175" x="600" style="fill:white;font-size:88px;" />
+   <text id="guidetime" y="175" x="600" style="fill:white;font-size:88px;" />
+   <text id="guide0" y="150" x="300" style="fill:white;font-size:38px;" />
+   <text id="guide1" y="200" x="300" style="fill:white;font-size:38px;" />
+   <text id="guide2" y="250" x="300" style="fill:white;font-size:38px;" />
+   <text id="guide3" y="300" x="300" style="fill:white;font-size:38px;" />
+   <text id="guide4" y="350" x="300" style="fill:white;font-size:38px;" />
+   <text id="guide5" y="400" x="300" style="fill:white;font-size:38px;" />
+   <text id="guide6" y="450" x="300" style="fill:white;font-size:38px;" />
+   <text id="guide7" y="500" x="300" style="fill:white;font-size:38px;" />
+   <text id="guide8" y="550" x="300" style="fill:white;font-size:38px;" />
+   <text id="guide9" y="600" x="300" style="fill:white;font-size:38px;" />
+   <text id="guide10" y="650" x="300" style="fill:white;font-size:38px;" />
+   <text id="guide11" y="700" x="300" style="fill:white;font-size:38px;" />
+   <text id="guide12" y="750" x="300" style="fill:white;font-size:38px;" />
+   <text id="guide13" y="800" x="300" style="fill:white;font-size:38px;" />
+   <text id="guide14" y="850" x="300" style="fill:white;font-size:38px;" />
+
+   <text id="guide_red" y="930" x="325" style="fill:white;font-size:48px;"/>
+   <text id="guide_green" y="930" x="675" style="fill:black;font-size:48px;"/>
+   <text id="guide_yellow" y="930" x="1025" style="fill:black;font-size:48px;"/>
+   <text id="guide_blue" y="930" x="1375" style="fill:white;font-size:48px;"/>
+</g>
+
+<g id="EPGnow" visibility="invisible" overlay="top">
    <rect height="800" width="1300" y="100" x="300" fill="#0000ff" rx="50" />
-   <text id="menuheader" y="275" x="600" style="fill:white;font-size:88px;" />
-   <text id="menu0" y="375" x="350" style="fill:white;font-size:56px;" />
-   <text id="menu1" y="450" x="350" style="fill:white;font-size:56px;" />
-   <text id="menu2" y="525" x="350" style="fill:white;font-size:56px;" />
-   <text id="menu3" y="600" x="350" style="fill:white;font-size:56px;" />
-   <text id="menu4" y="675" x="350" style="fill:white;font-size:56px;" />
-   <text id="menu5" y="750" x="350" style="fill:white;font-size:56px;" />
-   <text id="menu6" y="825" x="350" style="fill:white;font-size:56px;" />
-   <text id="menu7" y="900" x="350" style="fill:white;font-size:56px;" />
+   <text id="epgchannel" y="175" x="350" style="fill:white;font-size:64px;" />
+   <text id="epgtime" y="250" x="350" style="fill:white;font-size:40px;" />
+   <text id="epgduration" y="250" x="550" style="fill:white;font-size:40px;" />
+   <text id="epginfo" y="310" x="350" style="fill:yellow;font-size:48px;" />
+   <textArea id="epgextinfo" text-align="justify" width="1200" y="375" x="350" style="fill:white;font-size:40px;" />
+</g>
+
+<g id="EPGnext" visibility="invisible" overlay="top">
+   <rect height="800" width="1300" y="100" x="300" fill="#0000ff" rx="50" />
+   <text id="epgchanneln" y="175" x="350" style="fill:white;font-size:64px;" />
+   <text id="epgtimen" y="250" x="350" style="fill:white;font-size:40px;" />
+   <text id="epgdurationn" y="250" x="550" style="fill:white;font-size:40px;" />
+   <text id="epginfon" y="310" x="350" style="fill:yellow;font-size:48px;" />
+   <textArea id="epgextinfon" text-align="justify" width="1200" y="375" x="350" style="fill:white;font-size:40px;" />
 </g>
 
 
