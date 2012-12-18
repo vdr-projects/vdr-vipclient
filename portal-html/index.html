@@ -1,3 +1,12 @@
+<html>
+    <head>
+      <script type="text/javascript" src="settings.js" />
+      <script type="text/javascript" src="settings2.js" />
+      <script type="text/javascript" src="channels.js" />
+      <script type="text/javascript" src="recordings.js" />
+    </head>
+<script language="Javascript">
+
 //
 // Javascript VDR client for Motorola VIP19x0 & VIP19x3
 //
@@ -17,17 +26,15 @@
 //	 change IP server
 //
 
-var Version = "0.10	2012/12/xx"
+var Version = "0.04	2012/12/xx"
 var nrChannels = channels.length;
 var nrMedia = recording.length - 1;
 
+window.onkeydown = onKeyDown;
+
 function onLoad() {
-  document.addEventListener("keydown", onKeyDown, false);
-  video = document.getElementById("videoplane");
-  guide = document.getElementById("GUIDE");
-	createPlayer();
-        getBoxSize();
-	embedTeletextElement();
+ createPlayer();
+ embedTeletextPlugin();
 	toi.audioOutputService.setVolume(AudioOut, StartVolume);
 	toi.audioOutputService.setMuteState(AudioOut, false);
 	showDisplay((currChan.toString()), false, 100, 0 );
@@ -36,49 +43,26 @@ function onLoad() {
 	eitCache.setFilterMode(eitCache.FILTER_MODE_PF_AND_SCHEDULE);
 //	eitCache.setFilterMode(eitCache.FILTER_MODE_PF_ONLY);
 	eitCache.addEventListener(eitCache.ON_CACHE_UPDATED, onCacheUpdated);
-	FullScreen();
 	showOSD();
 }
 
 
 function onUnload() {
-  try {
-    if (mediaPlayer.getState() != mediaPlayer.STATE_IDLE) {
-      mediaPlayer.close();
-      alert("Has closed.");
-    }
-    mediaPlayer.releaseInstance();
-    mediaPlayer = null;
-
-    document.removeEventListener("keydown", onKeyDown, false);
-  }
-  catch (e) {
-    alert("onUnload error:" + e);
-  }
+	try {
+		mediaPlayer.close();
+		mediaPlayer.releaseInstance();
+	} catch(e) {
+		alert(e);
+	}
 }
-
-function getBoxSize() {
-   var w=videoWidth;
-   var h=videoHeight;
-   //get the screen size from viewBox object.
-   var viewboxstring = document.documentElement.getAttributeNS(null, "viewBox");
-   if (null != viewboxstring && "" != viewboxstring) {
-      var vbArray = viewboxstring.split(" ");
-      if (vbArray.length >= 4) {
-         w=vbArray[2];
-         h=vbArray[3];
-      }
-   }
-	videoWidth = w;
-	videoHeight = h;
-}
-
 
 function incChan(step) {
     currChan = currChan + step;
     if (currChan == nrChannels) {
         currChan = 1;
     }
+    osdnr.style.opacity = isFullscreen; 
+    OSDchannr(currChan);
 }
 
 function decChan(step) {
@@ -86,6 +70,8 @@ function decChan(step) {
     if (currChan == 0) {
         currChan = nrChannels - 1;
     }
+    osdnr.style.opacity = isFullscreen; 
+    OSDchannr(currChan);
 }
 
 function createPlayer() {
@@ -105,7 +91,6 @@ function play(uri) {
     mediaPlayer.open(uri);
     mediaPlayer.play(1000);
 	if(isFullscreen) {
-	GetEPG(currChan);
 	showOSD();
 	}
 	showDisplay((currChan.toString()), false, 100, 0 );
@@ -121,17 +106,16 @@ function preview(urip) {
 	}
 	showChannelList();
 	if (isSchedule) {
-//	GetSchedule(currChan);
+	GetSchedule(currChan,10);
 	}
 }
 
 
 function FullScreen() {
-    video.setAttribute("x", "0");
-    video.setAttribute("y", "0");
-    video.setAttribute("width", videoWidth);
-    video.setAttribute("heigth", videoHeight);
-//    alert ("Display :" + videoWidth + "x" + videoHeight);
+			videoplane.style.width = "100%";
+			videoplane.style.height = "100%";
+			videoplane.style.left = "0px";
+			videoplane.style.top = "0px";
 }
 
 
@@ -237,7 +221,12 @@ function onKeyDown(event) {
 	} else {
 		if(NowNext) {	
 			settimer();
-			showChannelList();
+			switchtimer.style.opacity = 1;
+			setTimeout("switchtimer.style.opacity = 0; ", 2000);
+//		} else {
+//			switchtimer.innerHTML = "<font color=black size=4><center> Program is running use OK to switch </center></font>";
+//			switchtimer.style.opacity = 1;
+//			setTimeout("switchtimer.style.opacity = 0; ", 2000);
 		}
 	}
         break;
@@ -248,87 +237,75 @@ function onKeyDown(event) {
 			is = toi.informationService;
 			if(audio == 1) {	
 				is.setObject("cfg.media.audio.languagepriority","dut,eng",is.STORAGE_VOLATILE);
-				document.getElementById("osdlang").setAttribute("visibility","visible");
-				document.getElementById("osdlangtxt").textContent = "Nederlands";
-				setTimeout("document.getElementById('osdlang').setAttribute('visibility','invisible');", 3000);
+				osdlang.style.opacity = 1;
+				osdlang.innerHTML = "<img src='unmute.png'><font color=white size=3>Nederlands</font>"
+				setTimeout("osdlang.style.opacity = 0; ", 3000);
 			} else if(audio == 2) {
 				is.setObject("cfg.media.audio.languagepriority","ger,deu,eng",is.STORAGE_VOLATILE);
-				document.getElementById("osdlang").setAttribute("visibility","visible");
-				document.getElementById("osdlangtxt").textContent = "Deutsch";
-				setTimeout("document.getElementById('osdlang').setAttribute('visibility','invisible');", 3000);
+				osdlang.style.opacity = 1;
+				osdlang.innerHTML = "<img src='unmute.png'><font color=white size=3>Deutsch</font>"
+				setTimeout("osdlang.style.opacity = 0; ", 3000);
 			} else if(audio == 3) {
 				is.setObject("cfg.media.audio.languagepriority","eng",is.STORAGE_VOLATILE);
-				document.getElementById("osdlang").setAttribute("visibility","visible");
-				document.getElementById("osdlangtxt").textContent = "English";
-				setTimeout("document.getElementById('osdlang').setAttribute('visibility','invisible');", 3000);
+				osdlang.style.opacity = 1;
+				osdlang.innerHTML = "<img src='unmute.png'><font color=white size=3>English</font>"
+				setTimeout("osdlang.style.opacity = 0; ", 3000);
 				audio = 0;
 			}
 		} else {
-			if (document.getElementById("EPGnow").getAttribute("visibility") == "visible" ){
-				document.getElementById("EPGnow").setAttribute("visibility","invisible");
-				document.getElementById("EPGnext").setAttribute("visibility","visible");
-			} else {
-				document.getElementById("EPGnow").setAttribute("visibility","visible");
-				document.getElementById("EPGnext").setAttribute("visibility","invisible");
-			}
+		osdepginfo.style.opacity = 1 - osdepginfo.style.opacity ;
+		osdepginfonext.style.opacity = 1 - osdepginfo.style.opacity;
 		}
 	} else {
+		colorkeys.innerHTML = "<font color=red size=3>" +  NN[3 + NowNext] + "</font><font color=green size=3>" + NN[NowNext] + "</font><font color=yellow size=3> Schedule </font><font color=blue size=3> INFO </font>";
 		NowNext = 1 - NowNext;
 		showChannelList();
 	}
 
 	break;
    case "Yellow":
-	alert ("YELLOW");
-	alert (isFullscreen);
-	alert (isSchedule);
-	alert (currChan);
 	if(isFullscreen) {
-		if (isSchedule) {
-			document.getElementById("SCHEDULE").setAttribute("visibility","invisible");
-		} else {
-			document.getElementById("SCHEDULE").setAttribute("visibility","visible");
-			SetSchedule();
+		if(!epgactive) {
+			GetSchedule(currChan,15);
+			schedule.style.opacity = 1;
+			schedule.style.height = "75%";
+			setTimeout("schedule.style.opacity = 0;schedule.style.height = '45%';", 3000);
 		}
+	} else {
+		GetSchedule(currChan,10);
+		schedule.style.opacity = 1 - schedule.style.opacity;
+		channelList.style.opacity = 1 - schedule.style.opacity;
+		schedkeys.style.opacity = schedule.style.opacity;
+		colorkeys.style.opacity = 1 - schedule.style.opacity;
+		isSchedule = schedule.style.opacity;
 	}
-		isSchedule = !isSchedule;
 	break;
    case "Blue":
 	if(isFullscreen) {
-
+	RestartPortal();
 	} else {
 		SetOsdInfo();
-			if (NowNext){
-				document.getElementById("EPGnow").setAttribute("visibility","invisible");
-				document.getElementById("EPGnext").setAttribute("visibility","visible");
-			} else {
-				document.getElementById("EPGnow").setAttribute("visibility","visible");
-				document.getElementById("EPGnext").setAttribute("visibility","invisible");
-			}
-
-		setTimeout("epgactive = 0; document.getElementById('EPGnow').setAttribute('visibility','invisible'); document.getElementById('EPGnext').setAttribute('visibility','invisible');", 5000);
+		osdepginfo.style.opacity = 1 - NowNext;
+		osdepginfonext.style.opacity = NowNext;
+		setTimeout("epgactive = 0; osdepginfo.style.opacity = 0; osdepginfonext.style.opacity = 0;", 5000);
 	}
 	break;
    case "BrowserBack":
 	if(count) {
 		count = 0;
+		osdnr.style.opacity = 0;
 		if(isFullscreen) {
 			showDisplay((currChan.toString()), false, 100, 0 );
 		}
 		Change = 0;
 	} else {
 		if(isFullscreen) {
-			if(epgactive) {
-			epgactive = 0;
-			document.getElementById("EPGnow").setAttribute("visibility","invisible");
-			document.getElementById("EPGnext").setAttribute("visibility","invisible");
-			} else {
-			//SHOW epg info
-			SetOsdInfo();
-			document.getElementById("EPGnow").setAttribute("visibility","visible");
-			document.getElementById("EPGnext").setAttribute("visibility","invisible");
-			epgactive = 1;		
-			}
+		//SHOW epg info
+		SetOsdInfo();
+		osdepginfo.style.opacity = 1;
+		osdepginfonext.style.opacity = 0;
+		epgactive = 1;		
+		setTimeout("epgactive = 0; osdepginfo.style.opacity = 0; osdepginfonext.style.opacity = 0;", 5000);
 		} else if(!isFullscreen){
 			isFullscreen = 1;
 			FullScreen();
@@ -363,7 +340,6 @@ function onKeyDown(event) {
 				}
 		  } else {
 		isFullscreen = 1;
-		guide.setAttribute("visibility","invisible");
 		FullScreen();
 	        play(channels[currChan]);
 		}
@@ -373,21 +349,23 @@ function onKeyDown(event) {
    case "Menu":
 		if(isFullscreen) {
 		isSetupMenu = 1;
-		document.getElementById("MENU").setAttribute("visibility","visible");
+		mainmenu.style.opacity = 1;
 		InitMenu();
 		}
 		break;
    case "Scroll":
 		if(isFullscreen) {
 			NowNext = 0;
-			guide.setAttribute("visibility","visible");
+			videoplane.style.width = "320px";
+			videoplane.style.height = "240px";
+			videoplane.style.left = "380px";
+			videoplane.style.top = "300px";
 			showChannelList();
 			isFullscreen = 0;
 			if(!SwitchGuide) {
 			preChan = currChan;
 			}
 		} else {
-			guide.setAttribute("visibility","invisible");
 			isFullscreen = 1;
 			FullScreen();
 			if(!SwitchGuide) {
@@ -450,11 +428,8 @@ function onKeyDown(event) {
     case "VolumeMute":
 	state = toi.audioOutputService.getMuteState(AudioOut);
 	toi.audioOutputService.setMuteState(AudioOut, !state);
-	if (state) {
-	document.getElementById("osdmute").setAttribute("visibility","invisible") ;
-	} else {
-	document.getElementById("osdmute").setAttribute("visibility","visible") ;
-	}
+	mute = 1 - state;
+        osdmute.style.opacity = mute; 
 	break;
     case "VolumeUp":
 	Volume = Volume + 10;
@@ -499,9 +474,10 @@ function Makedigit() {
 	prevChan = currChan;
 	Change = (Change*10) + digit;
 	count = count + 1;
+	osdnr.style.opacity = isFullscreen; 
+        OSDchannr(Change);
 	if(isFullscreen) {
-		showDisplay((Change.toString()), false, 100, 0 );
-//		document.getElementById("osdnr").setAttribute("visibility","visible"); 
+		showDisplay((Change.toString()), false, 100, 0 ); 
 	}
 
     if (count>2) {
@@ -529,6 +505,7 @@ function CheckChannel(CheckThis) {
 	if(prevChan == currChan) { 
 	ChangeOK = 0 ;
 	}
+	osdnr.style.opacity = 0;
 	if(isFullscreen) {
 	showDisplay((currChan.toString()), false, 100, 0 );
 	}
@@ -555,111 +532,64 @@ function showOSD() {
 		clearTimeout(osdtimeout);
 	}
 	SetOsdInfo();
-	document.getElementById("OSD").setAttribute("visibility","visible");
-	osdtimeout = setTimeout("document.getElementById('OSD').setAttribute('visibility','invisible');", 3000);
+	opacity = 1;
+	OSD(opacity);
+	osdtimeout = setTimeout("fadeOut()", 3000);
 }
 
 function showVolume() {
 	if (osdVolumetimeout) {
 		clearTimeout(osdVolumetimeout);
 	}
-	document.getElementById("osdvolume").textContent = "VOLUME : \uE007" + (new Array(Volume)).join("\uE008") + (new Array(100 - Volume)).join("\uE009") + "\uE00A";
-	document.getElementById("osdvolume").setAttribute("visibility","visible");
-	osdVolumetimeout = setTimeout("document.getElementById('osdvolume').setAttribute('visibility','invisible');", 3000);
+	osdvolume.innerHTML = "<font color=green size=3>VOLUME : \uE007" + (new Array(Volume)).join("\uE008") + (new Array(100 - Volume)).join("\uE009") + "\uE00A</font>";
+	osdvolume.style.opacity = 1;
+	osdVolumetimeout = setTimeout("osdvolume.style.opacity = 0;", 3000);
 }
 
+
+function OSD(opacity) {
+    osdmain.style.opacity = opacity;
+    osdnr.style.opacity = opacity;
+    osdtime.style.opacity = opacity;
+    osdname.style.opacity = opacity;
+    osdepg.style.opacity = opacity;
+    osdca.style.opacity = opacity;
+    osdtimer.style.opacity = opacity;
+}
 
 
 function SetOsdInfo() {
+    OSDchannr(currChan);
     date_time();
-//    GetEPG(currChan);
-    makeOSD();
+    GetEPG(currChan);
+    OSDhtml();
     return;
 }
 
-function SetSchedule() {
-	for (var i = 1;  i < 15; i++) {
-		document.getElementById(("schedule"+i)).textContent = schedule[i][currChan];
-	    }
-	document.getElementById("schedule0").textContent = currChan + "\uE003" + channelsnames[currChan];
-}
-
-
-
 function onCacheUpdated() {
-	GetEPG(currChan);
-
 	if (osdtimeout) {
+	GetEPG(currChan);
 	SetOsdInfo();
 	} 
 //	if (!isFullscreen) {
 //		showChannelList();
 //	}
 	if (isSchedule) {
-	SetSchedule();
+	GetSchedule(currChan,10);
 	}
 
 }
 
-function makeOSD(){
-document.getElementById("osdnr").textContent = currChan;
-document.getElementById("osdtime").textContent = result;
-document.getElementById("osdname").textContent = Left(channelsnames[currChan],30);
-document.getElementById("epgchannel").textContent = Left(channelsnames[currChan],30);
-document.getElementById("epgchanneln").textContent = Left(channelsnames[currChan],30);
+function OSDchannr(channr) {
+    osdnr.innerHTML = "<center><font color=black size=6>" + channr + "</font></center>";
+}
 
-	tijd = EPG[0][2][currChan];
-	date = new Date(tijd*1000); 
-	tijd = date.toUTCString();
-	tijd = new Date(tijd);
-	dateCurrent = new Date();
-	var EPGminutes = Math.floor((dateCurrent.getTime() - date.getTime()) /1000/60);
-	if (EPGminutes > 999) {
-	EPGminutes = 0;
-	}
-	var tm = tijd.getMinutes();
-	var th = tijd.getHours();
-	if(th<10)
-        {
-                th = "0"+th;
-        }
-        if(tm<10)
-        {
-                tm = "0"+tm;
-        }
-	document.getElementById("osdtimenow").textContent = th + ":" + tm;
-	document.getElementById("epgtime").textContent = th + ":" + tm;
-
-	tijd = EPG[1][2][currChan];
-	date = new Date(tijd*1000); 
-	tijd = date.toUTCString();
-	tijd = new Date(tijd);
-	var tm = tijd.getMinutes();
-	var th = tijd.getHours();
-	if(th<10)
-        {
-                th = "0"+th;
-        }
-        if(tm<10)
-        {
-                tm = "0"+tm;
-        }
-	document.getElementById("osdtimenext").textContent = th + ":" + tm;
-	document.getElementById("epgtimen").textContent = th + ":" + tm;
-
-document.getElementById("osdpnow").textContent = Left(EPG[0][1][currChan] + " " +  EPG[0][6][currChan],35);
-document.getElementById("epginfo").textContent = EPG[0][1][currChan] + " " +  EPG[0][6][currChan];
-document.getElementById("osdpnext").textContent = Left(EPG[1][1][currChan] + " " +  EPG[1][6][currChan],35);
-document.getElementById("epginfon").textContent = EPG[1][1][currChan] + " " +  EPG[1][6][currChan];
-
-document.getElementById("epgextinfo").textContent = EPG[0][4][currChan] + EPG[0][5][currChan];
-document.getElementById("epgextinfon").textContent = EPG[1][4][currChan] + EPG[1][5][currChan];
-
-document.getElementById("osddurationnow").textContent = EPGminutes + " / " + (EPG[0][3][currChan] - EPGminutes) + " min";
-document.getElementById("epgduration").textContent = EPGminutes + " / " + (EPG[0][3][currChan] - EPGminutes) + " minutes";
-document.getElementById("osddurationnext").textContent = EPG[1][3][currChan] + " min";
-document.getElementById("epgdurationn").textContent = EPG[1][3][currChan] + " minutes";
-
+function OSDhtml(){
+    osdtime.innerHTML = "<font color=white size=2>" + result +"</font>";
+    osdname.innerHTML = "<font color=black size=5>" + Left(channelsnames[currChan],30) + "</font>";
+    osdepg.innerHTML = "<font color=white size=4><p>" + EPG[0][7][currChan] + "</p>\n<p>" + EPG[1][7][currChan] + "</p></font>";
+    osdepginfo.innerHTML =  "<center><font color=white size=4><p>" + EPG[0][7][currChan] + "</p>\n<p>" + EPG[0][4][currChan] + "</p>\n<p>" + Left(EPG[0][5][epgchan],750) + "</p></font></center>";
+    osdepginfonext.innerHTML =  "<center><font color=white size=4><p>" + EPG[1][7][currChan] + "</p>\n<p>" + EPG[1][4][currChan] + "</p>\n<p>" + Left(EPG[1][5][epgchan],750) + "</p></font></center>";
 }
 
 
@@ -681,14 +611,14 @@ function settimer() {
 		dateCurrent = new Date();
 		var StartTime = Math.floor((date.getTime() - dateCurrent.getTime()));
 		timerChan = currChan;
-		TimerActions = "isVisible = 0; isFullscreen = 1; FullScreen(); setVisible(isVisible); currChan = timerChan; play(timerChan);SetLed(0,0,0);"
+		TimerActions = "isVisible = 0; isFullscreen = 1; FullScreen(); setVisible(isVisible); currChan = timerChan; play(timerChan); osdtimer.innerHTML = '';SetLed(0,0,0);"
 		// only 1 switch timer possible
 		if(switchtimerID) {
 			clearTimeout(switchtimerID);
 		}
 		switchtimerID = setTimeout(TimerActions, StartTime);
-		switchicon = "\uE00C";
-		switchtimericon[0] = currChan;
+		switchtimer.innerHTML = "<font color=black size=4><p>  Name      : " + EPG[NowNext][1][currChan] + "</p><p>  channel   : " + channelsnames[currChan] +  "</p><p>  Starttime : " + th + ":" + tm + "</p></font>";
+		osdtimer.innerHTML = "<font color=black size=3><p>" + th + ":" + tm + "</p></font>";
 		SetLed(0,2,1);
 	} else {
 	//
@@ -719,6 +649,40 @@ function Right(str, n){
   }
 }
 
+function fadeIn() {
+    opacity += 0.2;
+	    OSD(opcity);
+    if (opacity >= 1) {
+	setTimeout("fadeOut()", 200);
+	return;
+    }
+    setTimeout("fadeIn()", 100);
+}
+
+function fadeOut() {
+    opacity -= 0.2;
+	OSD(opacity);
+    if (opacity <= 0) {
+	return;
+    }
+    setTimeout("fadeOut()", 100);
+}
+
+function RestartPortal(){
+
+    try {
+	ids = toi.applicationService.getApplicationIds();
+	for ( i = 0; i < ids.length; ++i ){
+	    info = toi.applicationService.getInfo(ids[i]);
+	    if (info.applicationName == "WebKit Portal"){
+		 dump("Killing app " + ids[i] + ": " + info.applicationName);
+		 toi.applicationService.kill(ids[i]);
+	    }
+	}
+    }
+    catch(e) { dump(e) };
+}
+
 function date_time()
 {
         date = new Date;
@@ -741,7 +705,7 @@ function date_time()
         {
                 s = "0"+s;
         }
-        result = d + "\uE003" + months[month] + "\uE003" + h + ':' +m;
+        result = ''+days[day]+' '+d+' '+months[month]+' '+year+' '+h+':'+m;
         return;
 }
 
@@ -749,12 +713,13 @@ function date_time()
 
 function GetEPG(epgchan)
 {
+	EPG[0][7][epgchan] = "";
 	EPGShortnow = "";
 	EPGExtnow = "";
+	EPG[1][7][epgchan] = "";
 	EPGShortnext = "";
 	EPGExtnext = "";
 	cds = 0;
-	
   try {
 	// streaminfo
 	// SI[x] 0-sat,1-NID,2-TID,3-SID
@@ -773,9 +738,9 @@ function GetEPG(epgchan)
 	 eitCache.addService(eitService);
 	 event = eitCache.getPresentEvent(eitService);
 	if(event.freeCaMode){
-		document.getElementById("osdca").textContent = "\uE00D" + switchicon ;
+		osdca.innerHTML = "<font color=black size=6>\uE00D</font>";
 	} else {
-		document.getElementById("osdca").textContent = "\uE00F" + switchicon;
+		osdca.innerHTML = "<font color=black size=6>\uE00F</font>";
 	}
 
 	if (event.name)
@@ -791,7 +756,7 @@ function GetEPG(epgchan)
 
 	EPG[0][1][epgchan] = event.name;
 	EPG[0][2][epgchan] = event.time;
-	EPG[0][3][epgchan] = (event.duration/60).toFixed(0);
+	EPG[0][3][epgchan] = (event.duration/60);
 	EPG[0][4][epgchan] = "";
 	EPG[0][5][epgchan] = "";
 
@@ -802,16 +767,101 @@ function GetEPG(epgchan)
 	EPG[0][5][epgchan] = EPGExtnow;
 	}
 
+	tijd = event.time;
+	date = new Date(tijd*1000); 
+	tijd = date.toUTCString();
+	tijd = new Date(tijd);
+	dateCurrent = new Date();
+	var EPGminutes = Math.floor((dateCurrent.getTime() - date.getTime()) /1000/60);
+	var tm = tijd.getMinutes();
+	var th = tijd.getHours();
+	if(th<10)
+        {
+                th = "0"+th;
+        }
+        if(tm<10)
+        {
+                tm = "0"+tm;
+        }
 	if(cds){
 	 // CDS has short info, other providers, a little longer.
-	 EPG[0][6][epgchan] = EPGShortnow;
+	 EPG[0][7][epgchan] =  th + ":" + tm + " (" + EPGminutes + " / " + ((event.duration/60)-EPGminutes).toFixed(0) + ")" + " " + event.name + " " + EPGShortnow;
 	} else {
-	 EPG[0][6][epgchan] = "";
+	 EPG[0][7][epgchan] =  th + ":" + tm + " (" + EPGminutes + " / " + ((event.duration/60)-EPGminutes).toFixed(0) + ")" + " " + event.name + " ";
+	}
+	if (!event.time) 
+	{
+		EPG[0][7][epgchan] = " ";
 	}
 
 
-// schedule
+	 event = eitCache.getFollowingEvent(eitService);
+
+	EPG[1][1][epgchan] = event.name;
+	EPG[1][2][epgchan] = event.time;
+	EPG[1][3][epgchan] = (event.duration/60);
+	EPG[1][4][epgchan] = "";
+	EPG[1][5][epgchan] = "";
+
+	if(EPGShortnext) {
+	EPG[1][4][epgchan] = EPGShortnext;
+	}
+	if(EPGExtnext) {
+	EPG[1][5][epgchan] = EPGExtnext;
+	}
+
+	tijd = event.time;
+	date = new Date(tijd*1000); 
+	tijd = date.toUTCString();
+	tijd = new Date(tijd);
+	var tm = tijd.getMinutes();
+	var th = tijd.getHours();
+	if(th<10)
+        {
+                th = "0"+th;
+        }
+        if(tm<10)
+        {
+                tm = "0"+tm;
+        }
+	
+	if(cds){
+	 // CDS has short info, other providers, a little longer.
+	 EPG[1][7][epgchan] = th + ":" + tm + " (" + (event.duration/60).toFixed(0) + ")" + "          " + event.name + " " + EPGShortnext;
+	} else {
+	 EPG[1][7][epgchan] = th + ":" + tm + " (" + (event.duration/60).toFixed(0) + ")" + "          " + event.name + " ";
+	}
+	if (!event.time) 
+	{
+		EPG[1][7][epgchan] = " ";
+	}
+
+
+  } catch(e) {
+    alert("Get EPG problem: " + e);
+  }
+} 
+
+
+
+function GetSchedule(schchan,tablelength){
+  try {
+ 	SI=channels[schchan].split("-");
+	is = toi.informationService;
+	is.setObject("cfg.locale.ui","ger",is.STORAGE_VOLATILE);
+	if(SI[0]=="S28.2E") {
+		is.setObject("cfg.locale.ui","eng",is.STORAGE_VOLATILE);
+	} 
+	if((SI[0]=="S23.5E" && SI[1]=="3") || SI[2]=="1026" || SI[2]=="1097" || SI[2]=="1105" || SI[2]=="1119") {
+		is.setObject("cfg.locale.ui","dut",is.STORAGE_VOLATILE);
+		cds = 1;
+	}
+
+	 eitService = toi.statics.ToiDvbEitCacheServiceItem.create(SI[1],SI[2],SI[3]);
+	 eitCache.addService(eitService);
+	 event = eitCache.getPresentEvent(eitService);
 	 events = eitCache.getEvents(eitService, 1000000000, 2000000000);
+
 	if (event.name)	{
 	    if (events.more) {
 	      var t = eitCache.getEvents(eitService, 1000000000, 2000000000);
@@ -819,7 +869,13 @@ function GetEPG(epgchan)
 	      events.more = t.more;
 	    }
 
-	    for (var i = 0; i < events.infoSequence.length && i < 14; i++) {
+	    var txt = "<table><tr>";
+	    var i = 0;
+	    for (i = 0; i < events.infoSequence.length && i < tablelength; i++) {
+
+		while ((i > 0) && (events.infoSequence[i].eventId == events.infoSequence[(i-1)].eventId)) {
+			i = i +1;
+		}
 
 		tijd = events.infoSequence[i].time;
 		date = new Date(tijd*1000); 
@@ -835,41 +891,21 @@ function GetEPG(epgchan)
 	        	{
 	                tm = "0"+tm;
 	        	}
-	schedule[i+1][epgchan] = th + ":" + tm + "     (" + events.infoSequence[i].duration/60 + ")  " + events.infoSequence[i].name;
+
+	      txt = txt + "<td>" + th + ":" + tm + "     (" + events.infoSequence[i].duration/60 + ")  " + events.infoSequence[i].name + "</td></tr>";
 	    }
-	}
-// end schedule
-
-	event = eitCache.getFollowingEvent(eitService);
-
-	EPG[1][1][epgchan] = event.name;
-	EPG[1][2][epgchan] = event.time;
-	EPG[1][3][epgchan] = (event.duration/60).toFixed(0);
-	EPG[1][4][epgchan] = "";
-	EPG[1][5][epgchan] = "";
-
-	if(EPGShortnext) {
-	EPG[1][4][epgchan] = EPGShortnext;
-	}
-	if(EPGExtnext) {
-	EPG[1][5][epgchan] = EPGExtnext;
-	}
-
-	if(cds){
-	 // CDS has short info, other providers, a little longer.
-	 EPG[1][6][epgchan] = EPGShortnow;
+	   txt = txt + "</table>";
+	   schedule.innerHTML = channelsnames[schchan] + txt;
 	} else {
-	 EPG[1][6][epgchan] = "";
+		schedule.innerHTML = "<p>" + channelsnames[schchan] + "</p> ";
 	}
-
-
-
 
   } catch(e) {
     alert("Get EPG problem: " + e);
+		schedule.innerHTML = "<p>" + channelsnames[schchan] + "</p><p> NO EPG </p>";
   }
-} 
 
+}
 
 // End of EPG section
 
@@ -877,21 +913,17 @@ function GetEPG(epgchan)
 
 // Channelslist / EPG Guide
 //
-// show currchan - 7
+// show currchan - 5
 // highlite currchan
-// show currchan + 7
+// show currchan + 5
 // 
 // check if chan is OK
 // 
-
 function showChannelList() {
-		document.getElementById("guide_green").textContent = NN[1 - NowNext];
-		document.getElementById("guide_red").textContent = NN[3 + NowNext];
-		document.getElementById("guide_yellow").textContent = "Schedule";
-		document.getElementById("guide_blue").textContent = "INFO";
-	var yy = 0;
-	listChan = currChan-7;
-	for(var i=currChan-7; i<=currChan+7; i++) {
+	var liststyle = "";
+	var htmlstring = "<table border='0'><tr>";
+	listChan = currChan-5;
+	for(var i=currChan-5; i<=currChan+5; i++) {
 		if (listChan<1) {
 			listChan=nrChannels-2;
 			}
@@ -905,79 +937,144 @@ function showChannelList() {
 			while (!channels[listChan] && (listChan<nrChannels));
 		GetEPG(listChan);
 		if ( listChan == currChan) { 
-			var y = 110 + (50 * yy);
-			document.getElementById("guidebar").setAttribute("y",y);
+			liststyle = " style='background:#fc5;'";
+		}  else {
+			liststyle = "";
 		}
-	tijd = EPG[0][2][listChan];
-	date = new Date(tijd*1000); 
-	tijd = date.toUTCString();
-	tijd = new Date(tijd);
-	dateCurrent = new Date();
-	var EPGminutes = Math.floor((dateCurrent.getTime() - date.getTime()) /1000/60);
-	if (EPGminutes > 999) {
-	EPGminutes = 0;
+		EpgInfo[0] = EPG[0][7][listChan];
+		EpgInfo[1] = EPG[1][7][listChan];
+		htmlstring = htmlstring + "<td" + liststyle + ">" + listChan + "</td><td" +liststyle + ">" + Left(channelsnames[listChan],15) + "</td><td" +liststyle + ">"  + Left(EpgInfo[NowNext],64) + "</td></tr>";
 	}
-	var tm = tijd.getMinutes();
-	var th = tijd.getHours();
-	if(th<10)
-        {
-                th = "0"+th;
-        }
-        if(tm<10)
-        {
-                tm = "0"+tm;
-        }
-
-	EpgInfo[0] = th + ":" + tm + "\uE003(" + EPGminutes + "/" + (EPG[0][3][listChan] - EPGminutes).toFixed(0) + ")" + "\uE003" + EPG[0][1][listChan] + "\uE003" + EPG[0][6][listChan];
-
-
-	tijd = EPG[1][2][listChan];
-	date = new Date(tijd*1000); 
-	tijd = date.toUTCString();
-	tijd = new Date(tijd);
-	dateCurrent = new Date();
-	var tm = tijd.getMinutes();
-	var th = tijd.getHours();
-	if(th<10)
-        {
-                th = "0"+th;
-        }
-        if(tm<10)
-        {
-                tm = "0"+tm;
-        }
-
-	EpgInfo[1] = th + ":" + tm + "\uE003(" + (EPG[1][3][listChan]) + ")" + "\uE003" + EPG[1][1][listChan] + "\uE003" + EPG[1][6][listChan];
-
-
-	try {
-	if (listChan == switchtimericon[0] && NowNext == 1) {
-			document.getElementById("guide"+yy).setAttribute("style","fill:red;font-size:36px;");
-	} else {
-			document.getElementById("guide"+yy).setAttribute("style","fill:white;font-size:36px;");
-	}
-	document.getElementById(("guide"+yy)).textContent = listChan + "\uE003" + Left(channelsnames[listChan],15) + "\uE003" + Left(EpgInfo[NowNext],60);
-	  } catch (e) {
-	    alert("Error file guide list: " + e);
-	  }
-	yy = yy + 1;
-	}
-
+	htmlstring = htmlstring + "</table>";
+	channelList.innerHTML = htmlstring;
+        chanlistepg.innerHTML = "<center><font color=black size=4><p>" + EPG[NowNext][1][currChan] + "</p></font><font color=black size=3><p>" + Left(EPG[NowNext][4][currChan],250) + "</p></font></center>" ;
 
 }
 
-
 // END of Channelslist / EPG Guide
 
+// TeleTXT section
 
-// MENU
+function embedTeletextPlugin() {
+  teletext = document.createElement("embed");
+  teletext.id = "teletext";
+  teletext.type = "application/motorola-teletext-plugin";
+  teletext.style.position = "absolute";
+  teletext.style.width = "100%";
+  teletext.style.height = "100%";
+  teletext.style.top = "10px"; // has to be 1 rather than 0
+  teletext.style.left = "10px"; // has to be 1 rather than 0
+  teletext.style.zIndex = "501";
+  return teletext;
+}
+
+
+function setVisible(isVisible) {
+  if (isVisible) {
+    videoplane.style.width = "50%";
+    videoplane.style.left = "50%";
+    document.body.appendChild(teletext);
+    teletext.style.width = "50%";
+    teletext.style.visibility = "visible";
+    channelList.style.visibility = "hidden";
+    colorkeys.style.visibility = "hidden";
+  } else {
+    teletext.style.visibility = "hidden";
+    channelList.style.visibility = "visible";
+    colorkeys.style.visibility = "visible";
+  }
+}
+
+
+function onKeyTeletext(keyCode) {
+  switch(keyCode) {
+    case "Left":
+      teletext.api.gotoNextPage();
+    break;
+    case "Right":
+      teletext.api.gotoPreviousPage();
+    break;
+    case "Red":
+      teletext.api.inputRedKey();
+    break;
+    case "Green":
+      teletext.api.inputGreenKey();
+    break;
+    case "Yellow":
+      teletext.api.inputYellowKey();
+    break;
+    case "Blue":
+      teletext.api.inputCyanKey();
+    break;
+    case "MediaRewind":
+      teletext.api.gotoPreviousSubpage();
+    break;
+    case "MediaForward":
+      teletext.api.gotoNextSubpage();
+    break;
+    case "MediaStop":
+	teletext.style.width = "100%";
+	teletext.api.transparent = !teletext.api.transparent;
+	FullScreen();
+    break;
+    case "BrowserBack":
+    case "Teletext":
+	isVisible = 0;
+	FullScreen();
+	setVisible(isVisible);		
+    break;
+
+    case "TV":
+      teletext.api.gotoIndexPage();
+    break;
+
+	case KEY_0:
+	    teletext.api.inputDigit(0);
+	break;
+	case KEY_1:
+	    teletext.api.inputDigit(1);
+	break;
+	case KEY_2:
+	    teletext.api.inputDigit(2);
+	break;
+	case KEY_3:
+	    teletext.api.inputDigit(3);
+	break;
+	case KEY_4:
+	    teletext.api.inputDigit(4);
+	break;
+	case KEY_5:
+	    teletext.api.inputDigit(5);
+	break;
+	case KEY_6:
+	    teletext.api.inputDigit(6);
+	break;
+	case KEY_7:
+	    teletext.api.inputDigit(7);
+	break;
+	case KEY_8:
+	    teletext.api.inputDigit(8);
+	break;
+	case KEY_9:
+	    teletext.api.inputDigit(9);
+	break;
+
+
+
+  }
+}
+
+// end of TeleTXT section
+
+
+// Menu section
 
 function onKeyMenu(keyCode) {
   switch(keyCode) {
     case "Menu":
     case "BrowserBack":
 	isSetupMenu = 0;
-	document.getElementById("MENU").setAttribute("visibility","invisible");
+	mainmenu.style.opacity = 0;
     break;
     case "Left":
     break;
@@ -1010,8 +1107,7 @@ function onKeyMenu(keyCode) {
 	clearTimeout(switchtimerID);
 	switchtimerID = 0;
 	InitMenu();
-	switchtimericon[0] = 0;
-	switchicon = "\uE003";
+	osdtimer.innerHTML = "";
 	SetLed(0,0,0);
     break;
     case "Blue":
@@ -1056,20 +1152,12 @@ function onKeyMenu(keyCode) {
 }
 
 function InitMenu() {
-	document.getElementById("menuheader").textContent = "SETTINGS";
-	document.getElementById("menu0").textContent = "Frontdisplay Clock : " + showClock;
-	document.getElementById("menu1").textContent = "Prio audio track : " + (toi.informationService.getObject("cfg.media.audio.languagepriority"));
-	document.getElementById("menu2").textContent = "Switch timer : " + Boolean(switchtimerID);
-	document.getElementById("menu3").textContent = "Preview guide : " + SwitchGuide + " ";
-	document.getElementById("menu_red").textContent = " Clock ";
-	document.getElementById("menu_green").textContent = " Lang. ";
-	document.getElementById("menu_yellow").textContent = " Timer ";
-	document.getElementById("menu_blue").textContent = " Prev. ";
+	mainmenu.innerHTML = "<center><font size=7 color=white><p> SETTINGS </p><font color=red size=5><p>Frontdisplay Clock : " + showClock + "</p></font><font color=green size=5><p>Prio audio track : " + (toi.informationService.getObject("cfg.media.audio.languagepriority")) + "</p></font><font color=yellow size=5><p>Switch timer : " + Boolean(switchtimerID) + "</p></font><font color=blue size=5><p>Preview guide : " + SwitchGuide + "</p></font></center>";
 }
 
-// END Menu
+// End of Menu section
 
-// Mediaplayer
+// Media Player Section
 
 function onKeyMedia(keyCode) {
   switch(keyCode) {
@@ -1125,19 +1213,19 @@ function onKeyMedia(keyCode) {
 			is = toi.informationService;
 			if(audio == 1) {	
 				is.setObject("cfg.media.audio.languagepriority","dut,eng",is.STORAGE_VOLATILE);
-				document.getElementById("osdlang").setAttribute("visibility","visible");
-				document.getElementById("osdlangtxt").textContent = "Nederlands"
-				setTimeout("document.getElementById('osdlang').setAttribute('visibility','invisible');", 3000);
+				osdlang.style.opacity = 1;
+				osdlang.innerHTML = "<img src='unmute.png'><font color=white size=3>Nederlands</font>"
+				setTimeout("osdlang.style.opacity = 0; ", 3000);
 			} else if(audio == 2) {
 				is.setObject("cfg.media.audio.languagepriority","ger,deu,eng",is.STORAGE_VOLATILE);
-				document.getElementById("osdlang").setAttribute("visibility","visible");
-				document.getElementById("osdlangtxt").textContent = "Deutsch"
-				setTimeout("document.getElementById('osdlang').setAttribute('visibility','invisible');", 3000);
+				osdlang.style.opacity = 1;
+				osdlang.innerHTML = "<img src='unmute.png'><font color=white size=3>Deutsch</font>"
+				setTimeout("osdlang.style.opacity = 0; ", 3000);
 			} else if(audio == 3) {
 				is.setObject("cfg.media.audio.languagepriority","eng",is.STORAGE_VOLATILE);
-				document.getElementById("osdlang").setAttribute("visibility","visible");
-				document.getElementById("osdlangtxt").textContent = "English"
-				setTimeout("document.getElementById('osdlang').setAttribute('visibility','invisible');", 3000);
+				osdlang.style.opacity = 1;
+				osdlang.innerHTML = "<img src='unmute.png'><font color=white size=3>English</font>"
+				setTimeout("osdlang.style.opacity = 0; ", 3000);
 				audio = 0;
 			}
 	break;
@@ -1183,11 +1271,8 @@ function onKeyMedia(keyCode) {
     case "VolumeMute":
 	state = toi.audioOutputService.getMuteState(AudioOut);
 	toi.audioOutputService.setMuteState(AudioOut, !state);
-	if (state) {
-	document.getElementById("osdmute").setAttribute("visibility","invisible") ;
-	} else {
-	document.getElementById("osdmute").setAttribute("visibility","visible") ;
-	}
+	mute = 1 - state;
+        osdmute.style.opacity = mute; 
 	break;
     case "VolumeUp":
 	Volume = Volume + 10;
@@ -1273,112 +1358,48 @@ function ShowMediaOSD() {
 	osdmedia.innerHTML = "<font size=4> Elapsed time : " + mediaPlayer.getPosition() + "</font>";
 }
 
-// END of Mediaplayer
 
-// TELETEXT
-
-function embedTeletextElement() {
-  teletext = document.createElement("foreignObject");
-  teletext.setAttribute("id", "teletext");
-  teletext.setAttribute("x", "10");
-  teletext.setAttribute("y", "10");
-  teletext.setAttribute("width", videoWidth);
-  teletext.setAttribute("height", videoHeight);
-  teletext.setAttribute("requiredExtensions", "application/motorola-teletext-plugin");
-    document.documentElement.appendChild(teletext);
-  teletext.setAttribute("display", "none");
-  return teletext;
-}
+</script>
 
 
-function setVisible(isVisible) {
-  if (isVisible) {
-    video.setAttribute("width", (videoWidth/2));
-    video.setAttribute("x", (videoWidth/2));
-    teletext.setAttribute("width", (videoWidth/2));
-    teletext.setAttribute("height", videoHeight);
-    teletext.setAttribute("display", "inline");
-  } else {
-    teletext.setAttribute("display", "none");
-  }
-}
+	<body style="background:#ccc;" onload="onLoad()" onunload="onUnload()">
+    <embed type="application/x-motorola-toi" hidden="true">
 
-function onKeyTeletext(keyCode) {
-  switch(keyCode) {
-    case "Left":
-      teletext.gotoNextPage();
-    break;
-    case "Right":
-      teletext.gotoPreviousPage();
-    break;
-    case "Red":
-      teletext.inputRedKey();
-    break;
-    case "Green":
-      teletext.inputGreenKey();
-    break;
-    case "Yellow":
-      teletext.inputYellowKey();
-    break;
-    case "Blue":
-      teletext.inputCyanKey();
-    break;
-    case "MediaRewind":
-      teletext.gotoPreviousSubpage();
-    break;
-    case "MediaForward":
-      teletext.gotoNextSubpage();
-    break;
-    case "MediaStop":
-	teletext.setAttribute("width", videoWidth);
-	teletext.setAttribute("height", videoHeight);
-	teletext.transparent = !teletext.transparent;
-	FullScreen();
-    break;
-    case "BrowserBack":
-    case "Teletext":
-	isVisible = 0;
-	setVisible(isVisible);
-	FullScreen();		
-    break;
+	<div id="channelList" style="background:#bbb; width:100%; height:45%; position:absolute; left:50px; top:25px;"></div>
+	<div id="schedule" style="background:#bbb; width:100%; height:45%; position:absolute; left:50px; top:25px;opacity:0;"></div>
 
-    case "TV":
-      teletext.gotoIndexPage();
-    break;
-
-	case KEY_0:
-	    teletext.inputDigit(0);
-	break;
-	case KEY_1:
-	    teletext.inputDigit(1);
-	break;
-	case KEY_2:
-	    teletext.inputDigit(2);
-	break;
-	case KEY_3:
-	    teletext.inputDigit(3);
-	break;
-	case KEY_4:
-	    teletext.inputDigit(4);
-	break;
-	case KEY_5:
-	    teletext.inputDigit(5);
-	break;
-	case KEY_6:
-	    teletext.inputDigit(6);
-	break;
-	case KEY_7:
-	    teletext.inputDigit(7);
-	break;
-	case KEY_8:
-	    teletext.inputDigit(8);
-	break;
-	case KEY_9:
-	    teletext.inputDigit(9);
-	break;
+	<div id="colorkeys" style="width:100%; position:absolute; left:75px; top:485px;"><font color=red size=3> ----- </font><font color=green size=3> Next </font><font color=yellow size=3> Schedule </font><font color=blue size=3> INFO </font></div>
 
 
+	<div id="schedkeys" style="width:100%; position:absolute; left:75px; top:485px;opacity:0;"><font color=red size=3>-----</font><font color=green size=3>----</font><font color=yellow size=3> GUIDE </font><font color=blue size=3> ---- </font></div>
 
-  }
-}
+	<div id="chanlistepg" style="width:300; position:absolute; left:50px; top:290px;"> 	</div>
+	<div id="switchtimer" style="background:#3366ff;width:300; position:absolute; left:150px; top:150px;z-index:10;opacity:0;"></div>
+
+
+	<videoplane id='videoplane' style='position:absolute; left:0px; top:0px; height: 100%; width: 100%; z-index:500;'></videoplane>
+
+	<div id="osdvolume" style="width:450px; position:absolute; left:150px; top:500px;z-index:501;fontFamily:VDRSymbolsSans;opacity:0;">Volume : </div>
+	<div id="osdmedia" style="width:450px; position:absolute; left:150px; top:400px;z-index:505;fontFamily:VDRSymbolsSans;opacity:0;"></div>
+
+	<div id="osdmain" style="background:#3366ff;width:550px; position:absolute; left:75px; top:350px; bottom:50px;z-index:505;"></div>
+	<div id="osdtime" style="width:300px; position:absolute; left:375px; top:360px;z-index:505;"></div>
+	<div id="osdname" style="width:500px;height:25px; position:absolute; left:85px; top:375px;z-index:505;"></div>
+	<div id="osdepg" style="width:450px; position:absolute; left:150px; top:400px;z-index:505;"></div>
+	<div id="osdtimer" style="width:50px; position:absolute; left:85px; top:400px;z-index:505;"></div>
+	<div id="osdca" style="width:25px; position:absolute; left:575px; top:385px;z-index:505;fontFamily:VDRSymbolsSans;"></div>
+
+	<div id="osdnr" style="background:red;width:75px;height:50px; position:absolute; left:85px; top:320px;z-index:505;opacity:0;"></div>
+
+	<div id="osdepginfo" style="background:#3366ff;width:550px; position:absolute; left:100px; top:100px;z-index:510;opacity:0;"></div>
+	<div id="osdepginfonext" style="background:#3366ff;width:550px; position:absolute; left:100px; top:100px;z-index:510;opacity:0;"></div>
+
+	<div id="osdmute" style="width:50px; position:absolute; left:550px; top:50px;z-index:515;opacity:0;"><img src="mute.png"></div>
+	<div id="osdlang" style="width:50px; position:absolute; left:550px; top:50px;z-index:515;opacity:0;"></div>
+	<div id="mainmenu" style="background:#3366ff;width:550px; position:absolute; left:75px; top:50px; bottom:50px;z-index:520;opacity:0;"></div>
+	<div id="mediaList" style="background:#bbb; width:80%; height:75%; position:absolute; left:10%; top:10%;z-index:520;opacity:0;"></div>
+
+</body>
+</html>
+
 

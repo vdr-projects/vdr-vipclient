@@ -54,16 +54,6 @@ var KEY_7 = "U+0037";
 var KEY_8 = "U+0038";
 var KEY_9 = "U+0039";
 
-var videoWidth = "544"; // fallbacksize
-var videoHeight = "576";
-
-var switchtimericon = new Array();
-var switchicon = "\uE003";
-
-var guide = null;
-var video = null;
-
-var teletext = null;
 var eitCache = null;
 var events = null;
 var eitService = null;
@@ -79,9 +69,9 @@ var NN = new Array();
 NN[0] = "Now";
 NN[1] = "Next";
 NN[2] = "Schedule";
-NN[3] = "-----";
-NN[4] = "TIMER";
-NN[5] = "TIMER";
+NN[3] = "TIMER";
+NN[4] = "-----";
+
 
 //
 //NowNext,	1 = programma naam	event.name			,currchan
@@ -89,7 +79,8 @@ NN[5] = "TIMER";
 //2 = schedule	3 = lengte		event.duration (/60 = minuten)
 //		4 = shortinfo
 //		5 = extinfo
-//		6 = if (cds) -> shortinfo
+//		6 = eventid
+//		7 = EPGNow / EPGNext
 
 var EPG = new Array();
 EPG[0] = new Array();
@@ -101,21 +92,21 @@ EPG[0][3] = new Array();
 EPG[0][4] = new Array();
 EPG[0][5] = new Array();
 EPG[0][6] = new Array();
+EPG[0][7] = new Array();
 EPG[1][1] = new Array();
 EPG[1][2] = new Array();
 EPG[1][3] = new Array();
 EPG[1][4] = new Array();
 EPG[1][5] = new Array();
 EPG[1][6] = new Array();
+EPG[1][7] = new Array();
 EPG[2][1] = new Array();
 EPG[2][2] = new Array();
 EPG[2][3] = new Array();
 EPG[2][4] = new Array();
 EPG[2][5] = new Array();
 EPG[2][6] = new Array();
-
-var schedule = new Array();
-for (var i = 1;  i < 15; i++) { schedule[i] = new Array(); }
+EPG[2][7] = new Array();
 
 var osdtimeout = 0;
 var osdVolumetimeout = 0;
