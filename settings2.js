@@ -4,6 +4,7 @@ var showClock = 0;
 var SwitchGuide = 0;
 var VideoHDMIOut = HDMI[4];
 var VideoScartOut = Scart[1];
+var TimeShift = 0; // 0 = no, 1 = yes timeshift
 
 
 months = new Array('January', 'February', 'March', 'April', 'May', 'June', 'Jully', 'August', 'September', 'October', 'November', 'December');

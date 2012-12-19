@@ -3,6 +3,7 @@
 	Only Play/ Pause & FF, no REW.
 	OSD made for 576i !!
 	Bugfix EPG info, now it should show the now/next info of the current channel.
+	(for testing timeshift added (only on hdd-models and not working for vdr streams (?)) set timeshift to 1 in settings2.js)
 
 	Split portal into webkit (html) and svg version
 

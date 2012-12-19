@@ -26,9 +26,11 @@
 //	 change IP server
 //
 
-var Version = "0.04	2012/12/xx"
+var Version = "0.04	2012/12/20"
 var nrChannels = channels.length;
 var nrMedia = recording.length - 1;
+
+for (var i = 1;  i < nrChannels; i++) { EPG[0][4][i] = "";EPG[1][4][i] = "";EPG[0][5][i] = "";EPG[1][5][i] = "";EPG[0][7][i] = "";EPG[1][7][i] = ""; }
 
 window.onkeydown = onKeyDown;
 
@@ -84,12 +86,19 @@ function createPlayer() {
 
 function play(uri) {
   try {
+	if (initialDelayID != -1) {
+	  clearTimeout(initialDelayID);
+	  initialDelayID = -1;
+	}
     if (mediaPlayer.getState() != mediaPlayer.STATE_IDLE) {
       mediaPlayer.close();
     }
     uri = ServerAdres + uri;
     mediaPlayer.open(uri);
-    mediaPlayer.play(1000);
+    mediaPlayer.play(mediaPlayer.PACE_PLAY);
+	if(TimeShift){
+	    initialDelayID = setTimeout("startTimeshiftBuffering();", 5000);
+	}
 	if(isFullscreen) {
 	showOSD();
 	}
@@ -97,6 +106,8 @@ function play(uri) {
         GetEPG(currChan);
   } catch (e) {
     alert("Failed opening stream: " + e);
+    alert("error: " + mediaPlayer.getTimeshiftError().source);
+    alert("error: " + mediaPlayer.getTimeshiftError().details);
     return;
   }
 }
@@ -109,6 +120,17 @@ function preview(urip) {
 	if (isSchedule) {
 	GetSchedule(currChan,10);
 	}
+}
+
+
+function startTimeshiftBuffering() {
+    // check that media player is working
+    if (mediaPlayer.getState() != mediaPlayer.STATE_PLAYING ) {
+      alert("Media Player must be playing when starting timeshift buffering!");
+      return;
+    }
+
+    mediaPlayer.startTimeshiftBuffering(600);
 }
 
 
@@ -268,18 +290,15 @@ function onKeyDown(event) {
 	if(isFullscreen) {
 		if(!epgactive) {
 				if(!isSchedule) {
-				schedule.style.zIndex = 505;
 				schedule.style.opacity = 1;
 				schedule.style.height = "75%";
 				GetSchedule(currChan,15);
 				isSchedule = 1;
 				} else {
 				isSchedule = 0;
-				schedule.style.zIndex = 450;
 				schedule.style.opacity = 0;
 				schedule.style.height = "45%";
 				}
-//			setTimeout("schedule.style.opacity = 0;schedule.style.height = '45%';schedule.style.zIndex = 450;", 3000);
 		}
 	} else {
 		GetSchedule(currChan,10);
@@ -309,9 +328,16 @@ function onKeyDown(event) {
 		}
 		Change = 0;
 	} else {
+		if(isSchedule) {
+			isSchedule = 0;
+			schedule.style.opacity = 0;
+			schedule.style.height = "45%";
+			epgactive = 1; // else we get EPGinfo on the screen, bit nasty but works
+		}
+
 		if(isFullscreen) {
 		//SHOW epg info
-			if(!epgactive){
+			if(!epgactive) {
 			SetOsdInfo();
 			osdepginfo.style.opacity = 1;
 			osdepginfonext.style.opacity = 0;
@@ -465,17 +491,29 @@ function onKeyDown(event) {
 	break;
 
 	case "MediaRewind":
+	      mediaPlayer.play(mediaPlayer.PACE_REWIND);
 		break;
 	case "MediaForward":
+	      mediaPlayer.play(mediaPlayer.PACE_FASTFORWARD);
 		break;
 	case "MediaPlayPause":
+		if(mediaPlayer.getState() == mediaPlayer.STATE_PAUSED) {
+			SetLed(1,1,0);
+			mediaPlayer.play(1000);
+			break;
+		}
+	   if(mediaPlayer.getState() == mediaPlayer.STATE_PLAYING) {
+			SetLed(1,1,10);
+			mediaPlayer.play(0);
+			break;
+		}
 		break;
 	case "MediaStop":
-	mediaList.style.opacity = 0.8;
-	isMediaMenu = 1;
-	showDisplay("STOP", false, 100, 0 );
-	currMed = 0;
-	showMediaList();
+		mediaList.style.opacity = 0.8;
+		isMediaMenu = 1;
+		showDisplay("STOP", false, 100, 0 );
+		currMed = 0;
+		showMediaList();
 	break;
 	case "MediaRecord":
 	break;
@@ -592,7 +630,11 @@ function onCacheUpdated() {
 //		showChannelList();
 //	}
 	if (isSchedule) {
-	GetSchedule(currChan,10);
+		if (!isFullscreen) {
+			GetSchedule(currChan,10);
+		} else {
+			GetSchedule(currChan,15);
+		}
 	}
 
 }
@@ -605,8 +647,8 @@ function OSDhtml(){
     osdtime.innerHTML = "<font color=white size=2>" + result +"</font>";
     osdname.innerHTML = "<font color=black size=5>" + Left(channelsnames[currChan],30) + "</font>";
     osdepg.innerHTML = "<font color=white size=4><p>" + EPG[0][7][currChan] + "</p>\n<p>" + EPG[1][7][currChan] + "</p></font>";
-    osdepginfo.innerHTML =  "<center><font color=white size=4><p>" + EPG[0][7][currChan] + "</p>\n<p>" + EPG[0][4][currChan] + "</p>\n<p>" + Left(EPG[0][5][currChan],750) + "</p></font></center>";
-    osdepginfonext.innerHTML =  "<center><font color=white size=4><p>" + EPG[1][7][currChan] + "</p>\n<p>" + EPG[1][4][currChan] + "</p>\n<p>" + Left(EPG[1][5][currChan],750) + "</p></font></center>";
+    osdepginfo.innerHTML =  "<center><font color=white size=5><p>" + currChan + "\uE003" + channelsnames[currChan] + "</p></font><font color=white size=4><p>" + EPG[0][7][currChan] + "</p>\n<p><font color=yellow>" + EPG[0][4][currChan] + "</font></p>\n<p>" + Left(EPG[0][5][currChan],750) + "</p></font></center>";
+    osdepginfonext.innerHTML =  "<center><font color=white size=5><p>"  + currChan + "\uE003" + channelsnames[currChan] + "</p></font><font color=white size=4><p>" +  EPG[1][7][currChan] + "</p>\n<p><font color=yellow>" + EPG[1][4][currChan] + "</font></p>\n<p>" + Left(EPG[1][5][currChan],750) + "</p></font></center>";
 }
 
 
@@ -751,6 +793,28 @@ function GetEPG(epgchan)
 		cds = 1;
 	}
 
+	if((SI[0]=="S13.0E" && SI[3]=="14003") || (SI[0]=="S13.0E" && SI[3]=="14009") || (SI[0]=="S13.0E" && SI[3]=="14051") || (SI[0]=="S13.0E" && SI[3]=="951")) {
+		is.setObject("cfg.locale.ui","ita",is.STORAGE_VOLATILE);
+	cds = 1;
+	}
+
+	if((SI[0]=="S13.0E" && SI[2]=="12800")) {
+		is.setObject("cfg.locale.ui","eng",is.STORAGE_VOLATILE);
+	}
+
+
+	if((SI[0]=="S13.0E" && SI[3]=="14002") || (SI[0]=="S13.0E" && SI[3]=="14008") ) {
+		is.setObject("cfg.locale.ui","fra",is.STORAGE_VOLATILE);
+	cds = 1;
+	}
+
+	if((SI[0]=="S13.0E" && SI[2]=="1400") ) {
+		is.setObject("cfg.locale.ui","pol",is.STORAGE_VOLATILE);
+	cds = 1;
+	}
+
+
+
 	 eitService = toi.statics.ToiDvbEitCacheServiceItem.create(SI[1],SI[2],SI[3]);
 	 eitCache.addService(eitService);
 	 event = eitCache.getPresentEvent(eitService);
@@ -877,16 +941,40 @@ function GetEPG(epgchan)
 
 function GetSchedule(schchan,tablelength){
   try {
+	// streaminfo
+	// SI[x] 0-sat,1-NID,2-TID,3-SID
  	SI=channels[schchan].split("-");
 	is = toi.informationService;
 	is.setObject("cfg.locale.ui","ger",is.STORAGE_VOLATILE);
 	if(SI[0]=="S28.2E") {
 		is.setObject("cfg.locale.ui","eng",is.STORAGE_VOLATILE);
 	} 
+
 	if((SI[0]=="S23.5E" && SI[1]=="3") || SI[2]=="1026" || SI[2]=="1097" || SI[2]=="1105" || SI[2]=="1119") {
 		is.setObject("cfg.locale.ui","dut",is.STORAGE_VOLATILE);
 		cds = 1;
 	}
+
+	if((SI[0]=="S13.0E" && SI[3]=="14003") || (SI[0]=="S13.0E" && SI[3]=="14009") || (SI[0]=="S13.0E" && SI[3]=="14051") || (SI[0]=="S13.0E" && SI[3]=="951")) {
+		is.setObject("cfg.locale.ui","ita",is.STORAGE_VOLATILE);
+	cds = 1;
+	}
+
+	if((SI[0]=="S13.0E" && SI[2]=="12800")) {
+		is.setObject("cfg.locale.ui","eng",is.STORAGE_VOLATILE);
+	}
+
+
+	if((SI[0]=="S13.0E" && SI[3]=="14002") || (SI[0]=="S13.0E" && SI[3]=="14008") ) {
+		is.setObject("cfg.locale.ui","fra",is.STORAGE_VOLATILE);
+	cds = 1;
+	}
+
+	if((SI[0]=="S13.0E" && SI[2]=="1400") ) {
+		is.setObject("cfg.locale.ui","pol",is.STORAGE_VOLATILE);
+	cds = 1;
+	}
+
 
 	 eitService = toi.statics.ToiDvbEitCacheServiceItem.create(SI[1],SI[2],SI[3]);
 	 eitCache.addService(eitService);
@@ -905,7 +993,7 @@ function GetSchedule(schchan,tablelength){
 	    for (i = 0; i < events.infoSequence.length && i < tablelength; i++) {
 
 		while ((i > 0) && (events.infoSequence[i].eventId == events.infoSequence[(i-1)].eventId)) {
-			i = i +1;
+			i = i + 1;
 		}
 
 		tijd = events.infoSequence[i].time;
@@ -923,12 +1011,12 @@ function GetSchedule(schchan,tablelength){
 	                tm = "0"+tm;
 	        	}
 
-	      txt = txt + "<td>" + th + ":" + tm + "     (" + events.infoSequence[i].duration/60 + ")  " + events.infoSequence[i].name + "</td></tr>";
+	      txt = txt + "<td>" + "\uE003\uE003\uE003\uE003\uE003" + th + ":" + tm + "     (" + events.infoSequence[i].duration/60 + ")  " + events.infoSequence[i].name + "</td></tr>";
 	    }
 	   txt = txt + "</table>";
-	   schedule.innerHTML = "<font size=+3>" + schchan + "\uE003" + channelsnames[schchan] + "</font>" + txt;
+	   schedule.innerHTML = "<font size=+3>" + "\uE003" + schchan + "\uE003" + channelsnames[schchan] + "</font>" + txt;
 	} else {
-		schedule.innerHTML = "<p>" + channelsnames[schchan] + "</p> ";
+		schedule.innerHTML =  "<font size=+3>" + "\uE003" + schchan + "\uE003" + channelsnames[schchan] + "</font>";
 	}
 
   } catch(e) {
@@ -1397,7 +1485,7 @@ function ShowMediaOSD() {
     <embed type="application/x-motorola-toi" hidden="true">
 
 	<div id="channelList" style="background:#bbb; width:100%; height:45%; position:absolute; left:50px; top:25px;"></div>
-	<div id="schedule" style="background:#bbb; width:100%; height:45%; position:absolute; left:50px; top:25px;opacity:0;z-index:450;"></div>
+
 
 	<div id="colorkeys" style="width:100%; position:absolute; left:75px; top:485px;"><font color=red size=3> ----- </font><font color=green size=3> Next </font><font color=yellow size=3> Schedule </font><font color=blue size=3> INFO </font></div>
 
@@ -1424,9 +1512,11 @@ function ShowMediaOSD() {
 
 	<div id="osdepginfo" style="background:#3366ff;width:550px; position:absolute; left:100px; top:100px;z-index:510;opacity:0;"></div>
 	<div id="osdepginfonext" style="background:#3366ff;width:550px; position:absolute; left:100px; top:100px;z-index:510;opacity:0;"></div>
+	<div id="schedule" style="background:#bbb; width:100%; height:45%; position:absolute; left:50px; top:25px;opacity:0;z-index:510;"></div>
 
 	<div id="osdmute" style="width:50px; position:absolute; left:550px; top:50px;z-index:515;opacity:0;"><img src="mute.png"></div>
 	<div id="osdlang" style="width:50px; position:absolute; left:550px; top:50px;z-index:515;opacity:0;"></div>
+
 	<div id="mainmenu" style="background:#3366ff;width:550px; position:absolute; left:75px; top:50px; bottom:50px;z-index:520;opacity:0;"></div>
 	<div id="mediaList" style="background:#bbb; width:80%; height:75%; position:absolute; left:10%; top:10%;z-index:520;opacity:0;"></div>
 
