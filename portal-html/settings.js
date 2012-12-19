@@ -42,6 +42,7 @@ var isSchedule = 0;
 var mediaPlayer = null;
 var Change = 0;
 var ChangeOK = 0;
+var Extok = 0;
 var count = 0;
 var KEY_0 = "U+0030";
 var KEY_1 = "U+0031";

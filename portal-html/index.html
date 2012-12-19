@@ -94,6 +94,7 @@ function play(uri) {
 	showOSD();
 	}
 	showDisplay((currChan.toString()), false, 100, 0 );
+        GetEPG(currChan);
   } catch (e) {
     alert("Failed opening stream: " + e);
     return;
@@ -266,10 +267,19 @@ function onKeyDown(event) {
    case "Yellow":
 	if(isFullscreen) {
 		if(!epgactive) {
-			GetSchedule(currChan,15);
-			schedule.style.opacity = 1;
-			schedule.style.height = "75%";
-			setTimeout("schedule.style.opacity = 0;schedule.style.height = '45%';", 3000);
+				if(!isSchedule) {
+				schedule.style.zIndex = 505;
+				schedule.style.opacity = 1;
+				schedule.style.height = "75%";
+				GetSchedule(currChan,15);
+				isSchedule = 1;
+				} else {
+				isSchedule = 0;
+				schedule.style.zIndex = 450;
+				schedule.style.opacity = 0;
+				schedule.style.height = "45%";
+				}
+//			setTimeout("schedule.style.opacity = 0;schedule.style.height = '45%';schedule.style.zIndex = 450;", 3000);
 		}
 	} else {
 		GetSchedule(currChan,10);
@@ -301,11 +311,17 @@ function onKeyDown(event) {
 	} else {
 		if(isFullscreen) {
 		//SHOW epg info
-		SetOsdInfo();
-		osdepginfo.style.opacity = 1;
-		osdepginfonext.style.opacity = 0;
-		epgactive = 1;		
-		setTimeout("epgactive = 0; osdepginfo.style.opacity = 0; osdepginfonext.style.opacity = 0;", 5000);
+			if(!epgactive){
+			SetOsdInfo();
+			osdepginfo.style.opacity = 1;
+			osdepginfonext.style.opacity = 0;
+			epgactive = 1;		
+			} else {
+			osdepginfo.style.opacity = 0;
+			osdepginfonext.style.opacity = 0;
+			epgactive = 0;
+			}
+//		setTimeout("epgactive = 0; osdepginfo.style.opacity = 0; osdepginfonext.style.opacity = 0;", 5000);
 		} else if(!isFullscreen){
 			isFullscreen = 1;
 			FullScreen();
@@ -561,14 +577,15 @@ function OSD(opacity) {
 function SetOsdInfo() {
     OSDchannr(currChan);
     date_time();
-    GetEPG(currChan);
+//    GetEPG(currChan);
     OSDhtml();
     return;
 }
 
 function onCacheUpdated() {
+        GetEPG(currChan);
 	if (osdtimeout) {
-	GetEPG(currChan);
+//	GetEPG(currChan);
 	SetOsdInfo();
 	} 
 //	if (!isFullscreen) {
@@ -588,8 +605,8 @@ function OSDhtml(){
     osdtime.innerHTML = "<font color=white size=2>" + result +"</font>";
     osdname.innerHTML = "<font color=black size=5>" + Left(channelsnames[currChan],30) + "</font>";
     osdepg.innerHTML = "<font color=white size=4><p>" + EPG[0][7][currChan] + "</p>\n<p>" + EPG[1][7][currChan] + "</p></font>";
-    osdepginfo.innerHTML =  "<center><font color=white size=4><p>" + EPG[0][7][currChan] + "</p>\n<p>" + EPG[0][4][currChan] + "</p>\n<p>" + Left(EPG[0][5][epgchan],750) + "</p></font></center>";
-    osdepginfonext.innerHTML =  "<center><font color=white size=4><p>" + EPG[1][7][currChan] + "</p>\n<p>" + EPG[1][4][currChan] + "</p>\n<p>" + Left(EPG[1][5][epgchan],750) + "</p></font></center>";
+    osdepginfo.innerHTML =  "<center><font color=white size=4><p>" + EPG[0][7][currChan] + "</p>\n<p>" + EPG[0][4][currChan] + "</p>\n<p>" + Left(EPG[0][5][currChan],750) + "</p></font></center>";
+    osdepginfonext.innerHTML =  "<center><font color=white size=4><p>" + EPG[1][7][currChan] + "</p>\n<p>" + EPG[1][4][currChan] + "</p>\n<p>" + Left(EPG[1][5][currChan],750) + "</p></font></center>";
 }
 
 
@@ -743,16 +760,13 @@ function GetEPG(epgchan)
 		osdca.innerHTML = "<font color=black size=6>\uE00F</font>";
 	}
 
-	if (event.name)
-	{
+	if (event.name)	{
 	 events = eitCache.getEvents(eitService, 1000000000, 2000000000);
  	    extEventsnow = eitCache.getExtendedEventInfo(eitService, events.infoSequence[0].eventId);
- 	    extEventsnext = eitCache.getExtendedEventInfo(eitService, events.infoSequence[1].eventId);
 	    EPGShortnow = extEventsnow.shortInfo;
-	    EPGShortnext = extEventsnext.shortInfo;
 	    EPGExtnow = extEventsnow.extendedInfo;
-	    EPGExtnext = extEventsnext.extendedInfo; 
-	}
+	    Extok = 1;
+	} else { Extok = 0; }
 
 	EPG[0][1][epgchan] = event.name;
 	EPG[0][2][epgchan] = event.time;
@@ -762,11 +776,14 @@ function GetEPG(epgchan)
 
 	if(EPGShortnow) {
 	EPG[0][4][epgchan] = EPGShortnow;
+	} else {
+	EPG[0][4][epgchan] = "";
 	}
 	if(EPGExtnow) {
 	EPG[0][5][epgchan] = EPGExtnow;
+	} else {
+	EPG[0][5][epgchan] = "";
 	}
-
 	tijd = event.time;
 	date = new Date(tijd*1000); 
 	tijd = date.toUTCString();
@@ -796,6 +813,15 @@ function GetEPG(epgchan)
 
 
 	 event = eitCache.getFollowingEvent(eitService);
+	if (Extok) {
+		for (var i = 0; i < events.infoSequence.length && i < 4; i++) {
+	 	    extEvents = eitCache.getExtendedEventInfo(eitService, events.infoSequence[i].eventId);
+			if (extEvents.eventId == event.eventId) {
+			    EPGShortnext = extEvents.shortInfo;
+			    EPGExtnext = extEvents.extendedInfo; 
+			}
+		}
+	}
 
 	EPG[1][1][epgchan] = event.name;
 	EPG[1][2][epgchan] = event.time;
@@ -803,13 +829,18 @@ function GetEPG(epgchan)
 	EPG[1][4][epgchan] = "";
 	EPG[1][5][epgchan] = "";
 
+
+
 	if(EPGShortnext) {
 	EPG[1][4][epgchan] = EPGShortnext;
+	} else {
+	EPG[1][4][epgchan] = "";
 	}
 	if(EPGExtnext) {
 	EPG[1][5][epgchan] = EPGExtnext;
+	} else {
+	EPG[1][5][epgchan] = "";
 	}
-
 	tijd = event.time;
 	date = new Date(tijd*1000); 
 	tijd = date.toUTCString();
@@ -895,7 +926,7 @@ function GetSchedule(schchan,tablelength){
 	      txt = txt + "<td>" + th + ":" + tm + "     (" + events.infoSequence[i].duration/60 + ")  " + events.infoSequence[i].name + "</td></tr>";
 	    }
 	   txt = txt + "</table>";
-	   schedule.innerHTML = channelsnames[schchan] + txt;
+	   schedule.innerHTML = "<font size=+3>" + schchan + "\uE003" + channelsnames[schchan] + "</font>" + txt;
 	} else {
 		schedule.innerHTML = "<p>" + channelsnames[schchan] + "</p> ";
 	}
@@ -1366,7 +1397,7 @@ function ShowMediaOSD() {
     <embed type="application/x-motorola-toi" hidden="true">
 
 	<div id="channelList" style="background:#bbb; width:100%; height:45%; position:absolute; left:50px; top:25px;"></div>
-	<div id="schedule" style="background:#bbb; width:100%; height:45%; position:absolute; left:50px; top:25px;opacity:0;"></div>
+	<div id="schedule" style="background:#bbb; width:100%; height:45%; position:absolute; left:50px; top:25px;opacity:0;z-index:450;"></div>
 
 	<div id="colorkeys" style="width:100%; position:absolute; left:75px; top:485px;"><font color=red size=3> ----- </font><font color=green size=3> Next </font><font color=yellow size=3> Schedule </font><font color=blue size=3> INFO </font></div>
 
