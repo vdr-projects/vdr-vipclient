@@ -1215,3 +1215,10 @@ channels[968] = "S28.2E-2-2049-10000";
 channelsnames[969] = "Channel 4 HD (S)";
 channels[969] = "S28.2E-2-2068-21200";
 
+channelsnames[991] = "NED1 HD (S)"
+channels[991] = "S23.5E-3-3208-7035"
+channelsnames[992] = "NED2 HD (S)"
+channels[992] = "S23.5E-3-3202-6080"
+channelsnames[993] = "NED3 HD (S)"
+channels[993] = "S23.5E-3-3225-21040"
+

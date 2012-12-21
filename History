@@ -1,11 +1,13 @@
+0.05	Soon OSD 1920x1088 (16:9) // OSD 1280x720 (16:9) // OSD 704x576 (16:9)
+	EPG language routine expanded. Works for (almost) all german channels now.
+
+
 0.04	Volume OSD bar
 	Media Player added.
 	Only Play/ Pause & FF, no REW.
 	OSD made for 576i !!
 	Bugfix EPG info, now it should show the now/next info of the current channel.
 	(for testing timeshift added (only on hdd-models and not working for vdr streams (?)) set timeshift to 1 in settings2.js)
-
-	Split portal into webkit (html) and svg version
 
 0.03	Release date 2012/12/13
 	Try to fix Teletext crash.
