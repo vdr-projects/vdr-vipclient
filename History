@@ -1,6 +1,10 @@
 0.05	OSD 1920x1088 (16:9) // OSD 1280x720 (16:9) // OSD 704x576 (16:9) But should work on other size too.
 	EPG language routine expanded. Works for (almost) all german channels now.
 		Epg on Dvb-t defaults to Dutch.
+	Added toFixed on Schedule page.
+	Fixed colorkeys in some view.
+	Subs can be switched off from the menu.
+
 
 0.04	Volume OSD bar
 	Media Player added.

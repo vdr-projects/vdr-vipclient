@@ -2,6 +2,14 @@
 // or
 // init var settings
 
+//  720x576
+// 1280x720
+// 1920x1080
+
+var Xfactor = 1280 / 720;
+var Yfactor = 720 / 576;
+
+
 var channels = new Array();
 var channelsnames = new Array();
 var channelsepglang = new Array();
@@ -120,12 +128,14 @@ var switchtimerID = 0;
 var SwitchTimer = 1; // No other options yet
 var initialDelayID = 0;
 
+var switchicon = "\uE003";
+var CAicon = "\uE00D";
 
 var fsAudio = (16*Yfactor) + "px";
 var fsTime = (16*Yfactor) + "px";
 var fsName = (27*Yfactor) + "px";
-var fsMenu = (27*Yfactor) + "px";
-var fsChan = (43*Yfactor) + "px";
+var fsMenu = (24*Yfactor) + "px";
+var fsChan = (43*Yfactor) + "px"; 
 var fsCA = (32*Yfactor) + "px";
 var fsMenuMain = (48*Yfactor) + "px";
 var fsEpg = (19*Yfactor) + "px";

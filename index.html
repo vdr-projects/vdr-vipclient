@@ -26,8 +26,6 @@
 //	 change IP server
 //
 //
-//  videoplane.subtitles = true; // Enable subtitles
-//  videoplane.subtitles = false; // Disable subtitles
 //
 
 var Version = "0.05	2012/12/xx"
@@ -54,8 +52,6 @@ function onLoad() {
 	colorkeys.innerHTML = "<font color=red>" +  NN[4] + "</font><font color=green >" + NN[1] + "</font><font color=yellow> Schedule </font><font color=blue> INFO </font>";
 	osdvolume.style.fontSize = fsCA;
 	osdvolume.style.color = "green";
-	osdnr.style.fontSize = fsChan;
-	osdnr.style.color = "black";
 	osdtime.style.fontSize = fsTime;
 	osdtime.style.color = "white";
 	osdname.style.fontSize = fsName;
@@ -68,6 +64,7 @@ function onLoad() {
 	switchtimer.style.fontSize = fsEpg;
 	osdepginfo.style.fontSize = fsEpginfo;
 	osdepginfonext.style.fontSize = fsEpginfo;
+	videoplane.subtitles = Boolean(ShowSubs);
 }
 
 
@@ -140,7 +137,7 @@ function preview(urip) {
 	}
 	showChannelList();
 	if (isSchedule) {
-	GetSchedule(currChan,10);
+	//GetSchedule(currChan,10);
 	}
 }
 
@@ -263,7 +260,7 @@ function onKeyDown(event) {
 			showClock = 0;
 	 		showDisplay((currChan.toString()), false, 100, 0 );
 		}
-	} else {
+	} else if(isSchedule == 0){
 		if(NowNext) {	
 			settimer();
 			switchtimer.style.opacity = 1;
@@ -307,7 +304,7 @@ function onKeyDown(event) {
 		osdepginfo.style.opacity = 1 - osdepginfo.style.opacity ;
 		osdepginfonext.style.opacity = 1 - osdepginfo.style.opacity;
 		}
-	} else {
+	} else if(isSchedule == 0){
 		colorkeys.innerHTML = "<font color=red>" +  NN[3 + NowNext] + "</font><font color=green>" + NN[NowNext] + "</font><font color=yellow> Schedule </font><font color=blue> INFO </font>";
 		NowNext = 1 - NowNext;
 		showChannelList();
@@ -332,14 +329,18 @@ function onKeyDown(event) {
 		GetSchedule(currChan,10);
 		schedule.style.opacity = 1 - schedule.style.opacity;
 		channelList.style.opacity = 1 - schedule.style.opacity;
-		colorkeys.style.opacity = 1 - schedule.style.opacity;
 		isSchedule = schedule.style.opacity;
+		if(isSchedule == 1){
+		colorkeys.innerHTML = "<font color=red>" +  NN[4] + "</font><font color=green>" + NN[4] + "</font><font color=yellow> BACK </font><font color=blue>" + NN[4] + "</font>";
+		} else {
+		colorkeys.innerHTML = "<font color=red>" +  NN[3 + (1 - NowNext)] + "</font><font color=green>" + NN[1 - NowNext] + "</font><font color=yellow> Schedule </font><font color=blue> INFO </font>";
+		}
 	}
 	break;
    case "Blue":
 	if(isFullscreen) {
 	RestartPortal();
-	} else {
+	} else if(isSchedule ==0) {
 		SetOsdInfo();
 		osdepginfo.style.opacity = 1 - NowNext;
 		osdepginfonext.style.opacity = NowNext;
@@ -434,6 +435,7 @@ function onKeyDown(event) {
 			schedule.style.opacity = 0;
 			schedule.style.height = "48%";
 			channelList.style.opacity = 1;
+			colorkeys.innerHTML = "<font color=red>" +  NN[3 + (1 - NowNext)] + "</font><font color=green>" + NN[1 - NowNext] + "</font><font color=yellow> Schedule </font><font color=blue> INFO </font>";
 			colorkeys.style.opacity = 1;
 			showChannelList();
 			if(!SwitchGuide) {
@@ -675,6 +677,8 @@ function onCacheUpdated() {
 
 function OSDchannr(channr) {
     osdnr.innerHTML = "<center>" + channr + "</center>";
+    osdnr.style.fontSize = fsChan;
+    osdnr.style.color = "black";
 }
 
 function OSDhtml(){
@@ -703,7 +707,7 @@ function settimer() {
 		dateCurrent = new Date();
 		var StartTime = Math.floor((date.getTime() - dateCurrent.getTime()));
 		timerChan = currChan;
-		TimerActions = "isVisible = 0; isFullscreen = 1; FullScreen(); setVisible(isVisible); currChan = timerChan; play(timerChan); osdtimer.innerHTML = '';SetLed(0,0,0);"
+		TimerActions = "isVisible = 0; isFullscreen = 1; FullScreen(); setVisible(isVisible); currChan = timerChan; play(timerChan); osdtimer.innerHTML = '';SetLed(0,0,0);switchicon = '\uE003';osdca.innerHTML = CAicon + switchicon;"
 		// only 1 switch timer possible
 		if(switchtimerID) {
 			clearTimeout(switchtimerID);
@@ -712,6 +716,8 @@ function settimer() {
 		switchtimer.innerHTML = "<p>  Name      : " + EPG[NowNext][1][currChan] + "</p><p>  channel   : " + channelsnames[currChan] +  "</p><p>  Starttime : " + th + ":" + tm + "</p>";
 		osdtimer.innerHTML = "<p style='color:black;font-size:" + fsList + ";'>" + th + ":" + tm + "</p>";
 		SetLed(0,2,1);
+		switchicon = "\uE00C";
+		osdca.innerHTML = CAicon + switchicon;
 	} else {
 	//
 	// No Switch timer so send timer info to Server
@@ -863,11 +869,12 @@ function GetEPG(epgchan)
 	 eitCache.addService(eitService);
 	 event = eitCache.getPresentEvent(eitService);
 	if(event.freeCaMode){
-		osdca.innerHTML = "\uE00D";
+		CAicon = "\uE00D";
 	} else {
-		osdca.innerHTML = "\uE00F";
+		CAicon = "\uE00F";
 	}
 
+		osdca.innerHTML = CAicon + switchicon;
 	if (event.name)	{
 	 events = eitCache.getEvents(eitService, 1000000000, 2000000000);
  	    extEventsnow = eitCache.getExtendedEventInfo(eitService, events.infoSequence[0].eventId);
@@ -1055,7 +1062,7 @@ function GetSchedule(schchan,tablelength){
 	                tm = "0"+tm;
 	        	}
 
-	      txt = txt + "<td style='font-size:" + fsSchedList + ";'>\uE003\uE003\uE003\uE003\uE003" + th + ":" + tm + "     (" + events.infoSequence[i].duration/60 + ")  " + events.infoSequence[i].name + "</td></tr>";
+	      txt = txt + "<td style='font-size:" + fsSchedList + ";'>\uE003\uE003\uE003\uE003\uE003" + th + ":" + tm + "     (" + (events.infoSequence[i].duration/60).toFixed(0) + ")  " + events.infoSequence[i].name + "</td></tr>";
 	    }
 	   txt = txt + "</table>";
 	   schedule.innerHTML = "<p style='color:white;font-size:" + fsSched + ";'>" + "\uE003" + schchan + "\uE003" + channelsnames[schchan] + txt + "</p>";
@@ -1271,6 +1278,8 @@ function onKeyMenu(keyCode) {
 	switchtimerID = 0;
 	InitMenu();
 	osdtimer.innerHTML = "";
+	switchicon = "\uE003";
+	osdca.innerHTML = CAicon + switchicon;
 	SetLed(0,0,0);
     break;
     case "Blue":
@@ -1294,6 +1303,9 @@ function onKeyMenu(keyCode) {
 	case KEY_0:
 	break;
 	case KEY_1:
+	 ShowSubs = 1 - ShowSubs;
+	  videoplane.subtitles = Boolean(ShowSubs); // Enable subtitles or Disable subtitles
+	InitMenu();
 	break;
 	case KEY_2:
 	break;
@@ -1315,7 +1327,7 @@ function onKeyMenu(keyCode) {
 }
 
 function InitMenu() {
-	mainmenu.innerHTML = "<center><p style='font-size:" + fsMenuMain + ";color:white;'> SETTINGS </p><p style='color:red;font-size:" + fsMenu + ";'>Frontdisplay Clock : " + showClock + "</p><p style='color:green;font-size:" + fsMenu + ";'>Prio audio track : " + (toi.informationService.getObject("cfg.media.audio.languagepriority")) + "</p><p style='color:yellow;font-size:" + fsMenu + ";'>Switch timer : " + Boolean(switchtimerID) + "</p><p style='color:blue;font-size:" + fsMenu + ";'>Preview guide : " + SwitchGuide + "</p></center>";
+	mainmenu.innerHTML = "<center><p style='font-size:" + fsMenuMain + ";color:white;'> SETTINGS </p><p style='color:red;font-size:" + fsMenu + ";'>Frontdisplay Clock : " + showClock + "</p><p style='color:green;font-size:" + fsMenu + ";'>Prio audio track : " + (toi.informationService.getObject("cfg.media.audio.languagepriority")) + "</p><p style='color:yellow;font-size:" + fsMenu + ";'>Switch timer : " + Boolean(switchtimerID) + "</p><p style='color:blue;font-size:" + fsMenu + ";'>Preview guide : " + SwitchGuide + "</p><p style='color:black;font-size:" + fsMenu + ";'>1 - Show Subs : " + Boolean(ShowSubs) + "</p></center>";
 }
 
 // End of Menu section
