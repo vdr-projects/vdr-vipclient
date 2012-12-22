@@ -39,8 +39,8 @@ for (var i = 1;  i < nrChannels; i++) { EPG[0][4][i] = "";EPG[1][4][i] = "";EPG[
 window.onkeydown = onKeyDown;
 
 function onLoad() {
- createPlayer();
- embedTeletextPlugin();
+	 createPlayer();
+	 embedTeletextPlugin();
 	toi.audioOutputService.setVolume(AudioOut, StartVolume);
 	toi.audioOutputService.setMuteState(AudioOut, false);
 	showDisplay((currChan.toString()), false, 100, 0 );
@@ -50,6 +50,24 @@ function onLoad() {
 //	eitCache.setFilterMode(eitCache.FILTER_MODE_PF_ONLY);
 	eitCache.addEventListener(eitCache.ON_CACHE_UPDATED, onCacheUpdated);
 	showOSD();
+	colorkeys.style.fontSize = fsKeys;
+	colorkeys.innerHTML = "<font color=red>" +  NN[4] + "</font><font color=green >" + NN[1] + "</font><font color=yellow> Schedule </font><font color=blue> INFO </font>";
+	osdvolume.style.fontSize = fsCA;
+	osdvolume.style.color = "green";
+	osdnr.style.fontSize = fsChan;
+	osdnr.style.color = "black";
+	osdtime.style.fontSize = fsTime;
+	osdtime.style.color = "white";
+	osdname.style.fontSize = fsName;
+	osdname.style.color = "black";
+	osdepg.style.fontSize = fsEpg;
+	osdepg.style.color = "white";
+	osdca.style.fontSize = fsCA;
+	osdca.style.color = "black";
+	switchtimer.style.color = "black";
+	switchtimer.style.fontSize = fsEpg;
+	osdepginfo.style.fontSize = fsEpginfo;
+	osdepginfonext.style.fontSize = fsEpginfo;
 }
 
 
@@ -265,17 +283,23 @@ function onKeyDown(event) {
 			if(audio == 1) {	
 				is.setObject("cfg.media.audio.languagepriority","dut,eng",is.STORAGE_VOLATILE);
 				osdlang.style.opacity = 1;
-				osdlang.innerHTML = "<img src='unmute.png'><font color=white size=3>Nederlands</font>"
+				osdlang.style.fontSize = fsAudio;
+				osdlang.style.color = "white";
+				osdlang.innerHTML = "<img src='unmute.png'> Nederlands ";
 				setTimeout("osdlang.style.opacity = 0; ", 3000);
 			} else if(audio == 2) {
 				is.setObject("cfg.media.audio.languagepriority","ger,deu,eng",is.STORAGE_VOLATILE);
 				osdlang.style.opacity = 1;
-				osdlang.innerHTML = "<img src='unmute.png'><font color=white size=3>Deutsch</font>"
+				osdlang.style.fontSize = fsAudio;
+				osdlang.style.color = "white";
+				osdlang.innerHTML = "<img src='unmute.png'> Deutsch ";
 				setTimeout("osdlang.style.opacity = 0; ", 3000);
 			} else if(audio == 3) {
 				is.setObject("cfg.media.audio.languagepriority","eng",is.STORAGE_VOLATILE);
 				osdlang.style.opacity = 1;
-				osdlang.innerHTML = "<img src='unmute.png'><font color=white size=3>English</font>"
+				osdlang.style.fontSize = fsAudio;
+				osdlang.style.color = "white";
+				osdlang.innerHTML = "<img src='unmute.png'> English ";
 				setTimeout("osdlang.style.opacity = 0; ", 3000);
 				audio = 0;
 			}
@@ -284,7 +308,7 @@ function onKeyDown(event) {
 		osdepginfonext.style.opacity = 1 - osdepginfo.style.opacity;
 		}
 	} else {
-		colorkeys.innerHTML = "<font color=red size=3>" +  NN[3 + NowNext] + "</font><font color=green size=3>" + NN[NowNext] + "</font><font color=yellow size=3> Schedule </font><font color=blue size=3> INFO </font>";
+		colorkeys.innerHTML = "<font color=red>" +  NN[3 + NowNext] + "</font><font color=green>" + NN[NowNext] + "</font><font color=yellow> Schedule </font><font color=blue> INFO </font>";
 		NowNext = 1 - NowNext;
 		showChannelList();
 	}
@@ -301,14 +325,13 @@ function onKeyDown(event) {
 				} else {
 				isSchedule = 0;
 				schedule.style.opacity = 0;
-				schedule.style.height = "45%";
+				schedule.style.height = "48%";
 				}
 		}
 	} else {
 		GetSchedule(currChan,10);
 		schedule.style.opacity = 1 - schedule.style.opacity;
 		channelList.style.opacity = 1 - schedule.style.opacity;
-		schedkeys.style.opacity = schedule.style.opacity;
 		colorkeys.style.opacity = 1 - schedule.style.opacity;
 		isSchedule = schedule.style.opacity;
 	}
@@ -335,7 +358,7 @@ function onKeyDown(event) {
 		if(isSchedule) {
 			isSchedule = 0;
 			schedule.style.opacity = 0;
-			schedule.style.height = "45%";
+			schedule.style.height = "48%";
 			epgactive = 1; // else we get EPGinfo on the screen, bit nasty but works
 		}
 
@@ -402,16 +425,23 @@ function onKeyDown(event) {
    case "Scroll":
 		if(isFullscreen) {
 			NowNext = 0;
-			videoplane.style.width = "320px";
-			videoplane.style.height = "240px";
-			videoplane.style.left = "380px";
-			videoplane.style.top = "300px";
-			showChannelList();
+			videoplane.style.width = (320*Xfactor)+"px";
+			videoplane.style.height = (240*Yfactor)+"px";
+			videoplane.style.left = (380*Xfactor)+"px";
+			videoplane.style.top = (300*Yfactor)+"px";
 			isFullscreen = 0;
+			isSchedule = 0;
+			schedule.style.opacity = 0;
+			schedule.style.height = "48%";
+			channelList.style.opacity = 1;
+			colorkeys.style.opacity = 1;
+			showChannelList();
 			if(!SwitchGuide) {
 			preChan = currChan;
 			}
 		} else {
+			isSchedule = 0;
+			schedule.style.opacity = 0;
 			isFullscreen = 1;
 			FullScreen();
 			if(!SwitchGuide) {
@@ -599,7 +629,7 @@ function showVolume() {
 	if (osdVolumetimeout) {
 		clearTimeout(osdVolumetimeout);
 	}
-	osdvolume.innerHTML = "<font color=green size=3>VOLUME : \uE007" + (new Array(Volume)).join("\uE008") + (new Array(100 - Volume)).join("\uE009") + "\uE00A</font>";
+	osdvolume.innerHTML = "VOLUME : \uE007" + (new Array(Volume)).join("\uE008") + (new Array(100 - Volume)).join("\uE009") + "\uE00A";
 	osdvolume.style.opacity = 1;
 	osdVolumetimeout = setTimeout("osdvolume.style.opacity = 0;", 3000);
 }
@@ -644,17 +674,16 @@ function onCacheUpdated() {
 }
 
 function OSDchannr(channr) {
-    osdnr.innerHTML = "<center><font color=black size=6>" + channr + "</font></center>";
+    osdnr.innerHTML = "<center>" + channr + "</center>";
 }
 
 function OSDhtml(){
-    osdtime.innerHTML = "<font color=white size=2>" + result +"</font>";
-    osdname.innerHTML = "<font color=black size=5>" + Left(channelsnames[currChan],30) + "</font>";
-    osdepg.innerHTML = "<font color=white size=4><p>" + EPG[0][7][currChan] + "</p>\n<p>" + EPG[1][7][currChan] + "</p></font>";
-    osdepginfo.innerHTML =  "<center><font color=white size=5><p>" + currChan + "\uE003" + channelsnames[currChan] + "</p></font><font color=white size=4><p>" + EPG[0][7][currChan] + "</p>\n<p><font color=yellow>" + EPG[0][4][currChan] + "</font></p>\n<p>" + Left(EPG[0][5][currChan],750) + "</p></font></center>";
-    osdepginfonext.innerHTML =  "<center><font color=white size=5><p>"  + currChan + "\uE003" + channelsnames[currChan] + "</p></font><font color=white size=4><p>" +  EPG[1][7][currChan] + "</p>\n<p><font color=yellow>" + EPG[1][4][currChan] + "</font></p>\n<p>" + Left(EPG[1][5][currChan],750) + "</p></font></center>";
+    osdtime.innerHTML = result;
+    osdname.innerHTML = Left(channelsnames[currChan],30);
+    osdepg.innerHTML = "<p>" + EPG[0][7][currChan] + "</p>\n<p>" + EPG[1][7][currChan] + "</p>";
+    osdepginfo.innerHTML =  "<center><p style='color:white;' >" + currChan + "\uE003" + channelsnames[currChan] + "</p><p style='color:white;'>" + EPG[0][7][currChan] + "</p>\n<p style='color:yellow;'>" + EPG[0][4][currChan] + "</p>\n<p>" + Left(EPG[0][5][currChan],750) + "</p></center>";
+    osdepginfonext.innerHTML =  "<center><p style='color:white;'>"  + currChan + "\uE003" + channelsnames[currChan] + "</p><p style='color:white;'>" +  EPG[1][7][currChan] + "</p>\n<p style='color:yellow;'>" + EPG[1][4][currChan] + "</p>\n<p>" + Left(EPG[1][5][currChan],750) + "</p></center>";
 }
-
 
 
 function settimer() {
@@ -680,8 +709,8 @@ function settimer() {
 			clearTimeout(switchtimerID);
 		}
 		switchtimerID = setTimeout(TimerActions, StartTime);
-		switchtimer.innerHTML = "<font color=black size=4><p>  Name      : " + EPG[NowNext][1][currChan] + "</p><p>  channel   : " + channelsnames[currChan] +  "</p><p>  Starttime : " + th + ":" + tm + "</p></font>";
-		osdtimer.innerHTML = "<font color=black size=3><p>" + th + ":" + tm + "</p></font>";
+		switchtimer.innerHTML = "<p>  Name      : " + EPG[NowNext][1][currChan] + "</p><p>  channel   : " + channelsnames[currChan] +  "</p><p>  Starttime : " + th + ":" + tm + "</p>";
+		osdtimer.innerHTML = "<p style='color:black;font-size:" + fsList + ";'>" + th + ":" + tm + "</p>";
 		SetLed(0,2,1);
 	} else {
 	//
@@ -827,7 +856,6 @@ function GetEPG(epgchan)
 	if((SI[0]=="T") ) {
 		// I mustly get Dutch channels on DVB-T
 		is.setObject("cfg.locale.ui","dut",is.STORAGE_VOLATILE);
-	cds = 1;
 	}
 
 
@@ -835,9 +863,9 @@ function GetEPG(epgchan)
 	 eitCache.addService(eitService);
 	 event = eitCache.getPresentEvent(eitService);
 	if(event.freeCaMode){
-		osdca.innerHTML = "<font color=black size=6>\uE00D</font>";
+		osdca.innerHTML = "\uE00D";
 	} else {
-		osdca.innerHTML = "<font color=black size=6>\uE00F</font>";
+		osdca.innerHTML = "\uE00F";
 	}
 
 	if (event.name)	{
@@ -1027,17 +1055,17 @@ function GetSchedule(schchan,tablelength){
 	                tm = "0"+tm;
 	        	}
 
-	      txt = txt + "<td>" + "\uE003\uE003\uE003\uE003\uE003" + th + ":" + tm + "     (" + events.infoSequence[i].duration/60 + ")  " + events.infoSequence[i].name + "</td></tr>";
+	      txt = txt + "<td style='font-size:" + fsSchedList + ";'>\uE003\uE003\uE003\uE003\uE003" + th + ":" + tm + "     (" + events.infoSequence[i].duration/60 + ")  " + events.infoSequence[i].name + "</td></tr>";
 	    }
 	   txt = txt + "</table>";
-	   schedule.innerHTML = "<font size=+3>" + "\uE003" + schchan + "\uE003" + channelsnames[schchan] + "</font>" + txt;
+	   schedule.innerHTML = "<p style='color:white;font-size:" + fsSched + ";'>" + "\uE003" + schchan + "\uE003" + channelsnames[schchan] + txt + "</p>";
 	} else {
-		schedule.innerHTML =  "<font size=+3>" + "\uE003" + schchan + "\uE003" + channelsnames[schchan] + "</font>";
+		schedule.innerHTML =  "<p style='font-size:" + fsSched + ";'>" + "\uE003" + schchan + "\uE003" + channelsnames[schchan] + "</p>";
 	}
 
   } catch(e) {
     alert("Get EPG problem: " + e);
-		schedule.innerHTML = "<p>" + channelsnames[schchan] + "</p><p> NO EPG </p>";
+		schedule.innerHTML = "<p style='font-size:" + fsSched + ";'>" + channelsnames[schchan] + "</p><p> NO EPG </p>";
   }
 
 }
@@ -1072,17 +1100,17 @@ function showChannelList() {
 			while (!channels[listChan] && (listChan<nrChannels));
 		GetEPG(listChan);
 		if ( listChan == currChan) { 
-			liststyle = " style='background:#fc5;'";
+			liststyle = "background:#fc5;";
 		}  else {
 			liststyle = "";
 		}
 		EpgInfo[0] = EPG[0][7][listChan];
 		EpgInfo[1] = EPG[1][7][listChan];
-		htmlstring = htmlstring + "<td" + liststyle + ">" + listChan + "</td><td" +liststyle + ">" + Left(channelsnames[listChan],15) + "</td><td" +liststyle + ">"  + Left(EpgInfo[NowNext],64) + "</td></tr>";
+		htmlstring = htmlstring + "<td style='" + liststyle + "font-size:" + fsList + ";'>" + listChan + "\uE003</td><td style='" + liststyle + "font-size:" + fsList + ";'>" + Left(channelsnames[listChan],15) + "\uE003</td><td style='" + liststyle + "font-size:" + fsList + ";'>"  + Left(EpgInfo[NowNext],64) + "</td></tr>";
 	}
 	htmlstring = htmlstring + "</table>";
 	channelList.innerHTML = htmlstring;
-        chanlistepg.innerHTML = "<center><font color=black size=4><p>" + EPG[NowNext][1][currChan] + "</p></font><font color=black size=3><p>" + Left(EPG[NowNext][4][currChan],250) + "</p></font></center>" ;
+        chanlistepg.innerHTML = "<center><p style='color:black;font-size:" + fsEpg + ";'>" + EPG[NowNext][1][currChan] + "</p><p style='color:black;font-size:" + fsList + ";'>" + Left(EPG[NowNext][4][currChan],250) + "</p></center>" ;
 
 }
 
@@ -1287,7 +1315,7 @@ function onKeyMenu(keyCode) {
 }
 
 function InitMenu() {
-	mainmenu.innerHTML = "<center><font size=7 color=white><p> SETTINGS </p><font color=red size=5><p>Frontdisplay Clock : " + showClock + "</p></font><font color=green size=5><p>Prio audio track : " + (toi.informationService.getObject("cfg.media.audio.languagepriority")) + "</p></font><font color=yellow size=5><p>Switch timer : " + Boolean(switchtimerID) + "</p></font><font color=blue size=5><p>Preview guide : " + SwitchGuide + "</p></font></center>";
+	mainmenu.innerHTML = "<center><p style='font-size:" + fsMenuMain + ";color:white;'> SETTINGS </p><p style='color:red;font-size:" + fsMenu + ";'>Frontdisplay Clock : " + showClock + "</p><p style='color:green;font-size:" + fsMenu + ";'>Prio audio track : " + (toi.informationService.getObject("cfg.media.audio.languagepriority")) + "</p><p style='color:yellow;font-size:" + fsMenu + ";'>Switch timer : " + Boolean(switchtimerID) + "</p><p style='color:blue;font-size:" + fsMenu + ";'>Preview guide : " + SwitchGuide + "</p></center>";
 }
 
 // End of Menu section
@@ -1349,17 +1377,23 @@ function onKeyMedia(keyCode) {
 			if(audio == 1) {	
 				is.setObject("cfg.media.audio.languagepriority","dut,eng",is.STORAGE_VOLATILE);
 				osdlang.style.opacity = 1;
-				osdlang.innerHTML = "<img src='unmute.png'><font color=white size=3>Nederlands</font>"
+				osdlang.style.fontSize = fsAudio;
+				osdlang.style.color = "white";
+				osdlang.innerHTML = "<img src='unmute.png'> Nederlands ";
 				setTimeout("osdlang.style.opacity = 0; ", 3000);
 			} else if(audio == 2) {
 				is.setObject("cfg.media.audio.languagepriority","ger,deu,eng",is.STORAGE_VOLATILE);
 				osdlang.style.opacity = 1;
-				osdlang.innerHTML = "<img src='unmute.png'><font color=white size=3>Deutsch</font>"
+				osdlang.style.fontSize = fsAudio;
+				osdlang.style.color = "white";
+				osdlang.innerHTML = "<img src='unmute.png'> Deutsch ";
 				setTimeout("osdlang.style.opacity = 0; ", 3000);
 			} else if(audio == 3) {
 				is.setObject("cfg.media.audio.languagepriority","eng",is.STORAGE_VOLATILE);
 				osdlang.style.opacity = 1;
-				osdlang.innerHTML = "<img src='unmute.png'><font color=white size=3>English</font>"
+				osdlang.style.fontSize = fsAudio;
+				osdlang.style.color = "white";
+				osdlang.innerHTML = "<img src='unmute.png'> English ";
 				setTimeout("osdlang.style.opacity = 0; ", 3000);
 				audio = 0;
 			}
@@ -1432,7 +1466,7 @@ function onKeyMedia(keyCode) {
 
 function showMediaList() {
 	var liststyle = "";
-	var htmlstring = "<p><center><font size=4>RECORDINGS</font></center></p><table border='0'><tr>";
+	var htmlstring = "<p style='font-size:" + fsRec + ";'><center>RECORDINGS</center></p><table border='0'><tr>";
 	listMed = currMed-7;
 	for(var i=currMed-7; i<=currMed+7; i++) {
 		if (listMed<0) {
@@ -1451,7 +1485,7 @@ function showMediaList() {
 		}  else {
 			liststyle = "";
 		}
-		htmlstring = htmlstring + "<td" + liststyle + ">\uE003\uE003" + Left(recording[listMed],60) + "</td></tr>";
+		htmlstring = htmlstring + "<td" + liststyle + " style='font-size:" + fsReclist + ";'>\uE003\uE003" + Left(recording[listMed],60) + "</td></tr>";
 	}
 	htmlstring = htmlstring + "</table>";
 	mediaList.innerHTML = htmlstring;
@@ -1490,7 +1524,7 @@ function playRec(uri) {
 
 function ShowMediaOSD() {
 // Display Name/ length
-	osdmedia.innerHTML = "<font size=4> Elapsed time : " + mediaPlayer.getPosition() + "</font>";
+	osdmedia.innerHTML = "<p style='font-size:" + fsMedia +";'> Elapsed time : " + mediaPlayer.getPosition() + "</p>";
 }
 
 
@@ -1500,40 +1534,37 @@ function ShowMediaOSD() {
 	<body style="background:#ccc;" onload="onLoad()" onunload="onUnload()">
     <embed type="application/x-motorola-toi" hidden="true">
 
-	<div id="channelList" style="background:#bbb; width:100%; height:45%; position:absolute; left:50px; top:25px;"></div>
+	<div id="channelList" style="background:#bbb; width:100%; height:48%; position:absolute; left:7%; top:4%;"></div>
 
 
-	<div id="colorkeys" style="width:100%; position:absolute; left:75px; top:485px;"><font color=red size=3> ----- </font><font color=green size=3> Next </font><font color=yellow size=3> Schedule </font><font color=blue size=3> INFO </font></div>
+	<div id="colorkeys" style="width:100%; position:absolute; left:10%; top:84%;"></div>
 
-
-	<div id="schedkeys" style="width:100%; position:absolute; left:75px; top:485px;opacity:0;"><font color=red size=3>-----</font><font color=green size=3>----</font><font color=yellow size=3> GUIDE </font><font color=blue size=3> ---- </font></div>
-
-	<div id="chanlistepg" style="width:300; position:absolute; left:50px; top:290px;"> 	</div>
-	<div id="switchtimer" style="background:#3366ff;width:300; position:absolute; left:150px; top:150px;z-index:10;opacity:0;"></div>
+	<div id="chanlistepg" style="width:42%; position:absolute; left:7%; top:50%;"> 	</div>
+	<div id="switchtimer" style="background:#3366ff;width:42%; position:absolute; left:21%; top:26%;z-index:10;opacity:0;"></div>
 
 
 	<videoplane id='videoplane' style='position:absolute; left:0px; top:0px; height: 100%; width: 100%; z-index:500;'></videoplane>
 
-	<div id="osdvolume" style="width:450px; position:absolute; left:150px; top:500px;z-index:501;fontFamily:VDRSymbolsSans;opacity:0;">Volume : </div>
-	<div id="osdmedia" style="width:450px; position:absolute; left:150px; top:400px;z-index:505;fontFamily:VDRSymbolsSans;opacity:0;"></div>
+	<div id="osdvolume" style="width:63%; position:absolute; left:21%; top:87%;z-index:501;fontFamily:VDRSymbolsSans;opacity:0;">Volume : </div>
+	<div id="osdmedia" style="width:63%; position:absolute; left:21%; top:69%;z-index:505;fontFamily:VDRSymbolsSans;opacity:0;"></div>
 
-	<div id="osdmain" style="background:#3366ff;width:550px; position:absolute; left:75px; top:350px; bottom:50px;z-index:505;"></div>
-	<div id="osdtime" style="width:300px; position:absolute; left:375px; top:360px;z-index:505;"></div>
-	<div id="osdname" style="width:500px;height:25px; position:absolute; left:85px; top:375px;z-index:505;"></div>
-	<div id="osdepg" style="width:450px; position:absolute; left:150px; top:400px;z-index:505;"></div>
-	<div id="osdtimer" style="width:50px; position:absolute; left:85px; top:400px;z-index:505;"></div>
-	<div id="osdca" style="width:25px; position:absolute; left:575px; top:385px;z-index:505;fontFamily:VDRSymbolsSans;"></div>
+	<div id="osdmain" style="background:#3366ff;width:76%; position:absolute; left:10%; top:60%; bottom:9%;z-index:505;"></div>
+	<div id="osdtime" style="width:42%; position:absolute; left:52%; top:63%;z-index:505;"></div>
+	<div id="osdname" style="width:69%;height:4%; position:absolute; left:12%; top:65%;z-index:505;"></div>
+	<div id="osdepg" style="width:63%; position:absolute; left:21%; top:69%;z-index:505;"></div>
+	<div id="osdtimer" style="width:7%; position:absolute; left:12%; top:69%;z-index:505;"></div>
+	<div id="osdca" style="width:3%; position:absolute; left:80%; top:67%;z-index:505;fontFamily:VDRSymbolsSans;"></div>
 
-	<div id="osdnr" style="background:red;width:75px;height:50px; position:absolute; left:85px; top:320px;z-index:505;opacity:0;"></div>
+	<div id="osdnr" style="background:red;width:10%;height:9%; position:absolute; left:12%; top:56%;z-index:505;opacity:0;"></div>
 
-	<div id="osdepginfo" style="background:#3366ff;width:550px; position:absolute; left:100px; top:100px;z-index:510;opacity:0;"></div>
-	<div id="osdepginfonext" style="background:#3366ff;width:550px; position:absolute; left:100px; top:100px;z-index:510;opacity:0;"></div>
-	<div id="schedule" style="background:#bbb; width:100%; height:45%; position:absolute; left:50px; top:25px;opacity:0;z-index:510;"></div>
+	<div id="osdepginfo" style="background:#3366ff;width:76%; position:absolute; left:14%; top:17%;z-index:510;opacity:0;"></div>
+	<div id="osdepginfonext" style="background:#3366ff;width:76%; position:absolute; left:14%; top:17%;z-index:510;opacity:0;"></div>
+	<div id="schedule" style="background:#3366ff; width:100%; height:48%; position:absolute; left:7%; top:4%;opacity:0;z-index:510;"></div>
 
-	<div id="osdmute" style="width:50px; position:absolute; left:550px; top:50px;z-index:515;opacity:0;"><img src="mute.png"></div>
-	<div id="osdlang" style="width:50px; position:absolute; left:550px; top:50px;z-index:515;opacity:0;"></div>
+	<div id="osdmute" style="width:7%; position:absolute; left:76%; top:9%;z-index:515;opacity:0;"><img src="mute.png"></div>
+	<div id="osdlang" style="width:7%; position:absolute; left:76%; top:9%;z-index:515;opacity:0;"></div>
 
-	<div id="mainmenu" style="background:#3366ff;width:550px; position:absolute; left:75px; top:50px; bottom:50px;z-index:520;opacity:0;"></div>
+	<div id="mainmenu" style="background:#3366ff;width:76%; position:absolute; left:10%; top:9%; bottom:9%;z-index:520;opacity:0;"></div>
 	<div id="mediaList" style="background:#bbb; width:80%; height:75%; position:absolute; left:10%; top:10%;z-index:520;opacity:0;"></div>
 
 </body>

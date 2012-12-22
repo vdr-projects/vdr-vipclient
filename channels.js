@@ -1221,4 +1221,9 @@ channelsnames[992] = "NED2 HD (S)"
 channels[992] = "S23.5E-3-3202-6080"
 channelsnames[993] = "NED3 HD (S)"
 channels[993] = "S23.5E-3-3225-21040"
+channelsnames[998] = "101TV (S)"
+channels[998] = "S23.5E-3-3202-6010"
+channelsnames[999] = "101TV (T)"
+channels[999] = "T-8720-2244-44"
+
 

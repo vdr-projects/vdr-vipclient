@@ -120,3 +120,22 @@ var switchtimerID = 0;
 var SwitchTimer = 1; // No other options yet
 var initialDelayID = 0;
 
+
+var fsAudio = (16*Yfactor) + "px";
+var fsTime = (16*Yfactor) + "px";
+var fsName = (27*Yfactor) + "px";
+var fsMenu = (27*Yfactor) + "px";
+var fsChan = (43*Yfactor) + "px";
+var fsCA = (32*Yfactor) + "px";
+var fsMenuMain = (48*Yfactor) + "px";
+var fsEpg = (19*Yfactor) + "px";
+var fsEpginfo = (21*Yfactor) + "px";
+var fsList = (18*Yfactor) + "px";
+var fsSchedList = (16*Yfactor) + "px";
+var fsSched = (24*Yfactor) + "px";
+var fsRec = (27*Yfactor) + "px";
+var fsReclist = (19*Yfactor) + "px";
+var fsMedia = (27*Yfactor) + "px";
+var fsKeys = (19*Yfactor) + "px";
+
+
