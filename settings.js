@@ -13,6 +13,7 @@ var Yfactor = 720 / 576;
 var channels = new Array();
 var channelsnames = new Array();
 var channelsepglang = new Array();
+var channeldigits = 2; // 0 - Max 9, 1 max 99, 2 max 999 or 3 max 9999 channels
 
 var recording = new Array();
 
@@ -148,4 +149,5 @@ var fsReclist = (19*Yfactor) + "px";
 var fsMedia = (27*Yfactor) + "px";
 var fsKeys = (19*Yfactor) + "px";
 
+var isRecording = 0; // set by recording subroutine
 

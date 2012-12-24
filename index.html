@@ -28,7 +28,7 @@
 //
 //
 
-var Version = "0.05	2012/12/xx"
+var Version = "0.05	2012/12/24"
 var nrChannels = channels.length;
 var nrMedia = recording.length - 1;
 
@@ -38,6 +38,7 @@ window.onkeydown = onKeyDown;
 
 function onLoad() {
 	 createPlayer();
+	 createRecorder();
 	 embedTeletextPlugin();
 	toi.audioOutputService.setVolume(AudioOut, StartVolume);
 	toi.audioOutputService.setMuteState(AudioOut, false);
@@ -103,6 +104,15 @@ function createPlayer() {
   }
 }
 
+function createRecorder() {
+	alert("createRecorder()");
+	try {
+		mediaRecorder = toi.mediaService.createRecorderInstance();
+	} catch(e) {
+		alert("Cannot create media recorder: " + e);
+	}
+}
+
 function play(uri) {
   try {
 	if (initialDelayID != -1) {
@@ -113,8 +123,39 @@ function play(uri) {
       mediaPlayer.close();
     }
     uri = ServerAdres + uri;
-    mediaPlayer.open(uri);
-    mediaPlayer.play(mediaPlayer.PACE_PLAY);
+	if(Experimental){
+	createNewAsset();
+
+	alert("opening mediaRecorder...");
+	try {
+		mediaRecorder.open(uri, assetId);
+	} catch(e) {
+		alert("Cannot open mediaRecorder. " + e);
+	}
+
+	try {
+		mediaRecorder.record();
+		isRecording = 1;
+	} catch(e) {
+		alert("Cannot record! " + e);
+	}
+
+	var assetURI = "dvr:///pvr/storage/" + assetId;
+
+	try {
+		alert("Opening asset " + assetURI);
+		mediaPlayer.open(assetURI);
+		mediaPlayer.play(1000);
+
+		isPlaying = 1;
+	} catch(e) {
+		alert("Cannot play asset " + assetURI + ". " + e);
+	}
+	} else {
+		mediaPlayer.open(uri);
+		mediaPlayer.play(1000);
+	}
+
 	if(TimeShift){
 	    initialDelayID = setTimeout("startTimeshiftBuffering();", 5000);
 	}
@@ -535,7 +576,7 @@ function onKeyDown(event) {
 	case "MediaPlayPause":
 		if(mediaPlayer.getState() == mediaPlayer.STATE_PAUSED) {
 			SetLed(1,1,0);
-			mediaPlayer.play(1000);
+			mediaPlayer.play(mediaPlayer.PACE_PLAY);
 			break;
 		}
 	   if(mediaPlayer.getState() == mediaPlayer.STATE_PLAYING) {
@@ -570,7 +611,7 @@ function Makedigit() {
 		showDisplay((Change.toString()), false, 100, 0 ); 
 	}
 
-    if (count>2) {
+    if (count>channeldigits) {
 	CheckChannel(Change);
 	count = 0;
 	}
@@ -758,7 +799,7 @@ function fadeIn() {
 }
 
 function fadeOut() {
-    opacity -= 0.2;
+    opacity -= 0.5;
 	OSD(opacity);
     if (opacity <= 0) {
 	return;
@@ -818,52 +859,10 @@ function GetEPG(epgchan)
 	EPGShortnext = "";
 	EPGExtnext = "";
 	cds = 0;
+	SI="";
   try {
-	// streaminfo
-	// SI[x] 0-sat,1-NID,2-TID,3-SID
- 	SI=channels[epgchan].split("-");
-	is = toi.informationService;
-	is.setObject("cfg.locale.ui","ger",is.STORAGE_VOLATILE);
 
-	if(SI[1]=="133") {
-	//sky deutchland
-	is.setObject("cfg.locale.ui","DEU",is.STORAGE_VOLATILE);
-	}
-
-	if(SI[0]=="S28.2E") {
-		is.setObject("cfg.locale.ui","eng",is.STORAGE_VOLATILE);
-	} 
-	if(SI[1]=="3" || SI[1]=="53") {
-	//Canal Digitaal/ TV Vlaanderen (NID:3 is used for more than only CDS/TVV on 23East)
-	is.setObject("cfg.locale.ui","dut",is.STORAGE_VOLATILE);
-	cds = 1;
-	}
-
-	if((SI[0]=="S13.0E" && SI[3]=="14003") || (SI[0]=="S13.0E" && SI[3]=="14009") || (SI[0]=="S13.0E" && SI[3]=="14051") || (SI[0]=="S13.0E" && SI[3]=="951")) {
-		is.setObject("cfg.locale.ui","ita",is.STORAGE_VOLATILE);
-	cds = 1;
-	}
-
-	if((SI[0]=="S13.0E" && SI[2]=="12800")) {
-		is.setObject("cfg.locale.ui","eng",is.STORAGE_VOLATILE);
-	}
-
-
-	if((SI[0]=="S13.0E" && SI[3]=="14002") || (SI[0]=="S13.0E" && SI[3]=="14008") ) {
-		is.setObject("cfg.locale.ui","fra",is.STORAGE_VOLATILE);
-	cds = 1;
-	}
-
-	if((SI[0]=="S13.0E" && SI[2]=="1400") ) {
-		is.setObject("cfg.locale.ui","pol",is.STORAGE_VOLATILE);
-	cds = 1;
-	}
-
-	if((SI[0]=="T") ) {
-		// I mustly get Dutch channels on DVB-T
-		is.setObject("cfg.locale.ui","dut",is.STORAGE_VOLATILE);
-	}
-
+	 StreamInfo(epgchan);
 
 	 eitService = toi.statics.ToiDvbEitCacheServiceItem.create(SI[1],SI[2],SI[3]);
 	 eitCache.addService(eitService);
@@ -991,41 +990,9 @@ function GetEPG(epgchan)
 
 
 function GetSchedule(schchan,tablelength){
+	SI = "";
   try {
-	// streaminfo
-	// SI[x] 0-sat,1-NID,2-TID,3-SID
- 	SI=channels[schchan].split("-");
-	is = toi.informationService;
-	is.setObject("cfg.locale.ui","ger",is.STORAGE_VOLATILE);
-	if(SI[0]=="S28.2E") {
-		is.setObject("cfg.locale.ui","eng",is.STORAGE_VOLATILE);
-	} 
-
-	if((SI[0]=="S23.5E" && SI[1]=="3") || SI[2]=="1026" || SI[2]=="1097" || SI[2]=="1105" || SI[2]=="1119") {
-		is.setObject("cfg.locale.ui","dut",is.STORAGE_VOLATILE);
-		cds = 1;
-	}
-
-	if((SI[0]=="S13.0E" && SI[3]=="14003") || (SI[0]=="S13.0E" && SI[3]=="14009") || (SI[0]=="S13.0E" && SI[3]=="14051") || (SI[0]=="S13.0E" && SI[3]=="951")) {
-		is.setObject("cfg.locale.ui","ita",is.STORAGE_VOLATILE);
-	cds = 1;
-	}
-
-	if((SI[0]=="S13.0E" && SI[2]=="12800")) {
-		is.setObject("cfg.locale.ui","eng",is.STORAGE_VOLATILE);
-	}
-
-
-	if((SI[0]=="S13.0E" && SI[3]=="14002") || (SI[0]=="S13.0E" && SI[3]=="14008") ) {
-		is.setObject("cfg.locale.ui","fra",is.STORAGE_VOLATILE);
-	cds = 1;
-	}
-
-	if((SI[0]=="S13.0E" && SI[2]=="1400") ) {
-		is.setObject("cfg.locale.ui","pol",is.STORAGE_VOLATILE);
-	cds = 1;
-	}
-
+	 StreamInfo(schchan);
 
 	 eitService = toi.statics.ToiDvbEitCacheServiceItem.create(SI[1],SI[2],SI[3]);
 	 eitCache.addService(eitService);
@@ -1076,6 +1043,73 @@ function GetSchedule(schchan,tablelength){
   }
 
 }
+
+
+function StreamInfo(si) {
+
+	// streaminfo
+	// SI[x] 0-sat,1-NID,2-TID,3-SID
+ 	SI=channels[si].split("-");
+	is = toi.informationService;
+
+	if(SI[0]=="S19.2E") {
+	// Default on 19E German.
+	is.setObject("cfg.locale.ui","ger",is.STORAGE_VOLATILE);
+	}
+
+	if(SI[0]=="S28.2E") {
+	// Default on 28E English
+	is.setObject("cfg.locale.ui","eng",is.STORAGE_VOLATILE);
+	} 
+
+	if(SI[1]=="8720") {
+	// KPN DVB-T
+	is.setObject("cfg.locale.ui","dut",is.STORAGE_VOLATILE);
+	}
+
+	if(SI[1]=="133") {
+	//sky deutchland
+	is.setObject("cfg.locale.ui","DEU",is.STORAGE_VOLATILE);
+	}
+
+	if(SI[1]=="64511") {
+	//sky Italia
+	is.setObject("cfg.locale.ui","ita",is.STORAGE_VOLATILE);
+	}
+
+	if(SI[1]=="3" || SI[1]=="53") {
+	//Canal Digitaal/ TV Vlaanderen (NID:3 is used for more than only CDS/TVV on 23East)
+	is.setObject("cfg.locale.ui","dut",is.STORAGE_VOLATILE);
+	cds = 1;
+	}
+
+	if((SI[0]=="S13.0E" && SI[3]=="14003") || (SI[0]=="S13.0E" && SI[3]=="14009") || (SI[0]=="S13.0E" && SI[3]=="14051") || (SI[0]=="S13.0E" && SI[3]=="951")) {
+	//Swiss ITA channels
+		is.setObject("cfg.locale.ui","ita",is.STORAGE_VOLATILE);
+	}
+
+	if((SI[0]=="S13.0E" && SI[2]=="12800")) {
+		is.setObject("cfg.locale.ui","eng",is.STORAGE_VOLATILE);
+	}
+
+
+	if((SI[0]=="S13.0E" && SI[3]=="14002") || (SI[0]=="S13.0E" && SI[3]=="14008") || (SI[0]=="S13.0E" && SI[3]=="17203") || (SI[0]=="S13.0E" && SI[3]=="17204") ) {
+	//Swiss FRA channels
+		is.setObject("cfg.locale.ui","fra",is.STORAGE_VOLATILE);
+	}
+
+	if((SI[0]=="S13.0E" && SI[3]=="17201") || (SI[0]=="S13.0E" && SI[3]=="17202") || (SI[0]=="S13.0E" && SI[3]=="901") || (SI[0]=="S13.0E" && SI[3]=="907") || (SI[0]=="S13.0E" && SI[3]=="911") ) {
+	//Swiss GER channels
+		is.setObject("cfg.locale.ui","ger",is.STORAGE_VOLATILE);
+	}
+
+	if((SI[0]=="S13.0E" && SI[2]=="1400") ) {
+		is.setObject("cfg.locale.ui","pol",is.STORAGE_VOLATILE);
+	}
+
+
+}
+
 
 // End of EPG section
 
@@ -1353,7 +1387,6 @@ function onKeyMedia(keyCode) {
 	while (!recording[currMed]);
 	showMediaList();
 	} else {
-	      speed = 0;
 	      mediaPlayer.play(0);
 	      showDisplay("PAUS", false, 100, 0 );
 	}
@@ -1367,15 +1400,13 @@ function onKeyMedia(keyCode) {
 	while (!recording[currMed]);
 	showMediaList();
 	} else {
-	      speed = 1000;
-	      mediaPlayer.play(1000);
+	      mediaPlayer.play(mediaPlayer.PACE_PLAY);
 	      showDisplay("PLAY", false, 100, 0 );
 	}
 	break;
   case "Accept":
 	if (mediaList.style.opacity != 0) {
 	mediaList.style.opacity = 0;
-	speed = 1000;
 	playRec(recording[currMed]);
 	} else {
 	osdmedia.style.opacity = 1 - osdmedia.style.opacity;
@@ -1412,29 +1443,24 @@ function onKeyMedia(keyCode) {
 	break;
     case "MediaRewind":
 	    if (mediaPlayer.getState() != mediaPlayer.STATE_IDLE) {
-	    speed = speed - 1000;
-	    if (speed < -9000) {
-		speed = -9000;
-		}
-	    mediaPlayer.play(speed);
-	    showDisplay("PL" + ((speed/1000).toString()), false, 100, 0 );
+	      mediaPlayer.play(-4000);
+	    showDisplay("REW", false, 100, 0 );
 	    }
     break;
     case "MediaForward":
 	    if (mediaPlayer.getState() != mediaPlayer.STATE_IDLE) {
-	    speed = speed + 1000;
-	    if (speed > 9000) {
-		speed = 9000;
-		}
-	    mediaPlayer.play(speed);
-	    showDisplay("PL" + ((speed/1000).toString()), false, 100, 0 );
+	      mediaPlayer.play(4000);
+	    showDisplay("FF", false, 100, 0 );
 	    }
     break;
     case "MediaStop":
 	    if (mediaPlayer.getState() != mediaPlayer.STATE_IDLE) {
 	    mediaPlayer.close();
 	    }
-	    speed = 1000;
+	    if (isRecording == 1) { 
+		recordStop();
+		isRecording = 0;
+	    }
 	    mediaList.style.opacity = 0.8;
 	    showDisplay("STOP", false, 100, 0 );
 	    showMediaList();
@@ -1444,11 +1470,11 @@ function onKeyMedia(keyCode) {
 	      mediaPlayer.play(0);
 	      showDisplay("PAUS", false, 100, 0 );
 	    } else {
-	      speed = 1000;
 	      mediaPlayer.play(1000);
 	      showDisplay("PLAY", false, 100, 0 );
     	    }
 	break;
+
     case "VolumeMute":
 	state = toi.audioOutputService.getMuteState(AudioOut);
 	toi.audioOutputService.setMuteState(AudioOut, !state);
@@ -1523,16 +1549,83 @@ function playRec(uri) {
     if (mediaPlayer.getState() != mediaPlayer.STATE_IDLE) {
       mediaPlayer.close();
     }
-    uri = "file://" + uri;
-    mediaPlayer.open(uri);
-    mediaPlayer.play(1000);
+	uri = "file://" + uri;
+	mediaPlayer.open(uri);
+	mediaPlayer.play(1000);
+
+//	createNewAsset();
+
+//	alert("opening mediaRecorder...");
+//	try {
+//		mediaRecorder.open(uri, assetId);
+//	} catch(e) {
+//		alert("Cannot open mediaRecorder. " + e);
+//	}
+
+//	try {
+//		mediaRecorder.record();
+//		isRecording = 1;
+//	} catch(e) {
+//		alert("Cannot record! " + e);
+//	}
+
+//	assetId = "asset_RUyeln";
+//	mediaPlayer.open("dvr:///pvr/storage/" + assetId);
+//	mediaPlayer.play(1000);
+
+//	setTimeout("    mediaPlayer.open('dvr:///pvr/storage/' + assetId);mediaPlayer.play(1000);", 3000);   
 	showDisplay("PLAY", false, 100, 0 );
+ 
   } catch (e) {
     alert("Failed opening recording: " + e);
     return;
   }
 }
 
+
+//var propList = new Array(toi.consts.ToiAssetManagerService.PROPERTY_SYSTEM_DURATION);
+//var propList = new Array(toi.consts.ToiAssetManagerService.PROPERTY_SYSTEM_FILESIZE);
+//var propList = new Array(toi.consts.ToiAssetManagerService.PROPERTY_SYSTEM_PLAYBACKURI);
+//var properties = toi.assetManagerService.getProperties(assetId, propList);
+//   alert (properties[0].value);
+
+function createNewAsset() {
+	try {
+		assetId = toi.assetManagerService.createAsset(toi.assetManagerService.ASSET_PVR);
+		alert("Created " + assetId);
+	} catch(e) {
+		alert("Couldn't create asset: " + e);
+	}
+}
+
+function recordStart() {
+	createNewAsset();
+
+	alert("opening mediaRecorder...");
+	try {
+		mediaRecorder.open(uri, assetId, 0);
+	} catch(e) {
+		alert("Cannot open mediaRecorder. " + e);
+	}
+
+	try {
+		mediaRecorder.record();
+		isRecording = 1;
+	} catch(e) {
+		alert("Cannot record! " + e);
+	}
+}
+
+
+function recordStop() {
+	try {
+		mediaRecorder.close();
+		isRecording = 0;
+
+	} catch(e) {
+		alert("Cannot stop mediaRecorder! " + e);
+	}
+}
 
 function ShowMediaOSD() {
 // Display Name/ length

@@ -6,6 +6,7 @@ var VideoHDMIOut = HDMI[4];
 var VideoScartOut = Scart[1];
 var TimeShift = 0; // 0 = no, 1 = yes timeshift
 var ShowSubs = 1; // 0 no, 1 = yes (default)
+var Experimental = 0; // 1 = used for testing parts
 
 
 months = new Array('January', 'February', 'March', 'April', 'May', 'June', 'Jully', 'August', 'September', 'October', 'November', 'December');
