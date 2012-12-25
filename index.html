@@ -48,6 +48,7 @@ function onLoad() {
 	eitCache.setFilterMode(eitCache.FILTER_MODE_PF_AND_SCHEDULE);
 //	eitCache.setFilterMode(eitCache.FILTER_MODE_PF_ONLY);
 	eitCache.addEventListener(eitCache.ON_CACHE_UPDATED, onCacheUpdated);
+	mediaPlayer.addEventListener(mediaPlayer.ON_DATA_AVAILABLE,onDataAvailableEvent);
 	showOSD();
 	colorkeys.style.fontSize = fsKeys;
 	colorkeys.innerHTML = "<font color=red>" +  NN[4] + "</font><font color=green >" + NN[1] + "</font><font color=yellow> Schedule </font><font color=blue> INFO </font>";
@@ -181,6 +182,44 @@ function preview(urip) {
 	//GetSchedule(currChan,10);
 	}
 }
+
+
+function onDataAvailableEvent(event) {
+	dataAvailable = event.status;
+	
+	if(event.status==true) {
+		updateStreamInfo();
+	} 
+}
+
+
+function updateStreamInfo() {
+
+var streamInfo = mediaPlayer.getStreamInfo();
+var cList = streamInfo.availableComponents;
+var x;
+for(x=0; x<cList.length;x++) {
+alert ("XXX " + cList[x].type);
+	if(cList[x].type == 0) {
+	alert( mediaPlayer.getAudioStreamInfo(cList[x]).language);
+	alert( mediaPlayer.getAudioStreamInfo(cList[x]).audienceType);
+	alert( mediaPlayer.getAudioStreamInfo(cList[x]).channelFormat);
+	alert( mediaPlayer.getAudioStreamInfo(cList[x]).channelMode);
+	alert( mediaPlayer.getAudioStreamInfo(cList[x]).encoding);
+	alert( mediaPlayer.getAudioStreamInfo(cList[x]).sublanguage);
+	alert( mediaPlayer.getAudioStreamInfo(cList[x]).sampleRate);
+	}
+	if(cList[x].type == 1) {
+	alert(mediaPlayer.getVideoStreamInfo(cList[x]).aspectRatio);
+	alert(mediaPlayer.getVideoStreamInfo(cList[x]).activeFormatDescriptor);
+	}
+
+
+	}
+
+
+}
+
 
 
 function startTimeshiftBuffering() {
@@ -1342,10 +1381,39 @@ function onKeyMenu(keyCode) {
 	InitMenu();
 	break;
 	case KEY_2:
+			is = toi.informationService;
+			if(substype == 0 ) { 	
+				is.setObject("cfg.media.subtitling.typepriority","hearing_impaired,normal",is.STORAGE_VOLATILE);
+				substype = 1;
+			} else {
+				is.setObject("cfg.media.subtitling.typepriority","normal,hearing_impaired",is.STORAGE_VOLATILE);
+				substype = 0;
+			}
+	InitMenu();
 	break;
 	case KEY_3:
+			is = toi.informationService;
+			if(subsmode == 0 ) {	
+				is.setObject("cfg.media.subtitling.modepriority","Teletext,DVB",is.STORAGE_VOLATILE);
+				subsmode = 1;
+			} else {
+				is.setObject("cfg.media.subtitling.modepriority","DVB,Teletext",is.STORAGE_VOLATILE);
+				subsmode = 0;
+			}
+	InitMenu();
 	break;
 	case KEY_4:
+			audiotype = audiotype + 1;
+			is = toi.informationService;
+			if(audiotype == 1) {	
+				is.setObject("cfg.media.audio.typepriority","normal,hearing_impaired,visually_impaired",is.STORAGE_VOLATILE);
+			} else if(audiotype == 2) {
+				is.setObject("cfg.media.audio.typepriority","hearing_impaired,visually_impaired",is.STORAGE_VOLATILE);
+			} else if(audiotype == 3) {
+				is.setObject("cfg.media.audio.typepriority","visually_impaired",is.STORAGE_VOLATILE);
+				audiotype = 0;
+			}
+	InitMenu();
 	break;
 	case KEY_5:
 	break;
@@ -1361,7 +1429,7 @@ function onKeyMenu(keyCode) {
 }
 
 function InitMenu() {
-	mainmenu.innerHTML = "<center><p style='font-size:" + fsMenuMain + ";color:white;'> SETTINGS </p><p style='color:red;font-size:" + fsMenu + ";'>Frontdisplay Clock : " + showClock + "</p><p style='color:green;font-size:" + fsMenu + ";'>Prio audio track : " + (toi.informationService.getObject("cfg.media.audio.languagepriority")) + "</p><p style='color:yellow;font-size:" + fsMenu + ";'>Switch timer : " + Boolean(switchtimerID) + "</p><p style='color:blue;font-size:" + fsMenu + ";'>Preview guide : " + SwitchGuide + "</p><p style='color:black;font-size:" + fsMenu + ";'>1 - Show Subs : " + Boolean(ShowSubs) + "</p></center>";
+	mainmenu.innerHTML = "<center><p style='font-size:" + fsMenuMain + ";color:white;'> SETTINGS </p><p style='color:red;font-size:" + fsMenu + ";'>Frontdisplay Clock : " + showClock + "</p><p style='color:green;font-size:" + fsMenu + ";'>Prio audio track : " + (toi.informationService.getObject("cfg.media.audio.languagepriority")) + "</p><p style='color:yellow;font-size:" + fsMenu + ";'>Switch timer : " + Boolean(switchtimerID) + "</p><p style='color:blue;font-size:" + fsMenu + ";'>Preview guide : " + SwitchGuide + "</p><p style='color:black;font-size:" + fsMenu + ";'>1 - Show Subs : " + Boolean(ShowSubs) + "</p><p style='color:black;font-size:" + fsMenu + ";'>2 - Subs Type Prio : " + (toi.informationService.getObject("cfg.media.subtitling.typepriority")) + "</p><p style='color:black;font-size:" + fsMenu + ";'>3 - Subs Mode Prio : " + (toi.informationService.getObject("cfg.media.subtitling.modepriority")) + "</p><p style='color:black;font-size:" + fsMenu + ";'>4 - Audio Type Prio : " + (toi.informationService.getObject("cfg.media.audio.typepriority")) + "</p></center>";
 }
 
 // End of Menu section

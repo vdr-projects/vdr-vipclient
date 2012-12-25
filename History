@@ -1,3 +1,8 @@
+0.06	More options in Main Menu:
+	Audio selection normal,hearing_impaired,visually_impaired (work around for some AC3 channels is to select Hearing_impaired which is still in mpeg)
+	cfg.media.subtitling.modepriority, cfg.media.subtitling.typepriority
+
+
 0.05	OSD 1920x1088 (16:9) // OSD 1280x720 (16:9) // OSD 704x576 (16:9) But should work on other size too.
 	EPG language routine expanded. More NIDs added.
 	Added toFixed on Schedule page.

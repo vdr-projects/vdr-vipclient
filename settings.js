@@ -135,10 +135,10 @@ var CAicon = "\uE00D";
 var fsAudio = (16*Yfactor) + "px";
 var fsTime = (16*Yfactor) + "px";
 var fsName = (27*Yfactor) + "px";
-var fsMenu = (24*Yfactor) + "px";
+var fsMenu = (20*Yfactor) + "px";
 var fsChan = (43*Yfactor) + "px"; 
 var fsCA = (32*Yfactor) + "px";
-var fsMenuMain = (48*Yfactor) + "px";
+var fsMenuMain = (40*Yfactor) + "px";
 var fsEpg = (19*Yfactor) + "px";
 var fsEpginfo = (21*Yfactor) + "px";
 var fsList = (18*Yfactor) + "px";
@@ -150,4 +150,6 @@ var fsMedia = (27*Yfactor) + "px";
 var fsKeys = (19*Yfactor) + "px";
 
 var isRecording = 0; // set by recording subroutine
-
+var audiotype = 0; // used for selecting "cfg.media.audio.typepriority","normal,hearing_impaired,visually_impaired"
+var subsmode = 0;  // "cfg.media.subtitling.modepriority","Teletext,DVB"
+var substype = 0;  // "cfg.media.subtitling.typepriority","normal,hearing_impaired"

@@ -1,21 +1,3 @@
-recording[0] = "/mnt/00_Abony/%Tom_&_Jerry_Tales/2012-02-28.10.00.317-0.rec/00001.ts";
-recording[1] = "/mnt/000_Mpeg4/CSI:_Crime_Scene_Investigation/2012.11.09-22:15-Fr/2012-11-09.22.05.32-0.rec/00001.ts";
-recording[2] = "/mnt/000_Mpeg4/CSI:_Crime_Scene_Investigation/2012.11.09-23:10-Fr/2012-11-09.23.00.32-0.rec/00001.ts";
-recording[3] = "/mnt/000_Mpeg4/CSI:_Crime_Scene_Investigation/2012.11.16-23:45-Fr/2012-11-16.23.35.32-0.rec/00001.ts";
-recording[4] = "/mnt/000_Mpeg4/CSI:_NY/2012.10.28-20:45-So/2012-10-28.20.35.32-0.rec/00001.ts";
-recording[5] = "/mnt/000_Mpeg4/CSI:_NY/2012.11.11-20:45-So/2012-11-11.20.35.32-0.rec/00001.ts";
-recording[6] = "/mnt/000_Mpeg4/Castle/2012.10.26-21:25-Fr/2012-10-26.21.20.32-0.rec/00001.ts";
-recording[7] = "/mnt/000_Mpeg4/Castle/2012.11.02-21:25-Fr/2012-11-02.21.20.32-0.rec/00001.ts";
-recording[8] = "/mnt/000_Mpeg4/Castle/2012.11.09-21:25-Fr/2012-11-09.21.20.32-0.rec/00001.ts";
-recording[9] = "/mnt/000_Mpeg4/Castle/2012.11.16-22:55-Fr/2012-11-16.22.50.32-0.rec/00001.ts";
-recording[10] = "/mnt/Vermist/2012.12.12-22:25-Mi/2012-12-12.22.20.32-0.rec/00001.ts";
-recording[11] = "/mnt/00_Abony/%Tom_&_Jerry_Tales/2012-02-28.10.00.317-0.rec/00001.ts";
-recording[12] = "/mnt/00_Abony/2012.10.27-05:00-Sa/2012-10-27.05.00.12-0.rec/00001.ts";
-recording[13] = "/mnt/00_Abony/Bob_de_Bouwer/2012-11-13.09.25.8003-0.rec/00001.ts";
-recording[14] = "/mnt/00_Abony/Bob_de_Bouwer_(13)/2012-11-07.01.10.316-0.rec/00001.ts";
-recording[15] = "/mnt/00_Abony/Bob_de_Bouwer_(14)/2012-11-07.04.25.316-0.rec/00001.ts";
-recording[16] = "/mnt/00_Abony/Daffy_Duck/2012-03-14.15.25.328-0.rec/00001.ts";
-recording[17] = "/mnt/00_Abony/Dora/2012.10.25-05:00-Do/2012-10-25.05.00.12-0.rec/00001.ts";
-recording[18] = "/mnt/00_Abony/Dora/2012.10.26-05:00-Fr/2012-10-26.05.00.12-0.rec/00001.ts";
-recording[19] = "/mnt/00_Abony/Dora_the_Explorer/2012-05-28.13.00.319-0.rec/00001.ts";
+recording[0] = "No recordings. Sorry";
+recording[1] = "No recordings. Sorry";
 
