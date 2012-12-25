@@ -125,33 +125,10 @@ function play(uri) {
     }
     uri = ServerAdres + uri;
 	if(Experimental){
-	createNewAsset();
+	//Space for testing experimental parts.
 
-	alert("opening mediaRecorder...");
-	try {
-		mediaRecorder.open(uri, assetId);
-	} catch(e) {
-		alert("Cannot open mediaRecorder. " + e);
-	}
 
-	try {
-		mediaRecorder.record();
-		isRecording = 1;
-	} catch(e) {
-		alert("Cannot record! " + e);
-	}
 
-	var assetURI = "dvr:///pvr/storage/" + assetId;
-
-	try {
-		alert("Opening asset " + assetURI);
-		mediaPlayer.open(assetURI);
-		mediaPlayer.play(1000);
-
-		isPlaying = 1;
-	} catch(e) {
-		alert("Cannot play asset " + assetURI + ". " + e);
-	}
 	} else {
 		mediaPlayer.open(uri);
 		mediaPlayer.play(1000);
@@ -195,23 +172,28 @@ function onDataAvailableEvent(event) {
 
 function updateStreamInfo() {
 
+alert("What can this stream do : " + mediaPlayer.getCapabilities());
 var streamInfo = mediaPlayer.getStreamInfo();
 var cList = streamInfo.availableComponents;
 var x;
 for(x=0; x<cList.length;x++) {
-alert ("XXX " + cList[x].type);
+alert ("Read StreamINFO " + cList[x].type);
 	if(cList[x].type == 0) {
-	alert( mediaPlayer.getAudioStreamInfo(cList[x]).language);
-	alert( mediaPlayer.getAudioStreamInfo(cList[x]).audienceType);
-	alert( mediaPlayer.getAudioStreamInfo(cList[x]).channelFormat);
-	alert( mediaPlayer.getAudioStreamInfo(cList[x]).channelMode);
-	alert( mediaPlayer.getAudioStreamInfo(cList[x]).encoding);
-	alert( mediaPlayer.getAudioStreamInfo(cList[x]).sublanguage);
-	alert( mediaPlayer.getAudioStreamInfo(cList[x]).sampleRate);
+	alert("language : " + mediaPlayer.getAudioStreamInfo(cList[x]).language);
+	alert("audienceType : " + mediaPlayer.getAudioStreamInfo(cList[x]).audienceType);
+	alert("channelFormat : " + mediaPlayer.getAudioStreamInfo(cList[x]).channelFormat);
+	alert("channelMode : " + mediaPlayer.getAudioStreamInfo(cList[x]).channelMode);
+	alert("encoding : " + mediaPlayer.getAudioStreamInfo(cList[x]).encoding);
+	alert("sublanguage : " + mediaPlayer.getAudioStreamInfo(cList[x]).sublanguage);
+	alert("sampleRate : " + mediaPlayer.getAudioStreamInfo(cList[x]).sampleRate);
 	}
 	if(cList[x].type == 1) {
-	alert(mediaPlayer.getVideoStreamInfo(cList[x]).aspectRatio);
-	alert(mediaPlayer.getVideoStreamInfo(cList[x]).activeFormatDescriptor);
+	alert("aspectRatio : " + mediaPlayer.getVideoStreamInfo(cList[x]).aspectRatio);
+	alert("activeFormatDescriptor : " + mediaPlayer.getVideoStreamInfo(cList[x]).activeFormatDescriptor);
+	alert("frameRate : " + mediaPlayer.getVideoStreamInfo(cList[x]).frameRate);
+	alert("componentTag : " + mediaPlayer.getVideoStreamInfo(cList[x]).componentTag);
+	alert("resolutionX : " + mediaPlayer.getVideoStreamInfo(cList[x]).resolutionX);
+	alert("resolutionY : " + mediaPlayer.getVideoStreamInfo(cList[x]).resolutionY);
 	}
 
 
@@ -625,11 +607,7 @@ function onKeyDown(event) {
 		}
 		break;
 	case "MediaStop":
-		mediaList.style.opacity = 0.8;
-		isMediaMenu = 1;
-		showDisplay("STOP", false, 100, 0 );
-		currMed = 0;
-		showMediaList();
+		LoadMediaSettings();
 	break;
 	case "MediaRecord":
 	break;
@@ -1436,14 +1414,31 @@ function InitMenu() {
 
 // Media Player Section
 
-function onKeyMedia(keyCode) {
-  switch(keyCode) {
-    case "BrowserBack":
-    case "TV":
+function LoadMediaSettings() {
+		mediaList.style.opacity = 0.8;
+		isMediaMenu = 1;
+		showDisplay("STOP", false, 100, 0 );
+		currMed = 0;
+		showMediaList();
+		mediaPlayer.addEventListener(mediaPlayer.ON_POSITION_CHANGED, ShowMediaOSD);
+
+}
+
+function UnloadMediaSettings() {
+	mediaPlayer.removeEventListener(mediaPlayer.ON_POSITION_CHANGED, ShowMediaOSD);
 	mediaList.style.opacity = 0;
  	showDisplay((currChan.toString()), false, 100, 0 );
 	isMediaMenu = 0;
         play(channels[currChan]);
+}
+
+
+
+function onKeyMedia(keyCode) {
+  switch(keyCode) {
+    case "BrowserBack":
+    case "TV":
+	UnloadMediaSettings();
         break;
     break;
     case "Down":
@@ -1620,42 +1615,15 @@ function playRec(uri) {
 	uri = "file://" + uri;
 	mediaPlayer.open(uri);
 	mediaPlayer.play(1000);
-
-//	createNewAsset();
-
-//	alert("opening mediaRecorder...");
-//	try {
-//		mediaRecorder.open(uri, assetId);
-//	} catch(e) {
-//		alert("Cannot open mediaRecorder. " + e);
-//	}
-
-//	try {
-//		mediaRecorder.record();
-//		isRecording = 1;
-//	} catch(e) {
-//		alert("Cannot record! " + e);
-//	}
-
-//	assetId = "asset_RUyeln";
-//	mediaPlayer.open("dvr:///pvr/storage/" + assetId);
-//	mediaPlayer.play(1000);
-
-//	setTimeout("    mediaPlayer.open('dvr:///pvr/storage/' + assetId);mediaPlayer.play(1000);", 3000);   
 	showDisplay("PLAY", false, 100, 0 );
- 
   } catch (e) {
     alert("Failed opening recording: " + e);
+    alert("error: " + mediaPlayer.getTimeshiftError().source);
+    alert("error: " + mediaPlayer.getTimeshiftError().details);
     return;
   }
 }
 
-
-//var propList = new Array(toi.consts.ToiAssetManagerService.PROPERTY_SYSTEM_DURATION);
-//var propList = new Array(toi.consts.ToiAssetManagerService.PROPERTY_SYSTEM_FILESIZE);
-//var propList = new Array(toi.consts.ToiAssetManagerService.PROPERTY_SYSTEM_PLAYBACKURI);
-//var properties = toi.assetManagerService.getProperties(assetId, propList);
-//   alert (properties[0].value);
 
 function createNewAsset() {
 	try {
@@ -1696,8 +1664,8 @@ function recordStop() {
 }
 
 function ShowMediaOSD() {
-// Display Name/ length
-	osdmedia.innerHTML = "<p style='font-size:" + fsMedia +";'> Elapsed time : " + mediaPlayer.getPosition() + "</p>";
+// Display Name/ length 
+	osdmedia.innerHTML = "<p style='color:white;font-size:" + fsMedia +";'> getCapabilities : " + mediaPlayer.getCapabilities() + "Elapsed time : " + mediaPlayer.getPosition() + "</p>";
 }
 
 
