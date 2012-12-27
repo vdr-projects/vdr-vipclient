@@ -1,6 +1,11 @@
 0.06	More options in Main Menu:
-	Audio selection normal,hearing_impaired,visually_impaired (work around for some AC3 channels is to select Hearing_impaired which is still in mpeg)
+	Audio selection normal,hearing_impaired,visually_impaired 
 	cfg.media.subtitling.modepriority, cfg.media.subtitling.typepriority
+	removed cds setting.
+	Fixed : OSD time left/ time played is updated.
+		New BootImage now supports AC3 downmixing, so no more work around by selecting NAR sound track.
+	EPGinfo extended with audio languages read from the stream.
+
 
 
 0.05	OSD 1920x1088 (16:9) // OSD 1280x720 (16:9) // OSD 704x576 (16:9) But should work on other size too.
