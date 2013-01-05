@@ -5,7 +5,7 @@
 	Fixed : OSD time left/ time played is updated.
 		New BootImage now supports AC3 downmixing, so no more work around by selecting NAR sound track.
 	EPGinfo extended with audio languages read from the stream.
-
+	Pause only when Timeshift is set
 
 
 0.05	OSD 1920x1088 (16:9) // OSD 1280x720 (16:9) // OSD 704x576 (16:9) But should work on other size too.

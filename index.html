@@ -27,7 +27,7 @@
 //
 //
 
-var Version = "0.06	2012/12/xx"
+var Version = "0.06	2013/01/xx"
 var nrChannels = channels.length;
 var nrMedia = recording.length - 1;
 
@@ -128,13 +128,16 @@ function play(uri) {
     uri = ServerAdres + uri;
 	mediaPlayer.open(uri);
 	mediaPlayer.play(1000);
+	SetLed(1,1,0);
 
 	if(TimeShift){
 	    initialDelayID = setTimeout("startTimeshiftBuffering();", 5000);
 	}
+
 	if(isFullscreen) {
 	showOSD();
 	}
+
 	showDisplay((currChan.toString()), false, 100, 0 );
         GetEPG(currChan);
   } catch (e) {
@@ -167,7 +170,38 @@ function onDataAvailableEvent(event) {
 
 function updateStreamInfo() {
 
-//alert("What can this stream do : " + mediaPlayer.getCapabilities());
+alert("What can this stream do : " + mediaPlayer.getCapabilities());
+	var mpCap = "";
+if (mediaPlayer.getCapabilities() & 1) {
+  // bit is set
+	mpCap = " CAPABILITY_PAUSE ";
+}
+if (mediaPlayer.getCapabilities() & 2) {
+  // bit is set
+	mpCap = mpCap + "CAPABILITY_REWIND ";
+}
+if (mediaPlayer.getCapabilities() & 4) {
+  // bit is set
+	mpCap = mpCap + "CAPABILITY_FASTFORWARD ";
+}
+if (mediaPlayer.getCapabilities() & 8) {
+  // bit is set
+	mpCap = mpCap + "CAPABILITY_GETPOSITION ";
+}
+if (mediaPlayer.getCapabilities() & 16) {
+  // bit is set
+	mpCap = mpCap + "CAPABILITY_SETPOSITION ";
+}
+if (mediaPlayer.getCapabilities() & 32) {
+  // bit is set
+	mpCap = mpCap + "CAPABILITY_FREEZE ";
+}
+if (mediaPlayer.getCapabilities() & 64) {
+  // bit is set
+	mpCap = mpCap + "CAPABILITY_TIMESHIFT ";
+}
+	alert (mpCap);
+
 var streamInfo = mediaPlayer.getStreamInfo();
 var cList = streamInfo.availableComponents;
 var x;
@@ -187,12 +221,12 @@ for(x=0; x<cList.length;x++) {
 //	alert("sampleRate : " + mediaPlayer.getAudioStreamInfo(cList[x]).sampleRate);
 	}
 	if(cList[x].type == 1) {
-//	alert("aspectRatio : " + mediaPlayer.getVideoStreamInfo(cList[x]).aspectRatio);
+	alert("aspectRatio : " + mediaPlayer.getVideoStreamInfo(cList[x]).aspectRatio);
 //	alert("activeFormatDescriptor : " + mediaPlayer.getVideoStreamInfo(cList[x]).activeFormatDescriptor);
 //	alert("frameRate : " + mediaPlayer.getVideoStreamInfo(cList[x]).frameRate);
 //	alert("componentTag : " + mediaPlayer.getVideoStreamInfo(cList[x]).componentTag);
-//	alert("resolutionX : " + mediaPlayer.getVideoStreamInfo(cList[x]).resolutionX);
-//	alert("resolutionY : " + mediaPlayer.getVideoStreamInfo(cList[x]).resolutionY);
+	alert("resolutionX : " + mediaPlayer.getVideoStreamInfo(cList[x]).resolutionX);
+	alert("resolutionY : " + mediaPlayer.getVideoStreamInfo(cList[x]).resolutionY);
 	}
 
 
@@ -596,15 +630,17 @@ function onKeyDown(event) {
 	      mediaPlayer.play(mediaPlayer.PACE_FASTFORWARD);
 		break;
 	case "MediaPlayPause":
-		if(mediaPlayer.getState() == mediaPlayer.STATE_PAUSED) {
-			SetLed(1,1,0);
-			mediaPlayer.play(mediaPlayer.PACE_PLAY);
-			break;
-		}
-	   if(mediaPlayer.getState() == mediaPlayer.STATE_PLAYING) {
-			SetLed(1,1,10);
-			mediaPlayer.play(0);
-			break;
+		if(TimeShift){
+			if(mediaPlayer.getState() == mediaPlayer.STATE_PAUSED) {
+				SetLed(1,1,0);
+				mediaPlayer.play(mediaPlayer.PACE_PLAY);
+				break;
+			}
+		   if(mediaPlayer.getState() == mediaPlayer.STATE_PLAYING) {
+				SetLed(1,1,10);
+				mediaPlayer.play(0);
+				break;
+			}
 		}
 		break;
 	case "MediaStop":
@@ -1390,6 +1426,13 @@ function onKeyMenu(keyCode) {
 	InitMenu();
 	break;
 	case KEY_5:
+//		if(ShowInfo) {
+//		InitMenu();
+//		ShowInfo=false;
+//		} else {
+//		ShowInfo=true;
+//		InitInfo();
+//		}
 	break;
 	case KEY_6:
 	break;
@@ -1406,6 +1449,9 @@ function InitMenu() {
 	mainmenu.innerHTML = "<center><p style='font-size:" + fsMenuMain + ";color:white;'> SETTINGS </p><p style='color:red;font-size:" + fsMenu + ";'>Frontdisplay Clock : " + showClock + "</p><p style='color:green;font-size:" + fsMenu + ";'>Prio audio track : " + (toi.informationService.getObject("cfg.media.audio.languagepriority")) + "</p><p style='color:yellow;font-size:" + fsMenu + ";'>Switch timer : " + Boolean(switchtimerID) + "</p><p style='color:blue;font-size:" + fsMenu + ";'>Preview guide : " + SwitchGuide + "</p><p style='color:black;font-size:" + fsMenu + ";'>1 - Show Subs : " + Boolean(ShowSubs) + "</p><p style='color:black;font-size:" + fsMenu + ";'>2 - Subs Type Prio : " + (toi.informationService.getObject("cfg.media.subtitling.typepriority")) + "</p><p style='color:black;font-size:" + fsMenu + ";'>3 - Subs Mode Prio : " + (toi.informationService.getObject("cfg.media.subtitling.modepriority")) + "</p><p style='color:black;font-size:" + fsMenu + ";'>4 - Audio Type Prio : " + (toi.informationService.getObject("cfg.media.audio.typepriority")) + "</p></center>";
 }
 
+function InitInfo() {
+	mainmenu.innerHTML = "<center><p style='font-size:" + fsMenuMain + ";color:white;'> INFO </p><p style='color:black;font-size:" + fsMenu + ";'>" + "Bla bla bla" + "</p></center>";
+}
 // End of Menu section
 
 // Media Player Section
@@ -1608,7 +1654,7 @@ function playRec(uri) {
     if (mediaPlayer.getState() != mediaPlayer.STATE_IDLE) {
       mediaPlayer.close();
     }
-	uri = "file://" + uri;
+//	uri = "file://" + uri;
 	mediaPlayer.open(uri);
 	mediaPlayer.play(1000);
 	showDisplay("PLAY", false, 100, 0 );
@@ -1661,7 +1707,8 @@ function recordStop() {
 
 function ShowMediaOSD() {
 // Display Name/ length 
-	osdmedia.innerHTML = "<p style='color:white;font-size:" + fsMedia +";'> getCapabilities : " + mediaPlayer.getCapabilities() + "Elapsed time : " + mediaPlayer.getPosition() + "</p>";
+
+	osdmedia.innerHTML = "<p style='color:white;font-size:" + fsMedia +";'> getCapabilities : " + mediaPlayer.getCapabilities() + " Elapsed time : " + mediaPlayer.getPosition() + "</p>";
 }
 
 

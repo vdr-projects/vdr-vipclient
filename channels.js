@@ -1,17 +1,32 @@
 //
-//
-//
-// 0xxx SD channels
-// 1xxx HD channels
-// 2xxx 30 W channels
-// 3xxx 5 E channels
-// 4xxx
-// 5xxx
-// 6xxx XXX
-// 7xxx 
-// 8xxx DVB-T
-// 9xxx Radio channels
-//
+// 001 - 024 CDS - Dutch
+// 025 - 038 Local Dutch
+// 040 - 049 TVV - Belgium
+// 050 - 099 Docu, mostly UK
+// 100 - 149 Sky UK Movies
+// 150 - 199 D, Sky UK Series
+// 200 - 299 UK 
+//	200 - 209 BBC
+//	210 - 219 ITV
+// 	220 - 229 Four
+// 	230 - 239 Five
+// 300 - 349 Kidz
+// 350 - 399 reserved for future use
+// 400 - 419 D
+// 420 - 449 D, Private
+// 450 - 499 Sky D
+// 500 - 519 Austria
+// 520 - 549 Swiss
+// 550 - 599 Sports
+// 600 - 699 Music
+// 700 - 799 Japan/ China/ Orient
+// 800 - 839 Russia
+// 840 - 849 TVP (Poland)
+// 850 - 899 CanalSat/ TNTSat (France)
+// 900 - 949 News
+// 950 - 959 Travel
+// 960 - 999 Testing
+//	960 - HD channels dvb-s
 //
 //
 
@@ -64,6 +79,7 @@ channelsnames[23] = "MOTORS TV (S)";
 channels[23] = "S19.2E-1-1110-9509";
 channelsnames[24] = "NAUTICAL CHANNEL (S)";
 channels[24] = "S19.2E-1-1096-8607";
+
 channelsnames[25] = "Omrop Fryslan Televisie (S)";
 channels[25] = "S23.5E-3-3211-20808";
 channelsnames[26] = "TV Noord (S)";
@@ -72,32 +88,42 @@ channelsnames[27] = "TV Oost (S)";
 channels[27] = "S23.5E-3-3211-20814";
 channelsnames[28] = "TV Gelderland (S)";
 channels[28] = "S23.5E-3-3211-20816";
-channelsnames[29] = "een (S)";
-channels[29] = "S19.2E-53-1119-12775";
-channelsnames[30] = "Canvas (S)";
-channels[30] = "S19.2E-53-1119-12776";
-channelsnames[31] = "VTM (MPEG4) (S)";
-channels[31] = "S19.2E-53-1119-12810";
-channelsnames[32] = "VIER (MPEG4) (S)";
-channels[32] = "S19.2E-53-1119-12814";
-channelsnames[33] = "2BE (MPEG4) (S)";
-channels[33] = "S19.2E-53-1119-12812";
-channelsnames[34] = "VIJF (MPEG4) (S)";
-channels[34] = "S19.2E-53-1119-12820";
-channelsnames[35] = "Vitaya (MPEG4) (S)";
-channels[35] = "S19.2E-53-1119-12818";
-channelsnames[36] = "KetOp12 (S)";
-channels[36] = "S19.2E-53-1119-12808";
-channelsnames[37] = "vtmKazoom/Kanaal Z (MPEG4) (S)";
-channels[37] = "S19.2E-53-1119-12816";
-channelsnames[38] = "Acht (MPEG4) (S)";
-channels[38] = "S19.2E-53-1119-12822";
+channelsnames[29] = "Omroep Zeeland Televisie (S)";
+channels[29] = "S23.5E-3-3211-20818";
+channelsnames[30] = "TV Drenthe (S)";
+channels[30] = "S23.5E-3-3211-20812";
+channelsnames[31] = "TV West (S)";
+channels[31] = "S23.5E-3-3211-20804";
+channelsnames[32] = "AT5 (S)";
+channels[32] = "S23.5E-3-3211-20806";
+channelsnames[33] = "L1MBURG (S)";
+channels[33] = "S23.5E-3-3211-20802";
+channelsnames[34] = "Omroep Brabant Televisie (S)"
+channels[34] = "S23.5E-3-3211-20820";
+
 channelsnames[39] = "Informatiekanaal (S)";
 channels[39] = "S19.2E-53-1119-12826";
-channelsnames[40] = "2BE (S)";
-channels[40] = "S19.2E-53-1119-12772";
-channelsnames[41] = "VTM (S)";
-channels[41] = "S19.2E-53-1119-12771";
+channelsnames[40] = "een (S)";
+channels[40] = "S19.2E-53-1119-12775";
+channelsnames[41] = "Canvas (S)";
+channels[41] = "S19.2E-53-1119-12776";
+channelsnames[42] = "VTM (MPEG4) (S)";
+channels[42] = "S19.2E-53-1119-12810";
+channelsnames[43] = "VIER (MPEG4) (S)";
+channels[43] = "S19.2E-53-1119-12814";
+channelsnames[44] = "2BE (MPEG4) (S)";
+channels[44] = "S19.2E-53-1119-12812";
+channelsnames[45] = "VIJF (MPEG4) (S)";
+channels[45] = "S19.2E-53-1119-12820";
+channelsnames[46] = "Vitaya (MPEG4) (S)";
+channels[46] = "S19.2E-53-1119-12818";
+channelsnames[47] = "KetOp12 (S)";
+channels[47] = "S19.2E-53-1119-12808";
+channelsnames[48] = "vtmKazoom/Kanaal Z (MPEG4) (S)";
+channels[48] = "S19.2E-53-1119-12816";
+channelsnames[49] = "Acht (MPEG4) (S)";
+channels[49] = "S19.2E-53-1119-12822";
+
 channelsnames[50] = "DMAX (S)";
 channels[50] = "S19.2E-133-33-63";
 channelsnames[51] = "Discovery (S)";
@@ -204,6 +230,7 @@ channelsnames[114] = "Christmas 24+ (S)";
 channels[114] = "S28.2E-2-2303-52270";
 channelsnames[115] = "Cinémoi movies (S)";
 channels[115] = "S28.2E-2-2311-52014";
+
 channelsnames[150] = "RTL Crime (S)";
 channels[150] = "S19.2E-133-1-27";
 channelsnames[151] = "RTLNITRO (S)";
@@ -244,6 +271,7 @@ channelsnames[168] = "Watch (S)";
 channels[168] = "S28.2E-2-2006-6520";
 channelsnames[169] = "Watch +1 (S)";
 channels[169] = "S28.2E-2-2015-7615";
+
 channelsnames[201] = "BBC 1 London (S)";
 channels[201] = "S28.2E-2-2045-6301";
 channelsnames[202] = "BBC 2 England (S)";
@@ -402,6 +430,7 @@ channelsnames[289] = "Showcase 2 (S)";
 channels[289] = "S28.2E-2-2601-54051";
 channelsnames[290] = "Horse & Country (S)";
 channels[290] = "S28.2E-2-2602-54140";
+
 channelsnames[300] = "CBBC Channel (S)";
 channels[300] = "S28.2E-2-2045-6317";
 channelsnames[301] = "CBeebies (S)";
@@ -492,6 +521,7 @@ channelsnames[345] = "Cartoon I (S)";
 channels[345] = "S28.2E-2-2018-7109";
 channelsnames[346] = "Toonami I (S)";
 channels[346] = "S28.2E-2-2018-7108";
+
 channelsnames[401] = "Das Erste (S)";
 channels[401] = "S19.2E-1-1101-28106";
 channelsnames[402] = "ZDF (S)";
@@ -652,6 +682,7 @@ channelsnames[493] = "TNT Film (TCM). (S)";
 channels[493] = "S19.2E-133-9-61";
 channelsnames[494] = "TNT Serie (S)";
 channels[494] = "S19.2E-133-1-50";
+
 channelsnames[501] = "ORF1 (S)";
 channels[501] = "S19.2E-1-1117-13001";
 channelsnames[502] = "ORF2 (S)";
@@ -678,22 +709,24 @@ channelsnames[512] = "ServusTV Deutschland (S)";
 channels[512] = "S19.2E-1-1115-13110";
 channelsnames[513] = "ServusTV Oesterreich (S)";
 channels[513] = "S19.2E-1-1115-13111";
-channelsnames[514] = "SF info (S)";
-channels[514] = "S13.0E-318-8500-911";
-channelsnames[515] = "SF 1 (S)";
-channels[515] = "S13.0E-318-8500-901";
-channelsnames[516] = "SF zwei (S)";
-channels[516] = "S13.0E-318-8500-907";
-channelsnames[517] = "RSI LA 1 HD (S)";
-channels[517] = "S13.0E-318-1700-14051";
-// SD channels[517] = "S13.0E-318-1700-14003";
-channelsnames[518] = "RSI LA 2 HD (S)";
-channels[518] = "S13.0E-318-8500-951";
-// SD channels[518] = "S13.0E-318-1700-14009";
-channelsnames[519] = "RTS Un (S)";
-channels[519] = "S13.0E-318-1700-14002";
-channelsnames[520] = "RTS Deux (S)";
-channels[520] = "S13.0E-318-1700-14008";
+
+channelsnames[520] = "SF info (S)";
+channels[520] = "S13.0E-318-8500-911";
+channelsnames[521] = "SF 1 (S)";
+channels[521] = "S13.0E-318-8500-901";
+channelsnames[522] = "SF zwei (S)";
+channels[522] = "S13.0E-318-8500-907";
+channelsnames[523] = "RSI LA 1 HD (S)";
+channels[523] = "S13.0E-318-1700-14051";
+// SD channels[523] = "S13.0E-318-1700-14003";
+channelsnames[524] = "RSI LA 2 HD (S)";
+channels[524] = "S13.0E-318-8500-951";
+// SD channels[524] = "S13.0E-318-1700-14009";
+channelsnames[525] = "RTS Un (S)";
+channels[525] = "S13.0E-318-1700-14002";
+channelsnames[526] = "RTS Deux (S)";
+channels[526] = "S13.0E-318-1700-14008";
+
 channelsnames[550] = "AD Sport 1 (S)";
 channels[550] = "S13.0E-318-15600-10716";
 channelsnames[551] = "Dubai Sports 3 (S)";
@@ -1034,6 +1067,7 @@ channelsnames[773] = "GEO News (S)";
 channels[773] = "S28.2E-2-2405-50405";
 channelsnames[774] = "GEO UK (S)";
 channels[774] = "S28.2E-2-2306-52500";
+
 channelsnames[800] = "1TVRUS Europe (S)";
 channels[800] = "S13.0E-318-9400-8208";
 channelsnames[801] = "RTR (S)";
@@ -1100,24 +1134,27 @@ channelsnames[831] = "TV Verdade (S)";
 channels[831] = "S13.0E-318-11500-17338";
 channelsnames[832] = "TV9 (S)";
 channels[832] = "S13.0E-318-15400-13505";
-channelsnames[850] = "TVP INFO (S)";
-channels[850] = "S19.2E-1-1059-7102";
-channelsnames[851] = "TVP1 (S)";
-channels[851] = "S19.2E-1-1059-7100";
-channelsnames[852] = "TVP2 (S)";
-channels[852] = "S19.2E-1-1059-7101";
-channelsnames[853] = "TVP Sport (S)";
-channels[853] = "S19.2E-1-1059-7103";
-channelsnames[854] = "TVP Historia (S)";
-channels[854] = "S19.2E-1-1059-7105";
-channelsnames[855] = "TVP Seriale (S)";
-channels[855] = "S19.2E-1-1059-7108";
-channelsnames[856] = "TVP Kultura (S)";
-channels[856] = "S19.2E-1-1059-7106";
-channelsnames[857] = "BELSAT TV (S)";
-channels[857] = "S19.2E-1-1059-7107";
-channelsnames[858] = "TV Polonia (S)";
-channels[858] = "S19.2E-1-1059-7104";
+channelsnames[840] = "TVP INFO (S)";
+channels[840] = "S19.2E-1-1059-7102";
+channelsnames[841] = "TVP1 (S)";
+channels[841] = "S19.2E-1-1059-7100";
+channelsnames[842] = "TVP2 (S)";
+channels[842] = "S19.2E-1-1059-7101";
+channelsnames[843] = "TVP Sport (S)";
+channels[843] = "S19.2E-1-1059-7103";
+channelsnames[844] = "TVP Historia (S)";
+channels[844] = "S19.2E-1-1059-7105";
+channelsnames[845] = "TVP Seriale (S)";
+channels[845] = "S19.2E-1-1059-7108";
+channelsnames[846] = "TVP Kultura (S)";
+channels[846] = "S19.2E-1-1059-7106";
+channelsnames[847] = "BELSAT TV (S)";
+channels[847] = "S19.2E-1-1059-7107";
+channelsnames[848] = "TV Polonia (S)";
+channels[848] = "S19.2E-1-1059-7104";
+channelsnames[851] = "M6 (S)";
+channels[851] = "S19.2E-1-1074-8367";
+
 channelsnames[900] = "EuroNews (S)";
 channels[900] = "S19.2E-1-1091-31220";
 channelsnames[901] = "CNN Int. (S)";
