@@ -1,3 +1,8 @@
+0.10	Added Radio list / Protected List
+	Small fixes,  guideview, epg setup
+	In guideview Get EPG only for highlighted channel to speedup scrolling.
+
+
 0.06	More options in Main Menu:
 	Audio selection normal,hearing_impaired,visually_impaired 
 	cfg.media.subtitling.modepriority, cfg.media.subtitling.typepriority

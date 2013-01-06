@@ -13,8 +13,6 @@ var Yfactor = 720 / 576;
 var channels = new Array();
 var channelsnames = new Array();
 var channelsepglang = new Array();
-var channeldigits = 2; // 0 - Max 9, 1 max 99, 2 max 999 or 3 max 9999 channels
-
 var recording = new Array();
 
 var isFullscreen = 1; // start TV(1) or guide(0)
@@ -40,6 +38,26 @@ var HDMI = "OFF,VIDEO_MODE_576P50,VIDEO_MODE_576I50,VIDEO_MODE_720P50,VIDEO_MODE
 var currChan = 10; // default channel
 var epgchan = currChan;
 var prevChan = currChan;
+
+var channeldigits = 2; // 0 - Max 9, 1 max 99, 2 max 999 or 3 max 9999 channels directly selectable by numbers
+// Radio channels.js Settings
+var minRDchan = 9001;
+var maxRDchan = 9099; // set not too far from max rd channel to speed up zapping
+var rdChan = 9051;
+// Protected channels.js Settings
+var minPRTchan = 6001;
+var maxPRTchan = 6040; // set not too far from max prt channel to speed up zapping
+var prtChan = 6001;
+var ShowProtectedChannels = false; // Default don't show protected channels.
+
+// TV channels.js Settings
+var chanType = "TV" ; // used for switching TV <> Radio <> Protected
+var minTVchan = 1;
+var maxTVchan = 999; // set not too far from max TV channel to speed up zapping
+var tvChan = currChan;
+var minChan = minTVchan;
+var maxChan = maxTVchan;
+var chanBase = 0;
 
 var currMed = 0;
 var listMed = 0;
@@ -134,10 +152,10 @@ var CAicon = "\uE00D";
 var fsAudio = (16*Yfactor) + "px";
 var fsTime = (16*Yfactor) + "px";
 var fsName = (27*Yfactor) + "px";
-var fsMenu = (18*Yfactor) + "px";
+var fsMenu = (16*Yfactor) + "px";
 var fsChan = (43*Yfactor) + "px"; 
 var fsCA = (32*Yfactor) + "px";
-var fsMenuMain = (35*Yfactor) + "px";
+var fsMenuMain = (30*Yfactor) + "px";
 var fsEpg = (19*Yfactor) + "px";
 var fsEpginfo = (21*Yfactor) + "px";
 var fsList = (18*Yfactor) + "px";

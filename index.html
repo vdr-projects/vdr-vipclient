@@ -3,6 +3,8 @@
       <script type="text/javascript" src="settings.js" />
       <script type="text/javascript" src="settings2.js" />
       <script type="text/javascript" src="channels.js" />
+      <script type="text/javascript" src="channels-rd.js" />
+      <script type="text/javascript" src="channels-prt.js" />
       <script type="text/javascript" src="recordings.js" />
     </head>
 <script language="Javascript">
@@ -27,11 +29,12 @@
 //
 //
 
-var Version = "0.06	2013/01/05"
-var nrChannels = channels.length;
+var Version = "0.10	2013/01/xx"
 var nrMedia = recording.length - 1;
 
-for (var i = 1;  i < nrChannels; i++) { EPG[0][4][i] = "";EPG[1][4][i] = "";EPG[0][5][i] = "";EPG[1][5][i] = "";EPG[0][7][i] = "";EPG[1][7][i] = ""; }
+for (var i = minTVchan;  i < (maxTVchan+1); i++) { EPG[0][4][i] = "";EPG[1][4][i] = "";EPG[0][5][i] = "";EPG[1][5][i] = "";EPG[0][7][i] = "";EPG[1][7][i] = ""; }
+for (var i = minRDchan;  i < (maxRDchan+1); i++) { EPG[0][4][i] = "";EPG[1][4][i] = "";EPG[0][5][i] = "";EPG[1][5][i] = "";EPG[0][7][i] = "";EPG[1][7][i] = ""; }
+for (var i = minPRTchan;  i < (maxPRTchan+1); i++) { EPG[0][4][i] = "";EPG[1][4][i] = "";EPG[0][5][i] = "";EPG[1][5][i] = "";EPG[0][7][i] = "";EPG[1][7][i] = ""; }
 
 window.onkeydown = onKeyDown;
 
@@ -83,8 +86,8 @@ function onUnload() {
 
 function incChan(step) {
     currChan = currChan + step;
-    if (currChan == nrChannels) {
-        currChan = 1;
+    if (currChan > maxChan) {
+        currChan = minChan;
     }
     osdnr.style.opacity = isFullscreen; 
     OSDchannr(currChan);
@@ -92,8 +95,8 @@ function incChan(step) {
 
 function decChan(step) {
     currChan = currChan - step;
-    if (currChan == 0) {
-        currChan = nrChannels - 1;
+    if (currChan < minChan ) {
+        currChan = maxChan ;
     }
     osdnr.style.opacity = isFullscreen; 
     OSDchannr(currChan);
@@ -125,7 +128,8 @@ function play(uri) {
     if (mediaPlayer.getState() != mediaPlayer.STATE_IDLE) {
       mediaPlayer.close();
     }
-    uri = ServerAdres + uri;
+
+	uri = ServerAdres + uri;
 	mediaPlayer.open(uri);
 	mediaPlayer.play(1000);
 	SetLed(1,1,0);
@@ -311,10 +315,10 @@ function onKeyDown(event) {
     case "Left":
 	count = 0;
 	prevChan = currChan;
-	if (currChan > 9) {
+	if (currChan > (minChan + 8)) {
 	decChan(9);
 	} else {
-	currChan = nrChannels - currChan;
+	currChan = maxChan - currChan;
 	}
 	do
 	{
@@ -330,10 +334,10 @@ function onKeyDown(event) {
     case "Right":
 	count = 0;
 	prevChan = currChan;
-	if (currChan < (nrChannels - 9 )) {
+	if (currChan < (maxChan - 9 )) {
 	incChan(9);
 	} else {
-	currChan = nrChannels - currChan;
+	currChan = maxChan - currChan;
 	}
 	do
 	{
@@ -485,6 +489,7 @@ function onKeyDown(event) {
 	if(isFullscreen) {
 	// fullscreen    
 		if(!count) {
+	        GetEPG(currChan);
 		updateOSDtime(currChan);
 		osdepg.innerHTML = "<p>" + EPG[0][7][currChan] + "</p>\n<p>" + EPG[1][7][currChan] + "</p>";
 		showOSD();
@@ -681,6 +686,7 @@ function Makedigit() {
 
 function CheckChannel(CheckThis) {
 // function to check if channel exists
+	CheckThis = chanBase + CheckThis;
 	if(channels[CheckThis]) {
 		ChangeOK = 1;
 		currChan = CheckThis;
@@ -771,7 +777,7 @@ function onCacheUpdated() {
 }
 
 function OSDchannr(channr) {
-    osdnr.innerHTML = "<center>" + channr + "</center>";
+    osdnr.innerHTML = "<center>" + Right(channr,3) + "</center>";
     osdnr.style.fontSize = fsChan;
     osdnr.style.color = "black";
 }
@@ -1177,19 +1183,20 @@ function showChannelList() {
 	var htmlstring = "<table border='0'><tr>";
 	listChan = currChan-5;
 	for(var i=currChan-5; i<=currChan+5; i++) {
-		if (listChan<1) {
-			listChan=nrChannels-2;
-			}
-		if (listChan>nrChannels-2) {
-			listChan=0;
-			}
-			do
+		do
 			{
 				listChan = listChan + 1;
+				if (listChan<minChan) {
+					listChan=maxChan;
+					}
+				if (listChan>maxChan) {
+					listChan=minChan;
+				}
 			}
-			while (!channels[listChan] && (listChan<nrChannels));
-		GetEPG(listChan);
+
+		while (!channels[listChan] && (listChan<maxChan));
 		if ( listChan == currChan) { 
+			GetEPG(listChan);
 			liststyle = "background:#fc5;";
 		}  else {
 			liststyle = "";
@@ -1383,8 +1390,6 @@ function onKeyMenu(keyCode) {
     break;
     case "TV":
     break;
-	case KEY_0:
-	break;
 	case KEY_1:
 	 ShowSubs = 1 - ShowSubs;
 	  videoplane.subtitles = Boolean(ShowSubs); // Enable subtitles or Disable subtitles
@@ -1441,12 +1446,57 @@ function onKeyMenu(keyCode) {
 	case KEY_8:
 	break;
 	case KEY_9:
+	if(ShowProtectedChannels) {
+		if(chanType !== "Protected") {
+			//Protected
+			maxChan = maxPRTchan;
+			minChan = minPRTchan;
+			tvChan = currChan;
+			currChan = prtChan;
+			chanType = "Protected";
+			chanBase = 5000;
+		} else {
+			//TV
+			maxChan = maxTVchan;
+			minChan = minTVchan;
+			rdChan = currChan;
+			currChan = tvChan;
+			chanBase = 0;
+			chanType = "TV";
+		}
+		isSetupMenu = 0;
+		mainmenu.style.opacity = 0;
+		play(channels[currChan]);
+	}
 	break;
+	case KEY_0:
+	if(chanType !== "Radio") {
+	//Radio
+	maxChan = maxRDchan;
+	minChan = minRDchan;
+	tvChan = currChan;
+	currChan = rdChan;
+	chanType = "Radio";
+	chanBase = 9000;
+	} else {
+	//TV
+	maxChan = maxTVchan;
+	minChan = minTVchan;
+	rdChan = currChan;
+	currChan = tvChan;
+	chanBase = 0;
+	chanType = "TV";
+	}
+	isSetupMenu = 0;
+	mainmenu.style.opacity = 0;
+	play(channels[currChan]);
+	break;
+
   }
 }
 
 function InitMenu() {
-	mainmenu.innerHTML = "<center><p style='font-size:" + fsMenuMain + ";color:white;'> SETTINGS </p><p style='color:red;font-size:" + fsMenu + ";'>Frontdisplay Clock : " + showClock + "</p><p style='color:green;font-size:" + fsMenu + ";'>Prio audio track : " + (toi.informationService.getObject("cfg.media.audio.languagepriority")) + "</p><p style='color:yellow;font-size:" + fsMenu + ";'>Switch timer : " + Boolean(switchtimerID) + "</p><p style='color:blue;font-size:" + fsMenu + ";'>Preview guide : " + SwitchGuide + "</p><p style='color:black;font-size:" + fsMenu + ";'>1 - Show Subs : " + Boolean(ShowSubs) + "</p><p style='color:black;font-size:" + fsMenu + ";'>2 - Subs Type Prio : " + (toi.informationService.getObject("cfg.media.subtitling.typepriority")) + "</p><p style='color:black;font-size:" + fsMenu + ";'>3 - Subs Mode Prio : " + (toi.informationService.getObject("cfg.media.subtitling.modepriority")) + "</p><p style='color:black;font-size:" + fsMenu + ";'>4 - Audio Type Prio : " + (toi.informationService.getObject("cfg.media.audio.typepriority")) + "</p></center>";
+	mainmenu.innerHTML = "<center><p style='font-size:" + fsMenuMain + ";color:white;'> MainMenu ( " + Version + " )</p><p style='color:red;font-size:" + fsMenu + ";'>Frontdisplay Clock : " + showClock + "</p><p style='color:green;font-size:" + fsMenu + ";'>Prio audio track : " + (toi.informationService.getObject("cfg.media.audio.languagepriority")) + "</p><p style='color:yellow;font-size:" + fsMenu + ";'>Switch timer : " + Boolean(switchtimerID) + "</p><p style='color:blue;font-size:" + fsMenu + ";'>Preview guide : " + SwitchGuide + "</p><p style='color:black;font-size:" + fsMenu + ";'>1 - Show Subs : " + Boolean(ShowSubs) + "</p><p style='color:black;font-size:" + fsMenu + ";'>2 - Subs Type Prio : " + (toi.informationService.getObject("cfg.media.subtitling.typepriority")) + "</p><p style='color:black;font-size:" + fsMenu + ";'>3 - Subs Mode Prio : " + (toi.informationService.getObject("cfg.media.subtitling.modepriority")) + "</p><p style='color:black;font-size:" + fsMenu + ";'>4 - Audio Type Prio : " + (toi.informationService.getObject("cfg.media.audio.typepriority")) + "</p><p style='color:black;font-size:" + fsMenu + ";'>9 - Switch Protected / TV </p><p style='color:black;font-size:" + fsMenu + ";'>0 - Switch TV / Radio </p></center>";
 }
 
 function InitInfo() {
