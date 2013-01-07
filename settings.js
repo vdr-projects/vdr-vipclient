@@ -26,42 +26,53 @@ var AudioOut = 3;
 // AUDIO_CONNECTION_TYPE_BUFFER = 4
 // AUDIO_CONNECTION_TYPE_I2S = 5
 
-var Scart = new Array();
-var HDMI = new Array();
-var Scart = "NO_SCART_MODE,SCART_MODE_CVBS,SCART_MODE_YC,SCART_MODE_RGB_CVBS";
-var HDMI = "OFF,VIDEO_MODE_576P50,VIDEO_MODE_576I50,VIDEO_MODE_720P50,VIDEO_MODE_1080I50";
-//
-// HDMI modes for 19x0 series, 19x3 or 1003 can do also 1080p modes
-//
-
-
 var currChan = 10; // default channel
 var epgchan = currChan;
 var prevChan = currChan;
 
-var channeldigits = 2; // 0 - Max 9, 1 max 99, 2 max 999 or 3 max 9999 channels directly selectable by numbers
+var channeldigits = 2; // 0 - Max 9, 1 max 99, 2 max 999 or 3 max 9999 channels directly selectable by numbers (Don't set it to > 2 it crashes the player)
+
+var ChanGroup = 0;
+var minChan = new Array();
+var maxChan = new Array();
+var defChan = new Array();
+var baseChn = new Array();
+
 // Radio channels.js Settings
-var minRDchan = 9001;
-var maxRDchan = 9099; // set not too far from max rd channel to speed up zapping
-var rdChan = 9051;
+minChan[9] = 9001;
+maxChan[9] = 9099; // set not too far from max rd channel to speed up zapping
+defChan[9] = 9051;
+baseChn[9] = 9000;
 // Protected channels.js Settings
-var minPRTchan = 6001;
-var maxPRTchan = 6040; // set not too far from max prt channel to speed up zapping
-var prtChan = 6001;
-var ShowProtectedChannels = false; // Default don't show protected channels.
+minChan[6] = 6001;
+maxChan[6] = 6040; // set not too far from max prt channel to speed up zapping
+defChan[6] = 6001;
+baseChn[6] = 6000;
+var ShowProtectedChannels = 1; // Default don't show protected channels.
 
 // TV channels.js Settings
-var chanType = "TV" ; // used for switching TV <> Radio <> Protected
-var minTVchan = 1;
-var maxTVchan = 999; // set not too far from max TV channel to speed up zapping
-var tvChan = currChan;
-var minChan = minTVchan;
-var maxChan = maxTVchan;
-var chanBase = 0;
+minChan[0] = 1;
+maxChan[0] = 999; // set not too far from max TV channel to speed up zapping
+defChan[0] = currChan;
+baseChn[0] = 0;
+
+//HD list
+//minChan[1] = 1001;
+//maxChan[1] = 1999; // set not too far from max HD channel to speed up zapping
+//defChan[1] = 1001;
+//baseChn[1] = 1000;
+
+
+// MultiCast
+minChan[5] = 5001;
+maxChan[5] = 5010; // set not too far from max multicast channel to speed up zapping
+defChan[5] = 5001;
+baseChn[5] = 5000;
 
 var currMed = 0;
 var listMed = 0;
 
+var menu = 0;
 var isMediaMenu = 0;
 var isVisible = 0;
 var isSetupMenu = 0;
@@ -81,6 +92,7 @@ var KEY_6 = "U+0036";
 var KEY_7 = "U+0037";
 var KEY_8 = "U+0038";
 var KEY_9 = "U+0039";
+var KEY_REC = "U+00bd";
 
 var eitCache = null;
 var events = null;
@@ -152,10 +164,10 @@ var CAicon = "\uE00D";
 var fsAudio = (16*Yfactor) + "px";
 var fsTime = (16*Yfactor) + "px";
 var fsName = (27*Yfactor) + "px";
-var fsMenu = (16*Yfactor) + "px";
+var fsMenu = (20*Yfactor) + "px";
 var fsChan = (43*Yfactor) + "px"; 
 var fsCA = (32*Yfactor) + "px";
-var fsMenuMain = (30*Yfactor) + "px";
+var fsMenuMain = (35*Yfactor) + "px";
 var fsEpg = (19*Yfactor) + "px";
 var fsEpginfo = (21*Yfactor) + "px";
 var fsList = (18*Yfactor) + "px";

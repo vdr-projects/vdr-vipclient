@@ -4,6 +4,7 @@
       <script type="text/javascript" src="settings2.js" />
       <script type="text/javascript" src="channels.js" />
       <script type="text/javascript" src="channels-rd.js" />
+      <script type="text/javascript" src="channels-mc.js" />
       <script type="text/javascript" src="channels-prt.js" />
       <script type="text/javascript" src="recordings.js" />
     </head>
@@ -32,18 +33,17 @@
 var Version = "0.10	2013/01/xx"
 var nrMedia = recording.length - 1;
 
-for (var i = minTVchan;  i < (maxTVchan+1); i++) { EPG[0][4][i] = "";EPG[1][4][i] = "";EPG[0][5][i] = "";EPG[1][5][i] = "";EPG[0][7][i] = "";EPG[1][7][i] = ""; }
-for (var i = minRDchan;  i < (maxRDchan+1); i++) { EPG[0][4][i] = "";EPG[1][4][i] = "";EPG[0][5][i] = "";EPG[1][5][i] = "";EPG[0][7][i] = "";EPG[1][7][i] = ""; }
-for (var i = minPRTchan;  i < (maxPRTchan+1); i++) { EPG[0][4][i] = "";EPG[1][4][i] = "";EPG[0][5][i] = "";EPG[1][5][i] = "";EPG[0][7][i] = "";EPG[1][7][i] = ""; }
+for (var i = minChan[0];  i < (maxChan[0]+1); i++) { EPG[0][4][i] = "";EPG[1][4][i] = "";EPG[0][5][i] = "";EPG[1][5][i] = "";EPG[0][7][i] = "";EPG[1][7][i] = ""; }
+for (var i = minChan[1];  i < (maxChan[1]+1); i++) { EPG[0][4][i] = "";EPG[1][4][i] = "";EPG[0][5][i] = "";EPG[1][5][i] = "";EPG[0][7][i] = "";EPG[1][7][i] = ""; }
+for (var i = minChan[5];  i < (maxChan[5]+1); i++) { EPG[0][4][i] = "";EPG[1][4][i] = "";EPG[0][5][i] = "";EPG[1][5][i] = "";EPG[0][7][i] = "";EPG[1][7][i] = ""; }
+for (var i = minChan[6];  i < (maxChan[6]+1); i++) { EPG[0][4][i] = "";EPG[1][4][i] = "";EPG[0][5][i] = "";EPG[1][5][i] = "";EPG[0][7][i] = "";EPG[1][7][i] = ""; }
+for (var i = minChan[9];  i < (maxChan[9]+1); i++) { EPG[0][4][i] = "";EPG[1][4][i] = "";EPG[0][5][i] = "";EPG[1][5][i] = "";EPG[0][7][i] = "";EPG[1][7][i] = ""; }
 
 window.onkeydown = onKeyDown;
 
 function onLoad() {
 	createPlayer();
-	if(Experimental){
-	// Space for testing experimental parts.
-	 createRecorder();
-	}
+	createRecorder();
 	embedTeletextPlugin();
 	toi.audioOutputService.setVolume(AudioOut, StartVolume);
 	toi.audioOutputService.setMuteState(AudioOut, false);
@@ -79,6 +79,15 @@ function onUnload() {
 	try {
 		mediaPlayer.close();
 		mediaPlayer.releaseInstance();
+	if(TimeShift){
+		mediaPlayer.stopTimeshiftBuffering();
+		mediaPlayer.discardTimeshiftBuffer();
+		}
+		mediaRecorder.close();
+		mediaRecorder.releaseInstance();
+	eitCache.removeEventListener(eitCache.ON_CACHE_UPDATED, onCacheUpdated);
+	mediaPlayer.removeEventListener(mediaPlayer.ON_DATA_AVAILABLE,onDataAvailableEvent);
+
 	} catch(e) {
 		alert(e);
 	}
@@ -86,8 +95,8 @@ function onUnload() {
 
 function incChan(step) {
     currChan = currChan + step;
-    if (currChan > maxChan) {
-        currChan = minChan;
+    if (currChan > maxChan[ChanGroup]) {
+        currChan = minChan[ChanGroup];
     }
     osdnr.style.opacity = isFullscreen; 
     OSDchannr(currChan);
@@ -95,8 +104,8 @@ function incChan(step) {
 
 function decChan(step) {
     currChan = currChan - step;
-    if (currChan < minChan ) {
-        currChan = maxChan ;
+    if (currChan < minChan[ChanGroup] ) {
+        currChan = maxChan[ChanGroup] ;
     }
     osdnr.style.opacity = isFullscreen; 
     OSDchannr(currChan);
@@ -129,7 +138,11 @@ function play(uri) {
       mediaPlayer.close();
     }
 
+	if (ChanGroup == 5) {
+	uri = "239.255.0." + (currChan - baseChn[5]).toString() + ":11111";
+	} else {
 	uri = ServerAdres + uri;
+	}
 	mediaPlayer.open(uri);
 	mediaPlayer.play(1000);
 	SetLed(1,1,0);
@@ -225,10 +238,19 @@ for(x=0; x<cList.length;x++) {
 //	alert("sampleRate : " + mediaPlayer.getAudioStreamInfo(cList[x]).sampleRate);
 	}
 	if(cList[x].type == 1) {
+	AudioInfo[currChan] = AudioInfo[currChan] + " Video " + mediaPlayer.getVideoStreamInfo(cList[x]).encoding + " size : " + mediaPlayer.getVideoStreamInfo(cList[x]).resolutionX + " x " + mediaPlayer.getVideoStreamInfo(cList[x]).resolutionY;
+	if (mediaPlayer.getVideoStreamInfo(cList[x]).aspectRatio == "1") {
+	AudioInfo[currChan] = AudioInfo[currChan] + " (4:3)";
+	}
+	if (mediaPlayer.getVideoStreamInfo(cList[x]).aspectRatio == "2") {
+	AudioInfo[currChan] = AudioInfo[currChan] + " (16:9)";
+	}
+
 	alert("aspectRatio : " + mediaPlayer.getVideoStreamInfo(cList[x]).aspectRatio);
 //	alert("activeFormatDescriptor : " + mediaPlayer.getVideoStreamInfo(cList[x]).activeFormatDescriptor);
 //	alert("frameRate : " + mediaPlayer.getVideoStreamInfo(cList[x]).frameRate);
 //	alert("componentTag : " + mediaPlayer.getVideoStreamInfo(cList[x]).componentTag);
+	alert("encoding : " + mediaPlayer.getVideoStreamInfo(cList[x]).encoding);
 	alert("resolutionX : " + mediaPlayer.getVideoStreamInfo(cList[x]).resolutionX);
 	alert("resolutionY : " + mediaPlayer.getVideoStreamInfo(cList[x]).resolutionY);
 	}
@@ -314,40 +336,67 @@ function onKeyDown(event) {
 	break;
     case "Left":
 	count = 0;
+	if(isFullscreen) {
+	defChan[ChanGroup] = currChan;
+	do
+		{
+		ChanGroup = ChanGroup - 1;
+		if (ChanGroup < 0) {
+			ChanGroup = 9;
+			}
+		if (ChanGroup == 6 && ShowProtectedChannels == 1) {
+			ChanGroup = ChanGroup + 1;
+			}
+		}
+	while (!minChan[ChanGroup]);
+	currChan = defChan[ChanGroup];
+	play(channels[currChan]);
+	} else {
 	prevChan = currChan;
-	if (currChan > (minChan + 8)) {
+	if (currChan > (minChan[ChanGroup] + 8)) {
 	decChan(9);
 	} else {
-	currChan = maxChan - currChan;
+	currChan = maxChan[ChanGroup] - currChan;
 	}
 	do
 	{
 	        decChan(1);
 	}
 	while (!channels[currChan]);
-	if(isFullscreen) {
-	        play(channels[currChan]);
-	} else {
-	        preview(channels[currChan]);
+        preview(channels[currChan]);
 	}
 	break;
     case "Right":
 	count = 0;
+	if(isFullscreen) {
+	defChan[ChanGroup] = currChan;
+	do
+		{
+		ChanGroup = ChanGroup + 1;
+		if (ChanGroup > 9) {
+			ChanGroup = 0;
+			}
+		if (ChanGroup == 6 && ShowProtectedChannels == 1) {
+			ChanGroup = ChanGroup + 1;
+			}
+		}
+	while (!minChan[ChanGroup]);
+	currChan = defChan[ChanGroup];
+	play(channels[currChan]);
+
+	} else {
 	prevChan = currChan;
-	if (currChan < (maxChan - 9 )) {
+	if (currChan < (maxChan[ChanGroup] - 9 )) {
 	incChan(9);
 	} else {
-	currChan = maxChan - currChan;
+	currChan = maxChan[ChanGroup] - currChan;
 	}
 	do
 	{
 	        incChan(1);
 	}
 	while (!channels[currChan]);
-	if(isFullscreen) {
-	        play(channels[currChan]);
-	} else {
-	        preview(channels[currChan]);
+        preview(channels[currChan]);
 	}
 	break;
   case "Red":
@@ -522,7 +571,8 @@ function onKeyDown(event) {
 		if(isFullscreen) {
 		isSetupMenu = 1;
 		mainmenu.style.opacity = 1;
-		InitMenu();
+		menu = 0;
+		InitMenu(menu);
 		}
 		break;
    case "Scroll":
@@ -554,10 +604,24 @@ function onKeyDown(event) {
 		}
 		break;
     case "TV":
-	currChan = prevChan;
- 	showDisplay((currChan.toString()), false, 100, 0 );
-        play(channels[currChan]);
-        break;
+//	currChan = prevChan;
+// 	showDisplay((currChan.toString()), false, 100, 0 );
+//        play(channels[currChan]);
+//        break;
+    case "RADIO":
+	if(ChanGroup !== 9) {
+	//Radio
+	ChanGroup = 9;
+	currChan = defChan[9];
+	} else {
+	//TV
+	ChanGroup = 0;
+	currChan = defChan[0];
+	}
+	isSetupMenu = 0;
+	mainmenu.style.opacity = 0;
+	play(channels[currChan]);
+	break;
 
     case KEY_0:
 	digit = 0;
@@ -636,12 +700,12 @@ function onKeyDown(event) {
 		break;
 	case "MediaPlayPause":
 		if(TimeShift){
-			if(mediaPlayer.getState() == mediaPlayer.STATE_PAUSED) {
+			if(mediaPlayer.getState() == mediaPlayer.STATE_PAUSED || mediaPlayer.getState() == mediaPlayer.STATE_FASTFORWARDING || mediaPlayer.getState() == mediaPlayer.STATE_REWINDING) {
 				SetLed(1,1,0);
 				mediaPlayer.play(mediaPlayer.PACE_PLAY);
 				break;
 			}
-		   if(mediaPlayer.getState() == mediaPlayer.STATE_PLAYING) {
+		   	if(mediaPlayer.getState() == mediaPlayer.STATE_PLAYING) {
 				SetLed(1,1,10);
 				mediaPlayer.play(0);
 				break;
@@ -649,9 +713,20 @@ function onKeyDown(event) {
 		}
 		break;
 	case "MediaStop":
-		LoadMediaSettings();
+		try {
+		SetLed(1,1,0);
+		mediaPlayer.playFromPosition(mediaPlayer.POSITION_LIVE,mediaPlayer.PACE_PLAY);
+		} catch(e) {
+			alert(e);
+		}
 	break;
+	case KEY_REC:
 	case "MediaRecord":
+	if (isRecording == 1) {
+	recordStop();
+	} else {
+	recordStart();
+	}
 	break;
 
 	default:
@@ -686,7 +761,7 @@ function Makedigit() {
 
 function CheckChannel(CheckThis) {
 // function to check if channel exists
-	CheckThis = chanBase + CheckThis;
+	CheckThis = baseChn[ChanGroup] + CheckThis;
 	if(channels[CheckThis]) {
 		ChangeOK = 1;
 		currChan = CheckThis;
@@ -1138,6 +1213,12 @@ function StreamInfo(si) {
 	is.setObject("cfg.locale.ui","dut",is.STORAGE_VOLATILE);
 	}
 
+	if(SI[1]=="3" && ( SI[2]=="3210" || ( SI[2]=="3219" && SI[3]!=="13135") )) {
+	//Canal Digitaal/ TV Vlaanderen use CZE channels on 23East
+	// Strangly set filter to cze but epg is in Dutch. (But not for JimJam)
+	is.setObject("cfg.locale.ui","cze",is.STORAGE_VOLATILE);
+	}
+
 	if((SI[0]=="S13.0E" && SI[3]=="14003") || (SI[0]=="S13.0E" && SI[3]=="14009") || (SI[0]=="S13.0E" && SI[3]=="14051") || (SI[0]=="S13.0E" && SI[3]=="951")) {
 	//Swiss ITA channels
 		is.setObject("cfg.locale.ui","ita",is.STORAGE_VOLATILE);
@@ -1162,6 +1243,10 @@ function StreamInfo(si) {
 		is.setObject("cfg.locale.ui","pol",is.STORAGE_VOLATILE);
 	}
 
+	if(SI[0]=="S19.2E" && (SI[2]=="1074") || (SI[2]=="1018") || (SI[2]=="1024") || (SI[2]=="1068") || (SI[2]=="1070") || (SI[2]=="1072") || (SI[2]=="1076") || (SI[2]=="1080") || (SI[2]=="1084") || (SI[2]=="1086") || (SI[2]=="1090") || (SI[2]=="1092") || (SI[2]=="1094") || (SI[2]=="1096") || (SI[2]=="1100") || (SI[2]=="1102") || (SI[2]=="1106") || (SI[2]=="1110") || (SI[2]=="1112") || (SI[2]=="1114") || (SI[2]=="1116") || (SI[2]=="1118") || (SI[2]=="1120")) {
+	//CanalSat S19.2
+		is.setObject("cfg.locale.ui","fra",is.STORAGE_VOLATILE);
+	}
 
 }
 
@@ -1186,15 +1271,15 @@ function showChannelList() {
 		do
 			{
 				listChan = listChan + 1;
-				if (listChan<minChan) {
-					listChan=maxChan;
+				if (listChan<minChan[ChanGroup]) {
+					listChan=maxChan[ChanGroup];
 					}
-				if (listChan>maxChan) {
-					listChan=minChan;
+				if (listChan>maxChan[ChanGroup]) {
+					listChan=minChan[ChanGroup];
 				}
 			}
 
-		while (!channels[listChan] && (listChan<maxChan));
+		while (!channels[listChan] && (listChan<maxChan[ChanGroup]));
 		if ( listChan == currChan) { 
 			GetEPG(listChan);
 			liststyle = "background:#fc5;";
@@ -1331,8 +1416,13 @@ function onKeyTeletext(keyCode) {
 
 function onKeyMenu(keyCode) {
   switch(keyCode) {
-    case "Menu":
     case "BrowserBack":
+	if (menu !== 0) {
+		menu = 0;	
+		InitMenu(menu);
+		break;
+		}
+    case "Menu":
 	isSetupMenu = 0;
 	mainmenu.style.opacity = 0;
     break;
@@ -1341,16 +1431,19 @@ function onKeyMenu(keyCode) {
     case "Right":
     break;
     case "Red":
-	if(showClock == 0 )	{
-	 	showDisplay("", true, 80, 1 );
-		showClock = 1;
-	} else if(showClock == 1 ) {
-		showClock = 0;
- 		showDisplay((currChan.toString()), false, 100, 0 );
+	if (menu == 1) {
+		if(showClock == 0 )	{
+		 	showDisplay("", true, 80, 1 );
+			showClock = 1;
+		} else if(showClock == 1 ) {
+			showClock = 0;
+	 		showDisplay((currChan.toString()), false, 100, 0 );
+		}
 	}
-	InitMenu();
+	InitMenu(menu);
     break;
     case "Green":
+		if (menu == 1) {
 			audio = audio + 1;
 			is = toi.informationService;
 			if(audio == 1) {	
@@ -1361,24 +1454,20 @@ function onKeyMenu(keyCode) {
 				is.setObject("cfg.media.audio.languagepriority","eng",is.STORAGE_VOLATILE);
 				audio = 0;
 			}
-	InitMenu();
+		}
+	InitMenu(menu);
     break;
     case "Yellow":
-	clearTimeout(switchtimerID);
-	switchtimerID = 0;
-	InitMenu();
-	osdtimer.innerHTML = "";
-	switchicon = "\uE003";
-	osdca.innerHTML = CAicon + switchicon;
-	SetLed(0,0,0);
     break;
     case "Blue":
-	if(SwitchGuide == 0 )	{
-		SwitchGuide = 1;
-	} else if(SwitchGuide == 1 ) {
-		SwitchGuide = 0;
+	if (menu == 1) {
+		if(SwitchGuide == 0 )	{
+			SwitchGuide = 1;
+		} else if(SwitchGuide == 1 ) {
+			SwitchGuide = 0;
+		}
 	}
-	InitMenu();
+	InitMenu(menu);
     break;
     case "MediaRewind":
     break;
@@ -1391,11 +1480,21 @@ function onKeyMenu(keyCode) {
     case "TV":
     break;
 	case KEY_1:
-	 ShowSubs = 1 - ShowSubs;
-	  videoplane.subtitles = Boolean(ShowSubs); // Enable subtitles or Disable subtitles
-	InitMenu();
+		if (menu == 0) {
+		menu = 1;
+		} else if (menu == 1) {
+		 ShowSubs = 1 - ShowSubs;
+		 videoplane.subtitles = Boolean(ShowSubs); // Enable subtitles or Disable subtitles
+		}
+	InitMenu(menu);
 	break;
 	case KEY_2:
+		if (menu == 0) {
+		isSetupMenu = 0;
+		mainmenu.style.opacity = 0;
+		LoadMediaSettings();
+		}
+		if (menu == 1) {
 			is = toi.informationService;
 			if(substype == 0 ) { 	
 				is.setObject("cfg.media.subtitling.typepriority","hearing_impaired,normal",is.STORAGE_VOLATILE);
@@ -1404,9 +1503,11 @@ function onKeyMenu(keyCode) {
 				is.setObject("cfg.media.subtitling.typepriority","normal,hearing_impaired",is.STORAGE_VOLATILE);
 				substype = 0;
 			}
-	InitMenu();
+		}
+		InitMenu(menu);
 	break;
 	case KEY_3:
+		if (menu == 1) {
 			is = toi.informationService;
 			if(subsmode == 0 ) {	
 				is.setObject("cfg.media.subtitling.modepriority","Teletext,DVB",is.STORAGE_VOLATILE);
@@ -1415,9 +1516,19 @@ function onKeyMenu(keyCode) {
 				is.setObject("cfg.media.subtitling.modepriority","DVB,Teletext",is.STORAGE_VOLATILE);
 				subsmode = 0;
 			}
-	InitMenu();
+		}
+		if (menu == 0) {
+		clearTimeout(switchtimerID);
+		switchtimerID = 0;
+		osdtimer.innerHTML = "";
+		switchicon = "\uE003";
+		osdca.innerHTML = CAicon + switchicon;
+		SetLed(0,0,0);
+		}
+	InitMenu(menu);
 	break;
 	case KEY_4:
+		if (menu == 1) {
 			audiotype = audiotype + 1;
 			is = toi.informationService;
 			if(audiotype == 1) {	
@@ -1428,16 +1539,14 @@ function onKeyMenu(keyCode) {
 				is.setObject("cfg.media.audio.typepriority","visually_impaired",is.STORAGE_VOLATILE);
 				audiotype = 0;
 			}
-	InitMenu();
+		}
+	InitMenu(menu);
 	break;
 	case KEY_5:
-//		if(ShowInfo) {
-//		InitMenu();
-//		ShowInfo=false;
-//		} else {
-//		ShowInfo=true;
-//		InitInfo();
-//		}
+		if (menu == 1) {
+		ShowProtectedChannels = 1 - ShowProtectedChannels;
+		InitMenu(menu);
+		}
 	break;
 	case KEY_6:
 	break;
@@ -1446,62 +1555,37 @@ function onKeyMenu(keyCode) {
 	case KEY_8:
 	break;
 	case KEY_9:
-	if(ShowProtectedChannels) {
-		if(chanType !== "Protected") {
-			//Protected
-			maxChan = maxPRTchan;
-			minChan = minPRTchan;
-			tvChan = currChan;
-			currChan = prtChan;
-			chanType = "Protected";
-			chanBase = 5000;
-		} else {
-			//TV
-			maxChan = maxTVchan;
-			minChan = minTVchan;
-			rdChan = currChan;
-			currChan = tvChan;
-			chanBase = 0;
-			chanType = "TV";
-		}
-		isSetupMenu = 0;
-		mainmenu.style.opacity = 0;
-		play(channels[currChan]);
-	}
 	break;
 	case KEY_0:
-	if(chanType !== "Radio") {
-	//Radio
-	maxChan = maxRDchan;
-	minChan = minRDchan;
-	tvChan = currChan;
-	currChan = rdChan;
-	chanType = "Radio";
-	chanBase = 9000;
-	} else {
-	//TV
-	maxChan = maxTVchan;
-	minChan = minTVchan;
-	rdChan = currChan;
-	currChan = tvChan;
-	chanBase = 0;
-	chanType = "TV";
-	}
-	isSetupMenu = 0;
-	mainmenu.style.opacity = 0;
-	play(channels[currChan]);
+		if (menu == 0) {
+		RestartPortal();
+		} else {
+		menu = 0;	
+		InitMenu(menu);
+		}
 	break;
 
+	default:
+        break;
   }
 }
 
-function InitMenu() {
-	mainmenu.innerHTML = "<center><p style='font-size:" + fsMenuMain + ";color:white;'> MainMenu ( " + Version + " )</p><p style='color:red;font-size:" + fsMenu + ";'>Frontdisplay Clock : " + showClock + "</p><p style='color:green;font-size:" + fsMenu + ";'>Prio audio track : " + (toi.informationService.getObject("cfg.media.audio.languagepriority")) + "</p><p style='color:yellow;font-size:" + fsMenu + ";'>Switch timer : " + Boolean(switchtimerID) + "</p><p style='color:blue;font-size:" + fsMenu + ";'>Preview guide : " + SwitchGuide + "</p><p style='color:black;font-size:" + fsMenu + ";'>1 - Show Subs : " + Boolean(ShowSubs) + "</p><p style='color:black;font-size:" + fsMenu + ";'>2 - Subs Type Prio : " + (toi.informationService.getObject("cfg.media.subtitling.typepriority")) + "</p><p style='color:black;font-size:" + fsMenu + ";'>3 - Subs Mode Prio : " + (toi.informationService.getObject("cfg.media.subtitling.modepriority")) + "</p><p style='color:black;font-size:" + fsMenu + ";'>4 - Audio Type Prio : " + (toi.informationService.getObject("cfg.media.audio.typepriority")) + "</p><p style='color:black;font-size:" + fsMenu + ";'>9 - Switch Protected / TV </p><p style='color:black;font-size:" + fsMenu + ";'>0 - Switch TV / Radio </p></center>";
+function InitMenu(menu) {
+
+if(menu == 0) {
+// Main Menu
+	
+	mainmenu.innerHTML = "<pre><center style='font-size:" + fsMenuMain + ";color:white;'> MainMenu \n ( " + Version + " )</center></pre><pre style='color:black;font-size:" + fsMenu + ";'>   1 - SettingsMenu \n   2 - Recordings \n   3 - Switch timer : " + Boolean(switchtimerID) + "\n   4 -\n   5 -\n   6 -\n   7 -\n   8 -\n   9 -\n   0 - Restart Portal </pre>";
 }
 
-function InitInfo() {
-	mainmenu.innerHTML = "<center><p style='font-size:" + fsMenuMain + ";color:white;'> INFO </p><p style='color:black;font-size:" + fsMenu + ";'>" + "Bla bla bla" + "</p></center>";
+if(menu == 1) {
+// settings menu
+	mainmenu.innerHTML = "<pre><center style='font-size:" + fsMenuMain + ";color:white;'> Settings </center></pre><pre style='color:black;font-size:" + fsMenu + ";'><font style='color:red;font-size:" + fsMenu + ";'>   Frontdisplay Clock : " + Boolean(showClock) + "</font><font style='color:green;font-size:" + fsMenu + ";'>\n   Prio audio track : " + (toi.informationService.getObject("cfg.media.audio.languagepriority")) + "</font><font style='color:blue;font-size:" + fsMenu + ";'>\n   Preview guide : " + Boolean(SwitchGuide) + "</font>\n   1 - Show Subs : " + Boolean(ShowSubs) + "\n   2 - Subs Type Prio : " + (toi.informationService.getObject("cfg.media.subtitling.typepriority")) + "\n   3 - Subs Mode Prio : " + (toi.informationService.getObject("cfg.media.subtitling.modepriority")) + "\n   4 - Audio Type Prio : " + (toi.informationService.getObject("cfg.media.audio.typepriority")) + "\n   5 - Protection : " + Boolean(ShowProtectedChannels) + "\n\n\n\n   0 - MainMenu </pre>";
 }
+
+
+}
+
 // End of Menu section
 
 // Media Player Section
@@ -1521,7 +1605,9 @@ function UnloadMediaSettings() {
 	mediaList.style.opacity = 0;
  	showDisplay((currChan.toString()), false, 100, 0 );
 	isMediaMenu = 0;
+	if (mediaPlayer.getState() != mediaPlayer.STATE_PLAYING ) {
         play(channels[currChan]);
+	}
 }
 
 
@@ -1566,7 +1652,7 @@ function onKeyMedia(keyCode) {
 	} else {
 	osdmedia.style.opacity = 1 - osdmedia.style.opacity;
 	ShowMediaOSD();
-//	mediaPlayer.playFromPosition(60000,1000);
+//	mediaPlayer.playFromPosition(12000,1000);
 	}
         break;
    case "Green":
@@ -1704,14 +1790,11 @@ function playRec(uri) {
     if (mediaPlayer.getState() != mediaPlayer.STATE_IDLE) {
       mediaPlayer.close();
     }
-//	uri = "file://" + uri;
 	mediaPlayer.open(uri);
 	mediaPlayer.play(1000);
 	showDisplay("PLAY", false, 100, 0 );
   } catch (e) {
     alert("Failed opening recording: " + e);
-    alert("error: " + mediaPlayer.getTimeshiftError().source);
-    alert("error: " + mediaPlayer.getTimeshiftError().details);
     return;
   }
 }
@@ -1728,10 +1811,10 @@ function createNewAsset() {
 
 function recordStart() {
 	createNewAsset();
-
+	uri = ServerAdres + channels[currChan];
 	alert("opening mediaRecorder...");
 	try {
-		mediaRecorder.open(uri, assetId, 0);
+		mediaRecorder.open(uri, assetId);
 	} catch(e) {
 		alert("Cannot open mediaRecorder. " + e);
 	}
@@ -1791,8 +1874,8 @@ function ShowMediaOSD() {
 
 	<div id="osdnr" style="background:red;width:10%;height:9%; position:absolute; left:12%; top:56%;z-index:505;opacity:0;"></div>
 
-	<div id="osdepginfo" style="background:#3366ff;width:76%; position:absolute; left:14%; top:17%;z-index:510;opacity:0;"></div>
-	<div id="osdepginfonext" style="background:#3366ff;width:76%; position:absolute; left:14%; top:17%;z-index:510;opacity:0;"></div>
+	<div id="osdepginfo" style="background:#3366ff;width:80%; position:absolute; left:10%; top:10%;z-index:510;opacity:0;"></div>
+	<div id="osdepginfonext" style="background:#3366ff;width:80%; position:absolute; left:10%; top:10%;z-index:510;opacity:0;"></div>
 	<div id="schedule" style="background:#3366ff; width:100%; height:48%; position:absolute; left:7%; top:4%;opacity:0;z-index:510;"></div>
 
 	<div id="osdmute" style="width:7%; position:absolute; left:76%; top:9%;z-index:515;opacity:0;"><img src="mute.png"></div>

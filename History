@@ -1,6 +1,14 @@
-0.10	Added Radio list / Protected List
-	Small fixes,  guideview, epg setup
+0.10	Added Radio list / Protected List / SD/HD list etc
+	(Use for Multicast Channels List 5)
+	Left/ Right select list
+	Switch to Radiolist with key 'TV' or 'RADIO' (give same keycode)
+	Small fixes,  guideview, epg setup, timeshift.
 	In guideview Get EPG only for highlighted channel to speedup scrolling.
+	Added CanalSat to the EPG filter. Updated CDS/TVV routine.
+	EPGinfo extended with videoinfo read from the stream.
+	Direct recording with record button, next push stops recording. (Only for HDD models)
+	Changed the Main Menu.
+	TimeShift is possible for multicast channels.
 
 
 0.06	More options in Main Menu:
