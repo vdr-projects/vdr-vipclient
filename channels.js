@@ -101,8 +101,6 @@ channels[33] = "S23.5E-3-3211-20802";
 channelsnames[34] = "Omroep Brabant Televisie (S)"
 channels[34] = "S23.5E-3-3211-20820";
 
-channelsnames[39] = "Informatiekanaal (S)";
-channels[39] = "S19.2E-53-1119-12826";
 channelsnames[40] = "een (S)";
 channels[40] = "S19.2E-53-1119-12775";
 channelsnames[41] = "Canvas (S)";
@@ -119,10 +117,11 @@ channelsnames[46] = "Vitaya (MPEG4) (S)";
 channels[46] = "S19.2E-53-1119-12818";
 channelsnames[47] = "KetOp12 (S)";
 channels[47] = "S19.2E-53-1119-12808";
-channelsnames[48] = "vtmKazoom/Kanaal Z (MPEG4) (S)";
-channels[48] = "S19.2E-53-1119-12816";
-channelsnames[49] = "Acht (MPEG4) (S)";
-channels[49] = "S19.2E-53-1119-12822";
+channelsnames[48] = "Acht (MPEG4) (S)";
+channels[48] = "S19.2E-53-1119-12822";
+
+channelsnames[49] = "Informatiekanaal (S)";
+channels[49] = "S19.2E-53-1119-12826";
 
 channelsnames[50] = "DMAX (S)";
 channels[50] = "S19.2E-133-33-63";

@@ -1,5 +1,6 @@
-0.10	Added Radio list / Protected List / SD/HD list etc
-	(Use for Multicast Channels keyword Multicast in Serveradres)
+0.10	Added sub Listinges for use as Radio list / Protected List / SD/HD list etc
+	(Use for Multicast Channels keyword MultiCast in Serveradres)
+	(Multicast & streamdev is limited to 255 channels?)
 	Left/ Right select list
 	Switch to Radiolist with key 'TV' or 'RADIO' (give same keycode)
 	Small fixes,  guideview, epg setup, timeshift.
@@ -9,6 +10,7 @@
 	Direct recording with record button, next push stops recording. (Only for HDD models)
 	Changed the Main Menu.
 	TimeShift is possible for multicast channels.
+	Changed the style to round corners
 
 
 0.06	More options in Main Menu:
