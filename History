@@ -1,5 +1,5 @@
 0.10	Added Radio list / Protected List / SD/HD list etc
-	(Use for Multicast Channels List 5)
+	(Use for Multicast Channels keyword Multicast in Serveradres)
 	Left/ Right select list
 	Switch to Radiolist with key 'TV' or 'RADIO' (give same keycode)
 	Small fixes,  guideview, epg setup, timeshift.
