@@ -16,20 +16,15 @@
 //
 // TODO 
 //
-// auto epg switch language for EIT Cache
 // 
 // make VDR connection
 // 	get/set/create/edit timers
 // 	make/view recordings
 //
-// Mainmenu
-// set/save changes to cfg.custom.xxx
-//	 change IP server
-//
 //
 //
 
-var Version = "0.10	2013/01/xx"
+var Version = "0.10	2013/01/08"
 
 for (var i = minChan[0];  i < (maxChan[0]+1); i++) { EPG[0][4][i] = "";EPG[1][4][i] = "";EPG[0][5][i] = "";EPG[1][5][i] = "";EPG[0][7][i] = "";EPG[1][7][i] = ""; }
 for (var i = minChan[1];  i < (maxChan[1]+1); i++) { EPG[0][4][i] = "";EPG[1][4][i] = "";EPG[0][5][i] = "";EPG[1][5][i] = "";EPG[0][7][i] = "";EPG[1][7][i] = ""; }
@@ -70,6 +65,7 @@ function onLoad() {
 	osdepginfo.style.fontSize = fsEpginfo;
 	osdepginfonext.style.fontSize = fsEpginfo;
 	videoplane.subtitles = Boolean(ShowSubs);
+	mediaList.innerHTML = "<h1><center style='font-size:" + fsRec + ";color:white;'> Please WAIT </center></h1>";
 }
 
 
@@ -541,6 +537,13 @@ function onKeyDown(event) {
 	if(isFullscreen) {
 	// fullscreen    
 		if(!count) {
+			if (osdtimeout) {
+				clearTimeout(osdtimeout);
+				osdtimeout = 0;
+				opacity = 0;
+				OSD(opacity);
+				break;
+				}
 	        GetEPG(currChan);
 		updateOSDtime(currChan);
 		osdepg.innerHTML = "<p>" + EPG[0][7][currChan] + "</p>\n<p>" + EPG[1][7][currChan] + "</p>";
@@ -573,7 +576,7 @@ function onKeyDown(event) {
    case "Menu":
 		if(isFullscreen) {
 		isSetupMenu = 1;
-		mainmenu.style.opacity = 1;
+		mainmenu.style.opacity = 0.8;
 		menu = 0;
 		InitMenu(menu);
 		}
@@ -607,10 +610,6 @@ function onKeyDown(event) {
 		}
 		break;
     case "TV":
-//	currChan = prevChan;
-// 	showDisplay((currChan.toString()), false, 100, 0 );
-//        play(channels[currChan]);
-//        break;
     case "RADIO":
 	if(ChanGroup !== 9) {
 	//Radio
@@ -803,7 +802,7 @@ function showOSD() {
 	SetOsdInfo();
 	opacity = 1;
 	OSD(opacity);
-	osdtimeout = setTimeout("fadeOut()", 3000);
+	osdtimeout = setTimeout("fadeOut(); osdtimeout = 0;", 3000);
 }
 
 function showVolume() {
@@ -830,7 +829,6 @@ function OSD(opacity) {
 function SetOsdInfo() {
     OSDchannr(currChan);
     date_time();
-//    GetEPG(currChan);
     OSDhtml();
     return;
 }
@@ -838,12 +836,8 @@ function SetOsdInfo() {
 function onCacheUpdated() {
         GetEPG(currChan);
 	if (osdtimeout) {
-//	GetEPG(currChan);
-	SetOsdInfo();
+		SetOsdInfo();
 	} 
-//	if (!isFullscreen) {
-//		showChannelList();
-//	}
 	if (isSchedule) {
 		if (!isFullscreen) {
 			GetSchedule(currChan,10);
@@ -1299,6 +1293,7 @@ function showChannelList() {
 
 }
 
+
 // END of Channelslist / EPG Guide
 
 // TeleTXT section
@@ -1501,10 +1496,11 @@ function onKeyMenu(keyCode) {
 	break;
 	case KEY_2:
 		if (menu == 0) {
-		isSetupMenu = 0;
-		mainmenu.style.opacity = 0;
-		LoadMediaSettings();
-		}
+			isSetupMenu = 0;
+			mediaList.style.opacity = 0.8;
+			mainmenu.style.opacity = 0;
+			setTimeout("getRecList();LoadMediaSettings();",100);
+			}
 		if (menu == 1) {
 			is = toi.informationService;
 			if(substype == 0 ) { 	
@@ -1560,6 +1556,14 @@ function onKeyMenu(keyCode) {
 	case KEY_8:
 	break;
 	case KEY_9:
+		if (menu == 0) {
+			isSetupMenu = 0;
+			mediaList.style.opacity = 0.8;
+			mainmenu.style.opacity = 0;
+			getRecList2();
+			LoadMediaSettings();
+//			setTimeout("getRecList2();LoadMediaSettings();",100);
+			}
 	break;
 	case KEY_0:
 		if (menu == 0) {
@@ -1601,18 +1605,17 @@ if(menu == 2) {
 // Media Player Section
 
 function LoadMediaSettings() {
-		mediaList.style.opacity = 0.8;
 		isMediaMenu = 1;
 		showDisplay("STOP", false, 100, 0 );
 		currMed = 0;
 		showMediaList();
 		mediaPlayer.addEventListener(mediaPlayer.ON_POSITION_CHANGED, ShowMediaOSD);
-
 }
 
 function UnloadMediaSettings() {
 	mediaPlayer.removeEventListener(mediaPlayer.ON_POSITION_CHANGED, ShowMediaOSD);
 	mediaList.style.opacity = 0;
+	mediaList.innerHTML = "<h1><center style='font-size:" + fsRec + ";color:white;'> Please WAIT </center></h1>";
  	showDisplay((currChan.toString()), false, 100, 0 );
 	isMediaMenu = 0;
 	if (mediaPlayer.getState() != mediaPlayer.STATE_PLAYING ) {
@@ -1769,8 +1772,23 @@ for (i=0;i<x.length;i++)
 
 }
 
+function getRecList2() {
+recTitl[0] = "RTSP Stream";
+recLink[0] = "rtsp://192.168.3.15:5554/MyVideo";
+recDesc[0] = " ";
+recTitl[1] = "RTP Stream";
+recLink[1] = "239.255.42.42:1234 ";
+recDesc[1] = " ";
+recTitl[2] = "RTSP 00001 Stream";
+recLink[2] = "rtsp://192.168.3.15/00001.ts";
+recDesc[2] = " ";
+nrMedia = 2;
+
+}
+
+
+
 function showMediaList() {
-	getRecList();
 	var liststyle = "";
 	var htmlstring = "<h1><center style='font-size:" + fsRec + ";color:white;'> RECORDINGS </center></h1><table border='0'><tr>";
 	listMed = currMed-7;

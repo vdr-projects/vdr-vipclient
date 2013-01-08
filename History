@@ -9,7 +9,7 @@
 	EPGinfo extended with videoinfo read from the stream.
 	Direct recording with record button, next push stops recording. (Only for HDD models)
 	Changed the Main Menu.
-	TimeShift is possible for multicast channels.
+	TimeShift is possible for multicast channels. (Only for HDD models)
 	Changed the style to round corners
 
 	Support for recordings served by "VDR on SmartTV" plugin
