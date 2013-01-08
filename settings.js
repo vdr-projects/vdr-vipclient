@@ -13,7 +13,6 @@ var Yfactor = 720 / 576;
 var channels = new Array();
 var channelsnames = new Array();
 var channelsepglang = new Array();
-var recording = new Array();
 
 var showClock = 0;
 var SwitchGuide = 0;
@@ -48,6 +47,9 @@ var protChn = new Array();
 var ServerAdres = new Array();
 var ShowProtectedChannels = 1; // Default don't show protected channels.
 
+// Server for Recordings
+var recServ = "http://192.168.3.15:8000";
+
 // Radio channels.js Settings
 minChan[9] = 9001;
 maxChan[9] = 9099; // set not too far from max rd channel to speed up zapping
@@ -73,12 +75,12 @@ protChn[0] = 0;
 ServerAdres[0] = "http://192.168.3.15:3000/";
 
 //HD list
-//minChan[1] = 1001;
-//maxChan[1] = 1999; // set not too far from max HD channel to speed up zapping
-//defChan[1] = 1001;
-//baseChn[1] = 1000;
-//protChn[1] = 0;
-//ServerAdres[1] = "http://192.168.3.15:3000/";
+minChan[1] = 1001;
+maxChan[1] = 1999; // set not too far from max HD channel to speed up zapping
+defChan[1] = 1001;
+baseChn[1] = 1000;
+protChn[1] = 0;
+ServerAdres[1] = "http://192.168.3.15:3000/";
 
 // MultiCast
 minChan[5] = 5001;
@@ -87,6 +89,7 @@ defChan[5] = 5001;
 baseChn[5] = 5000;
 protChn[5] = 0;
 ServerAdres[5] = "MultiCast";
+// MultiCast, channels[x] layout DVB(Satposition, C or T)-NID-TID-SID-last digits of multicast address (239.255. is added later)
 
 var currMed = 0;
 var listMed = 0;
@@ -204,3 +207,9 @@ var isRecording = 0; // set by recording subroutine
 var audiotype = 0; // used for selecting "cfg.media.audio.typepriority","normal,hearing_impaired,visually_impaired"
 var subsmode = 0;  // "cfg.media.subtitling.modepriority","Teletext,DVB"
 var substype = 0;  // "cfg.media.subtitling.typepriority","normal,hearing_impaired"
+
+var recTitl = new Array();
+var recLink = new Array();
+var recDesc = new Array();
+
+var nrMedia = 0;

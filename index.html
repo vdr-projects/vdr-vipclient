@@ -2,10 +2,10 @@
     <head>
       <script type="text/javascript" src="settings.js" />
       <script type="text/javascript" src="channels.js" />
+      <script type="text/javascript" src="channels1.js" />
       <script type="text/javascript" src="channels5.js" />
       <script type="text/javascript" src="channels6.js" />
       <script type="text/javascript" src="channels9.js" />
-      <script type="text/javascript" src="recordings.js" />
     </head>
 <script language="Javascript">
 
@@ -30,7 +30,6 @@
 //
 
 var Version = "0.10	2013/01/xx"
-var nrMedia = recording.length - 1;
 
 for (var i = minChan[0];  i < (maxChan[0]+1); i++) { EPG[0][4][i] = "";EPG[1][4][i] = "";EPG[0][5][i] = "";EPG[1][5][i] = "";EPG[0][7][i] = "";EPG[1][7][i] = ""; }
 for (var i = minChan[1];  i < (maxChan[1]+1); i++) { EPG[0][4][i] = "";EPG[1][4][i] = "";EPG[0][5][i] = "";EPG[1][5][i] = "";EPG[0][7][i] = "";EPG[1][7][i] = ""; }
@@ -141,7 +140,7 @@ function play(uri) {
  	SI=channels[currChan].split("-");
 	uri = "239.255." + SI[4] + ":11111";
 	} else {
-	uri = ServerAdres + uri;
+	uri = ServerAdres[ChanGroup] + uri;
 	}
 	mediaPlayer.open(uri);
 	mediaPlayer.play(1000);
@@ -1636,7 +1635,7 @@ function onKeyMedia(keyCode) {
 	{
 	        incMed(1);
 	}
-	while (!recording[currMed]);
+	while (!recTitl[currMed]);
 	showMediaList();
 	} else {
 	      mediaPlayer.play(0);
@@ -1649,7 +1648,7 @@ function onKeyMedia(keyCode) {
 	{
 	        decMed(1);
 	}
-	while (!recording[currMed]);
+	while (!recTitl[currMed]);
 	showMediaList();
 	} else {
 	      mediaPlayer.play(mediaPlayer.PACE_PLAY);
@@ -1659,7 +1658,7 @@ function onKeyMedia(keyCode) {
   case "Accept":
 	if (mediaList.style.opacity != 0) {
 	mediaList.style.opacity = 0;
-	playRec(recording[currMed]);
+	playRec(recLink[currMed]);
 	} else {
 	osdmedia.style.opacity = 1 - osdmedia.style.opacity;
 	ShowMediaOSD();
@@ -1754,9 +1753,26 @@ function onKeyMedia(keyCode) {
   }
 }
 
+function getRecList() {
+xmlhttp=new XMLHttpRequest();
+xmlhttp.open("GET",(recServ + "/recordings.xml?" + new Date().getTime()),false);
+xmlhttp.send();
+xmlDoc=xmlhttp.responseXML; 
+var x=xmlDoc.getElementsByTagName("item");
+nrMedia = x.length - 1;
+for (i=0;i<x.length;i++)
+  { 
+  recTitl[i] = (x[i].getElementsByTagName("title")[0].childNodes[0].nodeValue);
+  recLink[i] = (x[i].getElementsByTagName("link")[0].childNodes[0].nodeValue);
+  recDesc[i] = (x[i].getElementsByTagName("description")[0].childNodes[0].nodeValue);
+  }
+
+}
+
 function showMediaList() {
+	getRecList();
 	var liststyle = "";
-	var htmlstring = "<p style='font-size:" + fsRec + ";'><center>RECORDINGS</center></p><table border='0'><tr>";
+	var htmlstring = "<h1><center style='font-size:" + fsRec + ";color:white;'> RECORDINGS </center></h1><table border='0'><tr>";
 	listMed = currMed-7;
 	for(var i=currMed-7; i<=currMed+7; i++) {
 		if (listMed<0) {
@@ -1769,13 +1785,13 @@ function showMediaList() {
 			{
 				listMed = listMed + 1;
 			}
-			while (!recording[listMed] && (listMed<nrMedia));
+			while (!recTitl[listMed] && (listMed<nrMedia));
 		if ( listMed == currMed) { 
-			liststyle = " style='background:#fc5;'";
+			liststyle = " style='background:#fc5;-webkit-border-radius:25px;";
 		}  else {
-			liststyle = "";
+			liststyle = " style='";
 		}
-		htmlstring = htmlstring + "<td" + liststyle + " style='font-size:" + fsReclist + ";'>\uE003\uE003" + Left(recording[listMed],60) + "</td></tr>";
+		htmlstring = htmlstring + "<td" + liststyle + "font-size:" + fsReclist + ";'>\uE003\uE003" + Left(recTitl[listMed],60) + "</td></tr>";
 	}
 	htmlstring = htmlstring + "</table>";
 	mediaList.innerHTML = htmlstring;
@@ -1876,8 +1892,8 @@ function ShowMediaOSD() {
 	<div id="osdvolume" style="width:63%; position:absolute; left:10%; top:80%;z-index:501;fontFamily:VDRSymbolsSans;opacity:0;">Volume : </div>
 	<div id="osdmedia" style="width:63%; position:absolute; left:21%; top:69%;z-index:505;fontFamily:VDRSymbolsSans;opacity:0;"></div>
 
-	<div id="osdmain" style="background:#3366ff;width:76%; position:absolute; left:10%; top:60%; bottom:9%;z-index:505;-webkit-border-radius:25px;"></div>
-	<div id="osdtime" style="width:42%; position:absolute; left:52%; top:63%;z-index:505;"></div>
+	<div id="osdmain" style="background:#3366ff;width:76%; position:absolute; left:10%; top:60%; bottom:9%;z-index:505;-webkit-border-radius:50px;"></div>
+	<div id="osdtime" style="width:42%; position:absolute; left:58%; top:63%;z-index:505;"></div>
 	<div id="osdname" style="width:69%;height:4%; position:absolute; left:12%; top:65%;z-index:505;"></div>
 	<div id="osdepg" style="width:63%; position:absolute; left:21%; top:69%;z-index:505;"></div>
 	<div id="osdtimer" style="width:7%; position:absolute; left:12%; top:69%;z-index:505;"></div>
@@ -1885,15 +1901,15 @@ function ShowMediaOSD() {
 
 	<div id="osdnr" style="background:red;width:10%;height:9%; position:absolute; left:12%; top:56%;z-index:505;opacity:0;-webkit-border-radius:25px;"></div>
 
-	<div id="osdepginfo" style="background:#3366ff;width:80%; position:absolute; left:10%; top:10%;z-index:510;opacity:0;-webkit-border-radius:25px;"></div>
-	<div id="osdepginfonext" style="background:#3366ff;width:80%; position:absolute; left:10%; top:10%;z-index:510;opacity:0;-webkit-border-radius:25px;"></div>
-	<div id="schedule" style="background:#3366ff; width:50%; height:48%; position:absolute; left:25%; top:4%;opacity:0;z-index:510;-webkit-border-radius:25px;"></div>
+	<div id="osdepginfo" style="background:#3366ff;width:80%; position:absolute; left:10%; top:10%;z-index:510;opacity:0;-webkit-border-radius:50px;"></div>
+	<div id="osdepginfonext" style="background:#3366ff;width:80%; position:absolute; left:10%; top:10%;z-index:510;opacity:0;-webkit-border-radius:50px;"></div>
+	<div id="schedule" style="background:#3366ff; width:50%; height:48%; position:absolute; left:25%; top:10%;opacity:0;z-index:510;-webkit-border-radius:50px;"></div>
 
 	<div id="osdmute" style="width:7%; position:absolute; left:76%; top:9%;z-index:515;opacity:0;"><img src="mute.png"></div>
 	<div id="osdlang" style="width:7%; position:absolute; left:76%; top:9%;z-index:515;opacity:0;"></div>
 
-	<div id="mainmenu" style="background:#3366ff;width:76%; position:absolute; left:10%; top:9%; bottom:9%;z-index:520;opacity:0;-webkit-border-radius:25px;"></div>
-	<div id="mediaList" style="background:#bbb; width:80%; height:75%; position:absolute; left:10%; top:10%;z-index:520;opacity:0;-webkit-border-radius:25px;"></div>
+	<div id="mainmenu"  style="background:#3366ff;width:76%; position:absolute; left:10%; top:10%; bottom:10%;z-index:520;opacity:0;-webkit-border-radius:50px;"></div>
+	<div id="mediaList" style="background:#3366ff;width:76%; position:absolute; left:10%; top:10%; bottom:10%;z-index:520;opacity:0;-webkit-border-radius:50px;"></div>
 
 </body>
 </html>

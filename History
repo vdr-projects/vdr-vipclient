@@ -12,6 +12,8 @@
 	TimeShift is possible for multicast channels.
 	Changed the style to round corners
 
+	Support for recordings served by "VDR on SmartTV" plugin
+
 
 0.06	More options in Main Menu:
 	Audio selection normal,hearing_impaired,visually_impaired 
