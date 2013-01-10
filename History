@@ -1,3 +1,8 @@
+0.11	Switch to Scheduler services for settings timers.
+	Some fixes in the recorder & player routine
+	Better support for "VDR on SmartTV"
+	
+
 0.10	Added sub Listinges for use as Radio list / Protected List / SD/HD list etc
 	(Use for Multicast Channels keyword MultiCast in Serveradres)
 	(Multicast & streamdev is limited to 255 channels?)

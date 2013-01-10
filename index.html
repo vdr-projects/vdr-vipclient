@@ -24,7 +24,7 @@
 //
 //
 
-var Version = "0.10	2013/01/08"
+var Version = "0.10	2013/01/xx"
 
 for (var i = minChan[0];  i < (maxChan[0]+1); i++) { EPG[0][4][i] = "";EPG[1][4][i] = "";EPG[0][5][i] = "";EPG[1][5][i] = "";EPG[0][7][i] = "";EPG[1][7][i] = ""; }
 for (var i = minChan[1];  i < (maxChan[1]+1); i++) { EPG[0][4][i] = "";EPG[1][4][i] = "";EPG[0][5][i] = "";EPG[1][5][i] = "";EPG[0][7][i] = "";EPG[1][7][i] = ""; }
@@ -47,6 +47,15 @@ function onLoad() {
 //	eitCache.setFilterMode(eitCache.FILTER_MODE_PF_ONLY);
 	eitCache.addEventListener(eitCache.ON_CACHE_UPDATED, onCacheUpdated);
 	mediaPlayer.addEventListener(mediaPlayer.ON_DATA_AVAILABLE,onDataAvailableEvent);
+	mediaRecorder.addEventListener(mediaRecorder.ON_STATE_CHANGED, onRecorderStateChanged);
+
+	var ss = toi.schedulerService;
+	    ss.addEventListener(ss.ON_SCHEDULED_START, onScheduledStart);
+	    ss.addEventListener(ss.ON_SCHEDULED_STOP, onScheduledStop);
+	    ss.setCategorySubscription(onScheduledStart, "*");
+	    ss.setCategorySubscription(onScheduledStop, "*");
+	setOSDtimer();
+
 	showOSD();
 	colorkeys.style.fontSize = fsKeys;
 	colorkeys.innerHTML = "<font color=red>" +  NN[4] + "</font><font color=green >" + NN[1] + "</font><font color=yellow> Schedule </font><font color=blue> INFO </font>";
@@ -81,6 +90,9 @@ function onUnload() {
 		mediaRecorder.releaseInstance();
 	eitCache.removeEventListener(eitCache.ON_CACHE_UPDATED, onCacheUpdated);
 	mediaPlayer.removeEventListener(mediaPlayer.ON_DATA_AVAILABLE,onDataAvailableEvent);
+	mediaRecorder.removeEventListener(mediaRecorder.ON_STATE_CHANGED, onRecorderStateChanged);
+	mediaRecorder.removeEventListener(mediaRecorder.ON_PARAMETER_CHANGED, onRecorderStateChanged);
+
 
 	} catch(e) {
 		alert(e);
@@ -715,11 +727,16 @@ function onKeyDown(event) {
 		}
 		break;
 	case "MediaStop":
+	    if (isRecording == 1) { 
+		recordStop();
+		isRecording = 0;
+	    } else {
 		try {
 		SetLed(1,1,0);
 		mediaPlayer.playFromPosition(mediaPlayer.POSITION_LIVE,mediaPlayer.PACE_PLAY);
 		} catch(e) {
 			alert(e);
+		}
 		}
 	break;
 	case KEY_REC:
@@ -727,7 +744,8 @@ function onKeyDown(event) {
 	if (isRecording == 1) {
 	recordStop();
 	} else {
-	recordStart();
+	createNewAsset();
+	recordStart(ServerAdres + channels[currChan]);
 	}
 	break;
 
@@ -892,32 +910,31 @@ function updateOSDtime(timchan) {
 
 function settimer() {
 	if(SwitchTimer) {	
+		  try {
+		    switchtimerID = toi.schedulerService.schedule("activity_1","record_hd_from_ip", EPG[NowNext][2][currChan] ,0);
+		    toi.schedulerService.setParameter(switchtimerID, "Type", "SwitchOnly");
+		    toi.schedulerService.setParameter(switchtimerID, "Channel", currChan.toString() );
+		  }
+		  catch (e) {
+		    alert(e);
+		  }
 		tijd = EPG[NowNext][2][currChan];
 		date = new Date(tijd*1000); 
 		tijd = date.toUTCString();
 		tijd = new Date(tijd);
 		var tm = tijd.getMinutes();
 		var th = tijd.getHours();
-		if(th<10) {
-                th = "0"+th;
-	        }
-        	if(tm<10) {
-                tm = "0"+tm;
-	        }
-		dateCurrent = new Date();
-		var StartTime = Math.floor((date.getTime() - dateCurrent.getTime()));
-		timerChan = currChan;
-		TimerActions = "isVisible = 0; isFullscreen = 1; FullScreen(); setVisible(isVisible); currChan = timerChan; play(timerChan); osdtimer.innerHTML = '';SetLed(0,0,0);switchicon = '\uE003';osdca.innerHTML = CAicon + switchicon;"
-		// only 1 switch timer possible
-		if(switchtimerID) {
-			clearTimeout(switchtimerID);
-		}
-		switchtimerID = setTimeout(TimerActions, StartTime);
+		if(tm<10)
+		        {
+	                tm = "0"+tm;
+        		}
+                if(th<10)
+        		{
+        	        th = "0"+th;
+		        }
+
 		switchtimer.innerHTML = "<p>  Name      : " + EPG[NowNext][1][currChan] + "</p><p>  channel   : " + channelsnames[currChan] +  "</p><p>  Starttime : " + th + ":" + tm + "</p>";
-		osdtimer.innerHTML = "<p style='color:black;font-size:" + fsList + ";'>" + th + ":" + tm + "</p>";
-		SetLed(0,2,1);
-		switchicon = "\uE00C";
-		osdca.innerHTML = CAicon + switchicon;
+		setOSDtimer();
 	} else {
 	//
 	// No Switch timer so send timer info to Server
@@ -925,7 +942,37 @@ function settimer() {
 	}
 }
 
-// linker n tekens van string
+
+function setOSDtimer() {
+
+		tijd = toi.schedulerService.getNextStartTime("*");
+		if (tijd !== 0) {
+		date = new Date(tijd*1000); 
+		tijd = date.toUTCString();
+		tijd = new Date(tijd);
+		var tm = tijd.getMinutes();
+		var th = tijd.getHours();
+		if(tm<10)
+		        {
+	                tm = "0"+tm;
+        		}
+                if(th<10)
+        		{
+        	        th = "0"+th;
+		        }
+		osdtimer.innerHTML = "<p style='color:black;font-size:" + fsList + ";'>" + th + ":" + tm + "</p>";
+		SetLed(0,2,1);
+		switchicon = "\uE00C";
+		osdca.innerHTML = CAicon + switchicon;
+		} else {
+		osdtimer.innerHTML = " ";
+		SetLed(0,0,0);
+		switchicon = '\uE003';
+		osdca.innerHTML = CAicon + switchicon;
+		}
+}
+
+// Left n characters of str
 function Left(str, n){
   if (n <= 0)
     return "";
@@ -935,7 +982,7 @@ function Left(str, n){
     return String(str).substring(0,n);
 }
 
-// rechter n tekens van string
+// Right n characters of str
 function Right(str, n){
   if (n <= 0)
     return "";
@@ -1483,13 +1530,6 @@ function onKeyMenu(keyCode) {
 		} else if (menu == 1) {
 		 ShowSubs = 1 - ShowSubs;
 		 videoplane.subtitles = Boolean(ShowSubs); // Enable subtitles or Disable subtitles
-		} else if (menu == 2) {
-		clearTimeout(switchtimerID);
-		switchtimerID = 0;
-		osdtimer.innerHTML = "";
-		switchicon = "\uE003";
-		osdca.innerHTML = CAicon + switchicon;
-		SetLed(0,0,0);
 		}
 
 	InitMenu(menu);
@@ -1497,7 +1537,7 @@ function onKeyMenu(keyCode) {
 	case KEY_2:
 		if (menu == 0) {
 			isSetupMenu = 0;
-			mediaList.style.opacity = 0.8;
+			mediaList.style.opacity = 0.9;
 			mainmenu.style.opacity = 0;
 			setTimeout("getRecList();LoadMediaSettings();",100);
 			}
@@ -1515,7 +1555,10 @@ function onKeyMenu(keyCode) {
 	break;
 	case KEY_3:
 		if (menu == 0) {
-			menu = 2;
+			isSetupMenu = 0;
+			mediaList.style.opacity = 0.9;
+			mainmenu.style.opacity = 0;
+			LoadTimers();
 		} else if (menu == 1) {
 			is = toi.informationService;
 			if(subsmode == 0 ) {	
@@ -1558,7 +1601,7 @@ function onKeyMenu(keyCode) {
 	case KEY_9:
 		if (menu == 0) {
 			isSetupMenu = 0;
-			mediaList.style.opacity = 0.8;
+			mediaList.style.opacity = 0.9;
 			mainmenu.style.opacity = 0;
 			getRecList2();
 			LoadMediaSettings();
@@ -1592,15 +1635,23 @@ if(menu == 1) {
 	mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'> Settings </center></h1><pre style='color:black;font-size:" + fsMenu + ";'><font style='color:red;font-size:" + fsMenu + ";'>   Frontdisplay Clock : " + Boolean(showClock) + "</font><font style='color:green;font-size:" + fsMenu + ";'>\n   Prio audio track : " + (toi.informationService.getObject("cfg.media.audio.languagepriority")) + "</font><font style='color:blue;font-size:" + fsMenu + ";'>\n   Preview guide : " + Boolean(SwitchGuide) + "</font>\n   1 - Show Subs : " + Boolean(ShowSubs) + "\n   2 - Subs Type Prio : " + (toi.informationService.getObject("cfg.media.subtitling.typepriority")) + "\n   3 - Subs Mode Prio : " + (toi.informationService.getObject("cfg.media.subtitling.modepriority")) + "\n   4 - Audio Type Prio : " + (toi.informationService.getObject("cfg.media.audio.typepriority")) + "\n   5 - Protection : " + Boolean(ShowProtectedChannels) + "\n\n\n\n   0 - MainMenu </pre>";
 }
 
-if(menu == 2) {
-// Timers menu
-	mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'> Timers </center></h1><pre style='color:black;font-size:" + fsMenu + ";'>\n   1 - Switch timer : " + Boolean(switchtimerID) + "" + "\n\n\n\n   0 - MainMenu </pre>";
-}
-
-
 }
 
 // End of Menu section
+
+// Timer Menu Section
+
+function LoadTimers() {
+
+// Timers menu
+	mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'> Timers </center></h1><pre style='color:black;font-size:" + fsMenu + ";'>\n   Press OK to remove a timer" + "\n\n\n\n   0 - MainMenu </pre>";
+
+
+
+		InitMenu(menu);
+}
+
+// End of Timers Menu
 
 // Media Player Section
 
@@ -1610,10 +1661,12 @@ function LoadMediaSettings() {
 		currMed = 0;
 		showMediaList();
 		mediaPlayer.addEventListener(mediaPlayer.ON_POSITION_CHANGED, ShowMediaOSD);
+		mediaPlayer.addEventListener(mediaPlayer.ON_STATE_CHANGED, onStateChanged);
 }
 
 function UnloadMediaSettings() {
 	mediaPlayer.removeEventListener(mediaPlayer.ON_POSITION_CHANGED, ShowMediaOSD);
+	mediaPlayer.removeEventListener(mediaPlayer.ON_STATE_CHANGED, onStateChanged);
 	mediaList.style.opacity = 0;
 	mediaList.innerHTML = "<h1><center style='font-size:" + fsRec + ";color:white;'> Please WAIT </center></h1>";
  	showDisplay((currChan.toString()), false, 100, 0 );
@@ -1632,6 +1685,28 @@ function onKeyMedia(keyCode) {
 	UnloadMediaSettings();
         break;
     break;
+    case "Right":
+	if (mediaList.style.opacity != 0) {
+		incMed(9);
+	do
+	{
+	        incMed(1);
+	}
+	while (!recTitl[currMed]);
+	showMediaList();
+	}
+	break;
+    case "Left":
+	if (mediaList.style.opacity != 0) {
+		decMed(9);
+	do
+	{
+	        decMed(1);
+	}
+	while (!recTitl[currMed]);
+	showMediaList();
+	}
+	break;
     case "Down":
 	if (mediaList.style.opacity != 0) {
 	do
@@ -1695,6 +1770,13 @@ function onKeyMedia(keyCode) {
 				audio = 0;
 			}
 	break;
+    case KEY_REC:
+    case "MediaRecord":
+	createNewAsset();
+	recordStart(recLink[currMed]);
+	UnloadMediaSettings();
+//	setTimeout("recordStop();",((recDura[currMed] * 1000) + 5000));
+	break;
     case "MediaRewind":
 	    if (mediaPlayer.getState() != mediaPlayer.STATE_IDLE) {
 	      mediaPlayer.play(-4000);
@@ -1704,18 +1786,20 @@ function onKeyMedia(keyCode) {
     case "MediaForward":
 	    if (mediaPlayer.getState() != mediaPlayer.STATE_IDLE) {
 	      mediaPlayer.play(4000);
+//		mediaPlayer.playFromPosition(12000,1000);
 	    showDisplay("FF", false, 100, 0 );
 	    }
     break;
     case "MediaStop":
-	    if (mediaPlayer.getState() != mediaPlayer.STATE_IDLE) {
-	    mediaPlayer.close();
-	    }
+	   // if (mediaPlayer.getState() != mediaPlayer.STATE_IDLE) {
+	   // mediaPlayer.close();
+	   // }
+	    play(channels[currChan]);
 	    if (isRecording == 1) { 
 		recordStop();
 		isRecording = 0;
 	    }
-	    mediaList.style.opacity = 0.8;
+	    mediaList.style.opacity = 0.9;
 	    showDisplay("STOP", false, 100, 0 );
 	    showMediaList();
     break;
@@ -1768,21 +1852,25 @@ for (i=0;i<x.length;i++)
   recTitl[i] = (x[i].getElementsByTagName("title")[0].childNodes[0].nodeValue);
   recLink[i] = (x[i].getElementsByTagName("link")[0].childNodes[0].nodeValue);
   recDesc[i] = (x[i].getElementsByTagName("description")[0].childNodes[0].nodeValue);
+  recDura[i] = (x[i].getElementsByTagName("duration")[0].childNodes[0].nodeValue);
   }
 
 }
 
 function getRecList2() {
 recTitl[0] = "RTSP Stream";
-recLink[0] = "rtsp://192.168.3.15:5554/MyVideo";
+recLink[0] = "rtsp://192.168.3.15:8000/video0/000_Mpeg4/CSI:_Crime_Scene_Investigation/2012.11.02-22:15-Fr/2012-11-02.22.05.32-0.rec";
 recDesc[0] = " ";
-recTitl[1] = "RTP Stream";
-recLink[1] = "239.255.42.42:1234 ";
+recTitl[1] = "DVR";
+recLink[1] = "dvr:///pvr/storage/asset_bmyjD4";
 recDesc[1] = " ";
-recTitl[2] = "RTSP 00001 Stream";
-recLink[2] = "rtsp://192.168.3.15/00001.ts";
+recTitl[2] = "HTTP Vermist";
+recLink[2] = "http://192.168.3.15/portal/webkit/video0/Vermist/2013.01.09-22:10-Mi/2013-01-09.22.05.43-0.rec/00001.ts";
 recDesc[2] = " ";
-nrMedia = 2;
+recTitl[3] = "FILE Vermist";
+recLink[3] = "file://mnt/Vermist/2013.01.09-22:10-Mi/2013-01-09.22.05.43-0.rec/00001.ts";
+recDesc[3] = " ";
+nrMedia = 3;
 
 }
 
@@ -1854,9 +1942,7 @@ function createNewAsset() {
 	}
 }
 
-function recordStart() {
-	createNewAsset();
-	uri = ServerAdres + channels[currChan];
+function recordStart(uri) {
 	alert("opening mediaRecorder...");
 	try {
 		mediaRecorder.open(uri, assetId);
@@ -1883,11 +1969,103 @@ function recordStop() {
 	}
 }
 
+function onStateChanged(ev) {
+    alert("Media player state changed: state=" + ev.state + ", reason=" + ev.reason + ", code=" + ev.code);
+
+	if ( ( ev.state == 6 && ev.reason == "HostUnreachable" ) || ( ev.state == 2 && ev.reason == "PositionEnd" )) {
+	    play(channels[currChan]);
+	    mediaList.style.opacity = 0.9;
+	    showDisplay("STOP", false, 100, 0 );
+	    showMediaList();
+	}
+
+}
+
+function onRecorderStateChanged(event) {
+  alert("EVENT! " + event.reason + " *** " + event.state);
+
+  switch (event.state) {
+    case mediaRecorder.STATE_IDLE:
+	//  "STATE_IDLE";
+      break;
+    case mediaRecorder.STATE_CONNECTING:
+	//  "STATE_CONNECTING";
+      break;
+    case mediaRecorder.STATE_PAUSED:
+	//  "STATE_PAUSED";
+      break;
+    case mediaRecorder.STATE_RECORDING:
+	//  "STATE_RECORDING";
+      break;
+    case mediaRecorder.STATE_FAILED:
+	//  "STATE_FAILED";
+	recordStop();
+      break;
+  }
+
+}
+
 function ShowMediaOSD() {
 // Display Name/ length 
 
 	osdmedia.innerHTML = "<p style='color:white;font-size:" + fsMedia +";'> getCapabilities : " + mediaPlayer.getCapabilities() + " Elapsed time : " + mediaPlayer.getPosition() + "</p>";
 }
+
+
+
+function onScheduledStart(event) {
+  // event is of type ToiSchedulerServiceBooking, see docs
+    var timertype = toi.schedulerService.getParameter(event.booking.id, "Type");
+
+  if ( timertype == "SwitchOnly") {
+	isVisible = 0; 
+	isFullscreen = 1; 
+	FullScreen(); 
+	setVisible(isVisible); 
+	setOSDtimer();
+		// switch only if not already on that channel.
+		if (currChan !== toi.schedulerService.getParameter(event.booking.id, "Channel")) {
+			currChan = toi.schedulerService.getParameter(event.booking.id, "Channel");
+			play(channels[currChan]);
+		}
+
+  } else {
+	  try {
+	    createNewAsset()
+	    mediaRecorder.open(toi.schedulerService.getParameter(event.booking.id, "Channel"), assetId);
+
+	    var propList = new Array(toi.assetManagerService.PROPERTY_SYSTEM_PLAYBACKURI);
+	    var properties = toi.assetManagerService.getProperties(assetId, propList);
+	    var assetURI = properties[0].value;
+
+	    // save the assetId in the booking
+	    toi.schedulerService.setParameter(event.booking.id, "assetURI", assetURI);
+
+	    mediaRecorder.record();
+	    alert("Recording to " + assetURI);
+	  }
+	  catch (e) {
+	    alert(e);
+	  }
+	}
+}
+
+
+function onScheduledStop(event) {
+    var timertype = toi.schedulerService.getParameter(event.booking.id, "Type");
+
+	if ( timertype == !"SwitchOnly") {
+	  try {
+	    mediaRecorder.close();
+
+	  }
+	  catch (e) {
+	    alert(e);
+	  }
+	}
+}
+
+
 
 
 </script>

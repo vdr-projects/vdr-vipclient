@@ -211,5 +211,6 @@ var substype = 0;  // "cfg.media.subtitling.typepriority","normal,hearing_impair
 var recTitl = new Array();
 var recLink = new Array();
 var recDesc = new Array();
+var recDura = new Array();
 
 var nrMedia = 0;
