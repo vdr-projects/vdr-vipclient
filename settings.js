@@ -213,6 +213,6 @@ var recLink = new Array();
 var recDesc = new Array();
 var recDura = new Array();
 
-var isTimerMenu = 0;
-var booking = ""; // used in TimerMenu
+var timer = new Array();
+var timerID = 0;
 var nrMedia = 0;

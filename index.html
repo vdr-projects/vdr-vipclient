@@ -948,6 +948,7 @@ function setOSDtimer() {
 		var x = toi.schedulerService.getBookingIds("SwitchOnly", 0, 0)
 		if (x.length !== 0) {
 		tijd = toi.schedulerService.getNextStartTime("SwitchOnly");
+		alert ("XXXX" + tijd);
 		date = new Date(tijd*1000); 
 		tijd = date.toUTCString();
 		tijd = new Date(tijd);
@@ -1472,9 +1473,28 @@ function onKeyMenu(keyCode) {
 	isSetupMenu = 0;
 	mainmenu.style.opacity = 0;
     break;
+
     case "Left":
     break;
     case "Right":
+    break;
+    case "Up":
+	if (menu == 2) {
+	    timerID = timerID - 1;
+		    if (timerID < 0) {
+        		timerID = timer.length;
+		    }
+		InitMenu(menu);
+	}
+    break;
+    case "Down":
+	if (menu == 2) {
+	    timerID = timerID + 1;
+		    if (timerID == timer.length + 1) {
+		        timerID = 0;
+		    }
+		InitMenu(menu);
+	}
     break;
     case "Red":
 	if (menu == 1) {
@@ -1556,7 +1576,6 @@ function onKeyMenu(keyCode) {
 	break;
 	case KEY_3:
 		if (menu == 0) {
-			isTimerMenu = 1;
 			LoadTimers();
 			menu = 2;
 		} else if (menu == 1) {
@@ -1636,20 +1655,42 @@ if(menu == 1) {
 
 if(menu == 2) {
 // Timers menu
-	mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'> Timers </center></h1><pre style='color:black;font-size:" + fsMenu + ";'>\n   Press OK to remove a timer \n" + booking + "\n\n\n\n   0 - MainMenu </pre>";
-}
+	var booking = "";
+	var x = timerID;
+		if (timer.length !== 0) { do { x = x + 1; } while (!timer[x] && (x < timer.length)) }
+		timerID = x - 1;
+		x = x - 1;
+	for (var i=0;i<10;i++) {
+		if (timer.length !== 0) { do { x = x + 1; } while (!timer[x] && (x < timer.length)) }
+
+			if ( i == 0 ) {
+			booking = booking + "*";
+			} else {
+			booking = booking + " ";
+			}
+
+		if (timer.length > x) {
+			booking = booking + timer[x];
+		} else {
+			booking = booking +"\n";
+		}
+	}
 
 
+	mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'> Timers </center></h1><pre style='color:black;font-size:" + fsMenu + ";'>\n   Press OK to remove a timer \n" + booking + "   0 - MainMenu </pre>";
+
 }
+
+} // end of initmenu
 
 function LoadTimers() {
-		booking = "";
+		var booking = "";
 		var x = toi.schedulerService.getBookingIds("*", 0, 0);
 			for (var i=0;i<x.length;i++) { 
 				var y = toi.schedulerService.getBooking(x[i]);
-				booking = booking + "ID " + x[i];
-				booking = booking + " Type " + y.category;
-				//booking = booking + toi.schedulerService.getParameter(x[i], "Channel");
+				booking = "ID " + x[i];
+				booking = booking + " " + y.category;
+				booking = booking + " " + toi.schedulerService.getParameter(x[i], "Channel");
 				tijd = y.start;
 				date = new Date(tijd*1000); 
 				tijd = date.toUTCString();
@@ -1668,9 +1709,11 @@ function LoadTimers() {
 						booking = booking + " Duration " + y.duration;
 					}
 
-				booking = booking + "\n" ;
+				timer[(x[i])] = booking + "\n" ;
+
 				}
 }
+
 
 // End of Menu section
 
@@ -2076,6 +2119,7 @@ function onScheduledStop(event) {
     var timertype = event.booking.category;
 	if ( timertype == "SwitchOnly") {
 	    toi.schedulerService.remove(event.booking.id);
+	    setOSDtimer();
 	} else {
 	  try {
 	    mediaRecorder.close();
