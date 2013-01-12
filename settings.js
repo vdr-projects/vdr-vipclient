@@ -214,5 +214,6 @@ var recDesc = new Array();
 var recDura = new Array();
 
 var timer = new Array();
+var getbookingID = 0;
 var timerID = 0;
 var nrMedia = 0;

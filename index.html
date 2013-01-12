@@ -233,36 +233,15 @@ var x;
 xx = 0;
 AudioInfo[currChan] = "";
 for(x=0; x<cList.length;x++) {
-//alert ("Read StreamINFO " + cList[x].type);
 	if(cList[x].type == 0) {
 	xx = xx + 1;
 	AudioInfo[currChan] = AudioInfo[currChan] + " Audio " + xx + " " + mediaPlayer.getAudioStreamInfo(cList[x]).encoding + " - " + mediaPlayer.getAudioStreamInfo(cList[x]).language + " , ";
-//	alert("language : " + mediaPlayer.getAudioStreamInfo(cList[x]).language);
-//	alert("audienceType : " + mediaPlayer.getAudioStreamInfo(cList[x]).audienceType);
-//	alert("channelFormat : " + mediaPlayer.getAudioStreamInfo(cList[x]).channelFormat);
-//	alert("channelMode : " + mediaPlayer.getAudioStreamInfo(cList[x]).channelMode);
-//	alert("encoding : " + mediaPlayer.getAudioStreamInfo(cList[x]).encoding);
-//	alert("sublanguage : " + mediaPlayer.getAudioStreamInfo(cList[x]).sublanguage);
-//	alert("sampleRate : " + mediaPlayer.getAudioStreamInfo(cList[x]).sampleRate);
 	}
 	if(cList[x].type == 1) {
 	AudioInfo[currChan] = AudioInfo[currChan] + " Video " + mediaPlayer.getVideoStreamInfo(cList[x]).encoding + " size : " + mediaPlayer.getVideoStreamInfo(cList[x]).resolutionX + " x " + mediaPlayer.getVideoStreamInfo(cList[x]).resolutionY;
-	if (mediaPlayer.getVideoStreamInfo(cList[x]).aspectRatio == "1") {
-	AudioInfo[currChan] = AudioInfo[currChan] + " (4:3)";
+	if (mediaPlayer.getVideoStreamInfo(cList[x]).aspectRatio == "1") { AudioInfo[currChan] = AudioInfo[currChan] + " (4:3)"; }
+	if (mediaPlayer.getVideoStreamInfo(cList[x]).aspectRatio == "2") { AudioInfo[currChan] = AudioInfo[currChan] + " (16:9)"; }
 	}
-	if (mediaPlayer.getVideoStreamInfo(cList[x]).aspectRatio == "2") {
-	AudioInfo[currChan] = AudioInfo[currChan] + " (16:9)";
-	}
-
-	alert("aspectRatio : " + mediaPlayer.getVideoStreamInfo(cList[x]).aspectRatio);
-//	alert("activeFormatDescriptor : " + mediaPlayer.getVideoStreamInfo(cList[x]).activeFormatDescriptor);
-//	alert("frameRate : " + mediaPlayer.getVideoStreamInfo(cList[x]).frameRate);
-//	alert("componentTag : " + mediaPlayer.getVideoStreamInfo(cList[x]).componentTag);
-	alert("encoding : " + mediaPlayer.getVideoStreamInfo(cList[x]).encoding);
-	alert("resolutionX : " + mediaPlayer.getVideoStreamInfo(cList[x]).resolutionX);
-	alert("resolutionY : " + mediaPlayer.getVideoStreamInfo(cList[x]).resolutionY);
-	}
-
 
 	}
 
@@ -945,10 +924,11 @@ function settimer() {
 
 function setOSDtimer() {
 		// Only for type "SwitchOnly"
-		var x = toi.schedulerService.getBookingIds("SwitchOnly", 0, 0)
+		var today = new Date;
+		today = today / 1000;
+		var x = toi.schedulerService.getBookingIds("SwitchOnly", today, 0)
 		if (x.length !== 0) {
 		tijd = toi.schedulerService.getNextStartTime("SwitchOnly");
-		alert ("XXXX" + tijd);
 		date = new Date(tijd*1000); 
 		tijd = date.toUTCString();
 		tijd = new Date(tijd);
@@ -1481,8 +1461,9 @@ function onKeyMenu(keyCode) {
     case "Up":
 	if (menu == 2) {
 	    timerID = timerID - 1;
-		    if (timerID < 0) {
-        		timerID = timer.length;
+			var x = toi.schedulerService.getBookingIds("*", 0, 0);
+		    if (timerID < x[0]) {
+        		timerID = x[0];
 		    }
 		InitMenu(menu);
 	}
@@ -1490,10 +1471,23 @@ function onKeyMenu(keyCode) {
     case "Down":
 	if (menu == 2) {
 	    timerID = timerID + 1;
-		    if (timerID == timer.length + 1) {
-		        timerID = 0;
+		var x = toi.schedulerService.getBookingIds("*", 0, 0);
+		    if (timerID > x[x.length-1] ) {
+		        timerID = x[x.length-1];
 		    }
 		InitMenu(menu);
+	}
+    break;
+    case "Accept":
+	if (menu == 2) {
+		var x = toi.schedulerService.getBookingIds("*", 0, 0);
+		if (x.length > 0) {
+			toi.schedulerService.remove(timerID);
+			LoadTimers();
+			if (timer.length !== 0) { do { timerID = timerID + 1; } while (!timer[timerID] && (timerID < timer.length)) }
+			setOSDtimer();
+			InitMenu(menu);
+		}
 	}
     break;
     case "Red":
@@ -1577,6 +1571,7 @@ function onKeyMenu(keyCode) {
 	case KEY_3:
 		if (menu == 0) {
 			LoadTimers();
+				if (timer.length !== 0) { do { timerID = timerID + 1; } while (!timer[timerID] && (timerID < timer.length)) }
 			menu = 2;
 		} else if (menu == 1) {
 			is = toi.informationService;
@@ -1655,19 +1650,18 @@ if(menu == 1) {
 
 if(menu == 2) {
 // Timers menu
-	var booking = "";
-	var x = timerID;
-		if (timer.length !== 0) { do { x = x + 1; } while (!timer[x] && (x < timer.length)) }
-		timerID = x - 1;
-		x = x - 1;
+	booking = "";
+	var x = timerID - 1;
+	var y = toi.schedulerService.getBookingIds("*", 0, 0);
+	if (y.length !== 0) {
 	for (var i=0;i<10;i++) {
 		if (timer.length !== 0) { do { x = x + 1; } while (!timer[x] && (x < timer.length)) }
 
-			if ( i == 0 ) {
-			booking = booking + "*";
-			} else {
-			booking = booking + " ";
-			}
+			if ( i == 0 && timer.length > 0) {
+			booking = "<pre style='background:#fc5;-webkit-border-radius:25px;color:black;font-size:" + fsMenu + ";'>";
+			} else if (i == 1) {
+			booking = booking + "<center> PRESS OK TO REMOVE </center></pre><pre style='color:black;font-size:" + fsMenu + ";'>";
+			} 
 
 		if (timer.length > x) {
 			booking = booking + timer[x];
@@ -1675,9 +1669,10 @@ if(menu == 2) {
 			booking = booking +"\n";
 		}
 	}
+	}
 
 
-	mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'> Timers </center></h1><pre style='color:black;font-size:" + fsMenu + ";'>\n   Press OK to remove a timer \n" + booking + "   0 - MainMenu </pre>";
+	mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'> Timers </center></h1><pre style='color:black;font-size:" + fsMenu + ";'>\n   0 - MainMenu \n</pre>" + booking + "</pre>";
 
 }
 
