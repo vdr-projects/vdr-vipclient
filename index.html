@@ -24,7 +24,7 @@
 //
 //
 
-var Version = "0.10	2013/01/xx"
+var Version = "0.11	2013/01/xx"
 
 for (var i = minChan[0];  i < (maxChan[0]+1); i++) { EPG[0][4][i] = "";EPG[1][4][i] = "";EPG[0][5][i] = "";EPG[1][5][i] = "";EPG[0][7][i] = "";EPG[1][7][i] = ""; }
 for (var i = minChan[1];  i < (maxChan[1]+1); i++) { EPG[0][4][i] = "";EPG[1][4][i] = "";EPG[0][5][i] = "";EPG[1][5][i] = "";EPG[0][7][i] = "";EPG[1][7][i] = ""; }
@@ -92,8 +92,6 @@ function onUnload() {
 	eitCache.removeEventListener(eitCache.ON_CACHE_UPDATED, onCacheUpdated);
 	mediaPlayer.removeEventListener(mediaPlayer.ON_DATA_AVAILABLE,onDataAvailableEvent);
 	mediaRecorder.removeEventListener(mediaRecorder.ON_STATE_CHANGED, onRecorderStateChanged);
-	mediaRecorder.removeEventListener(mediaRecorder.ON_PARAMETER_CHANGED, onRecorderStateChanged);
-
 
 	} catch(e) {
 		alert(e);
@@ -147,7 +145,7 @@ function play(uri) {
 
 	if (ServerAdres[ChanGroup] == "MultiCast" ) {
  	SI=channels[currChan].split("-");
-	uri = "239.255." + SI[4] + ":11111";
+	uri = SI[4];
 	} else {
 	uri = ServerAdres[ChanGroup] + uri;
 	}
@@ -536,10 +534,12 @@ function onKeyDown(event) {
 				OSD(opacity);
 				break;
 				}
+		osdepg.innerHTML = "";
+		showOSD();
 	        GetEPG(currChan);
 		updateOSDtime(currChan);
 		osdepg.innerHTML = "<p>" + EPG[0][7][currChan] + "</p>\n<p>" + EPG[1][7][currChan] + "</p>";
-		showOSD();
+//		showOSD();
 		} else {
 			CheckChannel(Change);
 			count = 0;
@@ -605,10 +605,12 @@ function onKeyDown(event) {
     case "RADIO":
 	if(ChanGroup !== 9) {
 	//Radio
+	defChan[ChanGroup] = currChan;
 	ChanGroup = 9;
 	currChan = defChan[9];
 	} else {
 	//TV
+	defChan[ChanGroup] = currChan;
 	ChanGroup = 0;
 	currChan = defChan[0];
 	}
@@ -713,7 +715,7 @@ function onKeyDown(event) {
 	    } else {
 		try {
 		SetLed(1,1,0);
-		mediaPlayer.playFromPosition(mediaPlayer.POSITION_LIVE,mediaPlayer.PACE_PLAY);
+		if(TimeShift){ mediaPlayer.playFromPosition(mediaPlayer.POSITION_LIVE,mediaPlayer.PACE_PLAY); }
 		} catch(e) {
 			alert(e);
 		}
@@ -721,11 +723,23 @@ function onKeyDown(event) {
 	break;
 	case KEY_REC:
 	case "MediaRecord":
+//
+//
+// if(isFullscreen) you're in guidemode, record = set timer for current item.
+//
+// if not in guidemode, set timer for current channel for x minutes, (default 180?)
+// if isRecording == 1 show REC icon E00B else E003 
+// 
+
 	if (isRecording == 1) {
-	recordStop();
+		recordStop();
 	} else {
-	createNewAsset();
-	recordStart(ServerAdres + channels[currChan]);
+		if (ServerAdres[ChanGroup] == "MultiCast" ) {
+		 	SI=channels[currChan].split("-");
+			recordStart(SI[4]);
+			} else {
+			recordStart = (ServerAdres[ChanGroup] + channels[currChan]);
+			}
 	}
 	break;
 
@@ -880,7 +894,7 @@ function updateOSDtime(timchan) {
         }
 
 	EPG[0][7][timchan] =  th + ":" + tm + " (" + EPGminutes + " / " + ((EPG[0][3][timchan])-EPGminutes).toFixed(0) + ")" + " " + EPG[0][1][timchan] + " ";
-	if (!EPG[0][2][timchan]) 
+	if (!EPG[0][2][timchan] || ((EPG[0][3][timchan]-EPGminutes) < 0))
 	{
 		EPG[0][7][timchan] = " ";
 	}
@@ -945,12 +959,12 @@ function setOSDtimer() {
 		osdtimer.innerHTML = "<p style='color:black;font-size:" + fsList + ";'>" + th + ":" + tm + "</p>";
 		SetLed(0,2,1);
 		switchicon = "\uE00C";
-		osdca.innerHTML = CAicon + switchicon;
+		osdca.innerHTML = CAicon + switchicon + RECicon;
 		} else {
 		osdtimer.innerHTML = " ";
 		SetLed(0,0,0);
 		switchicon = '\uE003';
-		osdca.innerHTML = CAicon + switchicon;
+		osdca.innerHTML = CAicon + switchicon + RECicon;
 		}
 }
 
@@ -1060,7 +1074,7 @@ function GetEPG(epgchan)
 		CAicon = "\uE00F";
 	}
 
-		osdca.innerHTML = CAicon + switchicon;
+		osdca.innerHTML = CAicon + switchicon + RECicon;
 	if (event.name)	{
 	 events = eitCache.getEvents(eitService, 1000000000, 2000000000);
  	    extEventsnow = eitCache.getExtendedEventInfo(eitService, events.infoSequence[0].eventId);
@@ -1141,6 +1155,7 @@ function GetEPG(epgchan)
 
   } catch(e) {
     alert("Get EPG problem: " + e);
+    CAicon = "\uE01A";
   }
 } 
 
@@ -1445,11 +1460,13 @@ function onKeyMenu(keyCode) {
   switch(keyCode) {
     case "BrowserBack":
 	if (menu !== 0) {
+		if (menu == 3 ) { isFullscreen = 0; play(channels[currChan]); isFullscreen = 1; }
 		menu = 0;	
 		InitMenu(menu);
 		break;
 		}
     case "Menu":
+	if (menu == 3 ) { play(channels[currChan]); }
 	isSetupMenu = 0;
 	mainmenu.style.opacity = 0;
     break;
@@ -1491,43 +1508,15 @@ function onKeyMenu(keyCode) {
 	}
     break;
     case "Red":
-	if (menu == 1) {
-		if(showClock == 0 )	{
-		 	showDisplay("", true, 80, 1 );
-			showClock = 1;
-		} else if(showClock == 1 ) {
-			showClock = 0;
-	 		showDisplay((currChan.toString()), false, 100, 0 );
-		}
-	}
-	InitMenu(menu);
     break;
     case "Green":
-		if (menu == 1) {
-			audio = audio + 1;
-			is = toi.informationService;
-			if(audio == 1) {	
-				is.setObject("cfg.media.audio.languagepriority","dut,eng",is.STORAGE_VOLATILE);
-			} else if(audio == 2) {
-				is.setObject("cfg.media.audio.languagepriority","ger,deu,eng",is.STORAGE_VOLATILE);
-			} else if(audio == 3) {
-				is.setObject("cfg.media.audio.languagepriority","eng",is.STORAGE_VOLATILE);
-				audio = 0;
-			}
-		}
-	InitMenu(menu);
     break;
     case "Yellow":
     break;
     case "Blue":
-	if (menu == 1) {
-		if(SwitchGuide == 0 )	{
-			SwitchGuide = 1;
-		} else if(SwitchGuide == 1 ) {
-			SwitchGuide = 0;
+		if (menu == 0) {
+		RestartPortal();
 		}
-	}
-	InitMenu(menu);
     break;
     case "MediaRewind":
     break;
@@ -1559,10 +1548,10 @@ function onKeyMenu(keyCode) {
 		if (menu == 1) {
 			is = toi.informationService;
 			if(substype == 0 ) { 	
-				is.setObject("cfg.media.subtitling.typepriority","hearing_impaired,normal",is.STORAGE_VOLATILE);
+				is.setObject("cfg.media.subtitling.typepriority","hearing_impaired",is.STORAGE_VOLATILE);
 				substype = 1;
 			} else {
-				is.setObject("cfg.media.subtitling.typepriority","normal,hearing_impaired",is.STORAGE_VOLATILE);
+				is.setObject("cfg.media.subtitling.typepriority","normal",is.STORAGE_VOLATILE);
 				substype = 0;
 			}
 		}
@@ -1590,9 +1579,9 @@ function onKeyMenu(keyCode) {
 			audiotype = audiotype + 1;
 			is = toi.informationService;
 			if(audiotype == 1) {	
-				is.setObject("cfg.media.audio.typepriority","normal,hearing_impaired,visually_impaired",is.STORAGE_VOLATILE);
+				is.setObject("cfg.media.audio.typepriority","normal",is.STORAGE_VOLATILE);
 			} else if(audiotype == 2) {
-				is.setObject("cfg.media.audio.typepriority","hearing_impaired,visually_impaired",is.STORAGE_VOLATILE);
+				is.setObject("cfg.media.audio.typepriority","hearing_impaired",is.STORAGE_VOLATILE);
 			} else if(audiotype == 3) {
 				is.setObject("cfg.media.audio.typepriority","visually_impaired",is.STORAGE_VOLATILE);
 				audiotype = 0;
@@ -1601,18 +1590,39 @@ function onKeyMenu(keyCode) {
 	InitMenu(menu);
 	break;
 	case KEY_5:
+	if (menu == 1) {
+			audio = audio + 1;
+			is = toi.informationService;
+			if(audio == 1) {	
+				is.setObject("cfg.media.audio.languagepriority","dut,eng",is.STORAGE_VOLATILE);
+			} else if(audio == 2) {
+				is.setObject("cfg.media.audio.languagepriority","ger,deu,eng",is.STORAGE_VOLATILE);
+			} else if(audio == 3) {
+				is.setObject("cfg.media.audio.languagepriority","eng,swe",is.STORAGE_VOLATILE);
+				audio = 0;
+			}
+		}
+	InitMenu(menu);
+	break;
+	case KEY_6:
+	if (menu == 1) {
+		if(showClock == 0 )	{
+		 	showDisplay("", true, 80, 1 );
+			showClock = 1;
+		} else if(showClock == 1 ) {
+			showClock = 0;
+	 		showDisplay((currChan.toString()), false, 100, 0 );
+		}
+	}
+	InitMenu(menu);
+	break;
+	case KEY_7:
 		if (menu == 1) {
 		ShowProtectedChannels = 1 - ShowProtectedChannels;
 		InitMenu(menu);
 		}
 	break;
-	case KEY_6:
-	break;
-	case KEY_7:
-	break;
 	case KEY_8:
-	break;
-	case KEY_9:
 		if (menu == 0) {
 			isSetupMenu = 0;
 			mediaList.style.opacity = 0.9;
@@ -1620,14 +1630,49 @@ function onKeyMenu(keyCode) {
 			getRecList2();
 			LoadMediaSettings();
 			}
+
+	if (menu == 1) {
+		if(SwitchGuide == 0 )	{
+			SwitchGuide = 1;
+		} else if(SwitchGuide == 1 ) {
+			SwitchGuide = 0;
+		}
+	}
+	InitMenu(menu);
+	break;
+	case KEY_9:
+		if (menu == 0) {
+		menu = 3;
+		playMPD(MPDAddress);
+		InitMenu(menu);
+		}
 	break;
 	case KEY_0:
-		if (menu == 0) {
-		RestartPortal();
-		} else {
+		if (menu !== 0) {
+		if (menu == 3 ) { isFullscreen = 0; play(channels[currChan]); isFullscreen = 1; }
 		menu = 0;	
 		InitMenu(menu);
 		}
+	break;
+    case "VolumeMute":
+	state = toi.audioOutputService.getMuteState(AudioOut);
+	toi.audioOutputService.setMuteState(AudioOut, !state);
+	mute = 1 - state;
+        osdmute.style.opacity = mute; 
+	break;
+    case "VolumeUp":
+	Volume = Volume + 10;
+        if (Volume > 100) {
+            Volume = 100;
+        }
+        toi.audioOutputService.setVolume(AudioOut, Volume);
+	break;
+    case "VolumeDown":
+	Volume = Volume - 10;
+        if (Volume < 0) {
+            Volume = 0;
+        }
+        toi.audioOutputService.setVolume(AudioOut, Volume);
 	break;
 
 	default:
@@ -1635,21 +1680,43 @@ function onKeyMenu(keyCode) {
   }
 }
 
+
+function playMPD(uri) {
+  try {
+    if (mediaPlayer.getState() != mediaPlayer.STATE_IDLE) {
+      mediaPlayer.close();
+    }
+	mediaPlayer.open(uri);
+	mediaPlayer.play(1000);
+	showDisplay("MPD", false, 100, 0 );
+  } catch (e) {
+    alert("Failed opening recording: " + e);
+    return;
+  }
+}
+
+
+
 function InitMenu(menu) {
 
-if(menu == 0) {
-// Main Menu
-	
-	mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'> MainMenu \n ( " + Version + " )</center></h1><pre style='color:black;font-size:" + fsMenu + ";'>   1 - SettingsMenu \n   2 - Recordings \n   3 - TimersMenu\n   4 -\n   5 -\n   6 -\n   7 -\n   8 -\n   9 -\n   0 - Restart Portal </pre>";
+if(menu == 0) { // Main Menu
+	mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'> MainMenu \n ( " + Version + " )</center></h1><pre style='color:black;font-size:" + fsMenu + ";'>   1 - SettingsMenu \n   2 - Recordings \n   3 - TimersMenu\n   4 -\n   5 -\n   6 -\n   7 -\n   8 -\n   9 - MPD Server Connection\n\n   BLUE - Restart Portal </pre>";
 }
 
-if(menu == 1) {
-// settings menu
-	mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'> Settings </center></h1><pre style='color:black;font-size:" + fsMenu + ";'><font style='color:red;font-size:" + fsMenu + ";'>   Frontdisplay Clock : " + Boolean(showClock) + "</font><font style='color:green;font-size:" + fsMenu + ";'>\n   Prio audio track : " + (toi.informationService.getObject("cfg.media.audio.languagepriority")) + "</font><font style='color:blue;font-size:" + fsMenu + ";'>\n   Preview guide : " + Boolean(SwitchGuide) + "</font>\n   1 - Show Subs : " + Boolean(ShowSubs) + "\n   2 - Subs Type Prio : " + (toi.informationService.getObject("cfg.media.subtitling.typepriority")) + "\n   3 - Subs Mode Prio : " + (toi.informationService.getObject("cfg.media.subtitling.modepriority")) + "\n   4 - Audio Type Prio : " + (toi.informationService.getObject("cfg.media.audio.typepriority")) + "\n   5 - Protection : " + Boolean(ShowProtectedChannels) + "\n\n\n\n   0 - MainMenu </pre>";
+if(menu == 1) { // settings menu
+	var htmltext = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'> Settings </center></h1><pre style='color:black;font-size:" + fsMenu + ";'>   1 - ";
+	if (ShowSubs) { htmltext = htmltext + "\uE017"; } else { htmltext = htmltext + "\uE016"; }
+	htmltext = htmltext + " Show Subs \n   2 - \uE003 Subs Type Prio\uE003\uE003\uE003: " + (toi.informationService.getObject("cfg.media.subtitling.typepriority")) + "\n   3 - \uE003 Subs Mode Prio\uE003\uE003\uE003: " + (toi.informationService.getObject("cfg.media.subtitling.modepriority")) + "\n   4 - \uE003 Audio Type Prio\uE003\uE003\uE003: " + Left(toi.informationService.getObject("cfg.media.audio.typepriority"),20) + "\n   5 - \uE003 Prio audio track\uE003\uE003\uE003: " + (toi.informationService.getObject("cfg.media.audio.languagepriority")) + "\n   6 - ";
+	if (showClock) { htmltext = htmltext + "\uE017"; } else { htmltext = htmltext + "\uE016"; }
+	htmltext = htmltext + " Frontdisplay Clock\n   7 - ";
+	if (ShowProtectedChannels) { htmltext = htmltext + "\uE017"; } else { htmltext = htmltext + "\uE016"; }
+	htmltext = htmltext + " Protection\n   8 - ";
+	if (SwitchGuide) { htmltext = htmltext + "\uE017"; } else { htmltext = htmltext + "\uE016"; }
+	htmltext = htmltext +  " Preview guide\n\n\n   0 - MainMenu </pre>";
+	mainmenu.innerHTML = htmltext;
 }
 
-if(menu == 2) {
-// Timers menu
+if(menu == 2) { // Timers menu
 	booking = "";
 	var x = timerID - 1;
 	var y = toi.schedulerService.getBookingIds("*", 0, 0);
@@ -1657,10 +1724,10 @@ if(menu == 2) {
 	for (var i=0;i<10;i++) {
 		if (timer.length !== 0) { do { x = x + 1; } while (!timer[x] && (x < timer.length)) }
 
-			if ( i == 0 && timer.length > 0) {
-			booking = "<pre style='background:#fc5;-webkit-border-radius:25px;color:black;font-size:" + fsMenu + ";'>";
+			if (i == 0) {
+			booking = "<font style='background:#fc5;-webkit-border-radius:25px;color:black;font-size:" + fsMenu + ";'>";
 			} else if (i == 1) {
-			booking = booking + "<center> PRESS OK TO REMOVE </center></pre><pre style='color:black;font-size:" + fsMenu + ";'>";
+			booking = booking + "<center> PRESS OK TO REMOVE </center></font>";
 			} 
 
 		if (timer.length > x) {
@@ -1672,8 +1739,11 @@ if(menu == 2) {
 	}
 
 
-	mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'> Timers </center></h1><pre style='color:black;font-size:" + fsMenu + ";'>\n   0 - MainMenu \n</pre>" + booking + "</pre>";
+	mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'> Timers </center></h1><pre style='color:black;font-size:" + fsMenu + ";'>\n   0 - MainMenu \n" + booking + "</pre>";
+}
 
+if(menu == 3) { // MPD Menu
+	mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'> MPD Connection </center></h1><pre style='color:black;font-size:" + fsMenu + ";'> MENU to exit \n 0 - back to MainMenu </pre>";
 }
 
 } // end of initmenu
@@ -1718,7 +1788,7 @@ function LoadMediaSettings() {
 		isMediaMenu = 1;
 		showDisplay("STOP", false, 100, 0 );
 		currMed = 0;
-		showMediaList();
+		if (getRecOK) { showMediaList();}
 		mediaPlayer.addEventListener(mediaPlayer.ON_POSITION_CHANGED, ShowMediaOSD);
 		mediaPlayer.addEventListener(mediaPlayer.ON_STATE_CHANGED, onStateChanged);
 }
@@ -1831,10 +1901,8 @@ function onKeyMedia(keyCode) {
 	break;
     case KEY_REC:
     case "MediaRecord":
-	createNewAsset();
 	recordStart(recLink[currMed]);
 	UnloadMediaSettings();
-//	setTimeout("recordStop();",((recDura[currMed] * 1000) + 5000));
 	break;
     case "MediaRewind":
 	    if (mediaPlayer.getState() != mediaPlayer.STATE_IDLE) {
@@ -1845,14 +1913,10 @@ function onKeyMedia(keyCode) {
     case "MediaForward":
 	    if (mediaPlayer.getState() != mediaPlayer.STATE_IDLE) {
 	      mediaPlayer.play(4000);
-//		mediaPlayer.playFromPosition(12000,1000);
 	    showDisplay("FF", false, 100, 0 );
 	    }
     break;
     case "MediaStop":
-	   // if (mediaPlayer.getState() != mediaPlayer.STATE_IDLE) {
-	   // mediaPlayer.close();
-	   // }
 	    play(channels[currChan]);
 	    if (isRecording == 1) { 
 		recordStop();
@@ -1900,20 +1964,26 @@ function onKeyMedia(keyCode) {
 }
 
 function getRecList() {
-xmlhttp=new XMLHttpRequest();
-xmlhttp.open("GET",(recServ + "/recordings.xml?" + new Date().getTime()),false);
-xmlhttp.send();
-xmlDoc=xmlhttp.responseXML; 
-var x=xmlDoc.getElementsByTagName("item");
-nrMedia = x.length - 1;
-for (i=0;i<x.length;i++)
-  { 
-  recTitl[i] = (x[i].getElementsByTagName("title")[0].childNodes[0].nodeValue);
-  recLink[i] = (x[i].getElementsByTagName("link")[0].childNodes[0].nodeValue);
-  recDesc[i] = (x[i].getElementsByTagName("description")[0].childNodes[0].nodeValue);
-  recDura[i] = (x[i].getElementsByTagName("duration")[0].childNodes[0].nodeValue);
+try {
+   xmlhttp=new XMLHttpRequest();
+   xmlhttp.open("GET",(recServ + "/recordings.xml?" + new Date().getTime()),false);
+   xmlhttp.send();
+   xmlDoc=xmlhttp.responseXML; 
+   var x=xmlDoc.getElementsByTagName("item");
+   nrMedia = x.length - 1;
+   for (var i=0;i<x.length;i++)
+	  { 
+	  recTitl[i] = (x[i].getElementsByTagName("title")[0].childNodes[0].nodeValue);
+	  recLink[i] = (x[i].getElementsByTagName("link")[0].childNodes[0].nodeValue);
+	  recDesc[i] = (x[i].getElementsByTagName("description")[0].childNodes[0].nodeValue);
+	  recDura[i] = (x[i].getElementsByTagName("duration")[0].childNodes[0].nodeValue);
+	  }
+	getRecOK = 1;
+  } catch(e) {
+    alert("Get Recordings problem: " + e);
+	getRecOK = 0;
+	mediaList.innerHTML = "<h1><center style='font-size:" + fsRec + ";color:white;'> RECORDINGS </center><pre>\n\n\nERROR getting RECORDINGS !!!</pre></h1>";
   }
-
 }
 
 function getRecList2() {
@@ -1958,8 +2028,7 @@ function showMediaList() {
 		}
 		htmlstring = htmlstring + "<td" + liststyle + "font-size:" + fsReclist + ";'>\uE003\uE003" + Left(recTitl[listMed],60) + "</td></tr>";
 	}
-	htmlstring = htmlstring + "</table>";
-	mediaList.innerHTML = htmlstring;
+	mediaList.innerHTML = htmlstring + "</table>";
 }
 
 
@@ -2003,6 +2072,7 @@ function createNewAsset() {
 
 function recordStart(uri) {
 	alert("opening mediaRecorder...");
+	createNewAsset();
 	try {
 		mediaRecorder.open(uri, assetId);
 	} catch(e) {
@@ -2022,7 +2092,6 @@ function recordStop() {
 	try {
 		mediaRecorder.close();
 		isRecording = 0;
-
 	} catch(e) {
 		alert("Cannot stop mediaRecorder! " + e);
 	}
@@ -2042,7 +2111,7 @@ function onStateChanged(ev) {
 
 function onRecorderStateChanged(event) {
   alert("EVENT! " + event.reason + " *** " + event.state);
-
+  RECicon = "\uE003"; // 0xE003 0x83 Fixed width blank
   switch (event.state) {
     case mediaRecorder.STATE_IDLE:
 	//  "STATE_IDLE";
@@ -2055,6 +2124,7 @@ function onRecorderStateChanged(event) {
       break;
     case mediaRecorder.STATE_RECORDING:
 	//  "STATE_RECORDING";
+	RECicon = "\uE00B"; // 0xE00B 0x8B REC
       break;
     case mediaRecorder.STATE_FAILED:
 	//  "STATE_FAILED";
@@ -2091,7 +2161,17 @@ function onScheduledStart(event) {
   } else {
 	  try {
 	    createNewAsset()
-	    mediaRecorder.open(toi.schedulerService.getParameter(event.booking.id, "Channel"), assetId);
+
+		var recChannr = channels[toi.schedulerService.getParameter(event.booking.id, "Channel")];
+		var recChan = 0;
+		if (ServerAdres[Left(recChannr,1)] == "MultiCast" ) {
+		 	SI=channels[recChannr].split("-");
+			recChan = SI[4];
+			} else {
+			recChan = ServerAdres[Left(recChannr,1)] + channels[recChannr];
+			}
+
+	    mediaRecorder.open(recChan, assetId);
 
 	    var propList = new Array(toi.assetManagerService.PROPERTY_SYSTEM_PLAYBACKURI);
 	    var properties = toi.assetManagerService.getProperties(assetId, propList);
@@ -2154,7 +2234,7 @@ function onScheduledStop(event) {
 	<div id="osdname" style="width:69%;height:4%; position:absolute; left:12%; top:65%;z-index:505;"></div>
 	<div id="osdepg" style="width:63%; position:absolute; left:21%; top:69%;z-index:505;"></div>
 	<div id="osdtimer" style="width:7%; position:absolute; left:12%; top:69%;z-index:505;"></div>
-	<div id="osdca" style="width:3%; position:absolute; left:80%; top:67%;z-index:505;fontFamily:VDRSymbolsSans;"></div>
+	<div id="osdca" style="width:5%; position:absolute; left:75%; top:67%;z-index:505;fontFamily:VDRSymbolsSans;"></div>
 
 	<div id="osdnr" style="background:red;width:10%;height:9%; position:absolute; left:12%; top:56%;z-index:505;opacity:0;-webkit-border-radius:25px;"></div>
 
@@ -2165,7 +2245,7 @@ function onScheduledStop(event) {
 	<div id="osdmute" style="width:7%; position:absolute; left:76%; top:9%;z-index:515;opacity:0;"><img src="mute.png"></div>
 	<div id="osdlang" style="width:7%; position:absolute; left:76%; top:9%;z-index:515;opacity:0;"></div>
 
-	<div id="mainmenu"  style="background:#3366ff;width:76%; position:absolute; left:10%; top:10%; bottom:10%;z-index:520;opacity:0;-webkit-border-radius:50px;"></div>
+	<div id="mainmenu"  style="background:#3366ff;width:76%; position:absolute; left:10%; top:10%; bottom:10%;z-index:520;opacity:0;-webkit-border-radius:50px;fontFamily:VDRSymbolsSans;"></div>
 	<div id="mediaList" style="background:#3366ff;width:76%; position:absolute; left:10%; top:10%; bottom:10%;z-index:520;opacity:0;-webkit-border-radius:50px;"></div>
 
 </body>

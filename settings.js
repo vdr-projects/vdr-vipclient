@@ -1,6 +1,6 @@
-// static settings
-// or
-// init var settings
+// 
+// Default settings
+// 
 
 //  720x576
 // 1280x720
@@ -10,45 +10,31 @@ var Xfactor = 1280 / 720;
 var Yfactor = 720 / 576;
 
 
-var channels = new Array();
-var channelsnames = new Array();
-var channelsepglang = new Array();
+var showClock = 0;   // 0 = no, 1 = yes
+var SwitchGuide = 0; // 0 = no, 1 = yes
+var TimeShift = 0;   // 0 = no, 1 = yes timeshift
+var ShowSubs = 1;    // 0 = no, 1 = yes (default)
 
-var showClock = 0;
-var SwitchGuide = 0;
-var TimeShift = 0; // 0 = no, 1 = yes timeshift
-var ShowSubs = 1; // 0 no, 1 = yes (default)
 months = new Array('January', 'February', 'March', 'April', 'May', 'June', 'Jully', 'August', 'September', 'October', 'November', 'December');
 days = new Array('Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday');
 
-var isFullscreen = 1; // start TV(1) or guide(0)
-var StartVolume = 50;
-var Volume = StartVolume;
-var AudioOut = 3;
-// AUDIO_CONNECTION_TYPE_ANALOG = 0
-// AUDIO_CONNECTION_TYPE_SPDIF = 1
-// AUDIO_CONNECTION_TYPE_HDMI = 2
-// AUDIO_CONNECTION_TYPE_DECODER = 3
-// AUDIO_CONNECTION_TYPE_BUFFER = 4
-// AUDIO_CONNECTION_TYPE_I2S = 5
+var NN = new Array();
+NN[0] = "Now";
+NN[1] = "Next";
+NN[2] = "Schedule";
+NN[3] = "TIMER";
+NN[4] = "-----";
 
-var currChan = 10; // default channel
-var epgchan = currChan;
-var prevChan = currChan;
-
-var channeldigits = 2; // 0 - Max 9, 1 max 99, 2 max 999 or 3 max 9999 channels directly selectable by numbers (Don't set it to > 2 it crashes the player)
-
-var ChanGroup = 0;
-var minChan = new Array();
-var maxChan = new Array();
-var defChan = new Array();
-var baseChn = new Array();
-var protChn = new Array();
-var ServerAdres = new Array();
 var ShowProtectedChannels = 1; // Default don't show protected channels.
+var StartVolume = 50; // Volume on (re)start of the portal.
+var currChan = 10; // default channel
+
+var ChanGroup = 0; // default TV group
+var minChan = new Array(); var maxChan = new Array(); var defChan = new Array(); var baseChn = new Array(); var protChn = new Array(); var ServerAdres = new Array(); // Define settings for Channels.
 
 // Server for Recordings
 var recServ = "http://192.168.3.15:8000";
+var MPDAddress = "http://192.168.3.15:8888/mpd.mp3";
 
 // Radio channels.js Settings
 minChan[9] = 9001;
@@ -89,7 +75,24 @@ defChan[5] = 5001;
 baseChn[5] = 5000;
 protChn[5] = 0;
 ServerAdres[5] = "MultiCast";
-// MultiCast, channels[x] layout DVB(Satposition, C or T)-NID-TID-SID-last digits of multicast address (239.255. is added later)
+// MultiCast, channels[x] layout DVB(Satposition, C or T)-NID-TID-SID-multicast address
+
+var channeldigits = 2; // 0 - Max 9, 1 max 99, 2 max 999 or 3 max 9999 channels directly selectable by numbers (Don't set it to > 2 it crashes the player)
+
+//
+// No need to change anything from here on.
+//
+
+var isFullscreen = 1;
+var Volume = StartVolume;
+var AudioOut = 3;
+
+var epgchan = currChan;
+var prevChan = currChan;
+
+var channels = new Array();
+var channelsnames = new Array();
+var channelsepglang = new Array();
 
 var currMed = 0;
 var listMed = 0;
@@ -127,13 +130,6 @@ var NowNext = 0;
 var EpgInfo = new Array();
 var EpgExtInfo = new Array();
 var files = new Array();
-var NN = new Array();
-NN[0] = "Now";
-NN[1] = "Next";
-NN[2] = "Schedule";
-NN[3] = "TIMER";
-NN[4] = "-----";
-
 
 //
 //NowNext,	1 = programma naam	event.name			,currchan
@@ -181,12 +177,13 @@ var SwitchTimer = 1; // No other options yet
 var initialDelayID = 0;
 
 var switchicon = "\uE003";
-var CAicon = "\uE00D";
+var CAicon = "\uE00F";
+var RECicon = "\uE003";
 
 var fsAudio = (16*Yfactor) + "px";
 var fsTime = (16*Yfactor) + "px";
 var fsName = (27*Yfactor) + "px";
-var fsMenu = (20*Yfactor) + "px";
+var fsMenu = (27*Yfactor) + "px";
 var fsChan = (43*Yfactor) + "px"; 
 var fsCA = (32*Yfactor) + "px";
 var fsMenuMain = (35*Yfactor) + "px";
@@ -212,6 +209,7 @@ var recTitl = new Array();
 var recLink = new Array();
 var recDesc = new Array();
 var recDura = new Array();
+var getRecOK = 0;
 
 var timer = new Array();
 var getbookingID = 0;
