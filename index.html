@@ -48,7 +48,12 @@ function onLoad() {
 //	eitCache.setFilterMode(eitCache.FILTER_MODE_PF_ONLY);
 	eitCache.addEventListener(eitCache.ON_CACHE_UPDATED, onCacheUpdated);
 	mediaPlayer.addEventListener(mediaPlayer.ON_DATA_AVAILABLE,onDataAvailableEvent);
+	if (mediaRecorder) {
 	mediaRecorder.addEventListener(mediaRecorder.ON_STATE_CHANGED, onRecorderStateChanged);
+	}
+
+	    toi.informationService.addEventListener(toi.informationService.ON_OBJECTS_CHANGED, onEvent);
+	    toi.informationService.subscribeObject(onEvent, "var.io.state", true);
 
 	var ss = toi.schedulerService;
 	    ss.addEventListener(ss.ON_SCHEDULED_START, onScheduledStart);
@@ -78,7 +83,22 @@ function onLoad() {
 	mediaList.innerHTML = "<h1><center style='font-size:" + fsRec + ";color:white;'> Please WAIT </center></h1>";
 }
 
-
+function onEvent(event) {
+var numObjs = event.objectNames.length;
+  for (var i=0; i<numObjs; i++) {
+	if(event.objectNames[i]="var.io.state" && toi.informationService.getObject(event.objectNames[i])="standby"){
+		try {
+		mediaPlayer.close();
+		mediaPlayer.releaseInstance();
+		} catch(e) {
+		alert(e);
+		}
+	} else if(event.objectNames[i]="var.io.state" && toi.informationService.getObject(event.objectNames[i])="normal"){
+		play(channels[currChan]);
+	}
+  }
+}
+	
 function onUnload() {
 	try {
 		mediaPlayer.close();
@@ -89,6 +109,7 @@ function onUnload() {
 		}
 		mediaRecorder.close();
 		mediaRecorder.releaseInstance();
+	toi.informationService.removeEventListener(toi.informationService.ON_OBJECTS_CHANGED, onEvent);
 	eitCache.removeEventListener(eitCache.ON_CACHE_UPDATED, onCacheUpdated);
 	mediaPlayer.removeEventListener(mediaPlayer.ON_DATA_AVAILABLE,onDataAvailableEvent);
 	mediaRecorder.removeEventListener(mediaRecorder.ON_STATE_CHANGED, onRecorderStateChanged);
@@ -130,6 +151,7 @@ function createRecorder() {
 		mediaRecorder = toi.mediaService.createRecorderInstance();
 	} catch(e) {
 		alert("Cannot create media recorder: " + e);
+		mediaRecorder = "";
 	}
 }
 
@@ -672,7 +694,7 @@ function onKeyDown(event) {
         osdmute.style.opacity = mute; 
 	break;
     case "VolumeUp":
-	Volume = Volume + 10;
+	Volume = Volume + VolumeStep;
         if (Volume > 100) {
             Volume = 100;
         }
@@ -680,7 +702,7 @@ function onKeyDown(event) {
 	showVolume();
 	break;
     case "VolumeDown":
-	Volume = Volume - 10;
+	Volume = Volume - VolumeStep;
         if (Volume < 0) {
             Volume = 0;
         }
@@ -1645,7 +1667,11 @@ function onKeyMenu(keyCode) {
 		menu = 3;
 		playMPD(MPDAddress);
 		InitMenu(menu);
+		} else if (menu == 1) {
+		menu = 4; // INFO menu
+		InitMenu(menu);
 		}
+
 	break;
 	case KEY_0:
 		if (menu !== 0) {
@@ -1661,14 +1687,14 @@ function onKeyMenu(keyCode) {
         osdmute.style.opacity = mute; 
 	break;
     case "VolumeUp":
-	Volume = Volume + 10;
+	Volume = Volume + VolumeStep;
         if (Volume > 100) {
             Volume = 100;
         }
         toi.audioOutputService.setVolume(AudioOut, Volume);
 	break;
     case "VolumeDown":
-	Volume = Volume - 10;
+	Volume = Volume - VolumeStep;
         if (Volume < 0) {
             Volume = 0;
         }
@@ -1700,7 +1726,7 @@ function playMPD(uri) {
 function InitMenu(menu) {
 
 if(menu == 0) { // Main Menu
-	mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'> MainMenu \n ( " + Version + " )</center></h1><pre style='color:black;font-size:" + fsMenu + ";'>   1 - SettingsMenu \n   2 - Recordings \n   3 - TimersMenu\n   4 -\n   5 -\n   6 -\n   7 -\n   8 -\n   9 - MPD Server Connection\n\n   BLUE - Restart Portal </pre>";
+	mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'> MainMenu \n ( " + Version + " )</center></h1><pre style='color:black;font-size:" + fsMenu + ";'>   1 - SettingsMenu \n   2 - Recordings \n   3 - TimersMenu\n\n\n\n\n\n   9 - MPD Server Connection\n\n   BLUE - Restart Portal </pre>";
 }
 
 if(menu == 1) { // settings menu
@@ -1712,7 +1738,7 @@ if(menu == 1) { // settings menu
 	if (ShowProtectedChannels) { htmltext = htmltext + "\uE017"; } else { htmltext = htmltext + "\uE016"; }
 	htmltext = htmltext + " Protection\n   8 - ";
 	if (SwitchGuide) { htmltext = htmltext + "\uE017"; } else { htmltext = htmltext + "\uE016"; }
-	htmltext = htmltext +  " Preview guide\n\n\n   0 - MainMenu </pre>";
+	htmltext = htmltext +  " Preview guide\n   9 - Show INFO\n   0 - MainMenu </pre>";
 	mainmenu.innerHTML = htmltext;
 }
 
@@ -1745,6 +1771,33 @@ if(menu == 2) { // Timers menu
 if(menu == 3) { // MPD Menu
 	mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'> MPD Connection </center></h1><pre style='color:black;font-size:" + fsMenu + ";'> MENU to exit \n 0 - back to MainMenu </pre>";
 }
+
+if(menu == 4) { // INFO Menu
+	var htmltext = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'> INFO </center></h1><pre style='color:black;font-size:" + fsMenu + ";'>";
+	try {
+		is = toi.informationService;
+	
+		htmltext = htmltext + "\n   Product name: " + is.getObject("config.productdisplayname");
+		htmltext = htmltext + "\n   Build date : " + is.getObject("config.build.date");
+//		htmltext = htmltext + "\n   IO State: " + is.getObject("var.io.state");
+
+		htmltext = htmltext + "\n\n   IP address:" + is.getObject("config.ipaddress");
+		var x = is.getObject("cfg.ip.eth0.mode");
+		if (x == "DHCP") { htmltext = htmltext + "\n \uE017 "; } else { htmltext = htmltext + "\n \uE016 "; }
+		htmltext = htmltext + "DHCP";
+		var x = is.getObject("var.capabilities.dvr");
+		if (x !== "FALSE") { htmltext = htmltext + "\n \uE017 "; } else { htmltext = htmltext + "\n \uE016 "; }
+		htmltext = htmltext + "DVR ";
+
+
+	} catch(e) {
+		alert("Error : " + e);
+	}
+	htmltext = htmltext + "\n\n\n\n\n   0 - back to MainMenu </pre>";
+	mainmenu.innerHTML = htmltext;
+
+}
+
 
 } // end of initmenu
 
@@ -1943,7 +1996,7 @@ function onKeyMedia(keyCode) {
         osdmute.style.opacity = mute; 
 	break;
     case "VolumeUp":
-	Volume = Volume + 10;
+	Volume = Volume + VolumeStep;
         if (Volume > 100) {
             Volume = 100;
         }
@@ -1951,7 +2004,7 @@ function onKeyMedia(keyCode) {
 	showVolume();
 	break;
     case "VolumeDown":
-	Volume = Volume - 10;
+	Volume = Volume - VolumeStep;
         if (Volume < 0) {
             Volume = 0;
         }

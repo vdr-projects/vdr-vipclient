@@ -6,8 +6,8 @@
 // 1280x720
 // 1920x1080
 
-var Xfactor = 1280 / 720;
-var Yfactor = 720 / 576;
+var Xfactor = 1920 / 720;
+var Yfactor = 1080 / 576;
 
 
 var showClock = 0;   // 0 = no, 1 = yes
@@ -26,15 +26,16 @@ NN[3] = "TIMER";
 NN[4] = "-----";
 
 var ShowProtectedChannels = 1; // Default don't show protected channels.
-var StartVolume = 50; // Volume on (re)start of the portal.
+var StartVolume = 30; // Volume on (re)start of the portal.
+var VolumeStep = 5; // Steps the volume buttons make
 var currChan = 10; // default channel
 
 var ChanGroup = 0; // default TV group
 var minChan = new Array(); var maxChan = new Array(); var defChan = new Array(); var baseChn = new Array(); var protChn = new Array(); var ServerAdres = new Array(); // Define settings for Channels.
 
 // Server for Recordings
-var recServ = "http://192.168.3.15:8000";
-var MPDAddress = "http://192.168.3.15:8888/mpd.mp3";
+var recServ = "http://192.168.1.15:8000";
+var MPDAddress = "http://192.168.1.15:8888/mpd.mp3";
 
 // Radio channels.js Settings
 minChan[9] = 9001;
@@ -42,7 +43,7 @@ maxChan[9] = 9099; // set not too far from max rd channel to speed up zapping
 defChan[9] = 9051;
 baseChn[9] = 9000;
 protChn[9] = 0;
-ServerAdres[9] = "http://192.168.3.15:3000/";
+ServerAdres[9] = "http://192.168.1.15:3000/";
 
 // Protected channels.js Settings
 minChan[6] = 6001;
@@ -50,7 +51,7 @@ maxChan[6] = 6040; // set not too far from max prt channel to speed up zapping
 defChan[6] = 6001;
 baseChn[6] = 6000;
 protChn[6] = 1;
-ServerAdres[6] = "http://192.168.3.15:3000/";
+ServerAdres[6] = "http://192.168.1.15:3000/";
 
 // TV channels.js Settings
 minChan[0] = 1;
@@ -58,7 +59,7 @@ maxChan[0] = 999; // set not too far from max TV channel to speed up zapping
 defChan[0] = currChan;
 baseChn[0] = 0;
 protChn[0] = 0;
-ServerAdres[0] = "http://192.168.3.15:3000/";
+ServerAdres[0] = "http://192.168.1.15:3000/";
 
 //HD list
 minChan[1] = 1001;
@@ -66,7 +67,7 @@ maxChan[1] = 1999; // set not too far from max HD channel to speed up zapping
 defChan[1] = 1001;
 baseChn[1] = 1000;
 protChn[1] = 0;
-ServerAdres[1] = "http://192.168.3.15:3000/";
+ServerAdres[1] = "http://192.168.1.15:3000/";
 
 // MultiCast
 minChan[5] = 5001;
