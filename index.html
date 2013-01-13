@@ -435,21 +435,21 @@ function onKeyDown(event) {
 				is.setObject("cfg.media.audio.languagepriority","dut,eng",is.STORAGE_VOLATILE);
 				osdlang.style.opacity = 1;
 				osdlang.style.fontSize = fsAudio;
-				osdlang.style.color = "white";
+				osdlang.style.color = "blue";
 				osdlang.innerHTML = "<img src='unmute.png'> Nederlands ";
 				setTimeout("osdlang.style.opacity = 0; ", 3000);
 			} else if(audio == 2) {
 				is.setObject("cfg.media.audio.languagepriority","ger,deu,eng",is.STORAGE_VOLATILE);
 				osdlang.style.opacity = 1;
 				osdlang.style.fontSize = fsAudio;
-				osdlang.style.color = "white";
+				osdlang.style.color = "red";
 				osdlang.innerHTML = "<img src='unmute.png'> Deutsch ";
 				setTimeout("osdlang.style.opacity = 0; ", 3000);
 			} else if(audio == 3) {
 				is.setObject("cfg.media.audio.languagepriority","eng",is.STORAGE_VOLATILE);
 				osdlang.style.opacity = 1;
 				osdlang.style.fontSize = fsAudio;
-				osdlang.style.color = "white";
+				osdlang.style.color = "black";
 				osdlang.innerHTML = "<img src='unmute.png'> English ";
 				setTimeout("osdlang.style.opacity = 0; ", 3000);
 				audio = 0;
@@ -1938,14 +1938,14 @@ function onKeyMedia(keyCode) {
 				is.setObject("cfg.media.audio.languagepriority","ger,deu,eng",is.STORAGE_VOLATILE);
 				osdlang.style.opacity = 1;
 				osdlang.style.fontSize = fsAudio;
-				osdlang.style.color = "white";
+				osdlang.style.color = "red";
 				osdlang.innerHTML = "<img src='unmute.png'> Deutsch ";
 				setTimeout("osdlang.style.opacity = 0; ", 3000);
 			} else if(audio == 3) {
 				is.setObject("cfg.media.audio.languagepriority","eng",is.STORAGE_VOLATILE);
 				osdlang.style.opacity = 1;
 				osdlang.style.fontSize = fsAudio;
-				osdlang.style.color = "white";
+				osdlang.style.color = "black";
 				osdlang.innerHTML = "<img src='unmute.png'> English ";
 				setTimeout("osdlang.style.opacity = 0; ", 3000);
 				audio = 0;
@@ -1969,7 +1969,7 @@ function onKeyMedia(keyCode) {
 	    }
     break;
     case "MediaStop":
-	    play(channels[currChan]);
+	    isFullscreen = 0; play(channels[currChan]); isFullscreen = 1;
 	    if (isRecording == 1) { 
 		recordStop();
 		isRecording = 0;
