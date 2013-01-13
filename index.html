@@ -86,14 +86,13 @@ function onLoad() {
 function onEvent(event) {
 var numObjs = event.objectNames.length;
   for (var i=0; i<numObjs; i++) {
-	if(event.objectNames[i]="var.io.state" && toi.informationService.getObject(event.objectNames[i])="standby"){
+	if(event.objectNames[i] == "var.io.state" && toi.informationService.getObject(event.objectNames[i]) == "standby"){
 		try {
 		mediaPlayer.close();
-		mediaPlayer.releaseInstance();
 		} catch(e) {
 		alert(e);
 		}
-	} else if(event.objectNames[i]="var.io.state" && toi.informationService.getObject(event.objectNames[i])="normal"){
+	} else if(event.objectNames[i] == "var.io.state" && toi.informationService.getObject(event.objectNames[i]) == "normal"){
 		play(channels[currChan]);
 	}
   }
