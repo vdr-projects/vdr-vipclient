@@ -267,7 +267,14 @@ for(x=0; x<cList.length;x++) {
 
 }
 
-
+function addzero(zero)
+{
+if (zero<10)
+  {
+  zero="0" + zero;
+  }
+return zero;
+}
 
 function startTimeshiftBuffering() {
     // check that media player is working
@@ -905,14 +912,8 @@ function updateOSDtime(timchan) {
 	var EPGminutes = Math.floor((dateCurrent.getTime() - date.getTime()) /1000/60);
 	var tm = tijd.getMinutes();
 	var th = tijd.getHours();
-	if(th<10)
-        {
-                th = "0"+th;
-        }
-        if(tm<10)
-        {
-                tm = "0"+tm;
-        }
+	th=addzero(th);
+	tm=addzero(tm);
 
 	EPG[0][7][timchan] =  th + ":" + tm + " (" + EPGminutes + " / " + ((EPG[0][3][timchan])-EPGminutes).toFixed(0) + ")" + " " + EPG[0][1][timchan] + " ";
 	if (!EPG[0][2][timchan] || ((EPG[0][3][timchan]-EPGminutes) < 0))
@@ -938,14 +939,8 @@ function settimer() {
 		tijd = new Date(tijd);
 		var tm = tijd.getMinutes();
 		var th = tijd.getHours();
-		if(tm<10)
-		        {
-	                tm = "0"+tm;
-        		}
-                if(th<10)
-        		{
-        	        th = "0"+th;
-		        }
+		th=addzero(th);
+		tm=addzero(tm);
 
 		switchtimer.innerHTML = "<p>  Name      : " + EPG[NowNext][1][currChan] + "</p><p>  channel   : " + channelsnames[currChan] +  "</p><p>  Starttime : " + th + ":" + tm + "</p>";
 		setOSDtimer();
@@ -969,14 +964,8 @@ function setOSDtimer() {
 		tijd = new Date(tijd);
 		var tm = tijd.getMinutes();
 		var th = tijd.getHours();
-		if(tm<10)
-		        {
-	                tm = "0"+tm;
-        		}
-                if(th<10)
-        		{
-        	        th = "0"+th;
-		        }
+		th=addzero(th);
+		tm=addzero(tm);
 		osdtimer.innerHTML = "<p style='color:black;font-size:" + fsList + ";'>" + th + ":" + tm + "</p>";
 		SetLed(0,2,1);
 		switchicon = "\uE00C";
@@ -1053,20 +1042,9 @@ function date_time()
         d = date.getDate();
         day = date.getDay();
         h = date.getHours();
-        if(h<10)
-        {
-                h = "0"+h;
-        }
         m = date.getMinutes();
-        if(m<10)
-        {
-                m = "0"+m;
-        }
-        s = date.getSeconds();
-        if(s<10)
-        {
-                s = "0"+s;
-        }
+	h=addzero(h);
+	m=addzero(m);
         result = ''+days[day]+' '+d+' '+months[month]+' '+year+' '+h+':'+m;
         return;
 }
@@ -1157,15 +1135,8 @@ function GetEPG(epgchan)
 	tijd = new Date(tijd);
 	var tm = tijd.getMinutes();
 	var th = tijd.getHours();
-	if(th<10)
-        {
-                th = "0"+th;
-        }
-        if(tm<10)
-        {
-                tm = "0"+tm;
-        }
-	
+	th=addzero(th);
+	tm=addzero(tm);
 	 EPG[1][7][epgchan] = th + ":" + tm + " (" + (event.duration/60).toFixed(0) + ")" + "          " + event.name + " ";
 
 	if (!event.time) 
@@ -1213,14 +1184,8 @@ function GetSchedule(schchan,tablelength){
 		tijd = new Date(tijd);
 		var tm = tijd.getMinutes();
 		var th = tijd.getHours();
-		if(th<10)
-	        	{
-	                th = "0"+th;
-	        	}
-	        if(tm<10)
-	        	{
-	                tm = "0"+tm;
-	        	}
+		th=addzero(th);
+		tm=addzero(tm);
 
 	      txt = txt + "<td style='font-size:" + fsSchedList + ";'>\uE003\uE003\uE003\uE003\uE003" + th + ":" + tm + "     (" + (events.infoSequence[i].duration/60).toFixed(0) + ")  " + Left(events.infoSequence[i].name,30) + "</td></tr>";
 	    }
@@ -1481,13 +1446,13 @@ function onKeyMenu(keyCode) {
   switch(keyCode) {
     case "BrowserBack":
 	if (menu !== 0) {
-		if (menu == 3 ) { isFullscreen = 0; play(channels[currChan]); isFullscreen = 1; mediaPlayer.removeEventListener(mediaPlayer.ON_STATE_CHANGED, MPD);}
+		if (menu == 3 ) { isFullscreen = 0; play(channels[currChan]); isFullscreen = 1; mediaPlayer.removeEventListener(mediaPlayer.ON_STATE_CHANGED, MPD);MPDListener = 0;}
 		menu = 0;	
 		InitMenu(menu);
 		break;
 		}
     case "Menu":
-	if (menu == 3 ) { play(channels[currChan]); mediaPlayer.removeEventListener(mediaPlayer.ON_STATE_CHANGED, MPD);}
+	if (menu == 3 ) { play(channels[currChan]); mediaPlayer.removeEventListener(mediaPlayer.ON_STATE_CHANGED, MPD);MPDListener = 0;}
 	isSetupMenu = 0;
 	mainmenu.style.opacity = 0;
     break;
@@ -1674,7 +1639,7 @@ function onKeyMenu(keyCode) {
 	break;
 	case KEY_0:
 		if (menu !== 0) {
-		if (menu == 3 ) { isFullscreen = 0; play(channels[currChan]); isFullscreen = 1; mediaPlayer.removeEventListener(mediaPlayer.ON_STATE_CHANGED, MPD);}
+		if (menu == 3 ) { isFullscreen = 0; play(channels[currChan]); isFullscreen = 1; mediaPlayer.removeEventListener(mediaPlayer.ON_STATE_CHANGED, MPD);MPDListener = 0;}
 		menu = 0;	
 		InitMenu(menu);
 		}
@@ -1798,12 +1763,9 @@ function LoadTimers() {
 				tijd = new Date(tijd);
 				var tm = tijd.getMinutes();
 				var th = tijd.getHours();
-					if(tm<10) {
-                			tm = "0"+tm;
-		        		}
-			                if(th<10) {
-		        	        th = "0"+th;
-	        			}
+				th=addzero(th);
+				tm=addzero(tm);
+
 				booking = booking + " Start " + th + ":" + tm;
 
 					if (y.category !== "SwitchOnly") {
@@ -1872,6 +1834,8 @@ function UnloadMediaSettings() {
 	mediaPlayer.removeEventListener(mediaPlayer.ON_POSITION_CHANGED, ShowMediaOSD);
 	mediaPlayer.removeEventListener(mediaPlayer.ON_STATE_CHANGED, onStateChanged);
 	mediaList.style.opacity = 0;
+	osdmedia.style.opacity = 0;
+	osdepginfo.style.opacity = 0;
 	mediaList.innerHTML = "<h1><center style='font-size:" + fsRec + ";color:white;'> Please WAIT </center></h1>";
  	showDisplay((currChan.toString()), false, 100, 0 );
 	isMediaMenu = 0;
@@ -1885,7 +1849,13 @@ function UnloadMediaSettings() {
 function onKeyMedia(keyCode) {
   switch(keyCode) {
     case "BrowserBack":
+		if (mediaList.style.opacity == 0) { 
+		ShowInfo();
+		osdepginfo.style.opacity = 1 - osdepginfo.style.opacity;
+		break;
+		 }
     case "TV":
+		if (mediaList.style.opacity == 0) { play(channels[currChan]);}
 	UnloadMediaSettings();
         break;
     break;
@@ -1944,7 +1914,6 @@ function onKeyMedia(keyCode) {
 	} else {
 	osdmedia.style.opacity = 1 - osdmedia.style.opacity;
 	ShowMediaOSD();
-//	mediaPlayer.playFromPosition(12000,1000);
 	}
         break;
    case "Green":
@@ -1992,6 +1961,7 @@ function onKeyMedia(keyCode) {
 	    }
     break;
     case "MediaStop":
+	    position = 0;
 	    isFullscreen = 0; play(channels[currChan]); isFullscreen = 1;
 	    if (isRecording == 1) { 
 		recordStop();
@@ -2033,6 +2003,48 @@ function onKeyMedia(keyCode) {
         toi.audioOutputService.setVolume(AudioOut, Volume);
 	showVolume();
 	break;
+    case KEY_1:
+	position = position + (mediaPlayer.getPosition()/1000) - 30;
+	if (position <= 0) { position = 0;} 
+			playRec((recLink[currMed] + "?time=" + position));
+	break;
+    case KEY_4:
+	position = position + (mediaPlayer.getPosition()/1000) - 60;
+	if (position <= 0) { position = 0;} 
+			playRec((recLink[currMed] + "?time=" + position));
+	break;
+    case KEY_7:
+	position = position + (mediaPlayer.getPosition()/1000) - 240;
+	if (position <= 0) { position = 0;} 
+			playRec((recLink[currMed] + "?time=" + position));
+	break;
+
+
+    case KEY_3:
+	position = position + (mediaPlayer.getPosition()/1000) + 30;
+	if (position >= recDura[currMed]) {
+	 	    isFullscreen = 0; play(channels[currChan]); isFullscreen = 1;
+	} else {
+			playRec((recLink[currMed] + "?time=" + position));
+	}
+	break;
+    case KEY_6:
+	position = position + (mediaPlayer.getPosition()/1000) + 60;
+	if (position >= recDura[currMed]) {
+	 	    isFullscreen = 0; play(channels[currChan]); isFullscreen = 1;
+	} else {
+			playRec((recLink[currMed] + "?time=" + position));
+	}
+	break;
+    case KEY_9:
+	position = position + (mediaPlayer.getPosition()/1000) + 240;
+	if (position >= recDura[currMed]) {
+	 	    isFullscreen = 0; play(channels[currChan]); isFullscreen = 1;
+	} else {
+			playRec((recLink[currMed] + "?time=" + position));
+	}
+	break;
+
 	default:
         break;
   }
@@ -2052,6 +2064,7 @@ try {
 	  recLink[i] = (x[i].getElementsByTagName("link")[0].childNodes[0].nodeValue);
 	  recDesc[i] = (x[i].getElementsByTagName("description")[0].childNodes[0].nodeValue);
 	  recDura[i] = (x[i].getElementsByTagName("duration")[0].childNodes[0].nodeValue);
+	  recStrt[i] = (x[i].getElementsByTagName("start")[0].childNodes[0].nodeValue);
 	  }
 	getRecOK = 1;
   } catch(e) {
@@ -2062,8 +2075,8 @@ try {
 }
 
 function getRecList2() {
-recTitl[0] = "RTSP Stream";
-recLink[0] = "rtsp://192.168.3.15:8000/video0/000_Mpeg4/CSI:_Crime_Scene_Investigation/2012.11.02-22:15-Fr/2012-11-02.22.05.32-0.rec";
+recTitl[0] = "Test Stream";
+recLink[0] = "http://192.168.3.15:8000/video0/000_Mpeg4/CSI:_Crime_Scene_Investigation/2012.11.02-22:15-Fr/2012-11-02.22.05.32-0.rec?time=600";
 recDesc[0] = " ";
 recTitl[1] = "DVR";
 recLink[1] = "dvr:///pvr/storage/asset_bmyjD4";
@@ -2075,12 +2088,13 @@ recTitl[3] = "FILE Vermist";
 recLink[3] = "file://mnt/Vermist/2013.01.09-22:10-Mi/2013-01-09.22.05.43-0.rec/00001.ts";
 recDesc[3] = " ";
 nrMedia = 3;
-
+getRecOK = 1;
 }
 
 
 
 function showMediaList() {
+	osdmedia.style.opacity = 0;
 	var liststyle = "";
 	var htmlstring = "<h1><center style='font-size:" + fsRec + ";color:white;'> RECORDINGS </center></h1><table border='0'><tr>";
 	listMed = currMed-7;
@@ -2211,11 +2225,30 @@ function onRecorderStateChanged(event) {
 
 function ShowMediaOSD() {
 // Display Name/ length 
-
-	osdmedia.innerHTML = "<p style='color:white;font-size:" + fsMedia +";'> getCapabilities : " + mediaPlayer.getCapabilities() + " Elapsed time : " + mediaPlayer.getPosition() + "</p>";
+	var pos = (position + (mediaPlayer.getPosition()/1000)).toFixed(0);
+	var pos2 = ((pos / Number(recDura[currMed])) * 100).toFixed(0);
+	if (pos2 < 1) { pos2 = 1;} 
+	pos2 = ((pos2 * 140) / 100).toFixed(0);
+	osdmedia.innerHTML = "<pre style='color:white;font-size:" + fsMedia +";'>  " + Left(recTitl[currMed],50) + "\n  Elapsed time : " + (pos/60).toFixed(0) + " / " + (Number(recDura[currMed])/60).toFixed(0)  + "\n  \uE007" + new Array(pos2 - 1).join("\uE008") + new Array(140 - pos2).join("\uE009") + "\uE00A </pre>";
 }
 
+function ShowInfo() {
+//Like Show EPG Info
+        date = new Date(Number(recStrt[currMed])*1000);
+        year = date.getFullYear();
+        month = date.getMonth();
+        d = date.getDate();
+        day = date.getDay();
+        h = date.getHours();
+        m = date.getMinutes();
+	h=addzero(h);
+	m=addzero(m);
 
+        result = ''+days[day]+' '+d+' '+months[month]+' '+year+' '+h+':'+m;
+
+       	osdepginfo.innerHTML = "<center><pre style='color:white;'>" + Left(recTitl[currMed],60) + "\n Date : " + result + "\n Length : " + (recDura[currMed] / 60).toFixed(0) + " Minutes \n</pre><p>" + recDesc[currMed] + "</p></center>";
+
+}
 
 function onScheduledStart(event) {
   // event is of type ToiSchedulerServiceBooking, see docs
@@ -2302,7 +2335,7 @@ function onScheduledStop(event) {
 	<videoplane id='videoplane' style='position:absolute; left:0px; top:0px; height: 100%; width: 100%; z-index:500;'></videoplane>
 
 	<div id="osdvolume" style="width:63%; position:absolute; left:10%; top:80%;z-index:501;fontFamily:VDRSymbolsSans;opacity:0;">Volume : </div>
-	<div id="osdmedia" style="width:63%; position:absolute; left:21%; top:69%;z-index:505;fontFamily:VDRSymbolsSans;opacity:0;"></div>
+	<div id="osdmedia" style="background:#3366ff;-webkit-border-radius:50px;width:80%; position:absolute; left:10%; top:69%;z-index:505;fontFamily:VDRSymbolsSans;opacity:0;"></div>
 
 	<div id="osdmain" style="background:#3366ff;width:76%; position:absolute; left:10%; top:60%; bottom:9%;z-index:505;-webkit-border-radius:50px;"></div>
 	<div id="osdtime" style="width:42%; position:absolute; left:58%; top:63%;z-index:505;"></div>

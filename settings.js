@@ -210,7 +210,9 @@ var recTitl = new Array();
 var recLink = new Array();
 var recDesc = new Array();
 var recDura = new Array();
+var recStrt = new Array();
 var getRecOK = 0;
+var position = 0;
 
 var timer = new Array();
 var getbookingID = 0;
