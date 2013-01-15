@@ -1481,13 +1481,13 @@ function onKeyMenu(keyCode) {
   switch(keyCode) {
     case "BrowserBack":
 	if (menu !== 0) {
-		if (menu == 3 ) { isFullscreen = 0; play(channels[currChan]); isFullscreen = 1; }
+		if (menu == 3 ) { isFullscreen = 0; play(channels[currChan]); isFullscreen = 1; mediaPlayer.removeEventListener(mediaPlayer.ON_STATE_CHANGED, MPD);}
 		menu = 0;	
 		InitMenu(menu);
 		break;
 		}
     case "Menu":
-	if (menu == 3 ) { play(channels[currChan]); }
+	if (menu == 3 ) { play(channels[currChan]); mediaPlayer.removeEventListener(mediaPlayer.ON_STATE_CHANGED, MPD);}
 	isSetupMenu = 0;
 	mainmenu.style.opacity = 0;
     break;
@@ -1662,7 +1662,7 @@ function onKeyMenu(keyCode) {
 	InitMenu(menu);
 	break;
 	case KEY_9:
-		if (menu == 0) {
+		if (menu == 0 || menu == 3) {
 		menu = 3;
 		playMPD(MPDAddress);
 		InitMenu(menu);
@@ -1674,7 +1674,7 @@ function onKeyMenu(keyCode) {
 	break;
 	case KEY_0:
 		if (menu !== 0) {
-		if (menu == 3 ) { isFullscreen = 0; play(channels[currChan]); isFullscreen = 1; }
+		if (menu == 3 ) { isFullscreen = 0; play(channels[currChan]); isFullscreen = 1; mediaPlayer.removeEventListener(mediaPlayer.ON_STATE_CHANGED, MPD);}
 		menu = 0;	
 		InitMenu(menu);
 		}
@@ -1704,22 +1704,6 @@ function onKeyMenu(keyCode) {
         break;
   }
 }
-
-
-function playMPD(uri) {
-  try {
-    if (mediaPlayer.getState() != mediaPlayer.STATE_IDLE) {
-      mediaPlayer.close();
-    }
-	mediaPlayer.open(uri);
-	mediaPlayer.play(1000);
-	showDisplay("MPD", false, 100, 0 );
-  } catch (e) {
-    alert("Failed opening recording: " + e);
-    return;
-  }
-}
-
 
 
 function InitMenu(menu) {
@@ -1833,6 +1817,45 @@ function LoadTimers() {
 
 
 // End of Menu section
+
+// MPD Section
+
+function MPD(ev) {
+    alert("Media player state changed: state=" + ev.state + ", reason=" + ev.reason + ", code=" + ev.code);
+
+	if ( ev.state == 6 && ev.reason == "HostUnreachable" ) {
+	    showDisplay("ERRR", false, 100, 0 );
+	mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'> MPD Connection </center></h1><pre style='color:black;font-size:" + fsMenu + ";'>   MENU to exit \n   0 - back to MainMenu \n   9 - Retry \n\n<center style='color:white;'>ERROR Connecting to MPD server : \n" + MPDAddress + "</center></pre>";
+	  } else if ( ev.state == 2 ) { // && ev.reason == "PositionEnd" ) {
+	    showDisplay("STOP", false, 100, 0 );
+	mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'> MPD Connection </center></h1><pre style='color:black;font-size:" + fsMenu + ";'>   MENU to exit \n   0 - back to MainMenu \n   9 - Reconnect \n\n<center style='color:white;'>Connected to MPD server : \n" + MPDAddress + "\nbut streaming ended</center></pre>";
+	  } else if ( ev.state == 3 && ev.reason == "CommandPlay" ) {
+	showDisplay("MPD", false, 100, 0 );
+	mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'> MPD Connection </center></h1><pre style='color:black;font-size:" + fsMenu + ";'>   MENU to exit \n   0 - back to MainMenu \n\n\n<center style='color:white;'>Connected to MPD server : \n" + MPDAddress + "</center></pre>";
+	  } else {
+	    showDisplay("ERRR", false, 100, 0 );
+	mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'> MPD Connection </center></h1><pre style='color:black;font-size:" + fsMenu + ";'>   MENU to exit \n   0 - back to MainMenu \n   9 - Reconnect \n\n<center style='color:white;'>Error : " + ev.state + "\n Reason : " + ev.reason + "</center></pre>";
+	}
+
+}
+
+function playMPD(uri) {
+  try {
+    if (mediaPlayer.getState() != mediaPlayer.STATE_IDLE) {
+      mediaPlayer.close();
+    }
+	mediaPlayer.open(uri);
+	mediaPlayer.play(1000);
+	if (!MPDListener) {	mediaPlayer.addEventListener(mediaPlayer.ON_STATE_CHANGED, MPD); }
+	MPDListener = 1;
+  } catch (e) {
+    alert("Failed opening recording: " + e);
+    return;
+  }
+}
+
+
+// End of MPD Section
 
 // Media Player Section
 
