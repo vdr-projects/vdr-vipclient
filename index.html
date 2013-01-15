@@ -1663,7 +1663,9 @@ function onKeyMenu(keyCode) {
 	break;
 	case KEY_9:
 		if (menu == 0) {
-		//
+		menu = 3;
+		playMPD(MPDAddress);
+		InitMenu(menu);
 		} else if (menu == 1) {
 		menu = 4; // INFO menu
 		InitMenu(menu);
@@ -1704,11 +1706,26 @@ function onKeyMenu(keyCode) {
 }
 
 
+function playMPD(uri) {
+  try {
+    if (mediaPlayer.getState() != mediaPlayer.STATE_IDLE) {
+      mediaPlayer.close();
+    }
+	mediaPlayer.open(uri);
+	mediaPlayer.play(1000);
+	showDisplay("MPD", false, 100, 0 );
+  } catch (e) {
+    alert("Failed opening recording: " + e);
+    return;
+  }
+}
+
+
 
 function InitMenu(menu) {
 
 if(menu == 0) { // Main Menu
-	mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'> MainMenu \n ( " + Version + " )</center></h1><pre style='color:black;font-size:" + fsMenu + ";'>   1 - SettingsMenu \n   2 - Recordings \n   3 - TimersMenu\n\n\n\n\n\n\n\n   BLUE - Restart Portal </pre>";
+	mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'> MainMenu \n ( " + Version + " )</center></h1><pre style='color:black;font-size:" + fsMenu + ";'>   1 - SettingsMenu \n   2 - Recordings \n   3 - TimersMenu\n\n\n\n\n\n   9 - MPD Server Connection\n\n   BLUE - Restart Portal </pre>";
 }
 
 if(menu == 1) { // settings menu
@@ -1748,6 +1765,10 @@ if(menu == 2) { // Timers menu
 
 
 	mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'> Timers </center></h1><pre style='color:black;font-size:" + fsMenu + ";'>\n   0 - MainMenu \n" + booking + "</pre>";
+}
+
+if(menu == 3) { // MPD Menu
+	mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'> MPD Connection </center></h1><pre style='color:black;font-size:" + fsMenu + ";'> MENU to exit \n 0 - back to MainMenu </pre>";
 }
 
 if(menu == 4) { // INFO Menu
@@ -2024,8 +2045,8 @@ recDesc[0] = " ";
 recTitl[1] = "DVR";
 recLink[1] = "dvr:///pvr/storage/asset_bmyjD4";
 recDesc[1] = " ";
-recTitl[2] = "HTTP media avi file";
-recLink[2] = "http://192.168.3.15:8000/multimedia/video/The Island 2005/poster1.jpg";
+recTitl[2] = "HTTP Vermist";
+recLink[2] = "http://192.168.3.15/portal/webkit/video0/Vermist/2013.01.09-22:10-Mi/2013-01-09.22.05.43-0.rec/00001.ts";
 recDesc[2] = " ";
 recTitl[3] = "FILE Vermist";
 recLink[3] = "file://mnt/Vermist/2013.01.09-22:10-Mi/2013-01-09.22.05.43-0.rec/00001.ts";
