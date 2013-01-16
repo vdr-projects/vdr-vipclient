@@ -75,7 +75,7 @@ function onLoad() {
 	osdepg.style.color = "white";
 	osdca.style.fontSize = fsCA;
 	osdca.style.color = "black";
-	switchtimer.style.color = "black";
+	switchtimer.style.color = "white";
 	switchtimer.style.fontSize = fsEpg;
 	osdepginfo.style.fontSize = fsEpginfo;
 	osdepginfonext.style.fontSize = fsEpginfo;
@@ -1610,11 +1610,6 @@ function onKeyMenu(keyCode) {
 	break;
 	case KEY_8:
 		if (menu == 0) {
-			isSetupMenu = 0;
-			mediaList.style.opacity = 0.9;
-			mainmenu.style.opacity = 0;
-			getRecList2();
-			LoadMediaSettings();
 			}
 
 	if (menu == 1) {
@@ -1847,6 +1842,16 @@ function UnloadMediaSettings() {
 
 
 function onKeyMedia(keyCode) {
+if (DelisOK) {
+	switch(keyCode) {
+	case "Accept":
+	  DelRec2();
+	default:
+	  switchtimer.style.opacity = 0;
+	  DelisOK = 0;
+	break;
+	}
+} else {
   switch(keyCode) {
     case "BrowserBack":
 		if (mediaList.style.opacity == 0) { 
@@ -1861,23 +1866,26 @@ function onKeyMedia(keyCode) {
     break;
     case "Right":
 	if (mediaList.style.opacity != 0) {
-		incMed(9);
-	do
-	{
-	        incMed(1);
-	}
-	while (!recTitl[currMed]);
+           for (var i=0;i<10;i++) {
+		do
+		{
+		        incMed(1);
+		}
+		while (!recTitl[currMed]);
+	   }	
 	showMediaList();
 	}
+
 	break;
     case "Left":
 	if (mediaList.style.opacity != 0) {
-		decMed(9);
-	do
-	{
-	        decMed(1);
-	}
-	while (!recTitl[currMed]);
+           for (var i=0;i<10;i++) {
+		do
+		{
+		        decMed(1);
+		}
+		while (!recTitl[currMed]);
+	   }
 	showMediaList();
 	}
 	break;
@@ -1909,13 +1917,17 @@ function onKeyMedia(keyCode) {
 	break;
   case "Accept":
 	if (mediaList.style.opacity != 0) {
-	mediaList.style.opacity = 0;
-	playRec(recLink[currMed]);
+		mediaList.style.opacity = 0;
+		playRec(recLink[currMed]);
 	} else {
 	osdmedia.style.opacity = 1 - osdmedia.style.opacity;
 	ShowMediaOSD();
 	}
         break;
+    case "Red":
+	if (mediaList.style.opacity != 0) {
+	DelRec();
+	}
    case "Green":
 			audio = audio + 1;
 			is = toi.informationService;
@@ -2048,6 +2060,7 @@ function onKeyMedia(keyCode) {
 	default:
         break;
   }
+ }
 }
 
 function getRecList() {
@@ -2061,12 +2074,14 @@ try {
    for (var i=0;i<x.length;i++)
 	  { 
 	  recTitl[i] = (x[i].getElementsByTagName("title")[0].childNodes[0].nodeValue);
+	  recTitl[i] = recTitl[i].split("~");
 	  recLink[i] = (x[i].getElementsByTagName("link")[0].childNodes[0].nodeValue);
 	  recDesc[i] = (x[i].getElementsByTagName("description")[0].childNodes[0].nodeValue);
 	  recDura[i] = (x[i].getElementsByTagName("duration")[0].childNodes[0].nodeValue);
 	  recStrt[i] = (x[i].getElementsByTagName("start")[0].childNodes[0].nodeValue);
 	  }
-	getRecOK = 1;
+	MakeRecList();
+ 	getRecOK = 1;
   } catch(e) {
     alert("Get Recordings problem: " + e);
 	getRecOK = 0;
@@ -2074,33 +2089,67 @@ try {
   }
 }
 
-function getRecList2() {
-recTitl[0] = "Test Stream";
-recLink[0] = "http://192.168.3.15:8000/video0/000_Mpeg4/CSI:_Crime_Scene_Investigation/2012.11.02-22:15-Fr/2012-11-02.22.05.32-0.rec?time=600";
-recDesc[0] = " ";
-recTitl[1] = "DVR";
-recLink[1] = "dvr:///pvr/storage/asset_bmyjD4";
-recDesc[1] = " ";
-recTitl[2] = "HTTP Vermist";
-recLink[2] = "http://192.168.3.15/portal/webkit/video0/Vermist/2013.01.09-22:10-Mi/2013-01-09.22.05.43-0.rec/00001.ts";
-recDesc[2] = " ";
-recTitl[3] = "FILE Vermist";
-recLink[3] = "file://mnt/Vermist/2013.01.09-22:10-Mi/2013-01-09.22.05.43-0.rec/00001.ts";
-recDesc[3] = " ";
-nrMedia = 3;
-getRecOK = 1;
+
+function DelRec() {
+try {
+   xmlhttp=new XMLHttpRequest();
+   xmlhttp.open("GET",(RestFulAPI + "/recordings/" + currMed + ".xml?" + new Date().getTime()),false);
+   xmlhttp.send();
+   xmlDoc=xmlhttp.responseXML; 
+   var x=xmlDoc.getElementsByTagName("recording");
+	//popup for confirm
+	switchtimer.style.opacity = 1;
+	switchtimer.innerHTML = "<pre><center> OK to delete \n other to abort \n\n " + (x[0].getElementsByTagName("param")[1].childNodes[0].nodeValue) + "</center></pre>"; // Recording Name
+	DelisOK = 1
+  } catch(e) {
+    alert("Delete Recordings problem: " + e);
+  }
+}
+
+function DelRec2() {
+try {
+   xmlhttp=new XMLHttpRequest();
+   xmlhttp.open("DELETE",(RestFulAPI + "/recordings/" + currMed ),false);
+   xmlhttp.send();
+   alert(xmlhttp.responseText);
+  } catch(e) {
+    alert("Delete Recordings problem: " + e);
+  }
 }
 
 
+
+
+function MakeRecList() {
+   var x = "";
+   for (var i=0;i<recTitl.length;i++)
+	{
+				if (recTitl[i][recMap + 1]) { 
+						if(i<(recTitl.length - 1)) {
+							if (recTitl[i][recMap] != x) {
+								recList[i] = "\uE002" + recTitl[i];
+							} else {
+								var y = recTitl[i][recMap].length + 1;
+								recList[i] = "\uE003" + new Array(y).join("\uE003") + String(recTitl[i]).substring(y);
+							}
+							x = recTitl[i][recMap];
+						}
+				} else { 
+					recList[i] = "\uE003" + recTitl[i];
+				}
+		}
+}
 
 function showMediaList() {
 	osdmedia.style.opacity = 0;
 	var liststyle = "";
 	var htmlstring = "<h1><center style='font-size:" + fsRec + ";color:white;'> RECORDINGS </center></h1><table border='0'><tr>";
-	listMed = currMed-7;
-	for(var i=currMed-7; i<=currMed+7; i++) {
+	listMed = currMed - 1;
+	if (nrMedia < 14) {var MaxMed = nrMedia; } else { var MaxMed = 14; }
+
+	for(var i=currMed; i<=currMed + MaxMed; i++) {
 		if (listMed<0) {
-			listMed=nrMedia-2;
+			listMed=nrMedia;
 			}
 		if (listMed>nrMedia-1) {
 			listMed= -1;
@@ -2109,13 +2158,13 @@ function showMediaList() {
 			{
 				listMed = listMed + 1;
 			}
-			while (!recTitl[listMed] && (listMed<nrMedia));
+			while (!recList[listMed] && (listMed<nrMedia));
 		if ( listMed == currMed) { 
 			liststyle = " style='background:#fc5;-webkit-border-radius:25px;";
 		}  else {
 			liststyle = " style='";
 		}
-		htmlstring = htmlstring + "<td" + liststyle + "font-size:" + fsReclist + ";'>\uE003\uE003" + Left(recTitl[listMed],60) + "</td></tr>";
+		htmlstring = htmlstring + "<td" + liststyle + "font-size:" + fsReclist + ";'>\uE003\uE003" + Left(recList[listMed],60) + "</td></tr>";
 	}
 	mediaList.innerHTML = htmlstring + "</table>";
 }
@@ -2329,8 +2378,6 @@ function onScheduledStop(event) {
 	<div id="colorkeys" style="width:100%; position:absolute; left:10%; top:84%;"></div>
 
 	<div id="chanlistepg" style="width:42%; position:absolute; left:7%; top:50%;"> 	</div>
-	<div id="switchtimer" style="background:#3366ff;width:42%; position:absolute; left:21%; top:26%;z-index:10;opacity:0;"></div>
-
 
 	<videoplane id='videoplane' style='position:absolute; left:0px; top:0px; height: 100%; width: 100%; z-index:500;'></videoplane>
 
@@ -2355,6 +2402,8 @@ function onScheduledStop(event) {
 
 	<div id="mainmenu"  style="background:#3366ff;width:76%; position:absolute; left:10%; top:10%; bottom:10%;z-index:520;opacity:0;-webkit-border-radius:50px;fontFamily:VDRSymbolsSans;"></div>
 	<div id="mediaList" style="background:#3366ff;width:76%; position:absolute; left:10%; top:10%; bottom:10%;z-index:520;opacity:0;-webkit-border-radius:50px;"></div>
+
+	<div id="switchtimer" style="background:red;width:42%; position:absolute; left:21%; top:26%;z-index:525;opacity:0;"></div>
 
 </body>
 </html>

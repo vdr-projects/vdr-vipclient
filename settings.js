@@ -35,6 +35,7 @@ var minChan = new Array(); var maxChan = new Array(); var defChan = new Array();
 
 // Server for Recordings
 var recServ = "http://192.168.3.15:8000";
+var RestFulAPI = "http://192.168.3.15:8002";
 var MPDAddress = "http://192.168.3.15:8888";
 
 // Radio channels.js Settings
@@ -97,6 +98,7 @@ var channelsepglang = new Array();
 
 var currMed = 0;
 var listMed = 0;
+var DelisOK = 0;
 
 var menu = 0;
 var isMediaMenu = 0;
@@ -211,6 +213,9 @@ var recLink = new Array();
 var recDesc = new Array();
 var recDura = new Array();
 var recStrt = new Array();
+var recList = new Array();
+var recMap = 0;
+
 var getRecOK = 0;
 var position = 0;
 

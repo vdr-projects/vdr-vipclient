@@ -5,6 +5,7 @@
 	Added Menu INFO for IP/ DVR state
 	Standby now stops the stream, getting back from standby reconnects to server & sets display
 	Added initial support for MPD -> client plays stream from MPD-httpd
+	Recordings Menu now show maps.
 
 0.10	Added sub Listinges for use as Radio list / Protected List / SD/HD list etc
 	(Use for Multicast Channels keyword MultiCast in Serveradres)
