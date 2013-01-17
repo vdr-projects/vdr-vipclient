@@ -216,6 +216,16 @@ var recStrt = new Array();
 var recList = new Array();
 var recMap = 0;
 
+var timersID = new Array();
+var timersFlag = new Array();
+var timersStrt = new Array();
+var timersStop = new Array();
+var timersDays = new Array();
+var timersName = new Array();
+var timersFile = new Array();
+var maxTimers = 0;
+var timerOK = 0;
+
 var getRecOK = 0;
 var position = 0;
 

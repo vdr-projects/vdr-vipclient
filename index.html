@@ -595,6 +595,8 @@ function onKeyDown(event) {
 
    case "Menu":
 		if(isFullscreen) {
+		osdepginfo.style.opacity = 0;
+		osdepginfonext.style.opacity = 0;
 		isSetupMenu = 1;
 		mainmenu.style.opacity = 0.8;
 		menu = 0;
@@ -1465,21 +1467,23 @@ function onKeyMenu(keyCode) {
 	if (menu == 2) {
 	    timerID = timerID - 1;
 			var x = toi.schedulerService.getBookingIds("*", 0, 0);
-		    if (timerID < x[0]) {
-        		timerID = x[0];
-		    }
-		InitMenu(menu);
+		    if (timerID < x[0]) { timerID = x[0]; }
+	} else 	if (menu == 5) {
+	    timerID = timerID - 1;
+		    if (timerID < 0) { timerID = 0; }
 	}
+		InitMenu(menu);
     break;
     case "Down":
 	if (menu == 2) {
 	    timerID = timerID + 1;
 		var x = toi.schedulerService.getBookingIds("*", 0, 0);
-		    if (timerID > x[x.length-1] ) {
-		        timerID = x[x.length-1];
-		    }
-		InitMenu(menu);
+		    if (timerID > x[x.length-1] ) { timerID = x[x.length-1]; }
+	} else 	if (menu == 5) {
+	    timerID = timerID + 1;
+		    if (timerID > (maxTimers - 1) ) { timerID = maxTimers - 1; }
 	}
+		InitMenu(menu);
     break;
     case "Accept":
 	if (menu == 2) {
@@ -1491,6 +1495,10 @@ function onKeyMenu(keyCode) {
 			setOSDtimer();
 			InitMenu(menu);
 		}
+	} else 	if (menu == 5) {
+		timersFlag[timerID] = 1 - timersFlag[timerID];
+		SwitchActiveTimers();
+		InitMenu(menu);
 	}
     break;
     case "Red":
@@ -1561,7 +1569,12 @@ function onKeyMenu(keyCode) {
 	InitMenu(menu);
 	break;
 	case KEY_4:
-		if (menu == 1) {
+		if (menu == 0) {
+			mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'> Timers </center></h1><pre style='color:black;font-size:" + fsMenu + ";'>\n\n\n<center> PLEASE WAIT </center></pre>";
+			timerID = 0;
+			menu = 5;
+			setTimeout("LoadTimersServer();InitMenu(menu);",100);
+		} else if (menu == 1) {
 			audiotype = audiotype + 1;
 			is = toi.informationService;
 			if(audiotype == 1) {	
@@ -1572,8 +1585,8 @@ function onKeyMenu(keyCode) {
 				is.setObject("cfg.media.audio.typepriority","visually_impaired",is.STORAGE_VOLATILE);
 				audiotype = 0;
 			}
+			InitMenu(menu);
 		}
-	InitMenu(menu);
 	break;
 	case KEY_5:
 	if (menu == 1) {
@@ -1669,7 +1682,7 @@ function onKeyMenu(keyCode) {
 function InitMenu(menu) {
 
 if(menu == 0) { // Main Menu
-	mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'> MainMenu \n ( " + Version + " )</center></h1><pre style='color:black;font-size:" + fsMenu + ";'>   1 - SettingsMenu \n   2 - Recordings \n   3 - TimersMenu\n\n\n\n\n\n   9 - MPD Server Connection\n\n   BLUE - Restart Portal </pre>";
+	mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'> MainMenu \n ( " + Version + " )</center></h1><pre style='color:black;font-size:" + fsMenu + ";'>   1 - Settings \n   2 - Recordings \n   3 - Timers\n   4 - Timers from Server\n\n\n\n\n   9 - MPD Server Connection\n\n   BLUE - Restart Portal </pre>";
 }
 
 if(menu == 1) { // settings menu
@@ -1741,6 +1754,20 @@ if(menu == 4) { // INFO Menu
 
 }
 
+if(menu == 5) { // Timers from Server
+	if (timerOK) {
+	booking = "<font style='background:#fc5;-webkit-border-radius:25px;color:black;font-size:" + fsMenu + ";'>";
+	var x = timerID - 1;
+	for (var i=0;i<10;i++) {
+		if (timer.length !== 0) { do { x = x + 1; } while (!timer[x] && (x < timer.length)) }
+		if (timer.length > x) { booking = booking + timer[x]; } else { booking = booking +"\n"; }
+		if (i == 0) { booking = booking + "</font>"; } 
+	}
+
+	mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'> Timers </center></h1><pre style='color:black;font-size:" + fsMenu + ";'>\n" + booking + "</pre>";
+	}
+}
+
 
 } // end of initmenu
 
@@ -1749,7 +1776,7 @@ function LoadTimers() {
 		var x = toi.schedulerService.getBookingIds("*", 0, 0);
 			for (var i=0;i<x.length;i++) { 
 				var y = toi.schedulerService.getBooking(x[i]);
-				booking = "ID " + x[i];
+				booking = "   ID " + x[i];
 				booking = booking + " " + y.category;
 				booking = booking + " " + toi.schedulerService.getParameter(x[i], "Channel");
 				tijd = y.start;
@@ -1761,7 +1788,7 @@ function LoadTimers() {
 				th=addzero(th);
 				tm=addzero(tm);
 
-				booking = booking + " Start " + th + ":" + tm;
+				booking = booking + " Start " + th + ":" + tm + "  ";
 
 					if (y.category !== "SwitchOnly") {
 						booking = booking + " Duration " + y.duration;
@@ -1772,6 +1799,63 @@ function LoadTimers() {
 				}
 }
 
+function SwitchActiveTimers() {
+try {
+   var x = "timer_id=" + timersID[timerID] + "&flags=" + timersFlag[timerID];
+	alert(x);
+   xmlhttp=new XMLHttpRequest();
+   xmlhttp.open("PUT",(RestFulAPI + "/timers"),false);
+//   xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+   xmlhttp.setRequestHeader("Content-length", x.length);
+//   xmlhttp.setRequestHeader("Connection", "close");
+//   xmlhttp.send(x);
+xmlhttp.send();
+	alert(xmlhttp.responseText);
+  } catch(e) {
+    alert("Updating Timers problem: " + e);
+  }
+}
+
+
+function LoadTimersServer() {
+try {
+   xmlhttp=new XMLHttpRequest();
+   xmlhttp.open("GET",(RestFulAPI + "/timers.xml"),false);  // ?" + new Date().getTime()),false);
+   xmlhttp.send();
+   xmlDoc=xmlhttp.responseXML; 
+   var x=xmlDoc.getElementsByTagName("timer");
+   maxTimers = x.length;
+   for (var i=0;i<x.length;i++)
+	  { 
+		var fill = "\uE003\uE003\uE003\uE003\uE003\uE003\uE003\uE003\uE003\uE003";
+	  timersID[i] = x[i].getElementsByTagName("param")[0].childNodes[0].nodeValue;
+	  timersFlag[i] = x[i].getElementsByTagName("param")[1].childNodes[0].nodeValue;
+	  timersStrt[i] = Right("00" + x[i].getElementsByTagName("param")[2].childNodes[0].nodeValue,4);
+	  timersStop[i] = Right("00" + x[i].getElementsByTagName("param")[3].childNodes[0].nodeValue,4);
+	  timersDays[i] = x[i].getElementsByTagName("param")[9].childNodes[0].nodeValue;
+	  if (timersDays[i] == "-------" ) { 
+		timersDays[i] = x[i].getElementsByTagName("param")[10].childNodes[0].nodeValue;
+	  } else { 
+		timersDays[i] = timersDays[i] + "\uE003\uE003\uE003";
+	  }
+	  timersName[i] = x[i].getElementsByTagName("param")[15].childNodes[0].nodeValue + fill;
+	  if (timersFlag[i] == "1") { 
+		timer[i] = "\uE003\uE00C\uE003";
+	  } else if (timersFlag[i] == "9") { 
+		timer[i] = "\uE003\uE00B\uE003";
+	  } else { 
+		timer[i] = "\uE003\uE003\uE003";
+	  }
+	  timersFile[i] = x[i].getElementsByTagName("param")[14].childNodes[0].nodeValue + fill + fill;
+	  timer[i] = timer[i] + timersDays[i] + "\uE003" + timersStrt[i] + "\uE003" + timersStop[i] + "\uE003" + Left(timersName[i],8) + "\uE003" + Left(timersFile[i],15) + "\n" ;
+	  timerOK = 1;
+	  }
+  } catch(e) {
+    timerOK = 0;
+    alert("Get Timers problem: " + e);
+    mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'> Timers </center></h1><pre style='color:black;font-size:" + fsMenu + ";'><center>\n   ERROR Getting Timers from : \n " + RestFulAPI + "</center></pre>";
+  }
+}
 
 // End of Menu section
 
@@ -1846,6 +1930,8 @@ if (DelisOK) {
 	switch(keyCode) {
 	case "Accept":
 	  DelRec2();
+	  getRecList();
+	  showMediaList();
 	default:
 	  switchtimer.style.opacity = 0;
 	  DelisOK = 0;
@@ -1854,11 +1940,12 @@ if (DelisOK) {
 } else {
   switch(keyCode) {
     case "BrowserBack":
-		if (mediaList.style.opacity == 0) { 
+	if (mediaList.style.opacity !== 0 && osdepginfo.style.opacity == 1) { osdepginfo.style.opacity = 0; break; }
+	if (mediaList.style.opacity == 0) { 
 		ShowInfo();
 		osdepginfo.style.opacity = 1 - osdepginfo.style.opacity;
 		break;
-		 }
+	 }
     case "TV":
 		if (mediaList.style.opacity == 0) { play(channels[currChan]);}
 	UnloadMediaSettings();
@@ -1955,6 +2042,16 @@ if (DelisOK) {
 				audio = 0;
 			}
 	break;
+    case "Yellow":
+	if (mediaList.style.opacity != 0) {
+	}
+    case "Blue":
+	ShowInfo();
+	osdepginfo.style.opacity = 1 - osdepginfo.style.opacity;
+	break;
+   case "Menu":
+	break;
+
     case KEY_REC:
     case "MediaRecord":
 	recordStart(recLink[currMed]);
@@ -2109,9 +2206,9 @@ try {
 function DelRec2() {
 try {
    xmlhttp=new XMLHttpRequest();
-   xmlhttp.open("DELETE",(RestFulAPI + "/recordings/" + currMed ),false);
+   xmlhttp.open("POST",(RestFulAPI + "/recordings/" + currMed ),false);
    xmlhttp.send();
-   alert(xmlhttp.responseText);
+   recList[currMed] = "";
   } catch(e) {
     alert("Delete Recordings problem: " + e);
   }
@@ -2167,6 +2264,7 @@ function showMediaList() {
 		htmlstring = htmlstring + "<td" + liststyle + "font-size:" + fsReclist + ";'>\uE003\uE003" + Left(recList[listMed],60) + "</td></tr>";
 	}
 	mediaList.innerHTML = htmlstring + "</table>";
+	ShowInfo();
 }
 
 
@@ -2295,7 +2393,7 @@ function ShowInfo() {
 
         result = ''+days[day]+' '+d+' '+months[month]+' '+year+' '+h+':'+m;
 
-       	osdepginfo.innerHTML = "<center><pre style='color:white;'>" + Left(recTitl[currMed],60) + "\n Date : " + result + "\n Length : " + (recDura[currMed] / 60).toFixed(0) + " Minutes \n</pre><p>" + recDesc[currMed] + "</p></center>";
+       	osdepginfo.innerHTML = "<center><pre style='color:white;'>" + Left(recTitl[currMed],60) + "\n " + result + "\n " + (recDura[currMed] / 60).toFixed(0) + " Minutes \n</pre><p>" + Left(recDesc[currMed],750) + "</p></center>";
 
 }
 
@@ -2384,7 +2482,7 @@ function onScheduledStop(event) {
 	<div id="osdvolume" style="width:63%; position:absolute; left:10%; top:80%;z-index:501;fontFamily:VDRSymbolsSans;opacity:0;">Volume : </div>
 	<div id="osdmedia" style="background:#3366ff;-webkit-border-radius:50px;width:80%; position:absolute; left:10%; top:69%;z-index:505;fontFamily:VDRSymbolsSans;opacity:0;"></div>
 
-	<div id="osdmain" style="background:#3366ff;width:76%; position:absolute; left:10%; top:60%; bottom:9%;z-index:505;-webkit-border-radius:50px;"></div>
+	<div id="osdmain" style="background:#3366ff;width:80%; position:absolute; left:10%; top:60%; bottom:9%;z-index:505;-webkit-border-radius:50px;"></div>
 	<div id="osdtime" style="width:42%; position:absolute; left:58%; top:63%;z-index:505;"></div>
 	<div id="osdname" style="width:69%;height:4%; position:absolute; left:12%; top:65%;z-index:505;"></div>
 	<div id="osdepg" style="width:63%; position:absolute; left:21%; top:69%;z-index:505;"></div>
@@ -2393,18 +2491,17 @@ function onScheduledStop(event) {
 
 	<div id="osdnr" style="background:red;width:10%;height:9%; position:absolute; left:12%; top:56%;z-index:505;opacity:0;-webkit-border-radius:25px;"></div>
 
-	<div id="osdepginfo" style="background:#3366ff;width:80%; position:absolute; left:10%; top:10%;z-index:510;opacity:0;-webkit-border-radius:50px;"></div>
-	<div id="osdepginfonext" style="background:#3366ff;width:80%; position:absolute; left:10%; top:10%;z-index:510;opacity:0;-webkit-border-radius:50px;"></div>
 	<div id="schedule" style="background:#3366ff; width:50%; height:48%; position:absolute; left:25%; top:10%;opacity:0;z-index:510;-webkit-border-radius:50px;"></div>
 
 	<div id="osdmute" style="width:7%; position:absolute; left:76%; top:9%;z-index:515;opacity:0;"><img src="mute.png"></div>
 	<div id="osdlang" style="width:7%; position:absolute; left:76%; top:9%;z-index:515;opacity:0;"></div>
 
-	<div id="mainmenu"  style="background:#3366ff;width:76%; position:absolute; left:10%; top:10%; bottom:10%;z-index:520;opacity:0;-webkit-border-radius:50px;fontFamily:VDRSymbolsSans;"></div>
-	<div id="mediaList" style="background:#3366ff;width:76%; position:absolute; left:10%; top:10%; bottom:10%;z-index:520;opacity:0;-webkit-border-radius:50px;"></div>
+	<div id="mainmenu"  style="background:#3366ff;width:80%; position:absolute; left:10%; top:10%; bottom:10%;z-index:520;opacity:0;-webkit-border-radius:50px;fontFamily:VDRSymbolsSans;"></div>
+	<div id="mediaList" style="background:#3366ff;width:80%; position:absolute; left:10%; top:10%; bottom:10%;z-index:520;opacity:0;-webkit-border-radius:50px;"></div>
 
 	<div id="switchtimer" style="background:red;width:42%; position:absolute; left:21%; top:26%;z-index:525;opacity:0;"></div>
-
+	<div id="osdepginfo" style="background:#3366ff;width:80%; position:absolute; left:10%; top:10%;z-index:525;opacity:0;-webkit-border-radius:50px;"></div>
+	<div id="osdepginfonext" style="background:#3366ff;width:80%; position:absolute; left:10%; top:10%;z-index:525;opacity:0;-webkit-border-radius:50px;"></div>
 </body>
 </html>
 
