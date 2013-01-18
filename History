@@ -9,6 +9,7 @@
 	Use of restfulapi
 		Read Timers from Server
 		Delete recording // if you want to Delete a recording, change in restfulapi/recordings.ccp line 46 DELETE by POST
+	KillStream on standby can be set from settings.js
 
 0.10	Added sub Listinges for use as Radio list / Protected List / SD/HD list etc
 	(Use for Multicast Channels keyword MultiCast in Serveradres)
