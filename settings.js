@@ -14,6 +14,7 @@ var showClock = 0;   // 0 = no, 1 = yes
 var SwitchGuide = 0; // 0 = no, 1 = yes
 var TimeShift = 0;   // 0 = no, 1 = yes timeshift
 var ShowSubs = 1;    // 0 = no, 1 = yes (default)
+var KillStream = 1;  //Close stream on Standby
 
 months = new Array('January', 'February', 'March', 'April', 'May', 'June', 'Jully', 'August', 'September', 'October', 'November', 'December');
 days = new Array('Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday');

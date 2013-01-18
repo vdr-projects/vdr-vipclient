@@ -24,7 +24,7 @@
 //
 //
 
-var Version = "0.11	2013/01/xx"
+var Version = "0.11	2013/01/18"
 
 for (var i = minChan[0];  i < (maxChan[0]+1); i++) { EPG[0][4][i] = "";EPG[1][4][i] = "";EPG[0][5][i] = "";EPG[1][5][i] = "";EPG[0][7][i] = "";EPG[1][7][i] = ""; }
 for (var i = minChan[1];  i < (maxChan[1]+1); i++) { EPG[0][4][i] = "";EPG[1][4][i] = "";EPG[0][5][i] = "";EPG[1][5][i] = "";EPG[0][7][i] = "";EPG[1][7][i] = ""; }
@@ -86,13 +86,13 @@ function onLoad() {
 function onEvent(event) {
 var numObjs = event.objectNames.length;
   for (var i=0; i<numObjs; i++) {
-	if(event.objectNames[i] == "var.io.state" && toi.informationService.getObject(event.objectNames[i]) == "standby"){
+	if(event.objectNames[i] == "var.io.state" && toi.informationService.getObject(event.objectNames[i]) == "standby" && KillStream == 1){
 		try {
 		mediaPlayer.close();
 		} catch(e) {
 		alert(e);
 		}
-	} else if(event.objectNames[i] == "var.io.state" && toi.informationService.getObject(event.objectNames[i]) == "normal"){
+	} else if(event.objectNames[i] == "var.io.state" && toi.informationService.getObject(event.objectNames[i]) == "normal" && KillStream == 1){
 		play(channels[currChan]);
 	}
   }
@@ -2219,22 +2219,36 @@ try {
 
 function MakeRecList() {
    var x = "";
+   var xx = "";
    for (var i=0;i<recTitl.length;i++)
 	{
-				if (recTitl[i][recMap + 1]) { 
-						if(i<(recTitl.length - 1)) {
-							if (recTitl[i][recMap] != x) {
-								recList[i] = "\uE002" + recTitl[i];
+	if (recTitl[i][recMap + 2]) { 
+		if (recTitl[i][recMap + 1] != xx) {
+						var y = recTitl[i][recMap].length + 1;
+						if (recTitl[i][recMap] != x) {
+								recList[i] = "\uE002 " + recTitl[i][recMap] + " \uE002 " + String(recTitl[i]).substring(y);
 							} else {
-								var y = recTitl[i][recMap].length + 1;
-								recList[i] = "\uE003" + new Array(y).join("\uE003") + String(recTitl[i]).substring(y);
+								recList[i] = "\uE003 " + new Array(y).join("\uE003") + " \uE002 " + String(recTitl[i]).substring(y);
 							}
-							x = recTitl[i][recMap];
+					} else {
+						var y = recTitl[i][recMap + 1].length + recTitl[i][recMap].length + 4;
+						recList[i] = new Array(y).join("\uE003") + String(recTitl[i]).substring(y - 2);
 						}
+	} else if (recTitl[i][recMap + 1]) { 
+					if (recTitl[i][recMap] != x) {
+						recList[i] = "\uE002 " + recTitl[i];
+					} else {
+						var y = recTitl[i][recMap].length + 4;
+						recList[i] = new Array(y).join("\uE003") + String(recTitl[i]).substring(y - 3);
+					}
 				} else { 
-					recList[i] = "\uE003" + recTitl[i];
+					recList[i] = "\uE003 " + recTitl[i];
 				}
-		}
+
+
+	x = recTitl[i][recMap];
+	xx = recTitl[i][recMap + 1];
+	}
 }
 
 function showMediaList() {
@@ -2243,7 +2257,6 @@ function showMediaList() {
 	var htmlstring = "<h1><center style='font-size:" + fsRec + ";color:white;'> RECORDINGS </center></h1><table border='0'><tr>";
 	listMed = currMed - 1;
 	if (nrMedia < 14) {var MaxMed = nrMedia; } else { var MaxMed = 14; }
-
 	for(var i=currMed; i<=currMed + MaxMed; i++) {
 		if (listMed<0) {
 			listMed=nrMedia;
@@ -2264,7 +2277,8 @@ function showMediaList() {
 		htmlstring = htmlstring + "<td" + liststyle + "font-size:" + fsReclist + ";'>\uE003\uE003" + Left(recList[listMed],60) + "</td></tr>";
 	}
 	mediaList.innerHTML = htmlstring + "</table>";
-	ShowInfo();
+	//ShowInfo();
+	alert(nrMedia);
 }
 
 
