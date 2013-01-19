@@ -24,7 +24,7 @@
 //
 //
 
-var Version = "0.11	2013/01/18"
+var Version = "0.12	2013/01/xx"
 
 for (var i = minChan[0];  i < (maxChan[0]+1); i++) { EPG[0][4][i] = "";EPG[1][4][i] = "";EPG[0][5][i] = "";EPG[1][5][i] = "";EPG[0][7][i] = "";EPG[1][7][i] = ""; }
 for (var i = minChan[1];  i < (maxChan[1]+1); i++) { EPG[0][4][i] = "";EPG[1][4][i] = "";EPG[0][5][i] = "";EPG[1][5][i] = "";EPG[0][7][i] = "";EPG[1][7][i] = ""; }
@@ -1759,8 +1759,8 @@ if(menu == 5) { // Timers from Server
 	booking = "<font style='background:#fc5;-webkit-border-radius:25px;color:black;font-size:" + fsMenu + ";'>";
 	var x = timerID - 1;
 	for (var i=0;i<10;i++) {
-		if (timer.length !== 0) { do { x = x + 1; } while (!timer[x] && (x < timer.length)) }
-		if (timer.length > x) { booking = booking + timer[x]; } else { booking = booking +"\n"; }
+		if (timers.length !== 0) { do { x = x + 1; } while (!timers[x] && (x < timers.length)) }
+		if (timers.length > x) { booking = booking + timers[x]; } else { booking = booking +"\n"; }
 		if (i == 0) { booking = booking + "</font>"; } 
 	}
 
@@ -1840,14 +1840,14 @@ try {
 	  }
 	  timersName[i] = x[i].getElementsByTagName("param")[15].childNodes[0].nodeValue + fill;
 	  if (timersFlag[i] == "1") { 
-		timer[i] = "\uE003\uE00C\uE003";
+		timers[i] = "\uE003\uE00C\uE003";
 	  } else if (timersFlag[i] == "9") { 
-		timer[i] = "\uE003\uE00B\uE003";
+		timers[i] = "\uE003\uE00B\uE003";
 	  } else { 
-		timer[i] = "\uE003\uE003\uE003";
+		timers[i] = "\uE003\uE003\uE003";
 	  }
 	  timersFile[i] = x[i].getElementsByTagName("param")[14].childNodes[0].nodeValue + fill + fill;
-	  timer[i] = timer[i] + timersDays[i] + "\uE003" + timersStrt[i] + "\uE003" + timersStop[i] + "\uE003" + Left(timersName[i],8) + "\uE003" + Left(timersFile[i],15) + "\n" ;
+	  timers[i] = timers[i] + timersDays[i] + "\uE003" + timersStrt[i] + "\uE003" + timersStop[i] + "\uE003" + Left(timersName[i],8) + "\uE003" + Left(timersFile[i],15) + "\n" ;
 	  timerOK = 1;
 	  }
   } catch(e) {
@@ -1929,9 +1929,9 @@ function onKeyMedia(keyCode) {
 if (DelisOK) {
 	switch(keyCode) {
 	case "Accept":
-	  DelRec2();
-	  getRecList();
-	  showMediaList();
+	  mediaList.innerHTML = "<h1><center style='font-size:" + fsRec + ";color:white;'> Please WAIT </center></h1>";
+	  switchtimer.style.opacity = 0;
+	  setTimeout("DelRec2(); getRecList(); showMediaList();",100)
 	default:
 	  switchtimer.style.opacity = 0;
 	  DelisOK = 0;
@@ -1998,13 +1998,14 @@ if (DelisOK) {
 	while (!recTitl[currMed]);
 	showMediaList();
 	} else {
-	      mediaPlayer.play(mediaPlayer.PACE_PLAY);
-	      showDisplay("PLAY", false, 100, 0 );
+	      position = position + (mediaPlayer.getPosition()/1000);
+	      playRec((recLink[currMed] + "?time=" + position));
 	}
 	break;
   case "Accept":
 	if (mediaList.style.opacity != 0) {
 		mediaList.style.opacity = 0;
+		GetMarks();
 		playRec(recLink[currMed]);
 	} else {
 	osdmedia.style.opacity = 1 - osdmedia.style.opacity;
@@ -2071,6 +2072,7 @@ if (DelisOK) {
     break;
     case "MediaStop":
 	    position = 0;
+	    osdepginfo.style.opacity = 0;
 	    isFullscreen = 0; play(channels[currChan]); isFullscreen = 1;
 	    if (isRecording == 1) { 
 		recordStop();
@@ -2082,11 +2084,11 @@ if (DelisOK) {
     break;
 	case "MediaPlayPause":
 	    if (mediaPlayer.getState() != mediaPlayer.STATE_PAUSED) {
-	      mediaPlayer.play(0);
 	      showDisplay("PAUS", false, 100, 0 );
+	      mediaPlayer.play(0);
 	    } else {
-	      mediaPlayer.play(1000);
-	      showDisplay("PLAY", false, 100, 0 );
+		position = position + (mediaPlayer.getPosition()/1000);
+		playRec((recLink[currMed] + "?time=" + position));
     	    }
 	break;
 
@@ -2128,6 +2130,12 @@ if (DelisOK) {
 			playRec((recLink[currMed] + "?time=" + position));
 	break;
 
+    case KEY_5:
+	if (recMark.length>0) {	
+		position = recMark[posMark]; 
+		playRec(recLink[currMed] + "?time=" + position); 
+	}
+	break;
 
     case KEY_3:
 	position = position + (mediaPlayer.getPosition()/1000) + 30;
@@ -2176,6 +2184,7 @@ try {
 	  recDesc[i] = (x[i].getElementsByTagName("description")[0].childNodes[0].nodeValue);
 	  recDura[i] = (x[i].getElementsByTagName("duration")[0].childNodes[0].nodeValue);
 	  recStrt[i] = (x[i].getElementsByTagName("start")[0].childNodes[0].nodeValue);
+	  rec_New[i] = (x[i].getElementsByTagName("isnew")[0].childNodes[0].nodeValue);
 	  }
 	MakeRecList();
  	getRecOK = 1;
@@ -2183,6 +2192,25 @@ try {
     alert("Get Recordings problem: " + e);
 	getRecOK = 0;
 	mediaList.innerHTML = "<h1><center style='font-size:" + fsRec + ";color:white;'> RECORDINGS </center><pre>\n\n\nERROR getting RECORDINGS !!!</pre></h1>";
+  }
+}
+
+function GetMarks() {
+try {
+   posMark = 0;
+   xmlhttp=new XMLHttpRequest();
+   xmlhttp.open("GET",(RestFulAPI + "/recordings/" + currMed + ".xml?marks=true&" + new Date().getTime()),false);
+   xmlhttp.send();
+   xmlDoc=xmlhttp.responseXML; 
+   var x=xmlDoc.getElementsByTagName("mark");
+	   for (var i=0;i<x.length;i++)
+		{
+		var y = x[i].childNodes[0].nodeValue.split(":");
+		recMark[i] = Number(y[0]*3600) + Number(y[1]*60) + Number(y[2]);
+		alert(recMark[i]);
+		}
+  } catch(e) {
+    alert("Getting Marks problem: " + e);
   }
 }
 
@@ -2244,8 +2272,7 @@ function MakeRecList() {
 				} else { 
 					recList[i] = "\uE003 " + recTitl[i];
 				}
-
-
+	if (rec_New[i] == "true" ) { recList[i] = "\uE010\uE003" + recList[i]; } else { recList[i] = "\uE003\uE003" + recList[i]; }
 	x = recTitl[i][recMap];
 	xx = recTitl[i][recMap + 1];
 	}
@@ -2274,11 +2301,10 @@ function showMediaList() {
 		}  else {
 			liststyle = " style='";
 		}
-		htmlstring = htmlstring + "<td" + liststyle + "font-size:" + fsReclist + ";'>\uE003\uE003" + Left(recList[listMed],60) + "</td></tr>";
+		htmlstring = htmlstring + "<td" + liststyle + "font-size:" + fsReclist + ";'>\uE003" + Left(recList[listMed],60) + "</td></tr>";
 	}
 	mediaList.innerHTML = htmlstring + "</table>";
 	//ShowInfo();
-	alert(nrMedia);
 }
 
 
@@ -2389,8 +2415,11 @@ function ShowMediaOSD() {
 	var pos = (position + (mediaPlayer.getPosition()/1000)).toFixed(0);
 	var pos2 = ((pos / Number(recDura[currMed])) * 100).toFixed(0);
 	if (pos2 < 1) { pos2 = 1;} 
+	if (pos>recMark[posMark] && recMark.length>0) { posMark = posMark + 1;}
+	if (recMark[posMark]) { var pos3 = "\n Next Mark : " + (recMark[posMark]/60).toFixed(0); } else { var pos3 = "\n"; }
 	pos2 = ((pos2 * 140) / 100).toFixed(0);
-	osdmedia.innerHTML = "<pre style='color:white;font-size:" + fsMedia +";'>  " + Left(recTitl[currMed],50) + "\n  Elapsed time : " + (pos/60).toFixed(0) + " / " + (Number(recDura[currMed])/60).toFixed(0)  + "\n  \uE007" + new Array(pos2 - 1).join("\uE008") + new Array(140 - pos2).join("\uE009") + "\uE00A </pre>";
+	var pos4 = Left(recTitl[currMed],50);
+	osdmedia.innerHTML = "<pre style='color:white;font-size:" + fsMedia +";'>  " + pos4 + "\n" + new Array(40).join("\uE003") + (pos/60).toFixed(0) + " / " + (Number(recDura[currMed])/60).toFixed(0) + pos3 + "\n  \uE007" + new Array(pos2 - 1).join("\uE008") + new Array(140 - pos2).join("\uE009") + "\uE00A </pre>";
 }
 
 function ShowInfo() {
@@ -2494,7 +2523,7 @@ function onScheduledStop(event) {
 	<videoplane id='videoplane' style='position:absolute; left:0px; top:0px; height: 100%; width: 100%; z-index:500;'></videoplane>
 
 	<div id="osdvolume" style="width:63%; position:absolute; left:10%; top:80%;z-index:501;fontFamily:VDRSymbolsSans;opacity:0;">Volume : </div>
-	<div id="osdmedia" style="background:#3366ff;-webkit-border-radius:50px;width:80%; position:absolute; left:10%; top:69%;z-index:505;fontFamily:VDRSymbolsSans;opacity:0;"></div>
+	<div id="osdmedia" style="background:#3366ff;-webkit-border-radius:50px;width:80%; position:absolute; left:10%; top:60%;z-index:505;opacity:0;"></div>
 
 	<div id="osdmain" style="background:#3366ff;width:80%; position:absolute; left:10%; top:60%; bottom:9%;z-index:505;-webkit-border-radius:50px;"></div>
 	<div id="osdtime" style="width:42%; position:absolute; left:58%; top:63%;z-index:505;"></div>

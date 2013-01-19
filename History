@@ -1,3 +1,9 @@
+0.12	Fixed timers menu (didn't work, after you read timers from server)
+	Fixed pause function with "VDR on SmartTV"
+	Updated to use the new function 'is_new' from "VDR on SmartTV"
+	Added (key '5') jump to next mark in recordings. With use of restfulapi plugin
+
+
 0.11	Switch to Scheduler services for settings timers.
 	Some fixes in the recorder & player routine
 	Better support for "VDR on SmartTV" & check if availible.

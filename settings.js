@@ -215,6 +215,10 @@ var recDesc = new Array();
 var recDura = new Array();
 var recStrt = new Array();
 var recList = new Array();
+var recMark = new Array();
+var rec_New = new Array();
+
+var posMark = 0;
 var recMap = 0;
 
 var timersID = new Array();
@@ -231,6 +235,7 @@ var getRecOK = 0;
 var position = 0;
 
 var timer = new Array();
+var timers = new Array();
 var getbookingID = 0;
 var timerID = 0;
 var nrMedia = 0;
