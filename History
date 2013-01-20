@@ -2,7 +2,8 @@
 	Fixed pause function with "VDR on SmartTV"
 	Updated to use the new function 'is_new' from "VDR on SmartTV"
 	Added (key '5') jump to next mark in recordings. With use of restfulapi plugin
-
+	Fixed standby problems when playing recordings.
+	Fixed switchtimer when menu / recordingsmenu / playing recordings
 
 0.11	Switch to Scheduler services for settings timers.
 	Some fixes in the recorder & player routine
@@ -14,7 +15,7 @@
 	Recordings Menu now show maps.
 	Use of restfulapi
 		Read Timers from Server
-		Delete recording // if you want to Delete a recording, change in restfulapi/recordings.ccp line 46 DELETE by POST
+		Delete recording // if you want to Delete a recording, change in restfulapi/recordings.ccp line 46 DELETE to POST
 	KillStream on standby can be set from settings.js
 
 0.10	Added sub Listinges for use as Radio list / Protected List / SD/HD list etc

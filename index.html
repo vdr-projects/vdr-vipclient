@@ -94,6 +94,11 @@ var numObjs = event.objectNames.length;
 		}
 	} else if(event.objectNames[i] == "var.io.state" && toi.informationService.getObject(event.objectNames[i]) == "normal" && KillStream == 1){
 		play(channels[currChan]);
+		if(isMediaMenu) {
+			    mediaList.style.opacity = 0.9;
+			    showDisplay("STOP", false, 100, 0 );
+			    showMediaList();
+		}
 	}
   }
 }
@@ -944,7 +949,7 @@ function settimer() {
 		th=addzero(th);
 		tm=addzero(tm);
 
-		switchtimer.innerHTML = "<p>  Name      : " + EPG[NowNext][1][currChan] + "</p><p>  channel   : " + channelsnames[currChan] +  "</p><p>  Starttime : " + th + ":" + tm + "</p>";
+		switchtimer.innerHTML = "<pre>  Name      : " + EPG[NowNext][1][currChan] + "\n  channel   : " + channelsnames[currChan] +  "\n  Starttime : " + th + ":" + tm + "</pre>";
 		setOSDtimer();
 	} else {
 	//
@@ -1735,8 +1740,6 @@ if(menu == 4) { // INFO Menu
 	
 		htmltext = htmltext + "\n   Product name: " + is.getObject("config.productdisplayname");
 		htmltext = htmltext + "\n   Build date : " + is.getObject("config.build.date");
-//		htmltext = htmltext + "\n   IO State: " + is.getObject("var.io.state");
-
 		htmltext = htmltext + "\n\n   IP address:" + is.getObject("config.ipaddress");
 		var x = is.getObject("cfg.ip.eth0.mode");
 		if (x == "DHCP") { htmltext = htmltext + "\n \uE017 "; } else { htmltext = htmltext + "\n \uE016 "; }
@@ -1801,15 +1804,17 @@ function LoadTimers() {
 
 function SwitchActiveTimers() {
 try {
-   var x = "timer_id=" + timersID[timerID] + "&flags=" + timersFlag[timerID];
+   var x = "?timer_id=" + timersID[timerID] + "&flags=" + timersFlag[timerID] ;
 	alert(x);
    xmlhttp=new XMLHttpRequest();
-   xmlhttp.open("PUT",(RestFulAPI + "/timers"),false);
-//   xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-   xmlhttp.setRequestHeader("Content-length", x.length);
+//   xmlhttp.open("PUT",(RestFulAPI + "/timers"),false);
+// xmlhttp.open("PUT",(RestFulAPI + "/timers/" + timersID[timerID] + ".xml"),false);
+   xmlhttp.open("POST",(RestFulAPI + "/timers.xml" + x),false);
+//   xmlhttp.setRequestHeader("Content-type", "text/xml; charset=utf-8");
+//   xmlhttp.setRequestHeader("Content-length", x.length);
 //   xmlhttp.setRequestHeader("Connection", "close");
 //   xmlhttp.send(x);
-xmlhttp.send();
+	xmlhttp.send();
 	alert(xmlhttp.responseText);
   } catch(e) {
     alert("Updating Timers problem: " + e);
@@ -2412,14 +2417,12 @@ function onRecorderStateChanged(event) {
 
 function ShowMediaOSD() {
 // Display Name/ length 
-	var pos = (position + (mediaPlayer.getPosition()/1000)).toFixed(0);
-	var pos2 = ((pos / Number(recDura[currMed])) * 100).toFixed(0);
+	var pos = position + (mediaPlayer.getPosition()/1000);
+	var pos2 = (pos / Number(recDura[currMed])) * 100;
 	if (pos2 < 1) { pos2 = 1;} 
 	if (pos>recMark[posMark] && recMark.length>0) { posMark = posMark + 1;}
-	if (recMark[posMark]) { var pos3 = "\n Next Mark : " + (recMark[posMark]/60).toFixed(0); } else { var pos3 = "\n"; }
 	pos2 = ((pos2 * 140) / 100).toFixed(0);
-	var pos4 = Left(recTitl[currMed],50);
-	osdmedia.innerHTML = "<pre style='color:white;font-size:" + fsMedia +";'>  " + pos4 + "\n" + new Array(40).join("\uE003") + (pos/60).toFixed(0) + " / " + (Number(recDura[currMed])/60).toFixed(0) + pos3 + "\n  \uE007" + new Array(pos2 - 1).join("\uE008") + new Array(140 - pos2).join("\uE009") + "\uE00A </pre>";
+	osdmedia.innerHTML = "<pre style='color:white;font-size:" + fsMedia +";'>  " + (pos/60).toFixed(0) + " / " + (Number(recDura[currMed])/60).toFixed(0) + "  " + Left(recTitl[currMed],50) + "\n  \uE007" + new Array(pos2 - 1).join("\uE008") + new Array(140 - pos2).join("\uE009") + "\uE00A </pre>";
 }
 
 function ShowInfo() {
@@ -2445,17 +2448,20 @@ function onScheduledStart(event) {
     var timertype = event.booking.category;
 
   if ( timertype == "SwitchOnly") {
-	isVisible = 0; 
-	isFullscreen = 1; 
-	FullScreen(); 
+	isVisible = 0; isSetupMenu = 0;
+	osdepginfonext.style.opacity = 0;
+	osdepginfo.style.opacity = 0;
+	mainmenu.style.opacity = 0;
+	isFullscreen = 1; FullScreen(); 
 	setVisible(isVisible); 
 	setOSDtimer();
-		// switch only if not already on that channel.
-		if (currChan !== toi.schedulerService.getParameter(event.booking.id, "Channel")) {
-			currChan = toi.schedulerService.getParameter(event.booking.id, "Channel");
-			play(channels[currChan]);
-		}
+	if (isMediaMenu) { UnloadMediaSettings(); }
 
+	// switch only if not already on that channel.
+	if (currChan !== toi.schedulerService.getParameter(event.booking.id, "Channel")) {
+		currChan = toi.schedulerService.getParameter(event.booking.id, "Channel");
+		play(channels[currChan]);
+	}
   } else {
 	  try {
 	    createNewAsset()
@@ -2523,7 +2529,7 @@ function onScheduledStop(event) {
 	<videoplane id='videoplane' style='position:absolute; left:0px; top:0px; height: 100%; width: 100%; z-index:500;'></videoplane>
 
 	<div id="osdvolume" style="width:63%; position:absolute; left:10%; top:80%;z-index:501;fontFamily:VDRSymbolsSans;opacity:0;">Volume : </div>
-	<div id="osdmedia" style="background:#3366ff;-webkit-border-radius:50px;width:80%; position:absolute; left:10%; top:60%;z-index:505;opacity:0;"></div>
+	<div id="osdmedia" style="background:#3366ff;-webkit-border-radius:50px;width:80%; position:absolute; left:10%; top:70%;z-index:505;opacity:0;"></div>
 
 	<div id="osdmain" style="background:#3366ff;width:80%; position:absolute; left:10%; top:60%; bottom:9%;z-index:505;-webkit-border-radius:50px;"></div>
 	<div id="osdtime" style="width:42%; position:absolute; left:58%; top:63%;z-index:505;"></div>
