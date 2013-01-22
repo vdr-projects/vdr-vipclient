@@ -2136,7 +2136,7 @@ if (DelisOK) {
 	break;
 
     case KEY_5:
-	if (recMark.length>0) {	
+	if (recMark.length-1>posMark) {	
 		position = recMark[posMark]; 
 		playRec(recLink[currMed] + "?time=" + position); 
 	}
@@ -2436,15 +2436,23 @@ function ShowMediaOSD() {
 	var pos = position + (mediaPlayer.getPosition()/1000);
 	var pos2 = (pos / Number(recDura[currMed])) * 100;
 	if (pos2 < 1) { pos2 = 1;} 
-	if (pos>recMark[posMark] && recMark.length>0) { posMark = posMark + 1;}
+	if (pos>recMark[posMark] && recMark.length-1>posMark) { posMark = posMark + 1;}
+	alert(recMark.length + "  XXX" + posMark);
 	pos2 = ((pos2 * 140) / 100).toFixed(0);  // make it 40% bigger
-	var pos4 = "\uE007" + new Array(pos2 - 1).join("\uE008") + new Array(140 - pos2).join("\uE009") + "\uE00A"
-	if (recMark[posMark]) 
-		{
-		var pos3 = recMark[posMark]/Number(recDura[currMed]) * 100;
+	var pos5 = "\uE007" + new Array(pos2 - 1).join("\uE008") + new Array(140 - pos2).join("\uE009") + "\uE00A"
+	var pos4 = "";
+	var pos6 = pos5;
+	var fontc = "<font color=red>";
+	var x = 0;
+	  for (var i=0; i<recMark.length; i++) {
+		var pos3 = recMark[i] / Number(recDura[currMed]) * 100;
 		pos3 = ((pos3 * 140) / 100).toFixed(0); // make it 40% bigger
-		pos4 = Left(pos4,pos3) + "<font color=red>" + Right(pos4,140 - pos3) + "</font>";
+		pos4 = pos4 + fontc + Left(pos6,pos3 - x);
+		if (fontc == "</font><font color=white>") { fontc = "</font><font color=red>"; } else { fontc = "</font><font color=white>";}
+		x = pos3;
+		pos6 = Right(pos5,140 - pos3);
 		}
+		pos4 = pos4 + "</font><font color=red>" + pos6 + "</font>";
 	osdmedia.innerHTML = "<pre style='color:white;font-size:" + fsMedia +";'>  " + (pos/60).toFixed(0) + " / " + (Number(recDura[currMed])/60).toFixed(0) + "  " + Left(recTitl[currMed],50) + "\n  " + pos4 + " </pre>";
 }
 
