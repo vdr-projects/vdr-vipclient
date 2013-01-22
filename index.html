@@ -2139,20 +2139,20 @@ if (DelisOK) {
 	break;
 
     case KEY_5:
-	if (recMark.length-1>posMark) {	
+	if (recMark.length>posMark) {	
 		position = recMark[posMark]; 
 		playRec(recLink[currMed] + "?time=" + position); 
 	}
 	break;
     case KEY_2:
-	if (recMark.length>0 && posMark>0) {	
+	if (posMark>0) {	
 		posMark = posMark - 1;
 		position = recMark[posMark]; 
 		playRec(recLink[currMed] + "?time=" + position); 
 	}
 	break;
     case KEY_8:
-	if (recMark.length>0 && recMark[posMark+1]) {	
+	if (recMark[posMark+1]) {	
 		posMark = posMark + 1;
 		position = recMark[posMark]; 
 		playRec(recLink[currMed] + "?time=" + position); 
