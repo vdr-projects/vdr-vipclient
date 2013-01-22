@@ -949,7 +949,7 @@ function settimer() {
 		th=addzero(th);
 		tm=addzero(tm);
 
-		switchtimer.innerHTML = "<pre>  Name      : " + EPG[NowNext][1][currChan] + "\n  channel   : " + channelsnames[currChan] +  "\n  Starttime : " + th + ":" + tm + "</pre>";
+		switchtimer.innerHTML = "<pre>  Name      : " + Left(EPG[NowNext][1][currChan],30) + "\n  channel   : " + channelsnames[currChan] +  "\n  Starttime : " + th + ":" + tm + "</pre>";
 		setOSDtimer();
 	} else {
 	//
@@ -1907,6 +1907,7 @@ function playMPD(uri) {
 
 function LoadMediaSettings() {
 		isMediaMenu = 1;
+		isFullscreen = 0;
 		showDisplay("STOP", false, 100, 0 );
 		currMed = 0;
 		if (getRecOK) { showMediaList();}
@@ -1923,6 +1924,7 @@ function UnloadMediaSettings() {
 	mediaList.innerHTML = "<h1><center style='font-size:" + fsRec + ";color:white;'> Please WAIT </center></h1>";
  	showDisplay((currChan.toString()), false, 100, 0 );
 	isMediaMenu = 0;
+	isFullscreen = 1;
 	if (mediaPlayer.getState() != mediaPlayer.STATE_PLAYING ) {
         play(channels[currChan]);
 	}
@@ -2011,6 +2013,7 @@ if (DelisOK) {
 	if (mediaList.style.opacity != 0) {
 		mediaList.style.opacity = 0;
 		GetMarks();
+		position = 0;
 		playRec(recLink[currMed]);
 	} else {
 	osdmedia.style.opacity = 1 - osdmedia.style.opacity;
@@ -2161,7 +2164,7 @@ if (DelisOK) {
     case KEY_3:
 	position = position + (mediaPlayer.getPosition()/1000) + 30;
 	if (position >= recDura[currMed]) {
-	 	    isFullscreen = 0; play(channels[currChan]); isFullscreen = 1;
+	 	    BackToTV();
 	} else {
 			playRec((recLink[currMed] + "?time=" + position));
 	}
@@ -2169,7 +2172,7 @@ if (DelisOK) {
     case KEY_6:
 	position = position + (mediaPlayer.getPosition()/1000) + 60;
 	if (position >= recDura[currMed]) {
-	 	    isFullscreen = 0; play(channels[currChan]); isFullscreen = 1;
+	 	    BackToTV();
 	} else {
 			playRec((recLink[currMed] + "?time=" + position));
 	}
@@ -2177,7 +2180,7 @@ if (DelisOK) {
     case KEY_9:
 	position = position + (mediaPlayer.getPosition()/1000) + 240;
 	if (position >= recDura[currMed]) {
-	 	    isFullscreen = 0; play(channels[currChan]); isFullscreen = 1;
+	 	    BackToTV();
 	} else {
 			playRec((recLink[currMed] + "?time=" + position));
 	}
@@ -2222,7 +2225,8 @@ try {
    xmlhttp=new XMLHttpRequest();
    xmlhttp.open("GET",(RestFulAPI + "/recordings/" + currMed + ".xml?marks=true&" + new Date().getTime()),false);
    xmlhttp.send();
-   xmlDoc=xmlhttp.responseXML; 
+   xmlDoc=xmlhttp.responseXML;
+   recMark = [];
    var x=xmlDoc.getElementsByTagName("mark");
 	   for (var i=0;i<x.length;i++)
 		{
@@ -2245,7 +2249,7 @@ try {
    var x=xmlDoc.getElementsByTagName("recording");
 	//popup for confirm
 	switchtimer.style.opacity = 1;
-	switchtimer.innerHTML = "<pre><center> OK to delete \n other to abort \n\n " + (x[0].getElementsByTagName("param")[1].childNodes[0].nodeValue) + "</center></pre>"; // Recording Name
+	switchtimer.innerHTML = "<pre><center> OK to delete \n other to abort \n\n " + Left(x[0].getElementsByTagName("param")[1].childNodes[0].nodeValue,30) + "</center></pre>"; // Recording Name
 	DelisOK = 1
   } catch(e) {
     alert("Delete Recordings problem: " + e);
@@ -2398,13 +2402,18 @@ function onStateChanged(ev) {
     alert("Media player state changed: state=" + ev.state + ", reason=" + ev.reason + ", code=" + ev.code);
 
 	if ( ( ev.state == 6 && ev.reason == "HostUnreachable" ) || ( ev.state == 2 && ev.reason == "PositionEnd" )) {
+	BackToTV();
+	}
+
+}
+
+function BackToTV() {
 	    play(channels[currChan]);
 	    mediaList.style.opacity = 0.9;
 	    showDisplay("STOP", false, 100, 0 );
 	    showMediaList();
-	}
-
 }
+
 
 function onRecorderStateChanged(event) {
   alert("EVENT! " + event.reason + " *** " + event.state);
@@ -2436,8 +2445,8 @@ function ShowMediaOSD() {
 	var pos = position + (mediaPlayer.getPosition()/1000);
 	var pos2 = (pos / Number(recDura[currMed])) * 100;
 	if (pos2 < 1) { pos2 = 1;} 
+	if (pos2 >100) {pos2 = 100;} // in case of viewing while still recording.
 	if (pos>recMark[posMark] && recMark.length-1>posMark) { posMark = posMark + 1;}
-	alert(recMark.length + "  XXX" + posMark);
 	pos2 = ((pos2 * 140) / 100).toFixed(0);  // make it 40% bigger
 	var pos5 = "\uE007" + new Array(pos2 - 1).join("\uE008") + new Array(140 - pos2).join("\uE009") + "\uE00A"
 	var pos4 = "";
@@ -2453,7 +2462,9 @@ function ShowMediaOSD() {
 		pos6 = Right(pos5,140 - pos3);
 		}
 		pos4 = pos4 + "</font><font color=red>" + pos6 + "</font>";
-	osdmedia.innerHTML = "<pre style='color:white;font-size:" + fsMedia +";'>  " + (pos/60).toFixed(0) + " / " + (Number(recDura[currMed])/60).toFixed(0) + "  " + Left(recTitl[currMed],50) + "\n  " + pos4 + " </pre>";
+		var x = (Number(recDura[currMed])/60).toFixed(0);
+		if (pos/60 > x) { x = (pos/60).toFixed(0);}
+	osdmedia.innerHTML = "<pre style='color:white;font-size:" + fsMedia +";'>  " + (pos/60).toFixed(0) + " / " + x + "  " + Left(recTitl[currMed],40) + "\n  " + pos4 + " </pre>";
 }
 
 function ShowInfo() {

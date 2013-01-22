@@ -4,6 +4,9 @@
 	Added (key '5') jump to next mark in recordings. With use of restfulapi plugin
 	Fixed standby problems when playing recordings.
 	Fixed switchtimer when menu / recordingsmenu / playing recordings
+	Media OSD shows marks in red/white
+	Remove Media OSD when EndofFile while jumping forward
+	
 
 0.11	Switch to Scheduler services for settings timers.
 	Some fixes in the recorder & player routine
