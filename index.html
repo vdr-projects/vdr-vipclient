@@ -1944,22 +1944,16 @@ if (DelisOK) {
 	  DelisOK = 0;
 	break;
 	}
-} else {
+} 
+if (mediaList.style.opacity != 0) { 
   switch(keyCode) {
     case "BrowserBack":
-	if (mediaList.style.opacity !== 0 && osdepginfo.style.opacity == 1) { osdepginfo.style.opacity = 0; break; }
-	if (mediaList.style.opacity == 0) { 
-		ShowInfo();
-		osdepginfo.style.opacity = 1 - osdepginfo.style.opacity;
-		break;
-	 }
+	if (osdepginfo.style.opacity == 1) { osdepginfo.style.opacity = 0; break; }
     case "TV":
-		if (mediaList.style.opacity == 0) { play(channels[currChan]);}
 	UnloadMediaSettings();
         break;
     break;
     case "Right":
-	if (mediaList.style.opacity != 0) {
            for (var i=0;i<10;i++) {
 		do
 		{
@@ -1968,11 +1962,8 @@ if (DelisOK) {
 		while (!recTitl[currMed]);
 	   }	
 	showMediaList();
-	}
-
 	break;
     case "Left":
-	if (mediaList.style.opacity != 0) {
            for (var i=0;i<10;i++) {
 		do
 		{
@@ -1981,49 +1972,116 @@ if (DelisOK) {
 		while (!recTitl[currMed]);
 	   }
 	showMediaList();
-	}
 	break;
     case "Down":
-	if (mediaList.style.opacity != 0) {
 	do
 	{
 	        incMed(1);
 	}
 	while (!recTitl[currMed]);
 	showMediaList();
-	} else {
-	      mediaPlayer.play(0);
-	      showDisplay("PAUS", false, 100, 0 );
-	}
         break;
     case "Up":
-	if (mediaList.style.opacity != 0) {
 	do
 	{
 	        decMed(1);
 	}
 	while (!recTitl[currMed]);
 	showMediaList();
-	} else {
-	      position = position + (mediaPlayer.getPosition()/1000);
-	      playRec((recLink[currMed] + "?time=" + position));
-	}
 	break;
   case "Accept":
-	if (mediaList.style.opacity != 0) {
+  case "MediaPlayPause":
 		mediaList.style.opacity = 0;
 		GetMarks();
 		position = 0;
 		playRec(recLink[currMed]);
-	} else {
-	osdmedia.style.opacity = 1 - osdmedia.style.opacity;
-	ShowMediaOSD();
-	}
         break;
     case "Red":
-	if (mediaList.style.opacity != 0) {
 	DelRec();
-	}
+	break;
+   case "Green":
+			audio = audio + 1;
+			is = toi.informationService;
+			if(audio == 1) {	
+				is.setObject("cfg.media.audio.languagepriority","dut,eng",is.STORAGE_VOLATILE);
+				osdlang.style.opacity = 1;
+				osdlang.style.fontSize = fsAudio;
+				osdlang.style.color = "white";
+				osdlang.innerHTML = "<img src='unmute.png'> Nederlands ";
+				setTimeout("osdlang.style.opacity = 0; ", 3000);
+			} else if(audio == 2) {
+				is.setObject("cfg.media.audio.languagepriority","ger,deu,eng",is.STORAGE_VOLATILE);
+				osdlang.style.opacity = 1;
+				osdlang.style.fontSize = fsAudio;
+				osdlang.style.color = "red";
+				osdlang.innerHTML = "<img src='unmute.png'> Deutsch ";
+				setTimeout("osdlang.style.opacity = 0; ", 3000);
+			} else if(audio == 3) {
+				is.setObject("cfg.media.audio.languagepriority","eng",is.STORAGE_VOLATILE);
+				osdlang.style.opacity = 1;
+				osdlang.style.fontSize = fsAudio;
+				osdlang.style.color = "black";
+				osdlang.innerHTML = "<img src='unmute.png'> English ";
+				setTimeout("osdlang.style.opacity = 0; ", 3000);
+				audio = 0;
+			}
+	break;
+    case "Blue":
+	ShowInfo();
+	osdepginfo.style.opacity = 1 - osdepginfo.style.opacity;
+	break;
+
+    case "VolumeMute":
+	state = toi.audioOutputService.getMuteState(AudioOut);
+	toi.audioOutputService.setMuteState(AudioOut, !state);
+	mute = 1 - state;
+        osdmute.style.opacity = mute; 
+	break;
+    case "VolumeUp":
+	Volume = Volume + VolumeStep;
+        if (Volume > 100) {
+            Volume = 100;
+        }
+        toi.audioOutputService.setVolume(AudioOut, Volume);
+	showVolume();
+	break;
+    case "VolumeDown":
+	Volume = Volume - VolumeStep;
+        if (Volume < 0) {
+            Volume = 0;
+        }
+        toi.audioOutputService.setVolume(AudioOut, Volume);
+	showVolume();
+	break;
+
+	default:
+        break;
+ }
+} 
+
+if (mediaList.style.opacity == 0) { 
+  switch(keyCode) {
+    case "BrowserBack":
+		ShowInfo();
+		osdepginfo.style.opacity = 1 - osdepginfo.style.opacity;
+		break;
+    case "TV":
+	play(channels[currChan]);
+	UnloadMediaSettings();
+        break;
+    break;
+    case "Down":
+	      mediaPlayer.play(0);
+	      showDisplay("PAUS", false, 100, 0 );
+        break;
+    case "Up":
+	      position = position + (mediaPlayer.getPosition()/1000);
+	      playRec((recLink[currMed] + "?time=" + position));
+	break;
+  case "Accept":
+	osdmedia.style.opacity = 1 - osdmedia.style.opacity;
+	ShowMediaOSD();
+        break;
    case "Green":
 			audio = audio + 1;
 			is = toi.informationService;
@@ -2052,52 +2110,12 @@ if (DelisOK) {
 			}
 	break;
     case "Yellow":
-	if (mediaList.style.opacity != 0) {
-	}
+	break;
     case "Blue":
 	ShowInfo();
 	osdepginfo.style.opacity = 1 - osdepginfo.style.opacity;
 	break;
    case "Menu":
-	break;
-
-    case KEY_REC:
-    case "MediaRecord":
-	recordStart(recLink[currMed]);
-	UnloadMediaSettings();
-	break;
-    case "MediaRewind":
-	    if (mediaPlayer.getState() != mediaPlayer.STATE_IDLE) {
-	      mediaPlayer.play(-4000);
-	    showDisplay("REW", false, 100, 0 );
-	    }
-    break;
-    case "MediaForward":
-	    if (mediaPlayer.getState() != mediaPlayer.STATE_IDLE) {
-	      mediaPlayer.play(4000);
-	    showDisplay("FF", false, 100, 0 );
-	    }
-    break;
-    case "MediaStop":
-	    position = 0;
-	    osdepginfo.style.opacity = 0;
-	    isFullscreen = 0; play(channels[currChan]); isFullscreen = 1;
-	    if (isRecording == 1) { 
-		recordStop();
-		isRecording = 0;
-	    }
-	    mediaList.style.opacity = 0.9;
-	    showDisplay("STOP", false, 100, 0 );
-	    showMediaList();
-    break;
-	case "MediaPlayPause":
-	    if (mediaPlayer.getState() != mediaPlayer.STATE_PAUSED) {
-	      showDisplay("PAUS", false, 100, 0 );
-	      mediaPlayer.play(0);
-	    } else {
-		position = position + (mediaPlayer.getPosition()/1000);
-		playRec((recLink[currMed] + "?time=" + position));
-    	    }
 	break;
 
     case "VolumeMute":
@@ -2121,6 +2139,45 @@ if (DelisOK) {
         }
         toi.audioOutputService.setVolume(AudioOut, Volume);
 	showVolume();
+	break;
+
+
+    case KEY_REC:
+    case "MediaRecord":
+	recordStart(recLink[currMed]);
+	UnloadMediaSettings();
+	break;
+    case "MediaRewind":
+	    if (mediaPlayer.getState() != mediaPlayer.STATE_IDLE) {
+	      mediaPlayer.play(-4000);
+	    showDisplay("REW", false, 100, 0 );
+	    }
+    break;
+    case "MediaForward":
+	    if (mediaPlayer.getState() != mediaPlayer.STATE_IDLE) {
+	      mediaPlayer.play(4000);
+	    showDisplay("FF", false, 100, 0 );
+	    }
+    break;
+    case "MediaStop":
+	    osdepginfo.style.opacity = 0;
+	    isFullscreen = 0; play(channels[currChan]); isFullscreen = 1;
+	    if (isRecording == 1) { 
+		recordStop();
+		isRecording = 0;
+	    }
+	    mediaList.style.opacity = 0.9;
+	    showDisplay("STOP", false, 100, 0 );
+	    showMediaList();
+    break;
+	case "MediaPlayPause":
+	    if (mediaPlayer.getState() != mediaPlayer.STATE_PAUSED) {
+	      showDisplay("PAUS", false, 100, 0 );
+	      mediaPlayer.play(0);
+	    } else {
+		position = position + (mediaPlayer.getPosition()/1000);
+		playRec((recLink[currMed] + "?time=" + position));
+    	    }
 	break;
     case KEY_1:
 	position = position + (mediaPlayer.getPosition()/1000) - 30;
@@ -2188,6 +2245,7 @@ if (DelisOK) {
 
 	default:
         break;
+
   }
  }
 }
