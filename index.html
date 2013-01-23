@@ -24,7 +24,7 @@
 //
 //
 
-var Version = "0.13	2013/01/23"
+var Version = "0.14	2013/01/xx"
 
 for (var i = minChan[0];  i < (maxChan[0]+1); i++) { EPG[0][4][i] = "";EPG[1][4][i] = "";EPG[0][5][i] = "";EPG[1][5][i] = "";EPG[0][7][i] = "";EPG[1][7][i] = ""; }
 for (var i = minChan[1];  i < (maxChan[1]+1); i++) { EPG[0][4][i] = "";EPG[1][4][i] = "";EPG[0][5][i] = "";EPG[1][5][i] = "";EPG[0][7][i] = "";EPG[1][7][i] = ""; }
@@ -201,6 +201,7 @@ function preview(urip) {
 	if(SwitchGuide) {
 	play(urip);
 	}
+	if (isSchedule) { schedule.style.opacity = 0; isSchedule = 0;}
 	showChannelList();
 }
 
@@ -871,17 +872,8 @@ function SetOsdInfo() {
 
 function onCacheUpdated() {
         GetEPG(currChan);
-	if (osdtimeout) {
-		SetOsdInfo();
-	} 
-	if (isSchedule == 1) {
-//		if (!isFullscreen) {
-//			GetSchedule(currChan,8);
-//		} else {
-			GetSchedule(currChan,15);
-//		}
-	}
-
+	if (osdtimeout) { SetOsdInfo();	} 
+	if (isSchedule) { GetSchedule(currChan,15); }
 }
 
 function OSDchannr(channr) {
