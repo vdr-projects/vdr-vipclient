@@ -1943,8 +1943,9 @@ if (DelisOK) {
 	  switchtimer.style.opacity = 0;
 	  DelisOK = 0;
 	break;
-	}
-} 
+  	} // end of switch
+} // end of if
+
 if (mediaList.style.opacity != 0) { 
   switch(keyCode) {
     case "BrowserBack":
@@ -2056,10 +2057,8 @@ if (mediaList.style.opacity != 0) {
 
 	default:
         break;
- }
-} 
-
-if (mediaList.style.opacity == 0) { 
+  } // end of switch
+} else { 
   switch(keyCode) {
     case "BrowserBack":
 		ShowInfo();
@@ -2245,9 +2244,8 @@ if (mediaList.style.opacity == 0) {
 
 	default:
         break;
-
-  }
- }
+  } // end of switch
+ } // end of if
 }
 
 function getRecList() {
