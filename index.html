@@ -17,14 +17,14 @@
 // TODO 
 //
 // 
-// make VDR connection
-// 	get/set/create/edit timers
-// 	make/view recordings
+// make VDR connection for
+// 	set/create/edit timers
+// 	make recordings
 //
 //
 //
 
-var Version = "0.12	2013/01/xx"
+var Version = "0.12	2013/01/23"
 
 for (var i = minChan[0];  i < (maxChan[0]+1); i++) { EPG[0][4][i] = "";EPG[1][4][i] = "";EPG[0][5][i] = "";EPG[1][5][i] = "";EPG[0][7][i] = "";EPG[1][7][i] = ""; }
 for (var i = minChan[1];  i < (maxChan[1]+1); i++) { EPG[0][4][i] = "";EPG[1][4][i] = "";EPG[0][5][i] = "";EPG[1][5][i] = "";EPG[0][7][i] = "";EPG[1][7][i] = ""; }
@@ -1944,9 +1944,7 @@ if (DelisOK) {
 	  DelisOK = 0;
 	break;
   	} // end of switch
-} // end of if
-
-if (mediaList.style.opacity != 0) { 
+} else if (mediaList.style.opacity != 0) { 
   switch(keyCode) {
     case "BrowserBack":
 	if (osdepginfo.style.opacity == 1) { osdepginfo.style.opacity = 0; break; }
@@ -1993,9 +1991,7 @@ if (mediaList.style.opacity != 0) {
   case "Accept":
   case "MediaPlayPause":
 		mediaList.style.opacity = 0;
-		GetMarks();
-		position = 0;
-		playRec(recLink[currMed]);
+		setTimeout("GetMarks(); position = 0; playRec(recLink[currMed]);",100);
         break;
     case "Red":
 	DelRec();
