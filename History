@@ -1,3 +1,7 @@
+0.13	Bug fixes.
+	Cosmetic fixes.
+	
+
 0.12	Fixed timers menu (didn't work, after you read timers from server)
 	Fixed pause function with "VDR on SmartTV"
 	Updated to use the new function 'is_new' from "VDR on SmartTV"
