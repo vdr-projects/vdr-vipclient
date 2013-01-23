@@ -24,7 +24,7 @@
 //
 //
 
-var Version = "0.12	2013/01/23"
+var Version = "0.13	2013/01/xx"
 
 for (var i = minChan[0];  i < (maxChan[0]+1); i++) { EPG[0][4][i] = "";EPG[1][4][i] = "";EPG[0][5][i] = "";EPG[1][5][i] = "";EPG[0][7][i] = "";EPG[1][7][i] = ""; }
 for (var i = minChan[1];  i < (maxChan[1]+1); i++) { EPG[0][4][i] = "";EPG[1][4][i] = "";EPG[0][5][i] = "";EPG[1][5][i] = "";EPG[0][7][i] = "";EPG[1][7][i] = ""; }
@@ -202,9 +202,6 @@ function preview(urip) {
 	play(urip);
 	}
 	showChannelList();
-	if (isSchedule) {
-	//GetSchedule(currChan,10);
-	}
 }
 
 
@@ -478,27 +475,19 @@ function onKeyDown(event) {
 
 	break;
    case "Yellow":
+		GetSchedule(currChan,15);
 	if(isFullscreen) {
 		if(!epgactive) {
 				if(!isSchedule) {
 				schedule.style.opacity = 1;
-				schedule.style.width = "50%";
-				schedule.style.height = "75%";
-				schedule.style.left = "25%";
-				GetSchedule(currChan,15);
 				isSchedule = 1;
 				} else {
 				isSchedule = 0;
 				schedule.style.opacity = 0;
-				schedule.style.height = "48%";
-				schedule.style.width = "100%";
-				schedule.style.left = "5%";
 				}
 		}
 	} else {
-		GetSchedule(currChan,10);
 		schedule.style.opacity = 1 - schedule.style.opacity;
-		channelList.style.opacity = 1 - schedule.style.opacity;
 		isSchedule = schedule.style.opacity;
 		if(isSchedule == 1){
 		colorkeys.innerHTML = "<font color=red>" +  NN[4] + "</font><font color=green>" + NN[4] + "</font><font color=yellow> BACK </font><font color=blue>" + NN[4] + "</font>";
@@ -529,8 +518,7 @@ function onKeyDown(event) {
 		if(isSchedule) {
 			isSchedule = 0;
 			schedule.style.opacity = 0;
-			schedule.style.height = "48%";
-			epgactive = 1; // else we get EPGinfo on the screen, bit nasty but works
+			break;
 		}
 
 		if(isFullscreen) {
@@ -547,6 +535,7 @@ function onKeyDown(event) {
 			}
 //		setTimeout("epgactive = 0; osdepginfo.style.opacity = 0; osdepginfonext.style.opacity = 0;", 5000);
 		} else if(!isFullscreen){
+			epgactive = 0;
 			isFullscreen = 1;
 			FullScreen();
 			currChan = preChan;
@@ -593,6 +582,7 @@ function onKeyDown(event) {
 		  } else {
 		isFullscreen = 1;
 		FullScreen();
+		if(isSchedule) { isSchedule = 0; schedule.style.opacity = 0; }
 	        play(channels[currChan]);
 		}
 	}
@@ -616,9 +606,7 @@ function onKeyDown(event) {
 			videoplane.style.left = (380*Xfactor)+"px";
 			videoplane.style.top = (300*Yfactor)+"px";
 			isFullscreen = 0;
-			isSchedule = 0;
-			schedule.style.opacity = 0;
-			schedule.style.height = "48%";
+			ClearScreen();
 			channelList.style.opacity = 1;
 			colorkeys.innerHTML = "<font color=red>" +  NN[3 + (1 - NowNext)] + "</font><font color=green>" + NN[1 - NowNext] + "</font><font color=yellow> Schedule </font><font color=blue> INFO </font>";
 			colorkeys.style.opacity = 1;
@@ -696,6 +684,7 @@ function onKeyDown(event) {
         break;
     case "Teletext":
 	if(isFullscreen) {
+		ClearScreen();
 		isVisible = 1;
 		setVisible(isVisible);
 		}
@@ -885,12 +874,12 @@ function onCacheUpdated() {
 	if (osdtimeout) {
 		SetOsdInfo();
 	} 
-	if (isSchedule) {
-		if (!isFullscreen) {
-			GetSchedule(currChan,10);
-		} else {
+	if (isSchedule == 1) {
+//		if (!isFullscreen) {
+//			GetSchedule(currChan,8);
+//		} else {
 			GetSchedule(currChan,15);
-		}
+//		}
 	}
 
 }
@@ -2542,12 +2531,9 @@ function onScheduledStart(event) {
     var timertype = event.booking.category;
 
   if ( timertype == "SwitchOnly") {
-	isVisible = 0; isSetupMenu = 0;
-	osdepginfonext.style.opacity = 0;
-	osdepginfo.style.opacity = 0;
-	mainmenu.style.opacity = 0;
+	ClearScreen();
 	isFullscreen = 1; FullScreen(); 
-	setVisible(isVisible); 
+	isVisible = 0; setVisible(isVisible); 
 	setOSDtimer();
 	if (isMediaMenu) { UnloadMediaSettings(); }
 
@@ -2605,6 +2591,15 @@ function onScheduledStop(event) {
 }
 
 
+function ClearScreen() {
+	isSchedule = 0; schedule.style.opacity = 0;
+	isSetupMenu = 0;
+	epgactive = 0;
+	osdepginfonext.style.opacity = 0;
+	osdepginfo.style.opacity = 0;
+	mainmenu.style.opacity = 0;
+}
+
 
 
 </script>
@@ -2634,7 +2629,7 @@ function onScheduledStop(event) {
 
 	<div id="osdnr" style="background:red;width:10%;height:9%; position:absolute; left:12%; top:56%;z-index:505;opacity:0;-webkit-border-radius:25px;"></div>
 
-	<div id="schedule" style="background:#3366ff; width:50%; height:48%; position:absolute; left:25%; top:10%;opacity:0;z-index:510;-webkit-border-radius:50px;"></div>
+	<div id="schedule" style="background:#3366ff; width:50%; height:75%; position:absolute; left:25%; top:10%;opacity:0;z-index:510;-webkit-border-radius:50px;"></div>
 
 	<div id="osdmute" style="width:7%; position:absolute; left:76%; top:9%;z-index:515;opacity:0;"><img src="mute.png"></div>
 	<div id="osdlang" style="width:7%; position:absolute; left:76%; top:9%;z-index:515;opacity:0;"></div>
