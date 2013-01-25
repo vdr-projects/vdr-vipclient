@@ -9,6 +9,15 @@
 var Xfactor = 1280 / 720;
 var Yfactor = 720 / 576;
 
+var server_ip = "http://192.168.3.15";
+var StartVolume = 15; // Volume on (re)start of the portal.
+var currChan = 10; // default channel
+
+//
+//
+//
+//
+//
 
 var showClock = 0;   // 0 = no, 1 = yes
 var SwitchGuide = 0; // 0 = no, 1 = yes
@@ -27,15 +36,12 @@ NN[3] = "TIMER";
 NN[4] = "-----";
 
 var ShowProtectedChannels = 1; // Default don't show protected channels.
-var StartVolume = 30; // Volume on (re)start of the portal.
 var VolumeStep = 5; // Steps the volume buttons make
-var currChan = 10; // default channel
 
 var ChanGroup = 0; // default TV group
 var minChan = new Array(); var maxChan = new Array(); var defChan = new Array(); var baseChn = new Array(); var protChn = new Array(); var ServerAdres = new Array(); // Define settings for Channels.
 
 // Server for Recordings
-var server_ip = "http://192.168.3.15";
 var recServ = server_ip + ":8000";
 var RestFulAPI = server_ip + ":8002";
 var MPDAddress = server_ip + ":8888";
@@ -210,14 +216,15 @@ var audiotype = 0; // used for selecting "cfg.media.audio.typepriority","normal,
 var subsmode = 0;  // "cfg.media.subtitling.modepriority","Teletext,DVB"
 var substype = 0;  // "cfg.media.subtitling.typepriority","normal,hearing_impaired"
 
-var recTitl = new Array();
-var recLink = new Array();
-var recDesc = new Array();
-var recDura = new Array();
-var recStrt = new Array();
-var recList = new Array();
-var recMark = new Array();
-var rec_New = new Array();
+var recTitl = new Array(); // title of recording
+var recLink = new Array(); // link to get recording
+var recDesc = new Array(); // description of the recording
+var recDura = new Array(); // duration of the recording
+var recStrt = new Array(); // date of recording
+var recList = new Array(); // used to verify if the right recording is going to be deleted
+var recMark = new Array(); // marks made in the recording, eg by Noad, Markad
+var rec_New = new Array(); // Flag if recording is new (unseen)
+var recGUID = new Array(); // GUID of recording
 
 var posMark = 0;
 var recMap = 0;

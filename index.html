@@ -217,7 +217,7 @@ function onDataAvailableEvent(event) {
 
 function updateStreamInfo() {
 
-alert("What can this stream do : " + mediaPlayer.getCapabilities());
+//alert("What can this stream do : " + mediaPlayer.getCapabilities());
 	var mpCap = "";
 if (mediaPlayer.getCapabilities() & 1) {
   // bit is set
@@ -247,7 +247,7 @@ if (mediaPlayer.getCapabilities() & 64) {
   // bit is set
 	mpCap = mpCap + "CAPABILITY_TIMESHIFT ";
 }
-	alert (mpCap);
+//	alert (mpCap);
 
 var streamInfo = mediaPlayer.getStreamInfo();
 var cList = streamInfo.availableComponents;
@@ -1848,7 +1848,7 @@ try {
 // MPD Section
 
 function MPD(ev) {
-    alert("Media player state changed: state=" + ev.state + ", reason=" + ev.reason + ", code=" + ev.code);
+//    alert("Media player state changed: state=" + ev.state + ", reason=" + ev.reason + ", code=" + ev.code);
 
 	if ( ev.state == 6 && ev.reason == "HostUnreachable" ) {
 	    showDisplay("ERRR", false, 100, 0 );
@@ -1972,7 +1972,7 @@ if (DelisOK) {
   case "Accept":
   case "MediaPlayPause":
 		mediaList.style.opacity = 0;
-		setTimeout("GetMarks(); position = 0; playRec(recLink[currMed]);",100);
+		setTimeout("GetMarks(); getResume(); playRec(recLink[currMed]+ '?time=' + position);",100);
         break;
     case "Red":
 	DelRec();
@@ -2136,6 +2136,7 @@ if (DelisOK) {
 	    }
     break;
     case "MediaStop":
+	    setResume();
 	    osdepginfo.style.opacity = 0;
 	    isFullscreen = 0; play(channels[currChan]); isFullscreen = 1;
 	    if (isRecording == 1) { 
@@ -2242,6 +2243,7 @@ try {
 	  recDura[i] = (x[i].getElementsByTagName("duration")[0].childNodes[0].nodeValue);
 	  recStrt[i] = (x[i].getElementsByTagName("start")[0].childNodes[0].nodeValue);
 	  rec_New[i] = (x[i].getElementsByTagName("isnew")[0].childNodes[0].nodeValue);
+	  recGUID[i] = (x[i].getElementsByTagName("guid")[0].childNodes[0].nodeValue);
 	  }
 	MakeRecList();
  	getRecOK = 1;
@@ -2265,12 +2267,39 @@ try {
 		{
 		var y = x[i].childNodes[0].nodeValue.split(":");
 		recMark[i] = Number(y[0]*3600) + Number(y[1]*60) + Number(y[2]);
-		alert(recMark[i]);
+//		alert(recMark[i]);
 		}
   } catch(e) {
     alert("Getting Marks problem: " + e);
   }
 }
+
+function setResume() {
+try {
+        var xmlhttp = new XMLHttpRequest();
+        xmlhttp.open("POST", recServ + "/setResume.xml?guid=" + recGUID[currMed] + "&resume=" + position, false);
+        xmlhttp.send();
+  } catch(e) {
+    alert("Setting Resume problem: " + e);
+  }
+
+}
+
+function getResume() {
+position = 0;
+try {
+	  var xmlhttp = new XMLHttpRequest();
+	  xmlhttp.open("GET", recServ + "/getResume.xml?guid=" + recGUID[currMed], false);
+	  xmlhttp.send();
+	  xmlDoc=xmlhttp.responseXML; 
+	  position = Number(xmlDoc.getElementsByTagName("resume")[0].childNodes[0].nodeValue);
+  } catch(e) {
+    alert("Getting Resume problem: " + e);
+  }
+
+}
+
+
 
 
 function DelRec() {
@@ -2432,7 +2461,7 @@ function recordStop() {
 }
 
 function onStateChanged(ev) {
-    alert("Media player state changed: state=" + ev.state + ", reason=" + ev.reason + ", code=" + ev.code);
+//    alert("Media player state changed: state=" + ev.state + ", reason=" + ev.reason + ", code=" + ev.code);
 
 	if ( ( ev.state == 6 && ev.reason == "HostUnreachable" ) || ( ev.state == 2 && ev.reason == "PositionEnd" )) {
 	BackToTV();
@@ -2449,7 +2478,7 @@ function BackToTV() {
 
 
 function onRecorderStateChanged(event) {
-  alert("EVENT! " + event.reason + " *** " + event.state);
+//  alert("EVENT! " + event.reason + " *** " + event.state);
   RECicon = "\uE003"; // 0xE003 0x83 Fixed width blank
   switch (event.state) {
     case mediaRecorder.STATE_IDLE:
