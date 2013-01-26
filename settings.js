@@ -248,3 +248,9 @@ var getbookingID = 0;
 var timerID = 0;
 var nrMedia = 0;
 var MPDListener = 0;
+
+//vdr status from VDR on SmartTV
+var free_space = 0;
+var used_space = 0;
+var perc_space = 0;
+

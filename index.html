@@ -2219,6 +2219,10 @@ if (DelisOK) {
 			playRec((recLink[currMed] + "?time=" + position));
 	}
 	break;
+   case KEY_0:
+	position = 0;
+	playRec((recLink[currMed] + "?time=" + position));
+	break;
 
 	default:
         break;
@@ -2227,6 +2231,7 @@ if (DelisOK) {
 }
 
 function getRecList() {
+	getVDRstatus();
 try {
    xmlhttp=new XMLHttpRequest();
    xmlhttp.open("GET",(recServ + "/recordings.xml?" + new Date().getTime()),false);
@@ -2279,6 +2284,7 @@ try {
         var xmlhttp = new XMLHttpRequest();
         xmlhttp.open("POST", recServ + "/setResume.xml?guid=" + recGUID[currMed] + "&resume=" + position, false);
         xmlhttp.send();
+	recList[currMed] = "\uE003" + Right(recList[currMed], recList[currMed].length -1 );
   } catch(e) {
     alert("Setting Resume problem: " + e);
   }
@@ -2299,8 +2305,21 @@ try {
 
 }
 
-
-
+function getVDRstatus() {
+try {
+   xmlhttp=new XMLHttpRequest();
+   xmlhttp.open("GET",(recServ + "/vdrstatus.xml?" + new Date().getTime()),false);
+   xmlhttp.send();
+   xmlDoc=xmlhttp.responseXML; 
+//   var x=xmlDoc.getElementsByTagName("vdrstatus");
+   var x=xmlDoc.getElementsByTagName("diskspace");
+	  free_space = x[0].getElementsByTagName("free")[0].childNodes[0].nodeValue;
+	  used_space = x[0].getElementsByTagName("used")[0].childNodes[0].nodeValue;
+	  perc_space = x[0].getElementsByTagName("percent")[0].childNodes[0].nodeValue;
+  } catch(e) {
+    alert("Get VDR Status problem: " + e);
+  }
+}
 
 function DelRec() {
 try {
@@ -2368,7 +2387,7 @@ function MakeRecList() {
 function showMediaList() {
 	osdmedia.style.opacity = 0;
 	var liststyle = "";
-	var htmlstring = "<h1><center style='font-size:" + fsRec + ";color:white;'> RECORDINGS </center></h1><table border='0'><tr>";
+	var htmlstring = "<h1><center style='font-size:" + fsRec + ";color:white;'> RECORDINGS (free " + (100 - perc_space) + "%, " + (free_space/1024).toFixed(0) + " GB) </center></h1><table border='0'><tr>";
 	listMed = currMed - 1;
 	if (nrMedia < 14) {var MaxMed = nrMedia; } else { var MaxMed = 14; }
 	for(var i=currMed; i<=currMed + MaxMed; i++) {
@@ -2561,6 +2580,7 @@ function onScheduledStart(event) {
 	// switch only if not already on that channel.
 	if (currChan !== toi.schedulerService.getParameter(event.booking.id, "Channel")) {
 		currChan = toi.schedulerService.getParameter(event.booking.id, "Channel");
+		ChanGroup = (currChan / 1000).toFixed(0);
 		play(channels[currChan]);
 	}
   } else {

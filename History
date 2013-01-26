@@ -1,5 +1,7 @@
-0.14	Resume add. (Uses "VDR on SmartTV" plugin)
-
+0.14	Resume, VDR (disk)status added (Uses "VDR on SmartTV" plugin)
+	Switch timer sets ChannelGroup.
+	When playing recordings key '0' rewinds to start of the recording.
+	Is_new flag unset when resume is set (without reloading recordings from server)
 
 0.13	Bug fixes.
 	Cosmetic fixes.
