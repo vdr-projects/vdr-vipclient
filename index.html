@@ -1604,7 +1604,10 @@ function onKeyMenu(keyCode) {
 	case KEY_7:
 		if (menu == 1) {
 		ShowProtectedChannels = 1 - ShowProtectedChannels;
-		InitMenu(menu);
+		if (ShowProtectedChannels == 1) { ChanGroup = 0; currChan = defChan[ChanGroup]; play(currChan); }
+		isSetupMenu = 0;
+		mainmenu.style.opacity = 0;
+//		InitMenu(menu);
 		}
 	break;
 	case KEY_8:
@@ -2047,12 +2050,16 @@ if (DelisOK) {
         break;
     break;
     case "Down":
-	      mediaPlayer.play(0);
+	if (mediaPlayer.getState() != mediaPlayer.STATE_PAUSED) {
 	      showDisplay("PAUS", false, 100, 0 );
+	      mediaPlayer.play(0);
+	}
         break;
     case "Up":
+	if (mediaPlayer.getState() != mediaPlayer.STATE_PLAYING) {
 	      position = position + (mediaPlayer.getPosition()/1000);
 	      playRec((recLink[currMed] + "?time=" + position));
+	}
 	break;
   case "Accept":
 	osdmedia.style.opacity = 1 - osdmedia.style.opacity;

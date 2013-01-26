@@ -2,6 +2,7 @@
 	Switch timer sets ChannelGroup.
 	When playing recordings key '0' rewinds to start of the recording.
 	Is_new flag unset when resume is set (without reloading recordings from server)
+	Setting protection on/off exits menu. Protection ON also jumps to ChannelGroup 0 & last played channel.
 
 0.13	Bug fixes.
 	Cosmetic fixes.
