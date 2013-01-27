@@ -1262,4 +1262,4 @@ channels[969] = "S28.2E-2-2068-21200";
 channelsnames[970] = "WDR Düsseldorf HD (S)";
 channels[970] = "S19.2E-1-1201-28328";
 
-
+maxChan[0] = 970; // set to max TV channel else you see 'undefined' in guide view

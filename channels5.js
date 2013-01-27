@@ -21,3 +21,5 @@ channels[5008] = "S19.2E-53-1097-2031-239.255.0.8:11111";
 channelsnames[5009] = "NET5 (S)";
 channels[5009] = "S19.2E-53-1105-4003-239.255.0.9:11111";
 
+maxChan[5] = 5009; // set to max multicast channel else you see 'undefined' in guide view
+

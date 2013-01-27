@@ -372,7 +372,7 @@ function onKeyDown(event) {
 	if (currChan > (minChan[ChanGroup] + 8)) {
 	decChan(9);
 	} else {
-	currChan = maxChan[ChanGroup] - currChan;
+		currChan = baseChn[ChanGroup] + (maxChan[ChanGroup] - currChan);
 	}
 	do
 	{
@@ -405,7 +405,7 @@ function onKeyDown(event) {
 	if (currChan < (maxChan[ChanGroup] - 9 )) {
 	incChan(9);
 	} else {
-	currChan = maxChan[ChanGroup] - currChan;
+		currChan = baseChn[ChanGroup] + (maxChan[ChanGroup] - currChan);
 	}
 	do
 	{
@@ -627,22 +627,23 @@ function onKeyDown(event) {
 		break;
     case "TV":
     case "RADIO":
-	if(ChanGroup !== 9) {
-	//Radio
-	defChan[ChanGroup] = currChan;
-	ChanGroup = 9;
-	currChan = defChan[9];
-	} else {
-	//TV
-	defChan[ChanGroup] = currChan;
-	ChanGroup = 0;
-	currChan = defChan[0];
+	if(isFullscreen) {
+		if(ChanGroup !== 9) {
+		//Radio
+		defChan[ChanGroup] = currChan;
+		ChanGroup = 9;
+		currChan = defChan[9];
+		} else {
+		//TV
+		defChan[ChanGroup] = currChan;
+		ChanGroup = 0;
+		currChan = defChan[0];
+		}
+		isSetupMenu = 0;
+		mainmenu.style.opacity = 0;
+		play(channels[currChan]);
 	}
-	isSetupMenu = 0;
-	mainmenu.style.opacity = 0;
-	play(channels[currChan]);
 	break;
-
     case KEY_0:
 	digit = 0;
 	Makedigit();

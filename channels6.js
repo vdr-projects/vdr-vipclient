@@ -81,4 +81,4 @@ channels[6038]="S13.0E-318-15800-16933";
 channelsnames[6039] = "DARING TV (S)";
 channels[6039]="S13.0E-318-15800-16931";
 
-
+maxChan[6] = 6039; // set to max prt channel else you see 'undefined' in guide view

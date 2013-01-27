@@ -24,6 +24,7 @@ var SwitchGuide = 0; // 0 = no, 1 = yes
 var TimeShift = 0;   // 0 = no, 1 = yes timeshift
 var ShowSubs = 1;    // 0 = no, 1 = yes (default)
 var KillStream = 1;  // 1 = Close stream on Standby
+var ShowProtectedChannels = 1; // Default don't show protected channels.
 
 months = new Array('January', 'February', 'March', 'April', 'May', 'June', 'Jully', 'August', 'September', 'October', 'November', 'December');
 days = new Array('Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday');
@@ -35,10 +36,9 @@ NN[2] = "Schedule";
 NN[3] = "TIMER";
 NN[4] = "-----";
 
-var ShowProtectedChannels = 1; // Default don't show protected channels.
 var VolumeStep = 5; // Steps the volume buttons make
 
-var ChanGroup = 0; // default TV group
+var ChanGroup = (currChan/1000).toFixed(0); // default group
 var minChan = new Array(); var maxChan = new Array(); var defChan = new Array(); var baseChn = new Array(); var protChn = new Array(); var ServerAdres = new Array(); // Define settings for Channels.
 
 // Server for Recordings
@@ -48,7 +48,6 @@ var MPDAddress = server_ip + ":8888";
 
 // Radio channels.js Settings
 minChan[9] = 9001;
-maxChan[9] = 9099; // set not too far from max rd channel to speed up zapping
 defChan[9] = 9051;
 baseChn[9] = 9000;
 protChn[9] = 0;
@@ -56,7 +55,6 @@ ServerAdres[9] = server_ip + ":3000/";
 
 // Protected channels.js Settings
 minChan[6] = 6001;
-maxChan[6] = 6040; // set not too far from max prt channel to speed up zapping
 defChan[6] = 6001;
 baseChn[6] = 6000;
 protChn[6] = 1;
@@ -64,7 +62,6 @@ ServerAdres[6] = server_ip + ":3000/";
 
 // TV channels.js Settings
 minChan[0] = 1;
-maxChan[0] = 999; // set not too far from max TV channel to speed up zapping
 defChan[0] = currChan;
 baseChn[0] = 0;
 protChn[0] = 0;
@@ -72,7 +69,6 @@ ServerAdres[0] = server_ip + ":3000/";
 
 //HD list
 minChan[1] = 1001;
-maxChan[1] = 1999; // set not too far from max HD channel to speed up zapping
 defChan[1] = 1001;
 baseChn[1] = 1000;
 protChn[1] = 0;
@@ -80,7 +76,6 @@ ServerAdres[1] = server_ip + ":3000/";
 
 // MultiCast
 minChan[5] = 5001;
-maxChan[5] = 5010; // set not too far from max multicast channel to speed up zapping
 defChan[5] = 5001;
 baseChn[5] = 5000;
 protChn[5] = 0;

@@ -130,3 +130,4 @@ channels[9065] = "S30.0W-2-15-19";
 channelsnames[9066] = "Musicam 6 (S)";
 channels[9066] = "S30.0W-2-15-20";
 
+maxChan[9] = 9066; // set to max rd channel else you see 'undefined' in guide view

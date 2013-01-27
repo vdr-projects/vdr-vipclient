@@ -401,3 +401,4 @@ channels[1952] = "S30.0W-1388-1388-3"
 channelsnames[1953] = "FOX Sports HD (S)"
 channels[1953] = "S30.0W-1388-1388-7"
 
+maxChan[1] = 1953; // set to max HD channel else you see 'undefined' in guide view
