@@ -3,15 +3,16 @@
 // 
 
 //  720x576
+// var Xfactor = 720 / 720; var Yfactor = 576 / 576;
 // 1280x720
+var Xfactor = 1280 / 720; var Yfactor = 720 / 576;
 // 1920x1080
+// var Xfactor = 1920 / 720; var Yfactor = 1080 / 576;
 
-var Xfactor = 1280 / 720;
-var Yfactor = 720 / 576;
 
 var server_ip = "http://192.168.3.15";
 var StartVolume = 15; // Volume on (re)start of the portal.
-var currChan = 9051; // default channel
+var currChan = 10; // default channel
 
 //
 //
