@@ -11,7 +11,7 @@ var Yfactor = 720 / 576;
 
 var server_ip = "http://192.168.3.15";
 var StartVolume = 15; // Volume on (re)start of the portal.
-var currChan = 10; // default channel
+var currChan = 9051; // default channel
 
 //
 //
@@ -62,7 +62,7 @@ ServerAdres[6] = server_ip + ":3000/";
 
 // TV channels.js Settings
 minChan[0] = 1;
-defChan[0] = currChan;
+defChan[0] = 10;
 baseChn[0] = 0;
 protChn[0] = 0;
 ServerAdres[0] = server_ip + ":3000/";

@@ -764,7 +764,7 @@ function onKeyDown(event) {
 		 	SI=channels[currChan].split("-");
 			recordStart(SI[4]);
 			} else {
-			recordStart = (ServerAdres[ChanGroup] + channels[currChan]);
+			recordStart(ServerAdres[ChanGroup] + channels[currChan]);
 			}
 	}
 	break;
@@ -2289,6 +2289,7 @@ try {
 
 function setResume() {
 try {
+	position = position + (mediaPlayer.getPosition()/1000)
         var xmlhttp = new XMLHttpRequest();
         xmlhttp.open("POST", recServ + "/setResume.xml?guid=" + recGUID[currMed] + "&resume=" + position, false);
         xmlhttp.send();
