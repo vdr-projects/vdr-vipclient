@@ -24,13 +24,15 @@
 //
 //
 
-var Version = "0.14	2013/01/27"
+var Version = "0.15"
 
-for (var i = minChan[0];  i < (maxChan[0]+1); i++) { EPG[0][4][i] = "";EPG[1][4][i] = "";EPG[0][5][i] = "";EPG[1][5][i] = "";EPG[0][7][i] = "";EPG[1][7][i] = ""; }
-for (var i = minChan[1];  i < (maxChan[1]+1); i++) { EPG[0][4][i] = "";EPG[1][4][i] = "";EPG[0][5][i] = "";EPG[1][5][i] = "";EPG[0][7][i] = "";EPG[1][7][i] = ""; }
-for (var i = minChan[5];  i < (maxChan[5]+1); i++) { EPG[0][4][i] = "";EPG[1][4][i] = "";EPG[0][5][i] = "";EPG[1][5][i] = "";EPG[0][7][i] = "";EPG[1][7][i] = ""; }
-for (var i = minChan[6];  i < (maxChan[6]+1); i++) { EPG[0][4][i] = "";EPG[1][4][i] = "";EPG[0][5][i] = "";EPG[1][5][i] = "";EPG[0][7][i] = "";EPG[1][7][i] = ""; }
-for (var i = minChan[9];  i < (maxChan[9]+1); i++) { EPG[0][4][i] = "";EPG[1][4][i] = "";EPG[0][5][i] = "";EPG[1][5][i] = "";EPG[0][7][i] = "";EPG[1][7][i] = ""; }
+for (var x = 0;  x < 10; x++) { 
+	if (minChan[x]) {
+		for (var i = minChan[x];  i < (maxChan[x]+1); i++) { 
+			EPG[0][4][i] = "";EPG[1][4][i] = "";EPG[0][5][i] = "";EPG[1][5][i] = "";EPG[0][7][i] = "";EPG[1][7][i] = ""; 
+		}
+	}
+}
 
 window.onkeydown = onKeyDown;
 
@@ -498,13 +500,21 @@ function onKeyDown(event) {
 	}
 	break;
    case "Blue":
-	if(isFullscreen) {
-	RestartPortal();
-	} else if(isSchedule ==0) {
-		SetOsdInfo();
-		osdepginfo.style.opacity = 1 - NowNext;
-		osdepginfonext.style.opacity = NowNext;
-		setTimeout("epgactive = 0; osdepginfo.style.opacity = 0; osdepginfonext.style.opacity = 0;", 5000);
+//	if(isFullscreen) {
+//	RestartPortal();
+//	} else 
+	if(isSchedule == 0) {
+			if(!epgactive) {
+			SetOsdInfo();
+			osdepginfo.style.opacity = 1;
+			osdepginfonext.style.opacity = 0;
+			epgactive = 1;		
+			} else {
+			osdepginfo.style.opacity = 0;
+			osdepginfonext.style.opacity = 0;
+			epgactive = 0;
+			}
+//		setTimeout("epgactive = 0; osdepginfo.style.opacity = 0; osdepginfonext.style.opacity = 0;", 5000);
 	}
 	break;
    case "BrowserBack":

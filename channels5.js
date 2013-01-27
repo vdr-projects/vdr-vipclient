@@ -2,6 +2,15 @@
 // MultiCast Channels.
 //
 
+// MultiCast
+minChan[5] = 5001;
+defChan[5] = 5001;
+baseChn[5] = 5000;
+protChn[5] = 0;
+ServerAdres[5] = "MultiCast";
+// MultiCast, channels[x] layout DVB(Satposition, C or T)-NID-TID-SID-multicast address
+
+
 channelsnames[5001] = "NED1 (S)";
 channels[5001] = "S19.2E-53-1105-4011-239.255.0.1:11111";
 channelsnames[5002] = "NED2 (S)";

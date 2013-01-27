@@ -47,42 +47,6 @@ var recServ = server_ip + ":8000";
 var RestFulAPI = server_ip + ":8002";
 var MPDAddress = server_ip + ":8888";
 
-// Radio channels.js Settings
-minChan[9] = 9001;
-defChan[9] = 9051;
-baseChn[9] = 9000;
-protChn[9] = 0;
-ServerAdres[9] = server_ip + ":3000/";
-
-// Protected channels.js Settings
-minChan[6] = 6001;
-defChan[6] = 6001;
-baseChn[6] = 6000;
-protChn[6] = 1;
-ServerAdres[6] = server_ip + ":3000/";
-
-// TV channels.js Settings
-minChan[0] = 1;
-defChan[0] = 10;
-baseChn[0] = 0;
-protChn[0] = 0;
-ServerAdres[0] = server_ip + ":3000/";
-
-//HD list
-minChan[1] = 1001;
-defChan[1] = 1001;
-baseChn[1] = 1000;
-protChn[1] = 0;
-ServerAdres[1] = server_ip + ":3000/";
-
-// MultiCast
-minChan[5] = 5001;
-defChan[5] = 5001;
-baseChn[5] = 5000;
-protChn[5] = 0;
-ServerAdres[5] = "MultiCast";
-// MultiCast, channels[x] layout DVB(Satposition, C or T)-NID-TID-SID-multicast address
-
 var channeldigits = 2; // 0 - Max 9, 1 max 99, 2 max 999 or 3 max 9999 channels directly selectable by numbers (Don't set it to > 2 it crashes the player)
 
 //

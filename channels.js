@@ -29,7 +29,12 @@
 //	960 - HD channels dvb-s
 //
 //
-
+// TV channels.js Settings
+minChan[0] = 1;
+defChan[0] = 10;
+baseChn[0] = 0;
+protChn[0] = 0;
+ServerAdres[0] = server_ip + ":3000/";
 
 channelsnames[1] = "NED1 (S)";
 channels[1] = "S19.2E-53-1105-4011";
