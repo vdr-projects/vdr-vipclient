@@ -4,7 +4,7 @@
 minChan[1] = 1001;
 defChan[1] = 1001;
 baseChn[1] = 1000;
-protChn[1] = 0;
+protChn[1] = 1;
 ServerAdres[1] = server_ip + ":3000/";
 
 channelsnames[1001] = "NED1 HD (S)"

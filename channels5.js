@@ -4,9 +4,9 @@
 
 // MultiCast
 minChan[5] = 5001;
-defChan[5] = 5001;
+defChan[5] = 5009;
 baseChn[5] = 5000;
-protChn[5] = 0;
+protChn[5] = 1;
 ServerAdres[5] = "MultiCast";
 // MultiCast, channels[x] layout DVB(Satposition, C or T)-NID-TID-SID-multicast address
 
@@ -27,8 +27,8 @@ channelsnames[5007] = "RTL7 (S)";
 channels[5007] = "S19.2E-53-1097-2006-239.255.0.7:11111";
 channelsnames[5008] = "Veronica/DisneyXD (S)";
 channels[5008] = "S19.2E-53-1097-2031-239.255.0.8:11111";
-channelsnames[5009] = "NET5 (S)";
-channels[5009] = "S19.2E-53-1105-4003-239.255.0.9:11111";
+channelsnames[5009] = "Live Stream TEST";
+channels[5009] = "Internet-0-0-0-http://mp3.webradio.antenne.de";
 
 maxChan[5] = 5009; // set to max multicast channel else you see 'undefined' in guide view
 

@@ -50,6 +50,7 @@ function onLoad() {
 //	eitCache.setFilterMode(eitCache.FILTER_MODE_PF_ONLY);
 	eitCache.addEventListener(eitCache.ON_CACHE_UPDATED, onCacheUpdated);
 	mediaPlayer.addEventListener(mediaPlayer.ON_DATA_AVAILABLE,onDataAvailableEvent);
+	mediaPlayer.addEventListener(mediaPlayer.ON_STATE_CHANGED, MPD); 
 	if (mediaRecorder) {
 	mediaRecorder.addEventListener(mediaRecorder.ON_STATE_CHANGED, onRecorderStateChanged);
 	}
@@ -118,6 +119,7 @@ function onUnload() {
 	toi.informationService.removeEventListener(toi.informationService.ON_OBJECTS_CHANGED, onEvent);
 	eitCache.removeEventListener(eitCache.ON_CACHE_UPDATED, onCacheUpdated);
 	mediaPlayer.removeEventListener(mediaPlayer.ON_DATA_AVAILABLE,onDataAvailableEvent);
+	mediaPlayer.removeEventListener(mediaPlayer.ON_STATE_CHANGED, MPD); 
 	mediaRecorder.removeEventListener(mediaRecorder.ON_STATE_CHANGED, onRecorderStateChanged);
 
 	} catch(e) {
@@ -210,7 +212,7 @@ function preview(urip) {
 
 function onDataAvailableEvent(event) {
 	dataAvailable = event.status;
-	
+	//alert("onDataAvailableEvent : " + event.status);
 	if(event.status==true) {
 		updateStreamInfo();
 	} 
@@ -358,10 +360,9 @@ function onKeyDown(event) {
 	defChan[ChanGroup] = currChan;
 	do
 		{
-		ChanGroup = ChanGroup - 1;
-		if (protChn[ChanGroup] == 1 && ShowProtectedChannels == 1) {
+		do
 			ChanGroup = ChanGroup - 1;
-			}
+		while (protChn[ChanGroup] == 1 && ShowProtectedChannels == 1) 
 		if (ChanGroup < 0) {
 			ChanGroup = 9;
 			}
@@ -390,10 +391,9 @@ function onKeyDown(event) {
 	defChan[ChanGroup] = currChan;
 	do
 		{
-		ChanGroup = ChanGroup + 1;
-		if (protChn[ChanGroup] == 1 && ShowProtectedChannels == 1) {
+		do
 			ChanGroup = ChanGroup + 1;
-			}
+		while (protChn[ChanGroup] == 1 && ShowProtectedChannels == 1)
 		if (ChanGroup > 9) {
 			ChanGroup = 0;
 			}
@@ -1445,13 +1445,13 @@ function onKeyMenu(keyCode) {
   switch(keyCode) {
     case "BrowserBack":
 	if (menu !== 0) {
-		if (menu == 3 ) { isFullscreen = 0; play(channels[currChan]); isFullscreen = 1; mediaPlayer.removeEventListener(mediaPlayer.ON_STATE_CHANGED, MPD);MPDListener = 0;}
+		if (menu == 3 ) { isFullscreen = 0; play(channels[currChan]); isFullscreen = 1;MPDListener = 0;}
 		menu = 0;	
 		InitMenu(menu);
 		break;
 		}
     case "Menu":
-	if (menu == 3 ) { play(channels[currChan]); mediaPlayer.removeEventListener(mediaPlayer.ON_STATE_CHANGED, MPD);MPDListener = 0;}
+	if (menu == 3 ) { play(channels[currChan]);MPDListener = 0;}
 	isSetupMenu = 0;
 	mainmenu.style.opacity = 0;
     break;
@@ -1615,7 +1615,7 @@ function onKeyMenu(keyCode) {
 	case KEY_7:
 		if (menu == 1) {
 		ShowProtectedChannels = 1 - ShowProtectedChannels;
-		if (ShowProtectedChannels == 1) { ChanGroup = 0; currChan = defChan[ChanGroup]; play(currChan); }
+		if (ShowProtectedChannels == 1 && protChn[ChanGroup] == 1) { ChanGroup = 0; currChan = defChan[ChanGroup]; play(currChan); }
 		isSetupMenu = 0;
 		mainmenu.style.opacity = 0;
 //		InitMenu(menu);
@@ -1647,7 +1647,7 @@ function onKeyMenu(keyCode) {
 	break;
 	case KEY_0:
 		if (menu !== 0) {
-		if (menu == 3 ) { isFullscreen = 0; play(channels[currChan]); isFullscreen = 1; mediaPlayer.removeEventListener(mediaPlayer.ON_STATE_CHANGED, MPD);MPDListener = 0;}
+		if (menu == 3 ) { isFullscreen = 0; play(channels[currChan]); isFullscreen = 1; MPDListener = 0;}
 		menu = 0;	
 		InitMenu(menu);
 		}
@@ -1756,7 +1756,7 @@ if(menu == 5) { // Timers from Server
 	if (timerOK) {
 	booking = "<font style='background:#fc5;-webkit-border-radius:25px;color:black;font-size:" + fsMenu + ";'>";
 	var x = timerID - 1;
-	for (var i=0;i<10;i++) {
+	for (var i=0;i<11;i++) {
 		if (timers.length !== 0) { do { x = x + 1; } while (!timers[x] && (x < timers.length)) }
 		if (timers.length > x) { booking = booking + timers[x]; } else { booking = booking +"\n"; }
 		if (i == 0) { booking = booking + "</font>"; } 
@@ -1862,8 +1862,11 @@ try {
 // MPD Section
 
 function MPD(ev) {
-//    alert("Media player state changed: state=" + ev.state + ", reason=" + ev.reason + ", code=" + ev.code);
-
+    // alert("Media player state changed: state=" + ev.state + ", reason=" + ev.reason); //  + ", code=" + ev.code);
+if (MPDListener == 0) {
+	if (ev.state == 6 ) { showDisplay("ERRR", false, 100, 0 ); }
+	
+} else {
 	if ( ev.state == 6 && ev.reason == "HostUnreachable" ) {
 	    showDisplay("ERRR", false, 100, 0 );
 	mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'> MPD Connection </center></h1><pre style='color:black;font-size:" + fsMenu + ";'>   MENU to exit \n   0 - back to MainMenu \n   9 - Retry \n\n<center style='color:white;'>ERROR Connecting to MPD server : \n" + MPDAddress + "</center></pre>";
@@ -1877,6 +1880,7 @@ function MPD(ev) {
 	    showDisplay("ERRR", false, 100, 0 );
 	mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'> MPD Connection </center></h1><pre style='color:black;font-size:" + fsMenu + ";'>   MENU to exit \n   0 - back to MainMenu \n   9 - Reconnect \n\n<center style='color:white;'>Error : " + ev.state + "\n Reason : " + ev.reason + "</center></pre>";
 	}
+}
 
 }
 
@@ -1887,7 +1891,6 @@ function playMPD(uri) {
     }
 	mediaPlayer.open(uri);
 	mediaPlayer.play(1000);
-	if (!MPDListener) {	mediaPlayer.addEventListener(mediaPlayer.ON_STATE_CHANGED, MPD); }
 	MPDListener = 1;
   } catch (e) {
     alert("Failed opening recording: " + e);
@@ -2435,7 +2438,7 @@ function showMediaList() {
 
 function incMed(step) {
     currMed = currMed + step;
-    if (currMed == nrMedia + 1) {
+    if (currMed > nrMedia ) {
         currMed = 0;
     }
 }
