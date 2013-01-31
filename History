@@ -1,3 +1,9 @@
+0.16	EPG/schedule info remove on channel switch
+	Exit Guide View removes epg/schedule info
+	Recording Info remove when doing up/down or OK/play
+	getResume request now with timestamp to force reload every time.
+
+
 0.15	ChannelGroup settings moved from settings to channelsX.js
 	Removed display timeout from EPG info in channels view
 	Restart portal only from MENU, in normal view Blue gives epginfo

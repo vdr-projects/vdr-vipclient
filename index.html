@@ -24,7 +24,7 @@
 //
 //
 
-var Version = "0.15"
+var Version = "0.16"
 
 for (var x = 0;  x < 10; x++) { 
 	if (minChan[x]) {
@@ -173,6 +173,9 @@ function play(uri) {
       mediaPlayer.close();
     }
 
+	if (isSchedule) { schedule.style.opacity = 0; isSchedule = 0;}
+	if (epgactive) { osdepginfo.style.opacity = 0; osdepginfonext.style.opacity = 0; epgactive = 0;}
+
 	if (ServerAdres[ChanGroup] == "MultiCast" ) {
  	SI=channels[currChan].split("-");
 	uri = SI[4];
@@ -206,6 +209,7 @@ function preview(urip) {
 	play(urip);
 	}
 	if (isSchedule) { schedule.style.opacity = 0; isSchedule = 0;}
+	if (epgactive) { osdepginfo.style.opacity = 0; osdepginfonext.style.opacity = 0; epgactive = 0;}
 	showChannelList();
 }
 
@@ -466,15 +470,18 @@ function onKeyDown(event) {
 				setTimeout("osdlang.style.opacity = 0; ", 3000);
 				audio = 0;
 			}
-		} else {
-		osdepginfo.style.opacity = 1 - osdepginfo.style.opacity ;
-		osdepginfonext.style.opacity = 1 - osdepginfo.style.opacity;
 		}
-	} else if(isSchedule == 0){
+	} else if(isSchedule == 0 && !epgactive){
 		colorkeys.innerHTML = "<font color=red>" +  NN[3 + NowNext] + "</font><font color=green>" + NN[NowNext] + "</font><font color=yellow> Schedule </font><font color=blue> INFO </font>";
 		NowNext = 1 - NowNext;
 		showChannelList();
 	}
+
+	if(epgactive) {
+		osdepginfo.style.opacity = 1 - osdepginfo.style.opacity ;
+		osdepginfonext.style.opacity = 1 - osdepginfo.style.opacity;
+	}
+
 
 	break;
    case "Yellow":
@@ -546,6 +553,8 @@ function onKeyDown(event) {
 			}
 //		setTimeout("epgactive = 0; osdepginfo.style.opacity = 0; osdepginfonext.style.opacity = 0;", 5000);
 		} else if(!isFullscreen){
+			osdepginfo.style.opacity = 0;
+			osdepginfonext.style.opacity = 0;
 			epgactive = 0;
 			isFullscreen = 1;
 			FullScreen();
@@ -2317,7 +2326,7 @@ function getResume() {
 position = 0;
 try {
 	  var xmlhttp = new XMLHttpRequest();
-	  xmlhttp.open("GET", recServ + "/getResume.xml?guid=" + recGUID[currMed], false);
+	  xmlhttp.open("GET", recServ + "/getResume.xml?guid=" + recGUID[currMed] + "&" + new Date().getTime(), false);
 	  xmlhttp.send();
 	  xmlDoc=xmlhttp.responseXML; 
 	  position = Number(xmlDoc.getElementsByTagName("resume")[0].childNodes[0].nodeValue);
@@ -2344,6 +2353,7 @@ try {
 }
 
 function DelRec() {
+	if (osdepginfo.style.opacity == 1) {osdepginfo.style.opacity = 0;}
 try {
    xmlhttp=new XMLHttpRequest();
    xmlhttp.open("GET",(RestFulAPI + "/recordings/" + currMed + ".xml?" + new Date().getTime()),false);
@@ -2407,6 +2417,7 @@ function MakeRecList() {
 }
 
 function showMediaList() {
+	if (osdepginfo.style.opacity == 1) {osdepginfo.style.opacity = 0;}
 	osdmedia.style.opacity = 0;
 	var liststyle = "";
 	var htmlstring = "<h1><center style='font-size:" + fsRec + ";color:white;'> RECORDINGS (free " + (100 - perc_space) + "%, " + (free_space/1024).toFixed(0) + " GB) </center></h1><table border='0'><tr>";
@@ -2455,6 +2466,7 @@ function playRec(uri) {
     if (mediaPlayer.getState() != mediaPlayer.STATE_IDLE) {
       mediaPlayer.close();
     }
+	if (osdepginfo.style.opacity == 1) {osdepginfo.style.opacity = 0;}
 	mediaPlayer.open(uri);
 	mediaPlayer.play(1000);
 	showDisplay("PLAY", false, 100, 0 );
