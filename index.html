@@ -2613,9 +2613,10 @@ function onScheduledStart(event) {
 
 	// switch only if not already on that channel.
 	if (currChan !== toi.schedulerService.getParameter(event.booking.id, "Channel")) {
-		currChan = toi.schedulerService.getParameter(event.booking.id, "Channel");
-		ChanGroup = (currChan / 1000).toFixed(0);
+		currChan = Number(toi.schedulerService.getParameter(event.booking.id, "Channel"));
+		ChanGroup = Number(Left((currChan / 1000),1));
 		play(channels[currChan]);
+		alert (ChanGroup);
 	}
   } else {
 	  try {
