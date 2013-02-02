@@ -2273,7 +2273,8 @@ try {
 	  { 
 	  recTitl[i] = (x[i].getElementsByTagName("title")[0].childNodes[0].nodeValue);
 	  recTitl[i] = recTitl[i].split("~");
-	  recLink[i] = (x[i].getElementsByTagName("link")[0].childNodes[0].nodeValue);
+//	  recLink[i] = (x[i].getElementsByTagName("link")[0].childNodes[0].nodeValue);
+	  recLink[i] = (x[i].getElementsByTagName("enclosure")[0].getAttribute('url'));
 	  recDesc[i] = (x[i].getElementsByTagName("description")[0].childNodes[0].nodeValue);
 	  recDura[i] = (x[i].getElementsByTagName("duration")[0].childNodes[0].nodeValue);
 	  recStrt[i] = (x[i].getElementsByTagName("start")[0].childNodes[0].nodeValue);
