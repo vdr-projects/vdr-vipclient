@@ -2356,14 +2356,14 @@ try {
 function DelRec() {
 	if (osdepginfo.style.opacity == 1) {osdepginfo.style.opacity = 0;}
 try {
-   xmlhttp=new XMLHttpRequest();
-   xmlhttp.open("GET",(RestFulAPI + "/recordings/" + currMed + ".xml?" + new Date().getTime()),false);
-   xmlhttp.send();
-   xmlDoc=xmlhttp.responseXML; 
-   var x=xmlDoc.getElementsByTagName("recording");
+//   xmlhttp=new XMLHttpRequest();
+//   xmlhttp.open("GET",(RestFulAPI + "/recordings/" + currMed + ".xml?" + new Date().getTime()),false);
+//   xmlhttp.send();
+//   xmlDoc=xmlhttp.responseXML; 
+//   var x=xmlDoc.getElementsByTagName("recording");
 	//popup for confirm
 	switchtimer.style.opacity = 1;
-	switchtimer.innerHTML = "<pre><center> OK to delete \n other to abort \n\n " + Left(x[0].getElementsByTagName("param")[1].childNodes[0].nodeValue,30) + "</center></pre>"; // Recording Name
+	switchtimer.innerHTML = "<pre><center> OK to delete \n other to abort \n\n " + Left(recTitl[currMed],30) + "</center></pre>"; // Recording Name
 	DelisOK = 1
   } catch(e) {
     alert("Delete Recordings problem: " + e);
@@ -2373,7 +2373,7 @@ try {
 function DelRec2() {
 try {
    xmlhttp=new XMLHttpRequest();
-   xmlhttp.open("POST",(RestFulAPI + "/recordings/" + currMed ),false);
+   xmlhttp.open("POST",(recServ + "/deleteRecording.xml?id=" + recGUID[currMed] ),false);
    xmlhttp.send();
    recList[currMed] = "";
   } catch(e) {

@@ -39,7 +39,7 @@ NN[4] = "-----";
 
 var VolumeStep = 5; // Steps the volume buttons make
 
-var ChanGroup = (currChan/1000).toFixed(0); // default group
+var ChanGroup = Number(String((currChan / 1000)).substring(0,1)); // default group
 var minChan = new Array(); var maxChan = new Array(); var defChan = new Array(); var baseChn = new Array(); var protChn = new Array(); var ServerAdres = new Array(); // Define settings for Channels.
 
 // Server for Recordings
