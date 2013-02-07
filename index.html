@@ -179,6 +179,8 @@ function play(uri) {
 	if (ServerAdres[ChanGroup] == "MultiCast" ) {
  	SI=channels[currChan].split("-");
 	uri = SI[4];
+	} else if (ServerAdres[ChanGroup] == "FullURL" ) {
+	// uri = ready!
 	} else {
 	uri = ServerAdres[ChanGroup] + uri;
 	}
@@ -1543,6 +1545,7 @@ function onKeyMenu(keyCode) {
 			isSetupMenu = 0;
 			mediaList.style.opacity = 0.9;
 			mainmenu.style.opacity = 0;
+			recPath = "/recordings.xml";
 			setTimeout("getRecList();LoadMediaSettings();",100);
 			}
 		if (menu == 1) {
@@ -1632,6 +1635,11 @@ function onKeyMenu(keyCode) {
 	break;
 	case KEY_8:
 		if (menu == 0) {
+			isSetupMenu = 0;
+			mediaList.style.opacity = 0.9;
+			mainmenu.style.opacity = 0;
+			recPath = "/media.xml";
+			setTimeout("getRecList();LoadMediaSettings();",100);
 			}
 
 	if (menu == 1) {
@@ -1691,7 +1699,7 @@ function onKeyMenu(keyCode) {
 function InitMenu(menu) {
 
 if(menu == 0) { // Main Menu
-	mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'> MainMenu \n ( " + Version + " )</center></h1><pre style='color:black;font-size:" + fsMenu + ";'>   1 - Settings \n   2 - Recordings \n   3 - Timers\n   4 - Timers from Server\n\n\n\n\n   9 - MPD Server Connection\n\n   BLUE - Restart Portal </pre>";
+	mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'> MainMenu \n ( " + Version + " )</center></h1><pre style='color:black;font-size:" + fsMenu + ";'>   1 - Settings \n   2 - Recordings \n   3 - Timers\n   4 - Timers from Server\n\n\n\n   8 - Media Directory\n   9 - MPD Server Connection\n\n   BLUE - Restart Portal </pre>";
 }
 
 if(menu == 1) { // settings menu
@@ -2264,7 +2272,7 @@ function getRecList() {
 	getVDRstatus();
 try {
    xmlhttp=new XMLHttpRequest();
-   xmlhttp.open("GET",(recServ + "/recordings.xml?" + new Date().getTime()),false);
+   xmlhttp.open("GET",(recServ + recPath + "?" + new Date().getTime()),false);
    xmlhttp.send();
    xmlDoc=xmlhttp.responseXML; 
    var x=xmlDoc.getElementsByTagName("item");

@@ -67,6 +67,7 @@ var channelsepglang = new Array();
 var currMed = 0;
 var listMed = 0;
 var DelisOK = 0;
+var recPath = "/recordings.xml";
 
 var menu = 0;
 var isMediaMenu = 0;
