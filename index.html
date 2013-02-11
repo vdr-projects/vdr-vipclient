@@ -24,7 +24,7 @@
 //
 //
 
-var Version = "0.16"
+var Version = "0.17"
 
 for (var x = 0;  x < 10; x++) { 
 	if (minChan[x]) {
@@ -2477,7 +2477,7 @@ function showMediaList() {
 function getServerSchedule() {
 try {
    xmlhttp=new XMLHttpRequest();
-   xmlhttp.open("GET",(RestFulAPI + "/events/" + channels[currChan] + ".xml?limit=50&" + new Date().getTime()),false);
+   xmlhttp.open("GET",(RestFulAPI + "/events/" + channels[currChan] + ".xml?timespan=" + serverEPGdays + "&" + new Date().getTime()),false);
    xmlhttp.send();
    xmlDoc=xmlhttp.responseXML; 
    var x=xmlDoc.getElementsByTagName("event");
