@@ -1542,12 +1542,10 @@ function onKeyMenu(keyCode) {
 	break;
 	case KEY_2:
 		if (menu == 0) {
-			isSetupMenu = 0;
-			mediaList.style.opacity = 0.9;
-			mainmenu.style.opacity = 0;
-			recPath = "/recordings.xml";
-			setTimeout("getRecList();LoadMediaSettings();",100);
-			}
+			LoadTimers();
+				if (timer.length !== 0) { do { timerID = timerID + 1; } while (!timer[timerID] && (timerID < timer.length)) }
+			menu = 2;
+		}
 		if (menu == 1) {
 			is = toi.informationService;
 			if(substype == 0 ) { 	
@@ -1562,9 +1560,11 @@ function onKeyMenu(keyCode) {
 	break;
 	case KEY_3:
 		if (menu == 0) {
-			LoadTimers();
-				if (timer.length !== 0) { do { timerID = timerID + 1; } while (!timer[timerID] && (timerID < timer.length)) }
-			menu = 2;
+			isSetupMenu = 0;
+			mediaList.style.opacity = 0.9;
+			mainmenu.style.opacity = 0;
+			recPath = "/recordings.xml";
+			setTimeout("getRecList();LoadMediaSettings();",100);
 		} else if (menu == 1) {
 			is = toi.informationService;
 			if(subsmode == 0 ) {	
@@ -1598,6 +1598,13 @@ function onKeyMenu(keyCode) {
 		}
 	break;
 	case KEY_5:
+
+	if (menu == 0) {
+			isSetupMenu = 0;
+			mediaList.style.opacity = 0.9;
+			mainmenu.style.opacity = 0;
+			setTimeout("getServerSchedule();LoadMediaSettings();",100);
+			}
 	if (menu == 1) {
 			audio = audio + 1;
 			is = toi.informationService;
@@ -1699,7 +1706,7 @@ function onKeyMenu(keyCode) {
 function InitMenu(menu) {
 
 if(menu == 0) { // Main Menu
-	mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'> MainMenu \n ( " + Version + " )</center></h1><pre style='color:black;font-size:" + fsMenu + ";'>   1 - Settings \n   2 - Recordings \n   3 - Timers\n   4 - Timers from Server\n\n\n\n   8 - Media Directory\n   9 - MPD Server Connection\n\n   BLUE - Restart Portal </pre>";
+	mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'> MainMenu \n ( " + Version + " )</center></h1><pre style='color:black;font-size:" + fsMenu + ";'>   1 - Settings \n   2 - Timers\n   3 - Server : Recordings\n   4 - Server : Timers\n   5 - Server : EPG\n\n\n   8 - Server : Media Directory\n   9 - MPD Server Connection\n\n   BLUE - Restart Portal </pre>";
 }
 
 if(menu == 1) { // settings menu
@@ -1923,7 +1930,7 @@ function playMPD(uri) {
 function LoadMediaSettings() {
 		isMediaMenu = 1;
 		isFullscreen = 0;
-		showDisplay("STOP", false, 100, 0 );
+		if (getRecOK !== 2) { showDisplay("STOP", false, 100, 0 ); }
 		currMed = 0;
 		if (getRecOK) { showMediaList();}
 		mediaPlayer.addEventListener(mediaPlayer.ON_POSITION_CHANGED, ShowMediaOSD);
@@ -2005,13 +2012,20 @@ if (DelisOK) {
 	break;
   case "Accept":
   case "MediaPlayPause":
+	if (getRecOK == 2) {
+		ShowInfo();
+		osdepginfo.style.opacity = 1 - osdepginfo.style.opacity;
+	}
+	if (getRecOK !== 2) {
 		mediaList.style.opacity = 0;
 		setTimeout("GetMarks(); getResume(); playRec(recLink[currMed]+ '?time=' + position);",100);
+	}
         break;
     case "Red":
-	DelRec();
+	if (getRecOK !== 2) { DelRec(); }
 	break;
    case "Green":
+	if (getRecOK !== 2) {
 			audio = audio + 1;
 			is = toi.informationService;
 			if(audio == 1) {	
@@ -2037,6 +2051,7 @@ if (DelisOK) {
 				setTimeout("osdlang.style.opacity = 0; ", 3000);
 				audio = 0;
 			}
+	}
 	break;
     case "Blue":
 	ShowInfo();
@@ -2429,7 +2444,11 @@ function showMediaList() {
 	if (osdepginfo.style.opacity == 1) {osdepginfo.style.opacity = 0;}
 	osdmedia.style.opacity = 0;
 	var liststyle = "";
+	if (getRecOK == 1) {
 	var htmlstring = "<h1><center style='font-size:" + fsRec + ";color:white;'> RECORDINGS (free " + (100 - perc_space) + "%, " + (free_space/1024).toFixed(0) + " GB) </center></h1><table border='0'><tr>";
+	} else {
+	var htmlstring = "<h1><center style='font-size:" + fsRec + ";color:white;'> EPG " + channelsnames[currChan] + " </center></h1><table border='0'><tr>";
+	}
 	listMed = currMed - 1;
 	if (nrMedia < 14) {var MaxMed = nrMedia; } else { var MaxMed = 14; }
 	for(var i=currMed; i<=currMed + MaxMed; i++) {
@@ -2453,6 +2472,45 @@ function showMediaList() {
 	}
 	mediaList.innerHTML = htmlstring + "</table>";
 	//ShowInfo();
+}
+
+function getServerSchedule() {
+try {
+   xmlhttp=new XMLHttpRequest();
+   xmlhttp.open("GET",(RestFulAPI + "/events/" + channels[currChan] + ".xml?limit=50&" + new Date().getTime()),false);
+   xmlhttp.send();
+   xmlDoc=xmlhttp.responseXML; 
+   var x=xmlDoc.getElementsByTagName("event");
+   nrMedia = x.length - 1;
+   for (var i=0;i<x.length;i++)
+	  { 
+	recTitl[i] = x[i].getElementsByTagName("param")[1].childNodes[0].nodeValue;
+		try { 
+			recDesc[i] = x[i].getElementsByTagName("param")[3].childNodes[0].nodeValue; 
+		} catch(e) {
+			recDesc[i] = "";
+		}
+	recDura[i] = x[i].getElementsByTagName("param")[6].childNodes[0].nodeValue;
+	recStrt[i] = x[i].getElementsByTagName("param")[5].childNodes[0].nodeValue;
+
+        date = new Date(Number(recStrt[i])*1000);
+	        year = date.getFullYear();
+	        month = date.getMonth();
+	        d = date.getDate();
+        	day = date.getDay();
+	        h = date.getHours();
+	        m = date.getMinutes();
+		h=addzero(h);
+		m=addzero(m);
+	recList[i] = ''+days[day]+' '+d+' '+months[month]+' '+year+' '+h+':'+m + " " + recTitl[i];
+
+	  }
+ 	getRecOK = 2;
+  } catch(e) {
+    alert("Get EPG problem: " + e);
+	getRecOK = 0;
+	mediaList.innerHTML = "<h1><center style='font-size:" + fsRec + ";color:white;'> Server EPG </center><pre>\n\n\nERROR getting Server EPG !!!</pre></h1>";
+  }
 }
 
 
