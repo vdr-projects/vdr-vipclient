@@ -434,7 +434,7 @@ function onKeyDown(event) {
 		}
 	} else if(isSchedule == 0){
 		if(NowNext) {	
-			settimer();
+			settimer(EPG[NowNext][2][currChan],EPG[NowNext][1][currChan]);
 			switchtimer.style.opacity = 1;
 			setTimeout("switchtimer.style.opacity = 0; ", 2000);
 //		} else {
@@ -487,25 +487,23 @@ function onKeyDown(event) {
 
 	break;
    case "Yellow":
-		GetSchedule(currChan,15);
 	if(isFullscreen) {
-		if(!epgactive) {
-				if(!isSchedule) {
-				schedule.style.opacity = 1;
-				isSchedule = 1;
-				} else {
-				isSchedule = 0;
-				schedule.style.opacity = 0;
-				}
+		if(epgactive) {
+			osdepginfo.style.opacity = 0;
+			osdepginfonext.style.opacity = 0;
+			epgactive = 0;
 		}
+		mediaList.style.opacity = 0.9;
+		setTimeout("getSchedule(currChan);LoadMediaSettings();",100);
 	} else {
+		GetSchedule(currChan,15);
 		schedule.style.opacity = 1 - schedule.style.opacity;
 		isSchedule = schedule.style.opacity;
 		if(isSchedule == 1){
-		colorkeys.innerHTML = "<font color=red>" +  NN[4] + "</font><font color=green>" + NN[4] + "</font><font color=yellow> BACK </font><font color=blue>" + NN[4] + "</font>";
-		} else {
-		colorkeys.innerHTML = "<font color=red>" +  NN[3 + (1 - NowNext)] + "</font><font color=green>" + NN[1 - NowNext] + "</font><font color=yellow> Schedule </font><font color=blue> INFO </font>";
-		}
+			colorkeys.innerHTML = "<font color=red>" +  NN[4] + "</font><font color=green>" + NN[4] + "</font><font color=yellow> BACK </font><font color=blue>" + NN[4] + "</font>";
+			} else {
+			colorkeys.innerHTML = "<font color=red>" +  NN[3 + (1 - NowNext)] + "</font><font color=green>" + NN[1 - NowNext] + "</font><font color=yellow> Schedule </font><font color=blue> INFO </font>";
+			}
 	}
 	break;
    case "Blue":
@@ -934,16 +932,16 @@ function updateOSDtime(timchan) {
 }
 
 
-function settimer() {
+function settimer(ProgTime,ProgName) {
 	if(SwitchTimer) {	
 		  try {
-		    switchtimerID = toi.schedulerService.schedule("SwitchOnly","notification", EPG[NowNext][2][currChan] , 0);
+		    switchtimerID = toi.schedulerService.schedule("SwitchOnly","notification", ProgTime , 0);
 		    toi.schedulerService.setParameter(switchtimerID, "Channel", currChan.toString() );
 		  }
 		  catch (e) {
 		    alert(e);
 		  }
-		tijd = EPG[NowNext][2][currChan];
+		tijd = ProgTime;
 		date = new Date(tijd*1000); 
 		tijd = date.toUTCString();
 		tijd = new Date(tijd);
@@ -952,7 +950,7 @@ function settimer() {
 		th=addzero(th);
 		tm=addzero(tm);
 
-		switchtimer.innerHTML = "<pre>  Name      : " + Left(EPG[NowNext][1][currChan],30) + "\n  channel   : " + channelsnames[currChan] +  "\n  Starttime : " + th + ":" + tm + "</pre>";
+		switchtimer.innerHTML = "<pre>  Name      : " + Left(ProgName,30) + "\n  channel   : " + channelsnames[currChan] +  "\n  Starttime : " + th + ":" + tm + "</pre>";
 		setOSDtimer();
 	} else {
 	//
@@ -1542,9 +1540,11 @@ function onKeyMenu(keyCode) {
 	break;
 	case KEY_2:
 		if (menu == 0) {
-			LoadTimers();
-				if (timer.length !== 0) { do { timerID = timerID + 1; } while (!timer[timerID] && (timerID < timer.length)) }
-			menu = 2;
+			isSetupMenu = 0;
+			mediaList.style.opacity = 0.9;
+			mainmenu.style.opacity = 0;
+			recPath = "/recordings.xml";
+			setTimeout("getRecList();LoadMediaSettings();",100);
 		}
 		if (menu == 1) {
 			is = toi.informationService;
@@ -1560,11 +1560,9 @@ function onKeyMenu(keyCode) {
 	break;
 	case KEY_3:
 		if (menu == 0) {
-			isSetupMenu = 0;
-			mediaList.style.opacity = 0.9;
-			mainmenu.style.opacity = 0;
-			recPath = "/recordings.xml";
-			setTimeout("getRecList();LoadMediaSettings();",100);
+			LoadTimers();
+				if (timer.length !== 0) { do { timerID = timerID + 1; } while (!timer[timerID] && (timerID < timer.length)) }
+			menu = 2;
 		} else if (menu == 1) {
 			is = toi.informationService;
 			if(subsmode == 0 ) {	
@@ -1578,12 +1576,12 @@ function onKeyMenu(keyCode) {
 	InitMenu(menu);
 	break;
 	case KEY_4:
-		if (menu == 0) {
-			mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'> Timers </center></h1><pre style='color:black;font-size:" + fsMenu + ";'>\n\n\n<center> PLEASE WAIT </center></pre>";
-			timerID = 0;
-			menu = 5;
-			setTimeout("LoadTimersServer();InitMenu(menu);",100);
-		} else if (menu == 1) {
+	if (menu == 0) {
+			isSetupMenu = 0;
+			mediaList.style.opacity = 0.9;
+			mainmenu.style.opacity = 0;
+			setTimeout("getSchedule(currChan);LoadMediaSettings();",100);
+			} else if (menu == 1) {
 			audiotype = audiotype + 1;
 			is = toi.informationService;
 			if(audiotype == 1) {	
@@ -1598,13 +1596,13 @@ function onKeyMenu(keyCode) {
 		}
 	break;
 	case KEY_5:
-
-	if (menu == 0) {
+		if (menu == 0) {
 			isSetupMenu = 0;
 			mediaList.style.opacity = 0.9;
 			mainmenu.style.opacity = 0;
-			setTimeout("getServerSchedule();LoadMediaSettings();",100);
-			}
+			recPath = "/recordings.xml";
+			setTimeout("getRecList();LoadMediaSettings();",100);
+		}
 	if (menu == 1) {
 			audio = audio + 1;
 			is = toi.informationService;
@@ -1620,6 +1618,12 @@ function onKeyMenu(keyCode) {
 	InitMenu(menu);
 	break;
 	case KEY_6:
+		if (menu == 0) {
+			mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'> Timers </center></h1><pre style='color:black;font-size:" + fsMenu + ";'>\n\n\n<center> PLEASE WAIT </center></pre>";
+			timerID = 0;
+			menu = 5;
+			setTimeout("LoadTimersServer();InitMenu(menu);",100);
+		}
 	if (menu == 1) {
 		if(showClock == 0 )	{
 		 	showDisplay("", true, 80, 1 );
@@ -1632,6 +1636,13 @@ function onKeyMenu(keyCode) {
 	InitMenu(menu);
 	break;
 	case KEY_7:
+	if (menu == 0) {
+			isSetupMenu = 0;
+			mediaList.style.opacity = 0.9;
+			mainmenu.style.opacity = 0;
+			setTimeout("getServerSchedule();LoadMediaSettings();",100);
+			}
+
 		if (menu == 1) {
 		ShowProtectedChannels = 1 - ShowProtectedChannels;
 		if (ShowProtectedChannels == 1 && protChn[ChanGroup] == 1) { ChanGroup = 0; currChan = defChan[ChanGroup]; play(currChan); }
@@ -1706,7 +1717,7 @@ function onKeyMenu(keyCode) {
 function InitMenu(menu) {
 
 if(menu == 0) { // Main Menu
-	mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'> MainMenu \n ( " + Version + " )</center></h1><pre style='color:black;font-size:" + fsMenu + ";'>   1 - Settings \n   2 - Timers\n   3 - Server : Recordings\n   4 - Server : Timers\n   5 - Server : EPG\n\n\n   8 - Server : Media Directory\n   9 - MPD Server Connection\n\n   BLUE - Restart Portal </pre>";
+	mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'> MainMenu \n ( " + Version + " )</center></h1><pre style='color:black;font-size:" + fsMenu + ";'>   1 - Settings \n   2 - Recordings\n   3 - Timers\n   4 - EPG\n   5 - Server : Recordings\n   6 - Server : Timers\n   7 - Server : EPG\n   8 - Server : Media Directory\n   9 - MPD Server Connection\n\n   BLUE - Restart Portal </pre>";
 }
 
 if(menu == 1) { // settings menu
@@ -1723,7 +1734,7 @@ if(menu == 1) { // settings menu
 }
 
 if(menu == 2) { // Timers menu
-	booking = "";
+	booking = "<center> PRESS OK TO REMOVE </center>";
 	var x = timerID - 1;
 	var y = toi.schedulerService.getBookingIds("*", 0, 0);
 	if (y.length !== 0) {
@@ -1731,9 +1742,9 @@ if(menu == 2) { // Timers menu
 		if (timer.length !== 0) { do { x = x + 1; } while (!timer[x] && (x < timer.length)) }
 
 			if (i == 0) {
-			booking = "<font style='background:#fc5;-webkit-border-radius:25px;color:black;font-size:" + fsMenu + ";'>";
+			booking = booking + "<font style='background:#fc5;-webkit-border-radius:25px;color:black;font-size:" + fsMenu + ";'>";
 			} else if (i == 1) {
-			booking = booking + "<center> PRESS OK TO REMOVE </center></font>";
+			booking = booking + "</font>";
 			} 
 
 		if (timer.length > x) {
@@ -1805,12 +1816,15 @@ function LoadTimers() {
 				date = new Date(tijd*1000); 
 				tijd = date.toUTCString();
 				tijd = new Date(tijd);
+			        month = tijd.getMonth();
+			        d = tijd.getDate();
+		        	day = tijd.getDay();
 				var tm = tijd.getMinutes();
 				var th = tijd.getHours();
 				th=addzero(th);
 				tm=addzero(tm);
 
-				booking = booking + " Start " + th + ":" + tm + "  ";
+				booking = booking + " Start " + Left(days[day],3) + " " + d + " " + Left(months[month],3) + " " + th + ":" + tm + "  ";
 
 					if (y.category !== "SwitchOnly") {
 						booking = booking + " Duration " + y.duration;
@@ -2023,6 +2037,11 @@ if (DelisOK) {
         break;
     case "Red":
 	if (getRecOK !== 2) { DelRec(); }
+	if (getRecOK == 2) { //set timer
+			settimer(recStrt[currMed],recTitl[currMed]);
+			switchtimer.style.opacity = 1;
+			setTimeout("switchtimer.style.opacity = 0; ", 2000);
+	 }
 	break;
    case "Green":
 	if (getRecOK !== 2) {
@@ -2512,6 +2531,56 @@ try {
 	mediaList.innerHTML = "<h1><center style='font-size:" + fsRec + ";color:white;'> Server EPG </center><pre>\n\n\nERROR getting Server EPG !!!</pre></h1>";
   }
 }
+
+function getSchedule(schchan){
+	SI = "";
+	recTitl.length = 0;
+  try {
+	 StreamInfo(schchan);
+
+	 eitService = toi.statics.ToiDvbEitCacheServiceItem.create(SI[1],SI[2],SI[3]);
+	 eitCache.addService(eitService);
+	 event = eitCache.getPresentEvent(eitService);
+	 events = eitCache.getEvents(eitService, 1000000000, 2000000000);
+
+	if (event.name)	{
+	    if (events.more) {
+	      var t = eitCache.getEvents(eitService, 1000000000, 2000000000);
+	      events.infoSequence.concat(t.infoSequence);
+	      events.more = t.more;
+	    }
+	    nrMedia = events.infoSequence.length - 1;
+	    for (var i = 0; i < events.infoSequence.length; i++) {
+			while ((i > 0) && (events.infoSequence[i].eventId == events.infoSequence[(i-1)].eventId)) {
+				i = i + 1;
+			}
+
+		recTitl[i] = events.infoSequence[i].name;
+		recDesc[i] = eitCache.getExtendedEventInfo(eitService,events.infoSequence[i].eventId).extendedInfo;
+		if (recDesc[i] == "" ) { recDesc[i] = eitCache.getExtendedEventInfo(eitService,events.infoSequence[i].eventId).shortInfo;}
+		recDura[i] = events.infoSequence[i].duration;
+		recStrt[i] = events.infoSequence[i].time;
+
+	        date = new Date(Number(recStrt[i])*1000);
+		        year = date.getFullYear();
+		        month = date.getMonth();
+		        d = date.getDate();
+	        	day = date.getDay();
+		        h = date.getHours();
+		        m = date.getMinutes();
+			h=addzero(h);
+			m=addzero(m);
+			recList[i] = ' ' + days[day] + ' ' + d + ' ' + months[month] + ' ' + year + " " + h + ":" + m + " (" + (recDura[i]/60).toFixed(0) + ") " + Left(recTitl[i],30);
+		}
+	}
+	getRecOK = 2;
+  } catch(e) {
+	getRecOK = 0;
+	mediaList.innerHTML = "<h1><center style='font-size:" + fsRec + ";color:white;'> EPG </center><pre>\n\n\nERROR getting EPG !!!</pre></h1>";
+  }
+
+}
+
 
 
 function incMed(step) {

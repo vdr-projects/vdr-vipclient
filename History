@@ -1,3 +1,10 @@
+0.17	Show EPG from Server limited to X days ( 3 = default, set in settings.js)
+	Updated Mainmenu. For now Recordings = Server Recordings menu item.
+	Updated EPG-Schedule view, for every item a switch timer can be set. With up/down scrolling through Schedule is possible
+	Guide view still uses the old Schedule View.
+	View Timer menu now also shows day & date.
+
+
 0.16	EPG/schedule info remove on channel switch
 	Exit Guide View removes epg/schedule info
 	Recording Info remove when doing up/down or OK/play
