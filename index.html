@@ -37,6 +37,20 @@ for (var x = 0;  x < 10; x++) {
 window.onkeydown = onKeyDown;
 
 function onLoad() {
+/*
+	//Searching for a way to get recordings ID.
+	var x = toi.assetManagerService.getDefinedProperties();
+	alert(x.length);
+  for (var i=0; i<x.length; i++) {
+	alert(x[i]);
+	}
+	alert(toi.assetManagerService.getDirectories(-1));
+	var x = toi.assetManagerService.getDirectories(-1);
+	alert(x.length);
+  for (var i=0; i<x.length; i++) {
+	alert(x[i]);
+	}
+*/
 
 	createPlayer();
 	createRecorder();
@@ -434,13 +448,9 @@ function onKeyDown(event) {
 		}
 	} else if(isSchedule == 0){
 		if(NowNext) {	
-			settimer(EPG[NowNext][2][currChan],EPG[NowNext][1][currChan]);
+			settimer(EPG[NowNext][2][currChan],EPG[NowNext][1][currChan],0);
 			switchtimer.style.opacity = 1;
 			setTimeout("switchtimer.style.opacity = 0; ", 2000);
-//		} else {
-//			switchtimer.innerHTML = "<font color=black size=4><center> Program is running use OK to switch </center></font>";
-//			switchtimer.style.opacity = 1;
-//			setTimeout("switchtimer.style.opacity = 0; ", 2000);
 		}
 	}
         break;
@@ -893,7 +903,6 @@ function SetOsdInfo() {
 function onCacheUpdated() {
         GetEPG(currChan);
 	if (osdtimeout) { SetOsdInfo();	} 
-	if (isSchedule) { GetSchedule(currChan,15); }
 }
 
 function OSDchannr(channr) {
@@ -932,8 +941,8 @@ function updateOSDtime(timchan) {
 }
 
 
-function settimer(ProgTime,ProgName) {
-	if(SwitchTimer) {	
+function settimer(ProgTime,ProgName,ProgDura) {
+	if(SwitchTimer == 1) {	
 		  try {
 		    switchtimerID = toi.schedulerService.schedule("SwitchOnly","notification", ProgTime , 0);
 		    toi.schedulerService.setParameter(switchtimerID, "Channel", currChan.toString() );
@@ -941,22 +950,25 @@ function settimer(ProgTime,ProgName) {
 		  catch (e) {
 		    alert(e);
 		  }
-		tijd = ProgTime;
-		date = new Date(tijd*1000); 
-		tijd = date.toUTCString();
-		tijd = new Date(tijd);
-		var tm = tijd.getMinutes();
-		var th = tijd.getHours();
-		th=addzero(th);
-		tm=addzero(tm);
-
-		switchtimer.innerHTML = "<pre>  Name      : " + Left(ProgName,30) + "\n  channel   : " + channelsnames[currChan] +  "\n  Starttime : " + th + ":" + tm + "</pre>";
-		setOSDtimer();
-	} else {
-	//
-	// No Switch timer so send timer info to Server
-	//
+	} else if(SwitchTimer == 2) {	
+		  try {
+		    toi.schedulerService.setParameter(toi.schedulerService.schedule("RecLocal","record_hd_from_ip", ProgTime , ProgDura), "Channel", currChan.toString() );
+		  }
+		  catch (e) {
+		    alert(e);
+		  }
 	}
+	tijd = ProgTime;
+	date = new Date(tijd*1000); 
+	tijd = date.toUTCString();
+	tijd = new Date(tijd);
+	var tm = tijd.getMinutes();
+	var th = tijd.getHours();
+	th=addzero(th);
+	tm=addzero(tm);
+	switchtimer.innerHTML = "<pre>  Name      : " + Left(ProgName,30) + "\n  channel   : " + channelsnames[currChan] +  "\n  Starttime : " + th + ":" + tm + "</pre>";
+	setOSDtimer();
+
 }
 
 
@@ -1496,6 +1508,7 @@ function onKeyMenu(keyCode) {
 		var x = toi.schedulerService.getBookingIds("*", 0, 0);
 		if (x.length > 0) {
 			toi.schedulerService.remove(timerID);
+			timer[timerID] = "";
 			LoadTimers();
 			if (timer.length !== 0) { do { timerID = timerID + 1; } while (!timer[timerID] && (timerID < timer.length)) }
 			setOSDtimer();
@@ -1805,6 +1818,7 @@ if(menu == 5) { // Timers from Server
 } // end of initmenu
 
 function LoadTimers() {
+		timer.length = 0;
 		var booking = "";
 		var x = toi.schedulerService.getBookingIds("*", 0, 0);
 			for (var i=0;i<x.length;i++) { 
@@ -1827,7 +1841,7 @@ function LoadTimers() {
 				booking = booking + " Start " + Left(days[day],3) + " " + d + " " + Left(months[month],3) + " " + th + ":" + tm + "  ";
 
 					if (y.category !== "SwitchOnly") {
-						booking = booking + " Duration " + y.duration;
+						booking = booking + " " + (y.duration/60).toFixed(0) + " min";
 					}
 
 				timer[(x[i])] = booking + "\n" ;
@@ -1989,6 +2003,7 @@ if (DelisOK) {
         break;
     break;
     case "Right":
+	if (getRecOK !== 0) {
            for (var i=0;i<10;i++) {
 		do
 		{
@@ -1997,8 +2012,10 @@ if (DelisOK) {
 		while (!recTitl[currMed]);
 	   }	
 	showMediaList();
+	}
 	break;
     case "Left":
+	if (getRecOK !== 0) {
            for (var i=0;i<10;i++) {
 		do
 		{
@@ -2007,22 +2024,27 @@ if (DelisOK) {
 		while (!recTitl[currMed]);
 	   }
 	showMediaList();
+	}
 	break;
     case "Down":
+	if (getRecOK !== 0) {
 	do
 	{
 	        incMed(1);
 	}
 	while (!recTitl[currMed]);
 	showMediaList();
+	}
         break;
     case "Up":
+	if (getRecOK !== 0) {
 	do
 	{
 	        decMed(1);
 	}
 	while (!recTitl[currMed]);
 	showMediaList();
+	}
 	break;
   case "Accept":
   case "MediaPlayPause":
@@ -2030,51 +2052,24 @@ if (DelisOK) {
 		ShowInfo();
 		osdepginfo.style.opacity = 1 - osdepginfo.style.opacity;
 	}
-	if (getRecOK !== 2) {
+	if (getRecOK == 1) {
 		mediaList.style.opacity = 0;
 		setTimeout("GetMarks(); getResume(); playRec(recLink[currMed]+ '?time=' + position);",100);
 	}
         break;
     case "Red":
-	if (getRecOK !== 2) { DelRec(); }
+	if (getRecOK == 1) { DelRec(); }
 	if (getRecOK == 2) { //set timer
-			settimer(recStrt[currMed],recTitl[currMed]);
+			settimer(recStrt[currMed],recTitl[currMed],recDura[currMed]);
 			switchtimer.style.opacity = 1;
 			setTimeout("switchtimer.style.opacity = 0; ", 2000);
 	 }
 	break;
-   case "Green":
-	if (getRecOK !== 2) {
-			audio = audio + 1;
-			is = toi.informationService;
-			if(audio == 1) {	
-				is.setObject("cfg.media.audio.languagepriority","dut,eng",is.STORAGE_VOLATILE);
-				osdlang.style.opacity = 1;
-				osdlang.style.fontSize = fsAudio;
-				osdlang.style.color = "white";
-				osdlang.innerHTML = "<img src='unmute.png'> Nederlands ";
-				setTimeout("osdlang.style.opacity = 0; ", 3000);
-			} else if(audio == 2) {
-				is.setObject("cfg.media.audio.languagepriority","ger,deu,eng",is.STORAGE_VOLATILE);
-				osdlang.style.opacity = 1;
-				osdlang.style.fontSize = fsAudio;
-				osdlang.style.color = "red";
-				osdlang.innerHTML = "<img src='unmute.png'> Deutsch ";
-				setTimeout("osdlang.style.opacity = 0; ", 3000);
-			} else if(audio == 3) {
-				is.setObject("cfg.media.audio.languagepriority","eng",is.STORAGE_VOLATILE);
-				osdlang.style.opacity = 1;
-				osdlang.style.fontSize = fsAudio;
-				osdlang.style.color = "black";
-				osdlang.innerHTML = "<img src='unmute.png'> English ";
-				setTimeout("osdlang.style.opacity = 0; ", 3000);
-				audio = 0;
-			}
-	}
-	break;
     case "Blue":
+	if (getRecOK !== 0) {
 	ShowInfo();
 	osdepginfo.style.opacity = 1 - osdepginfo.style.opacity;
+	}
 	break;
 
     case "VolumeMute":
@@ -2099,6 +2094,17 @@ if (DelisOK) {
         toi.audioOutputService.setVolume(AudioOut, Volume);
 	showVolume();
 	break;
+
+    case KEY_REC:
+    case "MediaRecord":
+	if (getRecOK == 2) { //set timer
+			SwitchTimer = 2;
+			settimer(recStrt[currMed],recTitl[currMed],recDura[currMed]);
+			SwitchTimer = 1;
+			switchtimer.style.opacity = 1;
+			setTimeout("switchtimer.style.opacity = 0; ", 2000);
+	 }
+        break;
 
 	default:
         break;
@@ -2535,6 +2541,7 @@ try {
 function getSchedule(schchan){
 	SI = "";
 	recTitl.length = 0;
+	nrMedia = 0;
   try {
 	 StreamInfo(schchan);
 
@@ -2572,8 +2579,11 @@ function getSchedule(schchan){
 			m=addzero(m);
 			recList[i] = ' ' + days[day] + ' ' + d + ' ' + months[month] + ' ' + year + " " + h + ":" + m + " (" + (recDura[i]/60).toFixed(0) + ") " + Left(recTitl[i],30);
 		}
-	}
 	getRecOK = 2;
+	} else {
+	getRecOK = 0;
+	mediaList.innerHTML = "<h1><center style='font-size:" + fsRec + ";color:white;'> EPG </center><pre>\n\n\nNO EPG on this channel!!!</pre></h1>";
+	}
   } catch(e) {
 	getRecOK = 0;
 	mediaList.innerHTML = "<h1><center style='font-size:" + fsRec + ";color:white;'> EPG </center><pre>\n\n\nERROR getting EPG !!!</pre></h1>";
@@ -2752,20 +2762,20 @@ function onScheduledStart(event) {
 		currChan = Number(toi.schedulerService.getParameter(event.booking.id, "Channel"));
 		ChanGroup = Number(Left((currChan / 1000),1));
 		play(channels[currChan]);
-		alert (ChanGroup);
 	}
   } else {
 	  try {
 	    createNewAsset()
 
-		var recChannr = channels[toi.schedulerService.getParameter(event.booking.id, "Channel")];
+		var recChannr = Number(toi.schedulerService.getParameter(event.booking.id, "Channel"));
+		var recGroup = Number(Left((recChannr / 1000),1));
 		var recChan = 0;
-		if (ServerAdres[Left(recChannr,1)] == "MultiCast" ) {
+		if (ServerAdres[recGroup] == "MultiCast" ) {
 		 	SI=channels[recChannr].split("-");
 			recChan = SI[4];
-			} else {
-			recChan = ServerAdres[Left(recChannr,1)] + channels[recChannr];
-			}
+		} else {
+			recChan = ServerAdres[recGroup] + channels[recChannr];
+		}
 
 	    mediaRecorder.open(recChan, assetId);
 

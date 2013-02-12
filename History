@@ -3,6 +3,8 @@
 	Updated EPG-Schedule view, for every item a switch timer can be set. With up/down scrolling through Schedule is possible
 	Guide view still uses the old Schedule View.
 	View Timer menu now also shows day & date.
+	Set timer for local recording.
+	Fixed crash when no EPG and users presses up/down
 
 
 0.16	EPG/schedule info remove on channel switch
