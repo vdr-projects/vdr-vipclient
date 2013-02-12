@@ -577,8 +577,9 @@ function onKeyDown(event) {
 	// OK key on frontpanel
    case "Accept":
 	if(isFullscreen) {
-	// fullscreen    
-		if(!count) {
+	// fullscreen
+		if (osdmain.style.opacity !== 0) {opacity = 0; OSD(opacity);}
+		if(count == 0) {
 			if (osdtimeout) {
 				clearTimeout(osdtimeout);
 				osdtimeout = 0;
@@ -2559,6 +2560,7 @@ function getSchedule(schchan){
 	    nrMedia = events.infoSequence.length - 1;
 	    for (var i = 0; i < events.infoSequence.length; i++) {
 			while ((i > 0) && (events.infoSequence[i].eventId == events.infoSequence[(i-1)].eventId)) {
+				recList[i] = "";
 				i = i + 1;
 			}
 
@@ -2758,7 +2760,7 @@ function onScheduledStart(event) {
 	if (isMediaMenu) { UnloadMediaSettings(); }
 
 	// switch only if not already on that channel.
-	if (currChan !== toi.schedulerService.getParameter(event.booking.id, "Channel")) {
+	if (currChan !== Number(toi.schedulerService.getParameter(event.booking.id, "Channel"))) {
 		currChan = Number(toi.schedulerService.getParameter(event.booking.id, "Channel"));
 		ChanGroup = Number(Left((currChan / 1000),1));
 		play(channels[currChan]);
