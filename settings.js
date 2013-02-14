@@ -173,6 +173,8 @@ var fsKeys = (19*Yfactor) + "px";
 var AudioInfo = new Array();
 var xx = 0;
 
+var pipPlayer = "";
+var mediaRecorder = "";
 var isRecording = 0; // set by recording subroutine
 var audiotype = 0; // used for selecting "cfg.media.audio.typepriority","normal,hearing_impaired,visually_impaired"
 var subsmode = 0;  // "cfg.media.subtitling.modepriority","Teletext,DVB"

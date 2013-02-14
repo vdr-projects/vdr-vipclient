@@ -1,3 +1,5 @@
+Tested on Motorola Vip : 1960 (with and without HDD), 1910, 1903.
+
 0.17	Show EPG from Server limited to X days ( 3 = default, set in settings.js)
 	Updated Mainmenu. For now Recordings = Server Recordings menu item.
 	Updated EPG-Schedule view, for every item a switch timer can be set. With up/down scrolling through Schedule is possible
@@ -6,6 +8,7 @@
 	Set timer for local recording.
 	Fixed crash when no EPG and users presses up/down
 	Small fixes OSD display, Schedule, SwitchTimer
+	Small fix to make it work on 19x3. (Looks like 19x0 auto selects right font)
 
 0.16	EPG/schedule info remove on channel switch
 	Exit Guide View removes epg/schedule info
