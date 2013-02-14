@@ -5,7 +5,7 @@
 	View Timer menu now also shows day & date.
 	Set timer for local recording.
 	Fixed crash when no EPG and users presses up/down
-
+	Small fixes OSD display, Schedule, SwitchTimer
 
 0.16	EPG/schedule info remove on channel switch
 	Exit Guide View removes epg/schedule info
