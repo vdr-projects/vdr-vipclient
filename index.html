@@ -117,6 +117,11 @@ function onUnload() {
 		mediaRecorder.close();
 		mediaRecorder.releaseInstance();
 	}
+	if(pipPlayer){
+		pipPlayer.close();
+		pipPlayer.releaseInstance();
+	}
+
 	toi.informationService.removeEventListener(toi.informationService.ON_OBJECTS_CHANGED, onEvent);
 	eitCache.removeEventListener(eitCache.ON_CACHE_UPDATED, onCacheUpdated);
 	mediaPlayer.removeEventListener(mediaPlayer.ON_DATA_AVAILABLE,onDataAvailableEvent);
@@ -164,6 +169,35 @@ function createRecorder() {
 		alert("Cannot create media recorder: " + e);
 		mediaRecorder = "";
 	}
+}
+
+function createPip() {
+  try {
+    pipPlayer = toi.mediaService.createPipPlayerInstance();
+  } catch(e) {
+    alert("Failed creating PIP player: " + e);
+  }
+}
+
+
+function addPipVideoplane() {
+  var pipVideoDiv = document.getElementById("pipVideoDiv");
+  pipVideoDiv.innerHTML = "<videoplane id='pipvideoplane' index=1 style='position:fixed;left:70%;top:10%;height:20%;width:20%;z-index:550;'></videoplane>";
+  document.body.appendChild(pipVideoDiv);
+}
+
+function pipplay(uri) {
+try {
+    if (pipPlayer.getState() != pipPlayer.STATE_IDLE) {
+      pipPlayer.close();
+    }
+	uri = ServerAdres[ChanGroup] + uri;
+	pipPlayer.open(uri);
+	pipPlayer.play(1000);
+  } catch (e) {
+    alert("Failed opening PIP stream: " + e);
+    return;
+  }
 }
 
 
@@ -777,16 +811,18 @@ function onKeyDown(event) {
 // if isRecording == 1 show REC icon E00B else E003 
 // 
 
-	if (isRecording == 1) {
-		recordStop();
-	} else {
-		if (ServerAdres[ChanGroup] == "MultiCast" ) {
-		 	SI=channels[currChan].split("-");
-			recordStart(SI[4]);
-			} else {
-			recordStart(ServerAdres[ChanGroup] + channels[currChan]);
-			}
-	}
+//	if (isRecording == 1) {
+//		recordStop();
+//	} else {
+//		if (ServerAdres[ChanGroup] == "MultiCast" ) {
+//		 	SI=channels[currChan].split("-");
+//			recordStart(SI[4]);
+//			} else {
+//			recordStart(ServerAdres[ChanGroup] + channels[currChan]);
+//			}
+//	}
+		ServerRecordStart();
+		//ServerTimer();
 	break;
 
 	default:
@@ -1665,10 +1701,16 @@ function onKeyMenu(keyCode) {
 		if (ShowProtectedChannels == 1 && protChn[ChanGroup] == 1) { ChanGroup = 0; currChan = defChan[ChanGroup]; play(currChan); }
 		isSetupMenu = 0;
 		mainmenu.style.opacity = 0;
-//		InitMenu(menu);
 		}
 	break;
 	case KEY_8:
+/*		// PIP testing
+		if (menu == 0) {
+		isSetupMenu = 0;
+		mainmenu.style.opacity = 0;
+		pipplay(channels[604]);
+		}
+*/
 	if (menu == 1) {
 		if(SwitchGuide == 0 )	{
 			SwitchGuide = 1;
@@ -1849,16 +1891,16 @@ function SwitchActiveTimers() {
 try {
    var x = "?timer_id=" + timersID[timerID] + "&flags=" + timersFlag[timerID] ;
 	alert(x);
-   xmlhttp=new XMLHttpRequest();
+//   xmlhttp=new XMLHttpRequest();
 //   xmlhttp.open("PUT",(RestFulAPI + "/timers"),false);
 // xmlhttp.open("PUT",(RestFulAPI + "/timers/" + timersID[timerID] + ".xml"),false);
-   xmlhttp.open("POST",(RestFulAPI + "/timers.xml" + x),false);
+//   xmlhttp.open("POST",(RestFulAPI + "/timers.xml" + x),false);
 //   xmlhttp.setRequestHeader("Content-type", "text/xml; charset=utf-8");
 //   xmlhttp.setRequestHeader("Content-length", x.length);
 //   xmlhttp.setRequestHeader("Connection", "close");
 //   xmlhttp.send(x);
-	xmlhttp.send();
-	alert(xmlhttp.responseText);
+//	xmlhttp.send();
+//	alert(xmlhttp.responseText);
   } catch(e) {
     alert("Updating Timers problem: " + e);
   }
@@ -2093,13 +2135,15 @@ if (DelisOK) {
 
     case KEY_REC:
     case "MediaRecord":
+/*	// make timer for local recording
 	if (getRecOK == 2) { //set timer
 			SwitchTimer = 2;
 			settimer(recStrt[currMed],recTitl[currMed],recDura[currMed]);
 			SwitchTimer = 1;
 			switchtimer.style.opacity = 1;
 			setTimeout("switchtimer.style.opacity = 0; ", 2000);
-	 }
+	 } 
+*/
         break;
 
 	default:
@@ -2665,6 +2709,50 @@ function onStateChanged(ev) {
 
 }
 
+// Make timers/ start recording/ timeshift
+
+function ServerRecordStart() {
+//Instant recording on server
+try {
+   xmlhttp=new XMLHttpRequest();
+	//switch server to current channel
+   xmlhttp.open("POST",(RestFulAPI + "/remote/switch/" + channels[currChan]),true);
+   xmlhttp.send();
+	//start recording
+   setTimeout("xmlhttp.open('POST',(RestFulAPI + '/remote/Record'),false);xmlhttp.send();",1000);
+  } catch(e) {
+   alert("Sending Record key to server problem: " + e);
+  }
+}
+
+function ServerRecordStop() {
+try {
+   xmlhttp=new XMLHttpRequest();
+	//stop recording
+   xmlhttp.open('POST',(RestFulAPI + '/remote/Stop'),false);
+   xmlhttp.send();
+  } catch(e) {
+   alert("Sending Stop key to server problem: " + e);
+  }
+}
+
+function ServerTimer() {
+var x = "file=TestFile&flags=1&start=1400&stop=1615&day=2013-12-24&channel=S19.2E-53-1105-4016"
+
+try {
+   xmlhttp=new XMLHttpRequest();
+	//switch server to current channel
+   xmlhttp.open("POST",(RestFulAPI + "/timers?" + x),false);
+   xmlhttp.send();
+  } catch(e) {
+    alert("Sending Timers to server problem: " + e);
+  }
+
+
+}
+
+
+
 function BackToTV() {
 	    play(channels[currChan]);
 	    mediaList.style.opacity = 0.9;
@@ -2835,6 +2923,7 @@ function ClearScreen() {
 	<div id="chanlistepg" style="width:42%; position:absolute; left:7%; top:50%;"> 	</div>
 
 	<videoplane id='videoplane' style='position:absolute;left:0px;top:0px;height:100%;width:100%;z-index:500;'></videoplane>
+	<div id="pipVideoDiv"></div>
 
 	<div id="osdvolume" style="width:63%; position:absolute; left:10%; top:80%;z-index:501;font-family:'VDRSymbols Sans';opacity:0;">Volume : </div>
 	<div id="osdmedia" style="background:#3366ff;-webkit-border-radius:50px;width:80%; position:absolute; left:10%; top:70%;z-index:505;opacity:0;"></div>
