@@ -1910,7 +1910,7 @@ try {
 function LoadTimersServer() {
 try {
    xmlhttp=new XMLHttpRequest();
-   xmlhttp.open("GET",(RestFulAPI + "/timers.xml"),false);  // ?" + new Date().getTime()),false);
+   xmlhttp.open("GET",(RestFulAPI + "/timers.xml?" + new Date().getTime()),false); //"),false);  // 
    xmlhttp.send();
    xmlDoc=xmlhttp.responseXML; 
    var x=xmlDoc.getElementsByTagName("timer");
@@ -1931,10 +1931,12 @@ try {
 	  timersName[i] = x[i].getElementsByTagName("param")[15].childNodes[0].nodeValue + fill;
 	  if (timersFlag[i] == "1") { 
 		timers[i] = "\uE003\uE00C\uE003";
-	  } else if (timersFlag[i] == "9") { 
+	  } else if (timersFlag[i] == "9" || timersFlag[i] == "11" ) { 
 		timers[i] = "\uE003\uE00B\uE003";
-	  } else { 
+	  } else if (timersFlag[i] == "0") { 
 		timers[i] = "\uE003\uE003\uE003";
+	  }  else { 
+		timers[i] = "\uE003?\uE003";
 	  }
 	  timersFile[i] = x[i].getElementsByTagName("param")[14].childNodes[0].nodeValue + fill + fill;
 	  timers[i] = timers[i] + timersDays[i] + "\uE003" + timersStrt[i] + "\uE003" + timersStop[i] + "\uE003" + Left(timersName[i],8) + "\uE003" + Left(timersFile[i],15) + "\n" ;
@@ -2368,6 +2370,9 @@ try {
 	  recStrt[i] = (x[i].getElementsByTagName("start")[0].childNodes[0].nodeValue);
 	  rec_New[i] = (x[i].getElementsByTagName("isnew")[0].childNodes[0].nodeValue);
 	  recGUID[i] = (x[i].getElementsByTagName("guid")[0].childNodes[0].nodeValue);
+	  recDummy = recGUID[i].split(".");
+	  recDummy = recDummy[(recDummy.length-2)].split("-");
+	  recChan[i] = recDummy[0];
 	  }
 	MakeRecList();
  	getRecOK = 1;
@@ -2824,10 +2829,9 @@ function ShowInfo() {
         m = date.getMinutes();
 	h=addzero(h);
 	m=addzero(m);
-
         result = ''+days[day]+' '+d+' '+months[month]+' '+year+' '+h+':'+m;
 
-       	osdepginfo.innerHTML = "<center><pre style='color:white;'>" + Left(recTitl[currMed],60) + "\n " + result + "\n " + (recDura[currMed] / 60).toFixed(0) + " Minutes \n</pre><p>" + Left(recDesc[currMed],750) + "</p></center>";
+       	osdepginfo.innerHTML = "<center><pre style='color:white;'>" + Left(recTitl[currMed],60) + "\n " + result + "\n " + (recDura[currMed] / 60).toFixed(0) + " Minutes \n " + recChan[currMed] + "\n </pre><p>" + Left(recDesc[currMed],750) + "</p></center>";
 
 }
 

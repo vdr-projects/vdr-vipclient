@@ -189,6 +189,8 @@ var recList = new Array(); // used to verify if the right recording is going to 
 var recMark = new Array(); // marks made in the recording, eg by Noad, Markad
 var rec_New = new Array(); // Flag if recording is new (unseen)
 var recGUID = new Array(); // GUID of recording
+var recChan = new Array(); // Channel ID
+var recDummy= new Array(); //
 
 var posMark = 0;
 var recMap = 0;
