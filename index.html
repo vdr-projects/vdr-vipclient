@@ -1282,16 +1282,34 @@ function StreamInfo(si) {
 	is.setObject("cfg.locale.ui","ita",is.STORAGE_VOLATILE);
 	}
 
-	if(SI[1]=="3" || SI[1]=="53") {
+	if(SI[1]=="53") {
+	//Canal Digitaal/ TV Vlaanderen 
+	is.setObject("cfg.locale.ui","dut",is.STORAGE_VOLATILE);
+	}
+
+
+	if(SI[1]=="3" && ( SI[2]=="3202" || SI[2]=="3208" || SI[2]=="3211" || SI[2]=="3222" || SI[2]=="3225") ) {
 	//Canal Digitaal/ TV Vlaanderen (NID:3 is used for more than only CDS/TVV on 23East)
 	is.setObject("cfg.locale.ui","dut",is.STORAGE_VOLATILE);
 	}
 
-	if(SI[1]=="3" && ( SI[2]=="3210" || ( SI[2]=="3219" && SI[3]!=="13135") )) {
+	if(SI[1]=="3" && ( SI[2]=="3206" || SI[2]=="3226" ) ) {
+	// Satellite BG
+	is.setObject("cfg.locale.ui","bul",is.STORAGE_VOLATILE);
+	}
+
+
+	if(SI[1]=="3" && ( SI[2]=="3205" || SI[2]=="3209" || SI[2]=="3210" || SI[2]=="3221" || ( SI[2]=="3219" && SI[3]!=="13135") )) {
 	//Canal Digitaal/ TV Vlaanderen use CZE channels on 23East
 	// Strangly set filter to cze but epg is in Dutch. (But not for JimJam)
 	is.setObject("cfg.locale.ui","cze",is.STORAGE_VOLATILE);
 	}
+
+	if(SI[1]=="3" && SI[2]=="3219" && SI[3]=="13135" ) {
+	//JimJam Dutch
+	is.setObject("cfg.locale.ui","dut",is.STORAGE_VOLATILE);
+	}
+
 
 	if((SI[0]=="S13.0E" && SI[3]=="14003") || (SI[0]=="S13.0E" && SI[3]=="14009") || (SI[0]=="S13.0E" && SI[3]=="14051") || (SI[0]=="S13.0E" && SI[3]=="951")) {
 	//Swiss ITA channels

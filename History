@@ -14,6 +14,7 @@ VDR 1.7.29
 	Small fix to make it work on 19x3. (Looks like 19x0 auto selects right font)
 	Pressing record start Instant server recording. (Works only correct if channels on Vip & Server are the same)
 	Recording info shows channelnumber.
+	EPG filter on 23 expanded.
 
 0.16	EPG/schedule info remove on channel switch
 	Exit Guide View removes epg/schedule info
