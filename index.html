@@ -1257,6 +1257,12 @@ function StreamInfo(si) {
  	SI=channels[si].split("-");
 	is = toi.informationService;
 
+	if(SI[0]=="C") {
+	// Default on Cable - Dutch // Ziggo.
+	is.setObject("cfg.locale.ui","dut",is.STORAGE_VOLATILE);
+	}
+
+
 	if(SI[0]=="S19.2E") {
 	// Default on 19E German.
 	is.setObject("cfg.locale.ui","ger",is.STORAGE_VOLATILE);
