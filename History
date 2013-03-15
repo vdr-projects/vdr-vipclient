@@ -12,10 +12,11 @@ VDR 1.7.29
 	Fixed crash when no EPG and users presses up/down
 	Small fixes OSD display, Schedule, SwitchTimer
 	Small fix to make it work on 19x3. (Looks like 19x0 auto selects right font)
-	Pressing record start Instant server recording. (Works only correct if channels on Vip & Server are the same)
+	Pressing record start Instant server recording. (Switching is done by ID so no need for same channelnumbering on server)
 	Recording info shows channelnumber.
 	EPG filter on 23 expanded.
 	EPG filter on Cable set to Dutch / Ziggo.
+	Added info window for instant records.
 
 0.16	EPG/schedule info remove on channel switch
 	Exit Guide View removes epg/schedule info

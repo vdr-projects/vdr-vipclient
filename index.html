@@ -2748,7 +2748,13 @@ try {
    xmlhttp.open("POST",(RestFulAPI + "/remote/switch/" + channels[currChan]),true);
    xmlhttp.send();
 	//start recording
-   setTimeout("xmlhttp.open('POST',(RestFulAPI + '/remote/Record'),false);xmlhttp.send();",1000);
+	setTimeout("xmlhttp.open('POST',(RestFulAPI + '/remote/Record'),false);xmlhttp.send();",1000);
+
+	//Show some info on screen
+	settimer(EPG[NowNext][2][currChan],EPG[NowNext][1][currChan],0);
+	switchtimer.style.opacity = 1;
+	setTimeout("switchtimer.style.opacity = 0; ", 2000);
+
   } catch(e) {
    alert("Sending Record key to server problem: " + e);
   }
