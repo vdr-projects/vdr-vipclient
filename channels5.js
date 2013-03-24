@@ -34,17 +34,17 @@ maxChan[5] = 5008; // set to max multicast channel else you see 'undefined' in g
 // Full URL TEST
 //
 
-minChan[2] = 2001;
-defChan[2] = 2001;
-baseChn[2] = 2000;
-protChn[2] = 0;
-ServerAdres[2] = "FullURL";
+//minChan[2] = 2001;
+//defChan[2] = 2001;
+//baseChn[2] = 2000;
+//protChn[2] = 0;
+//ServerAdres[2] = "FullURL";
 // MultiCast, channels[x] layout DVB(Satposition, C or T)-NID-TID-SID-multicast address
 
 
-channelsnames[2001] = "Nick TEST";
-channels[2001] = "http://82.73.255.132:3000/C-1000-6-16.ts";
+//channelsnames[2001] = "Nick TEST";
+//channels[2001] = "http://xx.xx.xx.xx:3000/C-1000-6-16.ts";
 
-maxChan[2] = 2001; // set to max multicast channel else you see 'undefined' in guide view
+//maxChan[2] = 2001; // set to max multicast channel else you see 'undefined' in guide view
 
 
