@@ -940,7 +940,11 @@ function OSDchannr(channr) {
 
 function OSDhtml(){
     osdtime.innerHTML = result;
-    osdname.innerHTML = Left(channelsnames[currChan],30);
+	if (ShowSource == 1) {
+	    osdname.innerHTML = channels[currChan].split("-")[0] + "\uE003" + Left(channelsnames[currChan],30);
+	} else {
+	    osdname.innerHTML = Left(channelsnames[currChan],30);
+	}
     osdepg.innerHTML = "<p>" + EPG[0][7][currChan] + "</p>\n<p>" + EPG[1][7][currChan] + "</p>";
     osdepginfo.innerHTML =  "<center><p style='color:white;' >" + currChan + "\uE003" + channelsnames[currChan] + "</p>" + AudioInfo[currChan] + "<p style='color:white;'>" + EPG[0][7][currChan] + "</p>\n<p style='color:yellow;'>" + EPG[0][4][currChan] + "</p>\n<p>" + Left(EPG[0][5][currChan],750) + "</p></center>";
     osdepginfonext.innerHTML =  "<center><p style='color:white;'>"  + currChan + "\uE003" + channelsnames[currChan] + "</p><p style='color:white;'>" +  EPG[1][7][currChan] + "</p>\n<p style='color:yellow;'>" + EPG[1][4][currChan] + "</p>\n<p>" + Left(EPG[1][5][currChan],750) + "</p></center>";
@@ -2964,7 +2968,7 @@ function ClearScreen() {
 
 	<div id="osdmain" style="background:#3366ff;width:80%; position:absolute; left:10%; top:60%; bottom:9%;z-index:505;-webkit-border-radius:50px;"></div>
 	<div id="osdtime" style="width:42%; position:absolute; left:58%; top:63%;z-index:505;"></div>
-	<div id="osdname" style="width:69%;height:4%; position:absolute; left:12%; top:65%;z-index:505;"></div>
+	<div id="osdname" style="width:69%;height:4%; position:absolute; left:12%; top:66%;z-index:505;"></div>
 	<div id="osdepg" style="width:63%; position:absolute; left:21%; top:69%;z-index:505;"></div>
 	<div id="osdtimer" style="width:7%; position:absolute; left:12%; top:69%;z-index:505;"></div>
 	<div id="osdca" style="width:5%; position:absolute; left:75%; top:67%;z-index:505;font-family:'VDRSymbols Sans';"></div>
