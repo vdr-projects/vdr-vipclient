@@ -47,4 +47,3 @@
 
 //maxChan[2] = 2001; // set to max multicast channel else you see 'undefined' in guide view
 
-

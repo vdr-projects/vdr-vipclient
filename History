@@ -2,7 +2,11 @@ Tested on
 Motorola Vip : 1960 (with and without HDD), 1910, 1903.
 VDR 1.7.29
 
-0.18	EPG filter 30W ZON, Digital 
+0.18	Updated EPG filter 
+		30W ZON, Digital, MEO
+		19E Tid 1057 (RTL HD etc) 
+	Changed time out for switching server before instant recording from 1 sec to 5 sec.
+	Added channelgroup 8 DVB-T Twente (The Netherlands)
 
 
 0.17	Show EPG from Server limited to X days ( 3 = default, set in settings.js)
