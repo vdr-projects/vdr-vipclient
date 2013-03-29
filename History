@@ -2,6 +2,8 @@ Tested on
 Motorola Vip : 1960 (with and without HDD), 1910, 1903.
 VDR 1.7.29
 
+0.18	EPG filter 30W ZON, Digital 
+
 
 0.17	Show EPG from Server limited to X days ( 3 = default, set in settings.js)
 	Updated Mainmenu. For now Recordings = Server Recordings menu item.

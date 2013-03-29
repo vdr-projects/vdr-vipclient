@@ -1261,6 +1261,9 @@ function StreamInfo(si) {
  	SI=channels[si].split("-");
 	is = toi.informationService;
 
+	//default setting : English
+	is.setObject("cfg.locale.ui","eng",is.STORAGE_VOLATILE);
+
 	if(SI[0]=="C") {
 	// Default on Cable - Dutch // Ziggo.
 	is.setObject("cfg.locale.ui","dut",is.STORAGE_VOLATILE);
@@ -1297,6 +1300,20 @@ function StreamInfo(si) {
 	is.setObject("cfg.locale.ui","dut",is.STORAGE_VOLATILE);
 	}
 
+	if(SI[1]=="54") {
+	//ZON / 30W
+	is.setObject("cfg.locale.ui","eng",is.STORAGE_VOLATILE);
+	}
+
+	if(SI[1]=="83") {
+	//MEO / 30W
+	is.setObject("cfg.locale.ui","por",is.STORAGE_VOLATILE);
+	}
+
+	if(SI[1]=="49") {
+	//Digital 30W
+	is.setObject("cfg.locale.ui","spa",is.STORAGE_VOLATILE);
+	}
 
 	if(SI[1]=="3" && ( SI[2]=="3202" || SI[2]=="3208" || SI[2]=="3211" || SI[2]=="3222" || SI[2]=="3225") ) {
 	//Canal Digitaal/ TV Vlaanderen (NID:3 is used for more than only CDS/TVV on 23East)
