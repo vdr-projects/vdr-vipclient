@@ -25,7 +25,7 @@
 //
 //
 
-var Version = "0.18.2"
+var Version = "0.18.3"
 
 for (var x = 0;  x < 10; x++) { 
 	if (minChan[x]) {
@@ -2422,9 +2422,15 @@ try {
 	  recStrt[i] = (x[i].getElementsByTagName("start")[0].childNodes[0].nodeValue);
 	  rec_New[i] = (x[i].getElementsByTagName("isnew")[0].childNodes[0].nodeValue);
 	  recGUID[i] = (x[i].getElementsByTagName("guid")[0].childNodes[0].nodeValue);
+	if (recPath == "/recordings.xml") {
+	  //Get channel number from recordings
 	  recDummy = recGUID[i].split(".");
 	  recDummy = recDummy[(recDummy.length-2)].split("-");
 	  recChan[i] = recDummy[0];
+	} else {
+	  //Media directory
+	  recChan[i] = "Media File";
+	}
 	  }
 	MakeRecList();
  	getRecOK = 1;
