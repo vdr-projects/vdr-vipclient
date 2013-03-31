@@ -2258,6 +2258,8 @@ if (DelisOK) {
 			}
 	break;
     case "Yellow":
+	 ShowSubs = 1 - ShowSubs;
+	 videoplane.subtitles = Boolean(ShowSubs); // Enable subtitles or Disable subtitles
 	break;
     case "Blue":
 	ShowInfo();
