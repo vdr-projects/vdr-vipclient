@@ -2620,6 +2620,7 @@ try {
 		}
 	recDura[i] = x[i].getElementsByTagName("param")[6].childNodes[0].nodeValue;
 	recStrt[i] = x[i].getElementsByTagName("param")[5].childNodes[0].nodeValue;
+	recChan[i] = currChan + "\uE003-\uE003" + channelsnames[currChan];
 
         date = new Date(Number(recStrt[i])*1000);
 	        year = date.getFullYear();
@@ -2671,6 +2672,7 @@ function getSchedule(schchan){
 		if (recDesc[i] == "" ) { recDesc[i] = eitCache.getExtendedEventInfo(eitService,events.infoSequence[i].eventId).shortInfo;}
 		recDura[i] = events.infoSequence[i].duration;
 		recStrt[i] = events.infoSequence[i].time;
+		recChan[i] = schchan + "\uE003-\uE003" + channelsnames[schchan];
 
 	        date = new Date(Number(recStrt[i])*1000);
 		        year = date.getFullYear();
