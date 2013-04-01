@@ -6,6 +6,7 @@ VDR 1.7.29
 0.18	Updated EPG filter for
 		30W ZON, Digital, MEO
 		19E Tid 1057 (RTL HD etc) 
+		19E HD+
 	Changed time out for switching server before instant recording from 1 sec to 5 sec.
 	Added channelgroup 8 DVB-T Twente (The Netherlands)
 	Fixed Menu 'Server : Media Directory'

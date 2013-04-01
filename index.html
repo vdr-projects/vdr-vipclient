@@ -1296,6 +1296,11 @@ function StreamInfo(si) {
 	is.setObject("cfg.locale.ui","GER",is.STORAGE_VOLATILE);
 	}
 
+	if(SI[2]=="1055" || SI[2]=="1053" || SI[2]=="1041" || SI[2]=="1017" || SI[2]=="1109") {
+	//HD+ transponder
+	is.setObject("cfg.locale.ui","DEU",is.STORAGE_VOLATILE);
+	}
+
 
 	if(SI[1]=="64511") {
 	//sky Italia
@@ -1331,6 +1336,12 @@ function StreamInfo(si) {
 	// Satellite BG
 	is.setObject("cfg.locale.ui","bul",is.STORAGE_VOLATILE);
 	}
+
+	if(SI[1]=="3" && ( SI[2]=="3217") ) {
+	// 23E - Deluxe HD
+	is.setObject("cfg.locale.ui","DEU",is.STORAGE_VOLATILE);
+	}
+
 
 
 	if(SI[1]=="3" && ( SI[2]=="3205" || SI[2]=="3209" || SI[2]=="3210" || SI[2]=="3221" || ( SI[2]=="3219" && SI[3]!=="13135") )) {
