@@ -2925,12 +2925,20 @@ function onScheduledStart(event) {
 	setOSDtimer();
 	if (isMediaMenu) { UnloadMediaSettings(); }
 
-	// switch only if not already on that channel.
-	if (currChan !== Number(toi.schedulerService.getParameter(event.booking.id, "Channel"))) {
-		currChan = Number(toi.schedulerService.getParameter(event.booking.id, "Channel"));
+	prevChan = currChan;
+	currChan = Number(toi.schedulerService.getParameter(event.booking.id, "Channel"));
+	ChanGroup = Number(Left((currChan / 1000),1));
+
+	// check if Group isn't protected
+	if ((protChn[ChanGroup] == 1) && (ShowProtectedChannels == 1)) {
+		currChan = prevChan;
 		ChanGroup = Number(Left((currChan / 1000),1));
-		play(channels[currChan]);
 	}
+
+	// switch only if not already on that channel.
+	if (currChan !== prevChan) {
+		play(channels[currChan]);
+	} 
   } else {
 	  try {
 	    createNewAsset()

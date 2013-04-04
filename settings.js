@@ -5,9 +5,9 @@
 //  720x576
 // var Xfactor = 720 / 720; var Yfactor = 576 / 576;
 // 1280x720
-var Xfactor = 1280 / 720; var Yfactor = 720 / 576;
+// var Xfactor = 1280 / 720; var Yfactor = 720 / 576;
 // 1920x1080
-// var Xfactor = 1920 / 720; var Yfactor = 1080 / 576;
+var Xfactor = 1920 / 720; var Yfactor = 1080 / 576;
 
 
 var server_ip = "http://192.168.3.15";
@@ -25,7 +25,7 @@ var SwitchGuide = 0; // 0 = no, 1 = yes
 var TimeShift = 0;   // 0 = no, 1 = yes timeshift
 var ShowSubs = 1;    // 0 = no, 1 = yes (default)
 var KillStream = 1;  // 1 = Close stream on Standby
-var ShowProtectedChannels = 1; // Default don't show protected channels.
+var ShowProtectedChannels = 1; // 0 = yes show, 1 = don't show protected channels (default)
 var ShowSource = 1; // show source in OSD
 var serverEPGdays = 3 * (60 * 60 * 24); // the higher the longer you wait while getting the epg info
 

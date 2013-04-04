@@ -12,6 +12,7 @@ VDR 1.7.29
 	Fixed Menu 'Server : Media Directory'
 	Fixed EPG & Server EPG info menu no more 'Undefined' but channelname/ number
 	When playing recordings you can switch subs on/off with 'yellow'
+	Switch Timer for protected channels only switch when protection is off
 
 
 0.17	Show EPG from Server limited to X days ( 3 = default, set in settings.js)
