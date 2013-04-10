@@ -1594,7 +1594,9 @@ function onKeyMenu(keyCode) {
 		InitMenu(menu);
     break;
     case "Accept":
-	if (menu == 2) {
+    break;
+    case "Red":
+    	if (menu == 2) {
 		var x = toi.schedulerService.getBookingIds("*", 0, 0);
 		if (x.length > 0) {
 			toi.schedulerService.remove(timerID);
@@ -1605,12 +1607,10 @@ function onKeyMenu(keyCode) {
 			InitMenu(menu);
 		}
 	} else 	if (menu == 5) {
-		timersFlag[timerID] = 1 - timersFlag[timerID];
-		SwitchActiveTimers();
-		InitMenu(menu);
+		mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'> Timers </center></h1><pre style='color:black;font-size:" + fsMenu + ";'>\n\n\n<center> PLEASE WAIT </center></pre>";
+		DeleteTimers();
+		setTimeout("LoadTimersServer();InitMenu(menu);",100);
 	}
-    break;
-    case "Red":
     break;
     case "Green":
     break;
@@ -1848,7 +1848,7 @@ if(menu == 1) { // settings menu
 }
 
 if(menu == 2) { // Timers menu
-	booking = "<center> PRESS OK TO REMOVE </center>";
+	booking = "<center> PRESS RED-KEY TO REMOVE </center>";
 	var x = timerID - 1;
 	var y = toi.schedulerService.getBookingIds("*", 0, 0);
 	if (y.length !== 0) {
@@ -1903,15 +1903,16 @@ if(menu == 4) { // INFO Menu
 
 if(menu == 5) { // Timers from Server
 	if (timerOK) {
-	booking = "<font style='background:#fc5;-webkit-border-radius:25px;color:black;font-size:" + fsMenu + ";'>";
+	booking = "<center> PRESS RED-KEY TO REMOVE </center>";
+	booking = booking + "<font style='background:#fc5;-webkit-border-radius:25px;color:black;font-size:" + fsMenu + ";'>";
 	var x = timerID - 1;
 	for (var i=0;i<11;i++) {
 		if (timers.length !== 0) { do { x = x + 1; } while (!timers[x] && (x < timers.length)) }
 		if (timers.length > x) { booking = booking + timers[x]; } else { booking = booking +"\n"; }
 		if (i == 0) { booking = booking + "</font>"; } 
+	mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'> Timers </center></h1><pre style='color:black;font-size:" + fsMenu + ";'>\n" + booking + "</pre>";
 	}
 
-	mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'> Timers </center></h1><pre style='color:black;font-size:" + fsMenu + ";'>\n" + booking + "</pre>";
 	}
 }
 
@@ -1950,22 +1951,16 @@ function LoadTimers() {
 				}
 }
 
-function SwitchActiveTimers() {
+function DeleteTimers() {
 try {
-   var x = "?timer_id=" + timersID[timerID] + "&flags=" + timersFlag[timerID] ;
-	alert(x);
-//   xmlhttp=new XMLHttpRequest();
-//   xmlhttp.open("PUT",(RestFulAPI + "/timers"),false);
-// xmlhttp.open("PUT",(RestFulAPI + "/timers/" + timersID[timerID] + ".xml"),false);
-//   xmlhttp.open("POST",(RestFulAPI + "/timers.xml" + x),false);
-//   xmlhttp.setRequestHeader("Content-type", "text/xml; charset=utf-8");
-//   xmlhttp.setRequestHeader("Content-length", x.length);
-//   xmlhttp.setRequestHeader("Connection", "close");
-//   xmlhttp.send(x);
-//	xmlhttp.send();
-//	alert(xmlhttp.responseText);
+	alert(timersID[timerID]);
+	xmlhttp=new XMLHttpRequest();
+	xmlhttp.open("POST",(RestFulAPI + "/timers/" + timersID[timerID]),false);
+	xmlhttp.send();
+	alert(xmlhttp.responseText);
+
   } catch(e) {
-    alert("Updating Timers problem: " + e);
+    alert("Deleting Timers problem: " + e);
   }
 }
 
@@ -2625,14 +2620,42 @@ try {
    nrMedia = x.length - 1;
    for (var i=0;i<x.length;i++)
 	  { 
+
+/*	// restful api layout dd 10/04/2013
+	// <event>
+	// 1 <param name="id">516</param>
+	// 2 <param name="title">Thuis</param>
+	// 3 <param name="short_text"/ >
+	// 4 <param name="description">Soapserie (BE).</param>
+	// 5 <param name="channel">S19.2E-53-1105-4016</param>
+	// 6 <param name="channel_name">BVN (S)</param>
+	// 7 <param name="start_time">1365608700</param>
+	// 8 <param name="duration">1500</param>
+	// 9 <param name="table_id">78</param>
+	// 10 <param name="version">7</param>
+	// 11 <param name="parental_rating">0</param>
+	// 12 <param name="vps">0</param>
+	// 13 <param name="images">0</param>
+	// 14 <param name="components">
+	//	<component stream="1" type="1" language="dut" description="4:3"/ >
+	//	<component stream="2" type="1" language="dut" description=""/ ></param>
+	// 15 <param name="contents">
+	// 16 <content name="Soap/Melodrama/Folkloric"/ ></param>
+	// 17 <param name="raw_contents"><raw_content name="21"/ ></param>
+	// 18 <param name="timer_exists">false</param>
+	// 19 <param name="timer_active">false</param>
+	// 20 <param name="timer_id"/ >
+	// </event>
+*/
+
 	recTitl[i] = x[i].getElementsByTagName("param")[1].childNodes[0].nodeValue;
 		try { 
 			recDesc[i] = x[i].getElementsByTagName("param")[3].childNodes[0].nodeValue; 
 		} catch(e) {
 			recDesc[i] = "";
 		}
-	recDura[i] = x[i].getElementsByTagName("param")[6].childNodes[0].nodeValue;
-	recStrt[i] = x[i].getElementsByTagName("param")[5].childNodes[0].nodeValue;
+	recDura[i] = x[i].getElementsByTagName("param")[7].childNodes[0].nodeValue;
+	recStrt[i] = x[i].getElementsByTagName("param")[6].childNodes[0].nodeValue;
 	recChan[i] = currChan + "\uE003-\uE003" + channelsnames[currChan];
 
         date = new Date(Number(recStrt[i])*1000);
