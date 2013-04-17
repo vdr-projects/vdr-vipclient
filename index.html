@@ -1973,6 +1973,7 @@ try {
    xmlDoc=xmlhttp.responseXML; 
    var x=xmlDoc.getElementsByTagName("timer");
    maxTimers = x.length;
+	   for (var i=0;i<(x.length+10);i++) { timers[i] = "" ;} // clear timers[i] tries to clear crap if current x.length < previous x.length
    for (var i=0;i<x.length;i++)
 	  { 
 		var fill = "\uE003\uE003\uE003\uE003\uE003\uE003\uE003\uE003\uE003\uE003";
