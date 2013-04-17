@@ -203,6 +203,8 @@ var timersStop = new Array();
 var timersDays = new Array();
 var timersName = new Array();
 var timersFile = new Array();
+var timersEvnt = new Array();
+var timersChan = new Array();
 var maxTimers = 0;
 var timerOK = 0;
 

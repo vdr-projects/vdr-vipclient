@@ -14,6 +14,10 @@ VDR 1.7.29
 	When playing recordings you can switch subs on/off with 'yellow'
 	Switch Timer for protected channels only switch when protection is off
 	Fixed <event> info, showing again date/ duration in server EPG view
+	Fix : timers[i] tries to clear crap if current timer.length < previous timer.length
+	New : in TimerMenu blue shows EPG info.
+
+
 
 0.17	Show EPG from Server limited to X days ( 3 = default, set in settings.js)
 	Updated Mainmenu. For now Recordings = Server Recordings menu item.

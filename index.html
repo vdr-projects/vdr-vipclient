@@ -1555,6 +1555,10 @@ function onKeyTeletext(keyCode) {
 function onKeyMenu(keyCode) {
   switch(keyCode) {
     case "BrowserBack":
+	if (menu == 5 && osdepginfo.style.opacity == 1) {
+		osdepginfo.style.opacity = 0;
+		break;
+		}
 	if (menu !== 0) {
 		if (menu == 3 ) { isFullscreen = 0; play(channels[currChan]); isFullscreen = 1;MPDListener = 0;}
 		menu = 0;	
@@ -1565,6 +1569,7 @@ function onKeyMenu(keyCode) {
 	if (menu == 3 ) { play(channels[currChan]);MPDListener = 0;}
 	isSetupMenu = 0;
 	mainmenu.style.opacity = 0;
+	osdepginfo.style.opacity = 0;
     break;
 
     case "Left":
@@ -1607,6 +1612,7 @@ function onKeyMenu(keyCode) {
 			InitMenu(menu);
 		}
 	} else 	if (menu == 5) {
+		osdepginfo.style.opacity = 0;
 		mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'> Timers </center></h1><pre style='color:black;font-size:" + fsMenu + ";'>\n\n\n<center> PLEASE WAIT </center></pre>";
 		DeleteTimers();
 		setTimeout("LoadTimersServer();InitMenu(menu);",100);
@@ -1619,7 +1625,12 @@ function onKeyMenu(keyCode) {
     case "Blue":
 		if (menu == 0) {
 		RestartPortal();
-		}
+	} else 	if (menu == 5) {
+		// Show EPG info Timer
+		ShowTimerInfo();
+		osdepginfo.style.opacity = 1 - osdepginfo.style.opacity;
+	}
+
     break;
     case "MediaRewind":
     break;
@@ -1828,9 +1839,10 @@ function onKeyMenu(keyCode) {
 
 function InitMenu(menu) {
 
+osdepginfo.style.opacity = 0;
+
 if(menu == 0) { // Main Menu
 	mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'> MainMenu \n ( " + Version + " )</center></h1><pre style='color:black;font-size:" + fsMenu + ";'>   1 - Settings \n   2 - Timers\n   3 - EPG\n   4 - Server : Recordings\n   5 - Server : Timers\n   6 - Server : EPG\n   7 - Server : Media Directory\n\n   9 - MPD Server Connection\n\n   BLUE - Restart Portal </pre>";
-//	mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'> MainMenu \n ( " + Version + " )</center></h1><pre style='color:black;font-size:" + fsMenu + ";'>   1 - Settings \n   2 - Recordings\n   3 - Timers\n   4 - EPG\n   5 - Server : Recordings\n   6 - Server : Timers\n   7 - Server : EPG\n   8 - Server : Media Directory\n   9 - MPD Server Connection\n\n   BLUE - Restart Portal </pre>";
 
 }
 
@@ -1987,6 +1999,8 @@ try {
 	  } else { 
 		timersDays[i] = timersDays[i] + "\uE003\uE003\uE003";
 	  }
+	  timersEvnt[i] = x[i].getElementsByTagName("param")[8].childNodes[0].nodeValue; // event_id
+	  timersChan[i] = x[i].getElementsByTagName("param")[11].childNodes[0].nodeValue; // channel_id
 	  timersName[i] = x[i].getElementsByTagName("param")[15].childNodes[0].nodeValue + fill;
 	  if (timersFlag[i] == "1") { 
 		timers[i] = "\uE003\uE00C\uE003";
@@ -2006,6 +2020,41 @@ try {
     alert("Get Timers problem: " + e);
     mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'> Timers </center></h1><pre style='color:black;font-size:" + fsMenu + ";'><center>\n   ERROR Getting Timers from : \n " + RestFulAPI + "</center></pre>";
   }
+}
+
+
+function ShowTimerInfo() {
+  //Like Show EPG Info
+  //setup some dummy vars
+  var info1 = ""; var info2 = ""; var info3 = ""; var info4="";
+
+  if (timersEvnt[timerID] > 0) {
+
+	try {
+	   xmlhttp=new XMLHttpRequest();
+	   xmlhttp.open("GET",(RestFulAPI + "/events/" + timersChan[timerID] + "/" + timersEvnt[timerID] + ".xml?" + new Date().getTime()),false);  
+	   xmlhttp.send();
+	   xmlDoc=xmlhttp.responseXML;
+	   var x=xmlDoc.getElementsByTagName("event");
+		// x[0].getElementsByTagName("param")[1].childNodes[0].nodeValue --> Title
+		// x[0].getElementsByTagName("param")[2].childNodes[0].nodeValue --> Short_text
+		// x[0].getElementsByTagName("param")[3].childNodes[0].nodeValue --> Description
+		// x[0].getElementsByTagName("param")[5].childNodes[0].nodeValue --> ChannelsName
+
+		info1 = x[0].getElementsByTagName("param")[1].childNodes[0].nodeValue;
+		info2 = x[0].getElementsByTagName("param")[5].childNodes[0].nodeValue;
+		info4 = x[0].getElementsByTagName("param")[3].childNodes[0].nodeValue;
+		info3 = x[0].getElementsByTagName("param")[2].childNodes[0].nodeValue + "</p><p>";
+
+	  } catch(e) {
+	    alert("Get EPG problem: " + e);
+
+	  }
+  } else {
+	info3 = " NO INFO ";
+  }
+       	osdepginfo.innerHTML = "<center><pre style='color:white;'>" + Left(info1,60) + "\n " + timersDays[timerID] + " " + 
+	timersStrt[timerID] + " - " + timersStop[timerID] + "\n" + info2 + "\n </pre><p>" + info3 + Left(info4,750) + "</p></center>" ;
 }
 
 // End of Menu section
