@@ -1,0 +1,88 @@
+TV mode
+0-9	- Channels 3 digits or OK
+TXT	- Teletext
+rec	- start recording current channel
+menu	- menu
+gids	- Guide view with mini TV window
+?	- Back or show EPG info window
+Radio	- Switch Group 1 & Group 9 (Default radio group)
+home 	- Switch Group 1 & Group 9 (Default radio group)
+red	- switch clock frontdisplay
+green	- Switch prefered audio channel
+yellow	- EPG current channel
+blue	- EPG info on/off
+P+	- Channel +
+P-	- Channel -
+Power	- Enter standby
+up	- Channel +
+down	- Channel -
+Left	- Group -
+Right	- Group +
+OK	- Show OSD epg current channel
+
+
+Play mode
+0	- Jump to 0
+1	- Jump -30 sec
+4	- Jump -60 sec
+7	- Jump -240 sec
+2	- Jump Mark -
+5	- Jump next Mark
+8	- Jump Mark +
+3	- Jump +30 sec
+6	- Jump +60 sec
+9	- Jump +240 sec
+stop	- Stop playing, save current position
+Rew	- not working
+FF	- not working
+Play	- Switch Play/Pause
+Rec	- 
+Menu	-
+?	- Back or show EPG info window
+TV	- switch to TV mode
+Down	- Pause
+UP	- Play
+OK	- Show OSD
+green	- Switch prefered audio channel
+yellow	- Switch subs on/of
+blue	- EPG info on/off
+
+Media selection mode
+?	- Back to TV mode
+TV	- Back to TV mode
+Right	- Jump +10
+Left	- Jump -10
+Up	- Jump -1
+Down	- Jump +1
+OK	- Start playing
+Play	- Start playing
+Red	- Delete Recording (OK to accept)
+Blue	- Info about Recording
+
+(Server) Timer selection mode
+?	- Back to TV mode
+TV	- Back to TV mode
+Right	- Jump +10
+Left	- Jump -10
+Up	- Jump -1
+Down	- Jump +1
+Red	- Delete Timer
+Blue	- Shows info about timer
+
+Teletext mode
+Left	- Next Page
+Right	- Prev Page
+Red	- Teletext Red
+Green	- Teletext Green
+Yellow	- Teletext Yellow
+Blue	- Teletext Blue
+Rew	- Prev Subpage
+FF	- Next Subpage
+Stop	- FullScreen
+TXT	- Back to TV mode
+?	- Back to TV mode
+TV	- goto Index page
+0-9	- TXT page selection
+
+Menu mode
+
