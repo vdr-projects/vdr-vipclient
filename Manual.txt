@@ -50,10 +50,10 @@ blue	- EPG info on/off
 Media selection mode
 ?	- Back to TV mode
 TV	- Back to TV mode
-Right	- Jump +10
-Left	- Jump -10
-Up	- Jump -1
-Down	- Jump +1
+Right	- scroll +10
+Left	- scroll -10
+Up	- scroll -1
+Down	- scroll +1
 OK	- Start playing
 Play	- Start playing
 Red	- Delete Recording (OK to accept)
@@ -62,11 +62,11 @@ Blue	- Info about Recording
 (Server) Timer selection mode
 ?	- Back to TV mode
 TV	- Back to TV mode
-Right	- Jump +10
-Left	- Jump -10
-Up	- Jump -1
-Down	- Jump +1
-Red	- Delete Timer
+Right	- scroll +10
+Left	- scroll -10
+Up	- scroll -1
+Down	- scroll +1
+Red	- Delete Timer (patched restfulapi only!)
 Blue	- Shows info about timer
 
 Teletext mode
@@ -83,6 +83,4 @@ TXT	- Back to TV mode
 ?	- Back to TV mode
 TV	- goto Index page
 0-9	- TXT page selection
-
-Menu mode
 

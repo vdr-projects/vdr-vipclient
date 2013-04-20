@@ -16,7 +16,8 @@ VDR 1.7.29
 	Fixed <event> info, showing again date/ duration in server EPG view
 	Fix : timers[i] tries to clear crap if current timer.length < previous timer.length
 	New : in TimerMenu blue shows EPG info.
-
+	With patched 'restfulapi' deleting of timers is possible.
+	Added manual.txt : key info for KPN remote.
 
 
 0.17	Show EPG from Server limited to X days ( 3 = default, set in settings.js)
