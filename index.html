@@ -20,12 +20,10 @@
 // 
 // make VDR connection for
 // 	set/create/edit timers
-// 	make recordings
-//
 //
 //
 
-var Version = "0.18"
+var Version = "0.19.1"
 
 for (var x = 0;  x < 10; x++) { 
 	if (minChan[x]) {
@@ -1637,6 +1635,20 @@ function onKeyMenu(keyCode) {
     case "MediaForward":
     break;
     case "MediaStop":
+	if (menu == 1) {
+		//set sleep timer.
+		SleepTimer = SleepTimer + 15;
+		if (SleepTimerID != -1) {
+		  clearTimeout(SleepTimerID);
+		  SleepTimerID = -1;
+		}
+		if (SleepTimer > 90) {
+			SleepTimer = 0;
+		} else {
+			SleepTimerID = setTimeout("SleepTimer = 0;toi.platformService.setStandby(true);", (SleepTimer * 60 * 1000));
+		}
+	}
+	InitMenu(menu);
     break;
     case "Teletext":
     break;
@@ -1855,7 +1867,9 @@ if(menu == 1) { // settings menu
 	if (ShowProtectedChannels) { htmltext = htmltext + "\uE017"; } else { htmltext = htmltext + "\uE016"; }
 	htmltext = htmltext + " Protection\n   8 - ";
 	if (SwitchGuide) { htmltext = htmltext + "\uE017"; } else { htmltext = htmltext + "\uE016"; }
-	htmltext = htmltext +  " Preview guide\n   9 - Show INFO\n   0 - MainMenu </pre>";
+	htmltext = htmltext +  " Preview guide\n   9 - Show INFO\n   S - SleepTimer : ";
+	if (SleepTimer) { htmltext = htmltext + SleepTimer + " minutes"; } else { htmltext = htmltext + "OFF"; }
+	htmltext = htmltext +  "\n   0 - MainMenu </pre>";
 	mainmenu.innerHTML = htmltext;
 }
 

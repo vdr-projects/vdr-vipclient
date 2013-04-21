@@ -62,12 +62,23 @@ Blue	- Info about Recording
 (Server) Timer selection mode
 ?	- Back to TV mode
 TV	- Back to TV mode
-Right	- scroll +10
-Left	- scroll -10
 Up	- scroll -1
 Down	- scroll +1
 Red	- Delete Timer (patched restfulapi only!)
 Blue	- Shows info about timer
+
+EPG mode (Yellow button, default view)
+?	- Back to TV mode
+TV	- Back to TV mode
+Right	- scroll +10
+Left	- scroll -10
+Up	- scroll -1
+Down	- scroll +1
+OK	- Shows info about timer
+Blue	- Shows info about timer
+Red	- Set switch timer
+Rec	-
+
 
 Teletext mode
 Left	- Next Page

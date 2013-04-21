@@ -149,6 +149,8 @@ var TimerActions = "";
 var switchtimerID = 0;
 var SwitchTimer = 1; // 1 - switchonly, 2 - record local, 3 - record on server (only 1 & 2 are working)
 var initialDelayID = 0;
+var SleepTimer = 0;
+var SleepTimerID = -1;
 
 var switchicon = "\uE003";
 var CAicon = "\uE00F";

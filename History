@@ -3,6 +3,9 @@ Motorola Vip : 1960, 1910, 1903, 1963.
 
 VDR 1.7.29
 
+0.19	Added SleepTimer in menu 1 Settings. (Key is stopbutton)
+
+
 0.18	Updated EPG filter for
 		30W ZON, Digital, MEO
 		19E Tid 1057 (RTL HD etc) 
