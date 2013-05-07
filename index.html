@@ -2729,22 +2729,28 @@ function showMediaList() {
 	osdmedia.style.opacity = 0;
 	var liststyle = "";
 	listMed = currMed - 1;
-
-	if (nrMedia < 14) {var MaxMed = nrMedia; } else { var MaxMed = 14; }
+	var MaxMed = -1;
 
 	if (getRecOK == 1) {
-	var htmlstring = "<h1><center style='font-size:" + fsRec + ";color:white;'> RECORDINGS (free " + (100 - perc_space) + "%, " + (free_space/1024).toFixed(0) + " GB) </center></h1><table border='0'><tr>";
-	if (MaxInGroup < 14 && subgroup) { MaxMed = MaxInGroup; }
-	if (!subgroup) { 
-		MaxMed = -1;
-		for(var i=0; i<=nrMedia; i++) {
-			if (recList[i]) { MaxMed = MaxMed + 1;}
+		var htmlstring = "<h1><center style='font-size:" + fsRec + ";color:white;'> RECORDINGS (free " + (100 - perc_space) + "%, " + (free_space/1024).toFixed(0) + " GB) </center></h1><table border='0'><tr>";
+
+		if (subgroup) { 
+		if (MaxInGroup < 14){ MaxMed = MaxInGroup; } else {MaxMed = 14; }
 		}
-		if (MaxMed > 14) { MaxMed = 14; }
-	}
+		if (!subgroup) { 
+			for(var i=0; i<=nrMedia; i++) {
+				if (recList[i]) { MaxMed = MaxMed + 1;}
+			}
+		}
+
 	} else {
-	var htmlstring = "<h1><center style='font-size:" + fsRec + ";color:white;'> EPG " + channelsnames[currChan] + " </center></h1><table border='0'><tr>";
+
+		if (nrMedia < 14) {MaxMed = nrMedia; } else {MaxMed = 14; }
+		var htmlstring = "<h1><center style='font-size:" + fsRec + ";color:white;'> EPG " + channelsnames[currChan] + " </center></h1><table border='0'><tr>";
 	}
+
+	if (MaxMed > 14) { MaxMed = 14; }
+	if (MaxMed < 0 ) { MaxMed = 0; }
 
 	for(var i=currMed; i<=currMed + MaxMed; i++) {
 		if (listMed<0) {
