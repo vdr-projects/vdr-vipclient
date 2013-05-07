@@ -2512,6 +2512,7 @@ if (DelisOK) {
 function getRecList() {
 	getVDRstatus();
 	MaxInGroup = 14;
+	subgroup = 0;
 try {
    xmlhttp=new XMLHttpRequest();
    xmlhttp.open("GET",(recServ + recPath + "?" + new Date().getTime()),false);
@@ -2687,7 +2688,7 @@ function MakeRecList2() {
 	{
 	 if (recTitl[i][1]) { 
 					if (recTitl[i][0] != x) {
-						recList[i] = "\uE002 " + recTitl[i][0];
+						recList[i] = "\uE002" + recTitl[i][0];
 						xx = xx + 1;
 					} else {
 						recList[i] = "" ; 
@@ -2695,7 +2696,7 @@ function MakeRecList2() {
 					recGroup[i] = xx;
 				} else { 
 					recGroup[i] = 0;
-					recList[i] = "\uE003 " + recTitl[i];
+					recList[i] = "\uE003" + recTitl[i];
 						if (rec_New[i] == "true" ) { recList[i] = "\uE010\uE003" + recList[i]; 
 							} else { recList[i] = "\uE003\uE003" + recList[i]; }
 				}
@@ -2729,12 +2730,12 @@ function showMediaList() {
 
 	if (getRecOK == 1) {
 	var htmlstring = "<h1><center style='font-size:" + fsRec + ";color:white;'> RECORDINGS (free " + (100 - perc_space) + "%, " + (free_space/1024).toFixed(0) + " GB) </center></h1><table border='0'><tr>";
-	if (MaxInGroup < 14) {var MaxMed = MaxInGroup - 1; }
+	if (MaxInGroup < 14) {var MaxMed = MaxInGroup; }
 	} else {
 	var htmlstring = "<h1><center style='font-size:" + fsRec + ";color:white;'> EPG " + channelsnames[currChan] + " </center></h1><table border='0'><tr>";
 	}
 
-	for(var i=currMed; i<=currMed + MaxMed; i++) {
+	for(var i=currMed; i<(currMed + MaxMed); i++) {
 		if (listMed<0) {
 			listMed=nrMedia;
 			}
