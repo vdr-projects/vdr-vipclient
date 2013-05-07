@@ -20,6 +20,7 @@ var currChan = 10; // default channel
 //
 //
 
+var ShowSubDir = 1 ; // 0 = no, 1 = yes (default) // show seperate maps for subdirs in menu recordings
 var showClock = 0;   // 0 = no, 1 = yes
 var SwitchGuide = 0; // 0 = no, 1 = yes
 var TimeShift = 0;   // 0 = no, 1 = yes timeshift
@@ -194,6 +195,9 @@ var rec_New = new Array(); // Flag if recording is new (unseen)
 var recGUID = new Array(); // GUID of recording
 var recChan = new Array(); // Channel ID
 var recDummy= new Array(); //
+var recGroup= new Array(); // group index
+var subgroup= 0 ; // Used for subdirs in recording view
+var MaxInGroup=14; // Used for subdirs in recording view
 
 var posMark = 0;
 var recMap = 0;

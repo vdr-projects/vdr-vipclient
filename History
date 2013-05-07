@@ -4,6 +4,10 @@ Motorola Vip : 1960, 1910, 1903, 1963.
 VDR 1.7.29
 
 0.19	Added SleepTimer in menu 1 Settings. (Key is stopbutton)
+	Timer menu OK shows same info as BLUE
+	Updated EPG filter for MTV Transponder (Nick JR france, Nick NL)
+	Channel group 0 : removed channels 30W, updated channels 28.8E 
+	Show maps for first level submaps. <OK> to enter submap (Can be switched off in settings to keep old way of displaying)
 
 
 0.18	Updated EPG filter for
