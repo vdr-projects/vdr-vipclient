@@ -2136,6 +2136,7 @@ function playMPD(uri) {
 // Media Player Section
 
 function LoadMediaSettings() {
+		subgroup = 0;
 		isMediaMenu = 1;
 		isFullscreen = 0;
 		if (getRecOK !== 2) { showDisplay("STOP", false, 100, 0 ); }
@@ -2177,7 +2178,7 @@ if (DelisOK) {
 } else if (mediaList.style.opacity != 0) { 
   switch(keyCode) {
     case "BrowserBack":
-	if (subgroup) { 	
+	if (subgroup && osdepginfo.style.opacity == 0) { 	
 		mediaList.innerHTML = "<h1><center style='font-size:" + fsRec + ";color:white;'> Please WAIT </center></h1>";
 		setTimeout("getRecList(); showMediaList();",100)
 		subgroup = 0;
@@ -2261,7 +2262,8 @@ if (DelisOK) {
 	 }
 	break;
     case "Blue":
-	if (getRecOK !== 0) {
+	if ( (getRecOK == 1 && (recGroup[currMed] == 0 || subgroup == 1)) || getRecOK == 2) {
+//	(recordings and	(file not in subdir	or	in subdir )) or EPG
 	ShowInfo();
 	osdepginfo.style.opacity = 1 - osdepginfo.style.opacity;
 	}
