@@ -23,7 +23,7 @@
 //
 //
 
-var Version = "0.19.2"
+var Version = "0.19.3"
 
 for (var x = 0;  x < 10; x++) { 
 	if (minChan[x]) {
@@ -2254,7 +2254,10 @@ if (DelisOK) {
 	}
         break;
     case "Red":
-	if (getRecOK == 1) { DelRec(); }
+	if (getRecOK == 1 && (recGroup[currMed] == 0 || subgroup == 1)) { 
+	   // Only delete item if it isn't a subdir marker
+	   DelRec(); 
+	}
 	if (getRecOK == 2) { //set timer
 			settimer(recStrt[currMed],recTitl[currMed],recDura[currMed]);
 			switchtimer.style.opacity = 1;
@@ -2262,8 +2265,8 @@ if (DelisOK) {
 	 }
 	break;
     case "Blue":
+	// only show info if not a subdir marker or if in EPG mode
 	if ( (getRecOK == 1 && (recGroup[currMed] == 0 || subgroup == 1)) || getRecOK == 2) {
-//	(recordings and	(file not in subdir	or	in subdir )) or EPG
 	ShowInfo();
 	osdepginfo.style.opacity = 1 - osdepginfo.style.opacity;
 	}
@@ -2726,16 +2729,24 @@ function showMediaList() {
 	osdmedia.style.opacity = 0;
 	var liststyle = "";
 	listMed = currMed - 1;
+
 	if (nrMedia < 14) {var MaxMed = nrMedia; } else { var MaxMed = 14; }
 
 	if (getRecOK == 1) {
 	var htmlstring = "<h1><center style='font-size:" + fsRec + ";color:white;'> RECORDINGS (free " + (100 - perc_space) + "%, " + (free_space/1024).toFixed(0) + " GB) </center></h1><table border='0'><tr>";
-	if (MaxInGroup < 14) {var MaxMed = MaxInGroup; }
+	if (MaxInGroup < 14 && subgroup) { MaxMed = MaxInGroup; }
+	if (!subgroup) { 
+		MaxMed = -1;
+		for(var i=0; i<=nrMedia; i++) {
+			if (recList[i]) { MaxMed = MaxMed + 1;}
+		}
+		if (MaxMed > 14) { MaxMed = 14; }
+	}
 	} else {
 	var htmlstring = "<h1><center style='font-size:" + fsRec + ";color:white;'> EPG " + channelsnames[currChan] + " </center></h1><table border='0'><tr>";
 	}
 
-	for(var i=currMed; i<(currMed + MaxMed); i++) {
+	for(var i=currMed; i<=currMed + MaxMed; i++) {
 		if (listMed<0) {
 			listMed=nrMedia;
 			}
