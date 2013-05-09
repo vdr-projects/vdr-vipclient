@@ -802,26 +802,22 @@ function onKeyDown(event) {
 	break;
 	case KEY_REC:
 	case "MediaRecord":
-//
-//
-// if(isFullscreen) you're in guidemode, record = set timer for current item.
-//
-// if not in guidemode, set timer for current channel for x minutes, (default 180?)
-// if isRecording == 1 show REC icon E00B else E003 
-// 
-
-//	if (isRecording == 1) {
-//		recordStop();
-//	} else {
-//		if (ServerAdres[ChanGroup] == "MultiCast" ) {
-//		 	SI=channels[currChan].split("-");
-//			recordStart(SI[4]);
-//			} else {
-//			recordStart(ServerAdres[ChanGroup] + channels[currChan]);
-//			}
-//	}
+	if(isFullscreen) {
 		ServerRecordStart();
 		//ServerTimer();
+	} else if(isSchedule == 0){
+		if(NowNext) {	
+			SwitchTimer = 2;
+			settimer(EPG[NowNext][2][currChan],EPG[NowNext][1][currChan],(EPG[NowNext][3][currChan]*60));
+			SwitchTimer = 1;
+			switchtimer.style.opacity = 1;
+			setTimeout("switchtimer.style.opacity = 0; ", 2000);
+		} else {
+			ServerRecordStart();
+		}
+	}
+
+
 	break;
 
 	default:
@@ -982,12 +978,20 @@ function settimer(ProgTime,ProgName,ProgDura) {
 		  }
 	} else if(SwitchTimer == 2) {	
 		  try {
+		    toi.schedulerService.setParameter(toi.schedulerService.schedule("RecServer","notification", ProgTime , ProgDura), "Channel", currChan.toString() );
+		  }
+		  catch (e) {
+		    alert(e);
+		  }
+	} else if(SwitchTimer == 3) {	
+		  try {
 		    toi.schedulerService.setParameter(toi.schedulerService.schedule("RecLocal","record_hd_from_ip", ProgTime , ProgDura), "Channel", currChan.toString() );
 		  }
 		  catch (e) {
 		    alert(e);
 		  }
 	}
+
 	tijd = ProgTime;
 	date = new Date(tijd*1000); 
 	tijd = date.toUTCString();
@@ -1620,6 +1624,7 @@ function onKeyMenu(keyCode) {
     	if (menu == 2) {
 		var x = toi.schedulerService.getBookingIds("*", 0, 0);
 		if (x.length > 0) {
+			alert(timerID); //Show timerID for debug, some times it won't delete.
 			toi.schedulerService.remove(timerID);
 			timer[timerID] = "";
 			LoadTimers();
@@ -1683,13 +1688,6 @@ function onKeyMenu(keyCode) {
 	InitMenu(menu);
 	break;
 	case KEY_2:
-	//	if (menu == 0) {
-	//		isSetupMenu = 0;
-	//		mediaList.style.opacity = 0.9;
-	//		mainmenu.style.opacity = 0;
-	//		recPath = "/recordings.xml";
-	//		setTimeout("getRecList();LoadMediaSettings();",100);
-	//	}
 		if (menu == 0) {
 			LoadTimers();
 				if (timer.length !== 0) { do { timerID = timerID + 1; } while (!timer[timerID] && (timerID < timer.length)) }
@@ -1754,7 +1752,7 @@ function onKeyMenu(keyCode) {
 			mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'> Timers </center></h1><pre style='color:black;font-size:" + fsMenu + ";'>\n\n\n<center> PLEASE WAIT </center></pre>";
 			timerID = 0;
 			menu = 5;
-			setTimeout("LoadTimersServer();InitMenu(menu);",100);
+			setTimeout("LoadTimersServer();InitMenu(menu);",200);
 		}
 
 	if (menu == 1) {
@@ -2297,7 +2295,7 @@ if (DelisOK) {
 
     case KEY_REC:
     case "MediaRecord":
-/*	// make timer for local recording
+	// make timer for timer server recording
 	if (getRecOK == 2) { //set timer
 			SwitchTimer = 2;
 			settimer(recStrt[currMed],recTitl[currMed],recDura[currMed]);
@@ -2305,7 +2303,6 @@ if (DelisOK) {
 			switchtimer.style.opacity = 1;
 			setTimeout("switchtimer.style.opacity = 0; ", 2000);
 	 } 
-*/
         break;
 
 	default:
@@ -2708,7 +2705,7 @@ function MakeRecList2() {
 }
 
 function MakeRecList3(GroupID) {
-   MaxInGroup = 0;
+   MaxInGroup = -1;
    for (var i=0;i<recTitl.length;i++)
 	{
 		if (recGroup[i] == GroupID) {
@@ -2735,7 +2732,7 @@ function showMediaList() {
 		var htmlstring = "<h1><center style='font-size:" + fsRec + ";color:white;'> RECORDINGS (free " + (100 - perc_space) + "%, " + (free_space/1024).toFixed(0) + " GB) </center></h1><table border='0'><tr>";
 
 		if (subgroup) { 
-		if (MaxInGroup < 14){ MaxMed = MaxInGroup; } else {MaxMed = 14; }
+			if (MaxInGroup < 14){ MaxMed = MaxInGroup; } else {MaxMed = 14; }
 		}
 		if (!subgroup) { 
 			for(var i=0; i<=nrMedia; i++) {
@@ -3008,6 +3005,23 @@ try {
   }
 }
 
+function ServerRecordTimer(SC) {
+//Timed Instant recording on server
+//Can be replaced if timer exchange is possible
+try {
+   xmlhttp=new XMLHttpRequest();
+	//switch server to current channel
+   xmlhttp.open("POST",(RestFulAPI + "/remote/switch/" + channels[SC]),true);
+   xmlhttp.send();
+	//start recording
+	setTimeout("xmlhttp.open('POST',(RestFulAPI + '/remote/Record'),false);xmlhttp.send();",5000);
+  } catch(e) {
+   alert("Sending Record key to server problem: " + e);
+  }
+}
+
+
+
 function ServerTimer() {
 var x = "file=TestFile&flags=1&start=1400&stop=1615&day=2013-12-24&channel=S19.2E-53-1105-4016"
 
@@ -3127,6 +3141,8 @@ function onScheduledStart(event) {
 	if (currChan !== prevChan) {
 		play(channels[currChan]);
 	} 
+  } if ( timertype == "RecServer") {
+	ServerRecordTimer(Number(toi.schedulerService.getParameter(event.booking.id, "Channel")));
   } else {
 	  try {
 	    createNewAsset()
@@ -3224,7 +3240,7 @@ function ClearScreen() {
 	<div id="mainmenu"  style="background:#3366ff;width:80%; position:absolute; left:10%; top:10%; bottom:10%;z-index:520;opacity:0;-webkit-border-radius:50px;font-family:'VDRSymbols Sans';"></div>
 	<div id="mediaList" style="background:#3366ff;width:80%; position:absolute; left:10%; top:10%; bottom:10%;z-index:520;opacity:0;-webkit-border-radius:50px;"></div>
 
-	<div id="switchtimer" style="background:red;width:42%; position:absolute; left:21%; top:26%;z-index:525;opacity:0;"></div>
+	<div id="switchtimer" style="background:red;width:45%; position:absolute; left:21%; top:26%;z-index:525;opacity:0;"></div>
 	<div id="osdepginfo" style="background:#3366ff;width:80%; position:absolute; left:10%; top:10%;z-index:525;opacity:0;-webkit-border-radius:50px;"></div>
 	<div id="osdepginfonext" style="background:#3366ff;width:80%; position:absolute; left:10%; top:10%;z-index:525;opacity:0;-webkit-border-radius:50px;"></div>
 </body>
