@@ -355,6 +355,8 @@ function onKeyDown(event) {
     } else {
 
     switch(event.keyIdentifier) {
+
+    case "ChannelUp":
     case "Up":
 	if(isFullscreen) {
 		count = 0;
@@ -376,6 +378,7 @@ function onKeyDown(event) {
 	        preview(channels[currChan]);
 	}
         break;
+    case "ChannelDown":
     case "Down":
 	if(isFullscreen) {
 		count = 0;
@@ -652,6 +655,7 @@ function onKeyDown(event) {
 		InitMenu(menu);
 		}
 		break;
+   case KEY_FAV:
    case "Scroll":
 		if(isFullscreen) {
 			NowNext = 0;
@@ -819,7 +823,18 @@ function onKeyDown(event) {
 
 
 	break;
-
+	case KEY_OPNAMES:
+	case KEY_FILM:
+	// jump to recordings menu.
+		if(isFullscreen) {
+		osdepginfo.style.opacity = 0;
+		osdepginfonext.style.opacity = 0;
+		mediaList.style.opacity = 0.9;
+		mainmenu.style.opacity = 0;
+		recPath = "/recordings.xml";
+		setTimeout("getRecList();LoadMediaSettings();",100);
+		}
+		break;
 	default:
         break;
     }

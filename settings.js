@@ -93,6 +93,12 @@ var KEY_7 = "U+0037";
 var KEY_8 = "U+0038";
 var KEY_9 = "U+0039";
 var KEY_REC = "U+00bd";
+var KEY_FAV = "U+e0003"; 	// comhem
+var KEY_FILM = "U+e0033";	// comhem
+var KEY_HELP2 = "U+f0001";	// comhem
+var KEY_OPNAMES = "U+0046";	// old kpn (vip1710/1760)
+var KEY_HELP = "Info";		// old kpn (vip1710/1760)
+var KEY_DIENSTEN = "Portal";	// old kpn (vip1710/1760)
 
 var eitCache = null;
 var events = null;

@@ -19,6 +19,9 @@ down	- Channel -
 Left	- Group -
 Right	- Group +
 OK	- Show OSD epg current channel
+FAV	- Guide view with mini TV window (comhem remote)
+FILM	- Jump directly to the recordings menu (comhem remote)
+OPNAMES	- Jump directly to the recordings menu (Old KPN remote)
 
 
 Play mode
