@@ -28,6 +28,11 @@ var ShowSubs = 1;    // 0 = no, 1 = yes (default)
 var KillStream = 1;  // 1 = Close stream on Standby
 var ShowProtectedChannels = 1; // 0 = yes show, 1 = don't show protected channels (default)
 var ShowSource = 1; // show source in OSD
+var pipPlayer = 0; // 0 = no, 1 = yes Pip
+var mediaRecorder = 0; // 0 = no, 1 = yes local recording.
+
+
+
 var serverEPGdays = 3 * (60 * 60 * 24); // the higher the longer you wait while getting the epg info
 
 months = new Array('January', 'February', 'March', 'April', 'May', 'June', 'Jully', 'August', 'September', 'October', 'November', 'December');
@@ -183,8 +188,6 @@ var fsKeys = (19*Yfactor) + "px";
 var AudioInfo = new Array();
 var xx = 0;
 
-var pipPlayer = "";
-var mediaRecorder = "";
 var isRecording = 0; // set by recording subroutine
 var audiotype = 0; // used for selecting "cfg.media.audio.typepriority","normal,hearing_impaired,visually_impaired"
 var subsmode = 0;  // "cfg.media.subtitling.modepriority","Teletext,DVB"

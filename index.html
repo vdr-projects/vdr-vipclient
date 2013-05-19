@@ -37,7 +37,10 @@ window.onkeydown = onKeyDown;
 
 function onLoad() {
 	createPlayer();
-	createRecorder();
+	if(pipPlayer){
+	addPipVideoplane();
+	createPip();
+	}
 	embedTeletextPlugin();
 	toi.audioOutputService.setVolume(AudioOut, StartVolume);
 	toi.audioOutputService.setMuteState(AudioOut, false);
@@ -50,6 +53,7 @@ function onLoad() {
 	mediaPlayer.addEventListener(mediaPlayer.ON_DATA_AVAILABLE,onDataAvailableEvent);
 	mediaPlayer.addEventListener(mediaPlayer.ON_STATE_CHANGED, MPD); 
 	if (mediaRecorder) {
+	createRecorder();
 	mediaRecorder.addEventListener(mediaRecorder.ON_STATE_CHANGED, onRecorderStateChanged);
 	}
 
@@ -162,8 +166,7 @@ function createPlayer() {
 function createRecorder() {
 	try {
 		// no recorder support yet 
-		// mediaRecorder = toi.mediaService.createRecorderInstance();
-		//
+		mediaRecorder = toi.mediaService.createRecorderInstance();
 	} catch(e) {
 		alert("Cannot create media recorder: " + e);
 		mediaRecorder = "";
@@ -187,10 +190,10 @@ function addPipVideoplane() {
 
 function pipplay(uri) {
 try {
-    if (pipPlayer.getState() != pipPlayer.STATE_IDLE) {
-      pipPlayer.close();
-    }
-	uri = ServerAdres[ChanGroup] + uri;
+	if (pipPlayer.getState() != pipPlayer.STATE_IDLE) {
+		pipPlayer.close();
+	 }
+	uri = ServerAdres[0] + uri;
 	pipPlayer.open(uri);
 	pipPlayer.play(1000);
   } catch (e) {
@@ -1821,13 +1824,12 @@ function onKeyMenu(keyCode) {
 		}
 	break;
 	case KEY_8:
-/*		// PIP testing
-		if (menu == 0) {
+		// PIP testing
+		if (menu == 0 && pipPlayer) {
 		isSetupMenu = 0;
 		mainmenu.style.opacity = 0;
 		pipplay(channels[604]);
 		}
-*/
 	if (menu == 1) {
 		if(SwitchGuide == 0 )	{
 			SwitchGuide = 1;
@@ -2556,7 +2558,8 @@ try {
 	  recChan[i] = "Media File";
 	}
 	  }
-	if (recPath == "/recordings.xml" && ShowSubDir) {
+//	if (recPath == "/recordings.xml" && ShowSubDir) {
+	if (ShowSubDir) {
 	MakeRecList2();
 	} else {
 	MakeRecList();
@@ -3232,8 +3235,8 @@ function ClearScreen() {
 
 	<div id="chanlistepg" style="width:42%; position:absolute; left:7%; top:50%;"> 	</div>
 
-	<videoplane id='videoplane' style='position:absolute;left:0px;top:0px;height:100%;width:100%;z-index:500;'></videoplane>
-	<div id="pipVideoDiv"></div>
+	<videoplane id='videoplane' index=0 style='position:absolute;left:0px;top:0px;height:100%;width:100%;z-index:500;'></videoplane>
+	<div id="pipVideoDiv" index=1></div>
 
 	<div id="osdvolume" style="width:63%; position:absolute; left:10%; top:80%;z-index:501;font-family:'VDRSymbols Sans';opacity:0;">Volume : </div>
 	<div id="osdmedia" style="background:#3366ff;-webkit-border-radius:50px;width:80%; position:absolute; left:10%; top:70%;z-index:505;opacity:0;"></div>
