@@ -23,7 +23,7 @@
 //
 //
 
-var Version = "0.19.3"
+var Version = "0.19.4"
 
 for (var x = 0;  x < 10; x++) { 
 	if (minChan[x]) {
@@ -37,10 +37,12 @@ window.onkeydown = onKeyDown;
 
 function onLoad() {
 	createPlayer();
+
 	if(pipPlayer){
-	addPipVideoplane();
-	createPip();
+		addPipVideoplane();
+		createPip();
 	}
+
 	embedTeletextPlugin();
 	toi.audioOutputService.setVolume(AudioOut, StartVolume);
 	toi.audioOutputService.setMuteState(AudioOut, false);
@@ -52,9 +54,13 @@ function onLoad() {
 	eitCache.addEventListener(eitCache.ON_CACHE_UPDATED, onCacheUpdated);
 	mediaPlayer.addEventListener(mediaPlayer.ON_DATA_AVAILABLE,onDataAvailableEvent);
 	mediaPlayer.addEventListener(mediaPlayer.ON_STATE_CHANGED, MPD); 
+
+	if (toi.informationService.getObject("var.capabilities.dvr") == "FALSE") { mediaRecorder = 0;}
+	// No harddisk, no recorder functions possible
+
 	if (mediaRecorder) {
-	createRecorder();
-	mediaRecorder.addEventListener(mediaRecorder.ON_STATE_CHANGED, onRecorderStateChanged);
+		createRecorder();
+		mediaRecorder.addEventListener(mediaRecorder.ON_STATE_CHANGED, onRecorderStateChanged);
 	}
 
 	    toi.informationService.addEventListener(toi.informationService.ON_OBJECTS_CHANGED, onEvent);
@@ -165,7 +171,6 @@ function createPlayer() {
 
 function createRecorder() {
 	try {
-		// no recorder support yet 
 		mediaRecorder = toi.mediaService.createRecorderInstance();
 	} catch(e) {
 		alert("Cannot create media recorder: " + e);
@@ -1003,7 +1008,9 @@ function settimer(ProgTime,ProgName,ProgDura) {
 		  }
 	} else if(SwitchTimer == 3) {	
 		  try {
-		    toi.schedulerService.setParameter(toi.schedulerService.schedule("RecLocal","record_hd_from_ip", ProgTime , ProgDura), "Channel", currChan.toString() );
+		    var x = toi.schedulerService.schedule("RecLocal","record_hd_from_ip", ProgTime , ProgDura);
+		    toi.schedulerService.setParameter(x, "Channel", currChan.toString() );
+		    toi.schedulerService.setParameter(x, "Title", ProgName );
 		  }
 		  catch (e) {
 		    alert(e);
@@ -1632,6 +1639,17 @@ function onKeyMenu(keyCode) {
 		InitMenu(menu);
     break;
     case "Accept":
+    	if (menu == 2) {
+		var x = toi.schedulerService.getParameter(timerID, "assetURI");
+		getRecOK = 0;
+		LoadMediaSettings();
+		isSetupMenu = 0;
+		mediaList.style.opacity = 0;
+		mainmenu.style.opacity = 0;
+		currMed = -1;
+		playRec(x);
+		//UnloadMediaSettings();
+	}
 	if (menu == 5) {
 		// Show EPG info Timer
 		ShowTimerInfo();
@@ -2286,6 +2304,15 @@ if (DelisOK) {
 	osdepginfo.style.opacity = 1 - osdepginfo.style.opacity;
 	}
 	break;
+    case "Green":
+	if (getRecOK == 2) { //set timer
+			SwitchTimer = 3;
+			settimer(recStrt[currMed],recTitl[currMed],recDura[currMed]);
+			SwitchTimer = 1;
+			switchtimer.style.opacity = 1;
+			setTimeout("switchtimer.style.opacity = 0; ", 2000);
+	 }
+	break;
 
     case "VolumeMute":
 	state = toi.audioOutputService.getMuteState(AudioOut);
@@ -2344,8 +2371,13 @@ if (DelisOK) {
         break;
     case "Up":
 	if (mediaPlayer.getState() != mediaPlayer.STATE_PLAYING) {
-	      position = position + (mediaPlayer.getPosition()/1000);
-	      playRec((recLink[currMed] + "?time=" + position));
+		if (currMed == -1 ) {
+		      showDisplay("PLAY", false, 100, 0 );
+		      mediaPlayer.play(1000);
+		} else {		
+		      position = position + (mediaPlayer.getPosition()/1000);
+		      playRec((recLink[currMed] + "?time=" + position));
+		}
 	}
 	break;
   case "Accept":
@@ -2416,8 +2448,8 @@ if (DelisOK) {
 
     case KEY_REC:
     case "MediaRecord":
-	recordStart(recLink[currMed]);
-	UnloadMediaSettings();
+	//	recordStart(recLink[currMed]);
+	//	UnloadMediaSettings();
 	break;
     case "MediaRewind":
 	    if (mediaPlayer.getState() != mediaPlayer.STATE_IDLE) {
@@ -2432,24 +2464,36 @@ if (DelisOK) {
 	    }
     break;
     case "MediaStop":
-	    setResume();
-	    osdepginfo.style.opacity = 0;
-	    isFullscreen = 0; play(channels[currChan]); isFullscreen = 1;
-	    if (isRecording == 1) { 
-		recordStop();
-		isRecording = 0;
+	    if (currMed == -1) {
+		    osdepginfo.style.opacity = 0;
+		    isFullscreen = 1; play(channels[currChan]); 
+		    UnloadMediaSettings();		
+	    } else {
+		    setResume();
+		    osdepginfo.style.opacity = 0;
+		    isFullscreen = 0; play(channels[currChan]); isFullscreen = 1;
+		//	if (isRecording == 1) { 
+		//	recordStop();
+		//	isRecording = 0;
+		//	}
+
+		    mediaList.style.opacity = 0.9;
+		    showDisplay("STOP", false, 100, 0 );
+		    showMediaList();
 	    }
-	    mediaList.style.opacity = 0.9;
-	    showDisplay("STOP", false, 100, 0 );
-	    showMediaList();
     break;
 	case "MediaPlayPause":
 	    if (mediaPlayer.getState() != mediaPlayer.STATE_PAUSED) {
 	      showDisplay("PAUS", false, 100, 0 );
 	      mediaPlayer.play(0);
 	    } else {
-		position = position + (mediaPlayer.getPosition()/1000);
-		playRec((recLink[currMed] + "?time=" + position));
+		if (currMed == -1 ) {
+		      showDisplay("PLAY", false, 100, 0 );
+		      mediaPlayer.play(1000);
+		} else {		
+			position = position + (mediaPlayer.getPosition()/1000);
+			playRec((recLink[currMed] + "?time=" + position));
+		}
     	    }
 	break;
     case KEY_1:
@@ -3163,7 +3207,7 @@ function onScheduledStart(event) {
 	ServerRecordTimer(Number(toi.schedulerService.getParameter(event.booking.id, "Channel")));
   } else {
 	  try {
-	    createNewAsset()
+	    createNewAsset();
 
 		var recChannr = Number(toi.schedulerService.getParameter(event.booking.id, "Channel"));
 		var recGroup = Number(Left((recChannr / 1000),1));
@@ -3199,6 +3243,9 @@ function onScheduledStop(event) {
 	if ( timertype == "SwitchOnly") {
 	    toi.schedulerService.remove(event.booking.id);
 	    setOSDtimer();
+	} else if ( timertype == "RecServer") {
+	    // Sending stop isn't possible yet.
+	    toi.schedulerService.remove(event.booking.id);
 	} else {
 	  try {
 	    mediaRecorder.close();
@@ -3235,8 +3282,8 @@ function ClearScreen() {
 
 	<div id="chanlistepg" style="width:42%; position:absolute; left:7%; top:50%;"> 	</div>
 
-	<videoplane id='videoplane' index=0 style='position:absolute;left:0px;top:0px;height:100%;width:100%;z-index:500;'></videoplane>
-	<div id="pipVideoDiv" index=1></div>
+	<videoplane id='videoplane' style='position:absolute;left:0px;top:0px;height:100%;width:100%;z-index:500;'></videoplane>
+	<div id="pipVideoDiv" ></div>
 
 	<div id="osdvolume" style="width:63%; position:absolute; left:10%; top:80%;z-index:501;font-family:'VDRSymbols Sans';opacity:0;">Volume : </div>
 	<div id="osdmedia" style="background:#3366ff;-webkit-border-radius:50px;width:80%; position:absolute; left:10%; top:70%;z-index:505;opacity:0;"></div>

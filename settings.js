@@ -29,7 +29,7 @@ var KillStream = 1;  // 1 = Close stream on Standby
 var ShowProtectedChannels = 1; // 0 = yes show, 1 = don't show protected channels (default)
 var ShowSource = 1; // show source in OSD
 var pipPlayer = 0; // 0 = no, 1 = yes Pip
-var mediaRecorder = 0; // 0 = no, 1 = yes local recording.
+var mediaRecorder = 1; // 0 = no, 1 = yes local recording.
 
 
 
