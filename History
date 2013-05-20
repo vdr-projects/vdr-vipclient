@@ -9,6 +9,13 @@ VDR 1.7.29
 	Channel group 0 : removed channels 30W, updated channels 28.8E 
 	Show maps for first level submaps. <OK> to enter submap (Can be switched off in settings to keep old way of displaying)
 	Timer entry for recording. (Starts instant recording at timer start)
+	Added local recording, for units with hdd 
+		Use epg view (yellow or menu 3) to set timers
+			red - switchtimer only 
+			rec - Server recording
+			green - local recording
+	Playback of localrecording (menu 2 / OK)
+
 
 
 0.18	Updated EPG filter for
