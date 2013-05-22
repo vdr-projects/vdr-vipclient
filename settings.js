@@ -82,6 +82,7 @@ var isMediaMenu = 0;
 var isVisible = 0;
 var isSetupMenu = 0;
 var isSchedule = 0;
+var MainMenu = 0;
 var mediaPlayer = null;
 var Change = 0;
 var ChangeOK = 0;
