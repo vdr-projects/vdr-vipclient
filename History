@@ -15,6 +15,7 @@ VDR 1.7.29
 			rec - Server recording
 			green - local recording
 	Playback of localrecording (menu 2 / OK)
+	During playback of recordings/ media parts of the mainmenu are accessible (View timers & settings)
 
 
 
