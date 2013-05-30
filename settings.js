@@ -224,11 +224,19 @@ var timersChan = new Array();
 var maxTimers = 0;
 var timerOK = 0;
 
+var searchtimersID = new Array();
+var searchtimersSearch = new Array();
+var searchtimersFlag = new Array();
+var SearchTimer = new Array();
+searchmode = new Array('phrase', 'all words', 'at least one word', 'match exactly', 'regex', 'fuzzy');
+searchchan = new Array('no', 'interval', 'channel group', 'only FTA');
+
 var getRecOK = 0;
 var position = 0;
 
 var timer = new Array();
 var timers = new Array();
+var searchtimers = new Array();
 var getbookingID = 0;
 var timerID = 0;
 var nrMedia = 0;
