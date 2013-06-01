@@ -1480,8 +1480,9 @@ function showChannelList() {
 			}
 
 		while (!channels[listChan] && (listChan<maxChan[ChanGroup]));
+		if (fullupdate) { GetEPG(listChan); }
 		if ( listChan == currChan) { 
-			GetEPG(listChan);
+			if (!fullupdate) { GetEPG(listChan); }
 			liststyle = "background:#fc5;";
 		}  else {
 			liststyle = "";
@@ -2234,7 +2235,7 @@ try {
 		// End of Extended INFO
 
 
-	  searchtimers[i] = searchtimers[i] + searchtimersSearch[i]  + "\n" ;
+	  searchtimers[i] = searchtimers[i] + searchtimersSearch[i]  + "\uE003\uE003\n" ;
 	  timerOK = 1;
 	  }
   } catch(e) {

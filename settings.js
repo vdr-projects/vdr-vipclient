@@ -31,6 +31,7 @@ var ShowSource = 1; // show source in OSD
 var pipPlayer = 0; // 0 = no, 1 = yes Pip
 var mediaRecorder = 1; // 0 = no, 1 = yes local recording.
 
+var fullupdate = 1; // If guideview is too slow, set it to 0 (for 1910/1960), faster boxes can use 1
 
 
 var serverEPGdays = 3 * (60 * 60 * 24); // the higher the longer you wait while getting the epg info

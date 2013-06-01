@@ -1136,8 +1136,13 @@ channelsnames[847] = "BELSAT TV (S)";
 channels[847] = "S19.2E-1-1059-7107";
 channelsnames[848] = "TV Polonia (S)";
 channels[848] = "S19.2E-1-1059-7104";
-channelsnames[851] = "M6 (S)";
-channels[851] = "S19.2E-1-1074-8367";
+
+channelsnames[850] = "TV5MONDE EUROPE (S)";
+channels[850] = "S19.2E-1-1022-6915";
+channelsnames[851] = "M6 HD(S)";
+channels[851] = "S19.2E-1-1088-9310";
+channelsnames[852] = "M6 (S)";
+channels[852] = "S19.2E-1-1074-8367";
 
 channelsnames[900] = "EuroNews (S)";
 channels[900] = "S19.2E-1-1091-31220";
