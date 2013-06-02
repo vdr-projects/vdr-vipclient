@@ -362,6 +362,10 @@ channelsnames[1817] = "HBO HD (S)"
 channels[1817] = "S23.5E-0-112109-5047"
 channelsnames[1818] = "Travel Channel HD (S)"
 channels[1818] = "S23.5E-0-112109-5048"
+
+channelsnames[1852] = "M6 HD(S)";
+channels[1852] = "S19.2E-1-1088-9310";
+
 channelsnames[1900] = "Sky News HD (S)"
 channels[1900] = "S28.2E-2-2039-3850"
 channelsnames[1934] = "AXN CS (S)"

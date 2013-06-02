@@ -5,6 +5,9 @@ VDR 1.7.29
 
 0.20	Updated EPG filter
 	SearchTimers Submenu.
+	Channels updates
+	In guideview you can have updates for all channels in view, was changed because it was too slow on 1910/1960 but 1963/1903 can handle it.
+
 
 0.19	Added SleepTimer in menu 1 Settings. (Key is stopbutton)
 	Timer menu OK shows same info as BLUE

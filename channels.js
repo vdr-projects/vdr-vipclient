@@ -220,7 +220,7 @@ channelsnames[107] = "Sky DramaRom (S)";
 channels[107] = "S28.2E-2-2007-5502";
 channelsnames[108] = "Sky ScFi/Horror (S)";
 channels[108] = "S28.2E-2-2007-4304";
-channelsnames[109] = "Sky Mdn Greats (S)";
+channelsnames[109] = "Sky Greats (S)";
 channels[109] = "S28.2E-2-2007-5650";
 channelsnames[110] = "Sky Classics (S)";
 channels[110] = "S28.2E-2-2007-4305";
@@ -228,12 +228,10 @@ channelsnames[111] = "TCM (S)";
 channels[111] = "S28.2E-2-2403-6038";
 channelsnames[112] = "TCM 2 (S)";
 channels[112] = "S28.2E-2-2021-5522";
-channelsnames[113] = "Christmas 24 (S)";
+channelsnames[113] = "Movies 24 (S)";
 channels[113] = "S28.2E-2-2303-52265";
-channelsnames[114] = "Christmas 24+ (S)";
+channelsnames[114] = "Movies 24+ (S)";
 channels[114] = "S28.2E-2-2303-52270";
-channelsnames[115] = "Cinémoi movies (S)";
-channels[115] = "S28.2E-2-2311-52014";
 
 channelsnames[150] = "RTL Crime (S)";
 channels[150] = "S19.2E-133-1-27";
@@ -1139,8 +1137,8 @@ channels[848] = "S19.2E-1-1059-7104";
 
 channelsnames[850] = "TV5MONDE EUROPE (S)";
 channels[850] = "S19.2E-1-1022-6915";
-channelsnames[851] = "M6 HD(S)";
-channels[851] = "S19.2E-1-1088-9310";
+channelsnames[851] = "Montagne TV (S)";
+channels[851] = "S19.2E-1-1020-7001";
 channelsnames[852] = "M6 (S)";
 channels[852] = "S19.2E-1-1074-8367";
 

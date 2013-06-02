@@ -23,7 +23,7 @@
 //
 //
 
-var Version = "0.20.1"
+var Version = "0.20.2"
 
 for (var x = 0;  x < 10; x++) { 
 	if (minChan[x]) {
@@ -55,8 +55,10 @@ function onLoad() {
 	mediaPlayer.addEventListener(mediaPlayer.ON_DATA_AVAILABLE,onDataAvailableEvent);
 	mediaPlayer.addEventListener(mediaPlayer.ON_STATE_CHANGED, MPD); 
 
-	if (toi.informationService.getObject("var.capabilities.dvr") == "FALSE") { mediaRecorder = 0;}
-	// No harddisk, no recorder functions possible
+	if (toi.informationService.getObject("var.capabilities.dvr") == "FALSE") { 
+		mediaRecorder = 0;
+		// No harddisk, no recorder functions possible
+	}
 
 	if (mediaRecorder) {
 		createRecorder();
@@ -66,11 +68,10 @@ function onLoad() {
 	    toi.informationService.addEventListener(toi.informationService.ON_OBJECTS_CHANGED, onEvent);
 	    toi.informationService.subscribeObject(onEvent, "var.io.state", true);
 
-	var ss = toi.schedulerService;
-	    ss.addEventListener(ss.ON_SCHEDULED_START, onScheduledStart);
-	    ss.addEventListener(ss.ON_SCHEDULED_STOP, onScheduledStop);
-	    ss.setCategorySubscription(onScheduledStart, "*");
-	    ss.setCategorySubscription(onScheduledStop, "*");
+	    toi.schedulerService.addEventListener(toi.schedulerService.ON_SCHEDULED_START, onScheduledStart);
+	    toi.schedulerService.addEventListener(toi.schedulerService.ON_SCHEDULED_STOP, onScheduledStop);
+	    toi.schedulerService.setCategorySubscription(onScheduledStart, "*");
+	    toi.schedulerService.setCategorySubscription(onScheduledStop, "*");
 	setOSDtimer();
 
 	showOSD();
@@ -2034,8 +2035,8 @@ if(menu == 5) { // Timers from Server
 		if (timers.length !== 0) { do { x = x + 1; } while (!timers[x] && (x < timers.length)) }
 		if (timers.length > x) { booking = booking + timers[x]; } else { booking = booking +"\n"; }
 		if (i == 0) { booking = booking + "</font>"; } 
-	mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'> Timers </center></h1><pre style='color:black;font-size:" + fsMenu + ";'>\n" + booking + "</pre>";
 	}
+	mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'> Timers </center></h1><pre style='color:black;font-size:" + fsMenu + ";'>\n" + booking + "</pre>";
 
 	}
 }
@@ -2051,8 +2052,8 @@ if(menu == 7) { // SearchTimers from Server
 		if (searchtimers.length !== 0) { do { x = x + 1; } while (!searchtimers[x] && (x < searchtimers.length)) }
 		if (searchtimers.length > x) { booking = booking + searchtimers[x]; } else { booking = booking +"\n"; }
 		if (i == 0) { booking = booking + "</font>"; } 
-	mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'> SearchTimers </center></h1><pre style='color:black;font-size:" + fsMenu + ";'>\n" + booking + "</pre>";
 	}
+	mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'> SearchTimers </center></h1><pre style='color:black;font-size:" + fsMenu + ";'>\n" + booking + "</pre>";
 
 	}
 }
@@ -2277,7 +2278,6 @@ function ShowSearchTimerInfo() {
 
 			info2 = x[i].getElementsByTagName("param")[6].childNodes[0].nodeValue; // Time
 			        date = new Date(Number(info2)*1000);
-			        year = date.getFullYear();
 	        		month = date.getMonth();
 			        d = date.getDate();
 		        	day = date.getDay();
@@ -2285,10 +2285,11 @@ function ShowSearchTimerInfo() {
 			        m = date.getMinutes();
 				h=addzero(h);
 				m=addzero(m);
-			info2 = days[day] + "\uE003" + d + "\uE003" + months[month] + "\uE003" + year + "\uE003" + h + ':' + m;
+			info2 = Left(days[day],3) + "\uE003" + d + "\uE003" + Left(months[month],3) + "\uE003" + h + ':' + m;
 			info1 = info1 + info2;
-			info2 = x[i].getElementsByTagName("param")[7].childNodes[0].nodeValue/60 + "\uE003\uE003\uE003"; // Duration
-			info1 = info1 + "\uE003" + Left(info2,4) + x[i].getElementsByTagName("param")[5].childNodes[0].nodeValue + "\uE003"; // Channel
+			info2 = "\uE003\uE003" + x[i].getElementsByTagName("param")[7].childNodes[0].nodeValue/60 + "\uE003"; // Duration
+			info1 = info1 + "\uE003" + Right(info2,3) + x[i].getElementsByTagName("param")[5].childNodes[0].nodeValue + "\uE003"; // Channel
+			info1 = info1 + "\uE003" + Left(x[i].getElementsByTagName("param")[1].childNodes[0].nodeValue,25) + "\uE003"; // Programm Title
 			info1 = info1 + "\n";
 			
 		}
@@ -2917,13 +2918,13 @@ function MakeRecList() {
 						}
 	} else if (recTitl[i][recMap + 1]) { 
 					if (recTitl[i][recMap] != x) {
-						recList[i] = "\uE002 " + recTitl[i];
+						recList[i] = "\uE002" + recTitl[i];
 					} else {
 						var y = recTitl[i][recMap].length + 4;
 						recList[i] = new Array(y).join("\uE003") + String(recTitl[i]).substring(y - 3);
 					}
 				} else { 
-					recList[i] = "\uE003 " + recTitl[i];
+					recList[i] = "\uE003" + recTitl[i];
 				}
 	if (rec_New[i] == "true" ) { recList[i] = "\uE010\uE003" + recList[i]; } else { recList[i] = "\uE003\uE003" + recList[i]; }
 	x = recTitl[i][recMap];
@@ -2938,7 +2939,7 @@ function MakeRecList2() {
 	{
 	 if (recTitl[i][1]) { 
 					if (recTitl[i][0] != x) {
-						recList[i] = "\uE002" + recTitl[i][0];
+						recList[i] = "\uE002\uE003" + recTitl[i][0];
 						xx = xx + 1;
 					} else {
 						recList[i] = "" ; 
@@ -2946,9 +2947,8 @@ function MakeRecList2() {
 					recGroup[i] = xx;
 				} else { 
 					recGroup[i] = 0;
-					recList[i] = "\uE003" + recTitl[i];
-						if (rec_New[i] == "true" ) { recList[i] = "\uE010\uE003" + recList[i]; 
-							} else { recList[i] = "\uE003\uE003" + recList[i]; }
+						if (rec_New[i] == "true" ) { recList[i] = "\uE003\uE010\uE003" + recTitl[i]; 
+							} else { recList[i] = "\uE003\uE003\uE003" + recTitl[i]; }
 				}
 	x = recTitl[i][0];
 	}
@@ -3016,7 +3016,7 @@ function showMediaList() {
 		}  else {
 			liststyle = " style='";
 		}
-		htmlstring = htmlstring + "<td" + liststyle + "font-size:" + fsReclist + ";'>\uE003" + Left(recList[listMed],60) + "</td></tr>";
+		htmlstring = htmlstring + "<td" + liststyle + "font-size:" + fsReclist + ";'>\uE003" + Left(recList[listMed],60) + "\uE003\uE003</td></tr>";
 	}
 	mediaList.innerHTML = htmlstring + "</table>";
 	//ShowInfo();
@@ -3361,9 +3361,14 @@ function ShowInfo() {
 	h=addzero(h);
 	m=addzero(m);
         result = ''+days[day]+' '+d+' '+months[month]+' '+year+' '+h+':'+m;
-
-       	osdepginfo.innerHTML = "<center><pre style='color:white;'>" + Left(recTitl[currMed],60) + "\n " + result + "\n " + (recDura[currMed] / 60).toFixed(0) + " Minutes \n " + recChan[currMed] + "\n </pre><p>" + Left(recDesc[currMed],750) + "</p></center>";
-
+	if (year!==1970) { 	
+       		osdepginfo.innerHTML = "<center><pre style='color:white;'>" + Left(recTitl[currMed],60) + "\n " + result + "\n " 
+					+ (recDura[currMed] / 60).toFixed(0) + " Minutes \n " + recChan[currMed] + "  " 
+					+ channelsnames[(recChan[currMed])] + "\n </pre><p>" + Left(recDesc[currMed],750) + "</p></center>";
+	} else {
+		//info for non-vdr recordings
+	       	osdepginfo.innerHTML = "<center><pre style='color:white;'>" + Left(recTitl[currMed],60) + "\n \n </pre></center>";
+	}
 }
 
 function onScheduledStart(event) {
