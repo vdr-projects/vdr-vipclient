@@ -2785,7 +2785,7 @@ try {
 	  //Get channel number from recordings
 	  recDummy = recGUID[i].split(".");
 	  recDummy = recDummy[(recDummy.length-2)].split("-");
-	  recChan[i] = recDummy[0];
+	  recChan[i] = recDummy[0] + "\uE003-\uE003" + channelsnames[(recDummy[0])];
 	} else {
 	  //Media directory
 	  recChan[i] = "Media File";
@@ -3364,7 +3364,7 @@ function ShowInfo() {
 	if (year!==1970) { 	
        		osdepginfo.innerHTML = "<center><pre style='color:white;'>" + Left(recTitl[currMed],60) + "\n " + result + "\n " 
 					+ (recDura[currMed] / 60).toFixed(0) + " Minutes \n " + recChan[currMed] + "  " 
-					+ channelsnames[(recChan[currMed])] + "\n </pre><p>" + Left(recDesc[currMed],750) + "</p></center>";
+					+ "\n </pre><p>" + Left(recDesc[currMed],750) + "</p></center>";
 	} else {
 		//info for non-vdr recordings
 	       	osdepginfo.innerHTML = "<center><pre style='color:white;'>" + Left(recTitl[currMed],60) + "\n \n </pre></center>";
