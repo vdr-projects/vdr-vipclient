@@ -966,8 +966,8 @@ function OSDhtml(){
 	    osdname.innerHTML = Left(channelsnames[currChan],30);
 	}
     osdepg.innerHTML = "<p>" + EPG[0][7][currChan] + "</p>\n<p>" + EPG[1][7][currChan] + "</p>";
-    osdepginfo.innerHTML =  "<center><p style='color:white;' >" + currChan + "\uE003" + channelsnames[currChan] + "</p>" + AudioInfo[currChan] + "<p style='color:white;'>" + EPG[0][7][currChan] + "</p>\n<p style='color:yellow;'>" + EPG[0][4][currChan] + "</p>\n<p>" + Left(EPG[0][5][currChan],750) + "</p></center>";
-    osdepginfonext.innerHTML =  "<center><p style='color:white;'>"  + currChan + "\uE003" + channelsnames[currChan] + "</p><p style='color:white;'>" +  EPG[1][7][currChan] + "</p>\n<p style='color:yellow;'>" + EPG[1][4][currChan] + "</p>\n<p>" + Left(EPG[1][5][currChan],750) + "</p></center>";
+    osdepginfo.innerHTML =  "<center><p style='color:white;' >" + currChan + "\uE003" + channelsnames[currChan] + "</p>" + AudioInfo[currChan] + "<p style='color:white;'>" + EPG[0][7][currChan] + EPG[0][8][currChan] + "</p>\n<p style='color:yellow;'>" + EPG[0][4][currChan] + "</p>\n<p>" + Left(EPG[0][5][currChan],750) + "</p></center>";
+    osdepginfonext.innerHTML =  "<center><p style='color:white;'>"  + currChan + "\uE003" + channelsnames[currChan] + "</p><p style='color:white;'>" +  EPG[1][7][currChan] + EPG[1][8][currChan] + "</p>\n<p style='color:yellow;'>" + EPG[1][4][currChan] + "</p>\n<p>" + Left(EPG[1][5][currChan],750) + "</p></center>";
 }
 
 function updateOSDtime(timchan) {
@@ -1168,6 +1168,11 @@ function GetEPG(epgchan)
 	EPG[0][3][epgchan] = (event.duration/60);
 	EPG[0][4][epgchan] = "";
 	EPG[0][5][epgchan] = "";
+	if (event.parentalRating) {
+	EPG[0][8][epgchan] = "( from " + (event.parentalRating + 3) + ")";
+	} else {
+	EPG[0][8][epgchan] = "";
+	}
 
 	if(EPGShortnow) {
 	EPG[0][4][epgchan] = EPGShortnow;
@@ -1197,7 +1202,11 @@ function GetEPG(epgchan)
 	EPG[1][3][epgchan] = (event.duration/60);
 	EPG[1][4][epgchan] = "";
 	EPG[1][5][epgchan] = "";
-
+	if (event.parentalRating) {
+	EPG[1][8][epgchan] = "( from " + (event.parentalRating + 3) + ")";
+	} else {
+	EPG[1][8][epgchan] = "";
+	}
 
 
 	if(EPGShortnext) {
