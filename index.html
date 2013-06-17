@@ -23,7 +23,7 @@
 //
 //
 
-var Version = "0.20.2"
+var Version = "0.20.4"
 
 for (var x = 0;  x < 10; x++) { 
 	if (minChan[x]) {
@@ -966,8 +966,8 @@ function OSDhtml(){
 	    osdname.innerHTML = Left(channelsnames[currChan],30);
 	}
     osdepg.innerHTML = "<p>" + EPG[0][7][currChan] + "</p>\n<p>" + EPG[1][7][currChan] + "</p>";
-    osdepginfo.innerHTML =  "<center><p style='color:white;' >" + currChan + "\uE003" + channelsnames[currChan] + "</p>" + AudioInfo[currChan] + "<p style='color:white;'>" + EPG[0][7][currChan] + EPG[0][8][currChan] + "</p>\n<p style='color:yellow;'>" + EPG[0][4][currChan] + "</p>\n<p>" + Left(EPG[0][5][currChan],750) + "</p></center>";
-    osdepginfonext.innerHTML =  "<center><p style='color:white;'>"  + currChan + "\uE003" + channelsnames[currChan] + "</p><p style='color:white;'>" +  EPG[1][7][currChan] + EPG[1][8][currChan] + "</p>\n<p style='color:yellow;'>" + EPG[1][4][currChan] + "</p>\n<p>" + Left(EPG[1][5][currChan],750) + "</p></center>";
+    osdepginfo.innerHTML =  "<center><p style='color:white;' >" + currChan + "\uE003" + channelsnames[currChan] + "</p>" + AudioInfo[currChan] + "<p style='color:white;'>" + EPG[0][7][currChan] + EPG[0][9][currChan] + EPG[0][8][currChan] + "</p>\n<p style='color:yellow;'>" + EPG[0][4][currChan] + "</p>\n<p>" + Left(EPG[0][5][currChan],750) + "</p></center>";
+    osdepginfonext.innerHTML =  "<center><p style='color:white;'>"  + currChan + "\uE003" + channelsnames[currChan] + "</p><p style='color:white;'>" +  EPG[1][7][currChan] + EPG[1][9][currChan] + EPG[1][8][currChan] + "</p>\n<p style='color:yellow;'>" + EPG[1][4][currChan] + "</p>\n<p>" + Left(EPG[1][5][currChan],750) + "</p></center>";
 }
 
 function updateOSDtime(timchan) {
@@ -1169,10 +1169,19 @@ function GetEPG(epgchan)
 	EPG[0][4][epgchan] = "";
 	EPG[0][5][epgchan] = "";
 	if (event.parentalRating) {
-	EPG[0][8][epgchan] = "( from " + (event.parentalRating + 3) + ")";
+		EPG[0][8][epgchan] = "<br>( from " + (event.parentalRating + 3) + ")";
 	} else {
-	EPG[0][8][epgchan] = "";
+		EPG[0][8][epgchan] = "";
 	}
+
+	if (event.contentNibbles) {
+		connib = event.contentNibbles;
+		Nibbles();
+		EPG[0][9][epgchan] = "<br>" + content;
+	} else {
+		EPG[0][9][epgchan] = "";
+	}
+
 
 	if(EPGShortnow) {
 	EPG[0][4][epgchan] = EPGShortnow;
@@ -1184,6 +1193,9 @@ function GetEPG(epgchan)
 	} else {
 	EPG[0][5][epgchan] = "";
 	}
+
+	if (EPG[0][5][epgchan] = EPG[0][4][epgchan]) { EPG[0][5][epgchan] = "";}
+
 	updateOSDtime(epgchan);
 
 	 event = eitCache.getFollowingEvent(eitService);
@@ -1203,11 +1215,18 @@ function GetEPG(epgchan)
 	EPG[1][4][epgchan] = "";
 	EPG[1][5][epgchan] = "";
 	if (event.parentalRating) {
-	EPG[1][8][epgchan] = "( from " + (event.parentalRating + 3) + ")";
+		EPG[1][8][epgchan] = "<br>( from " + (event.parentalRating + 3) + ")";
 	} else {
-	EPG[1][8][epgchan] = "";
+		EPG[1][8][epgchan] = "";
 	}
 
+	if (event.contentNibbles) {
+		connib = event.contentNibbles;
+		Nibbles();
+		EPG[1][9][epgchan] = "<br>" + content;
+	} else {
+		EPG[1][9][epgchan] = "";
+	}
 
 	if(EPGShortnext) {
 	EPG[1][4][epgchan] = EPGShortnext;
@@ -1219,6 +1238,9 @@ function GetEPG(epgchan)
 	} else {
 	EPG[1][5][epgchan] = "";
 	}
+	
+	if (EPG[1][5][epgchan] = EPG[1][4][epgchan]) { EPG[1][5][epgchan] = "";}
+
 	tijd = event.time;
 	date = new Date(tijd*1000); 
 	tijd = date.toUTCString();
@@ -1241,6 +1263,22 @@ function GetEPG(epgchan)
   }
 } 
 
+
+function Nibbles() {
+	content = "";
+	if (connib >= 0x00001000 && connib < 0x00002000) { content = "Movie/Drama"; }
+	if (connib >= 0x00002000 && connib < 0x00003000) { content = "News/Current affairs"; }
+	if (connib >= 0x00003000 && connib < 0x00004000) { content = "Show/Game show"; }
+	if (connib >= 0x00004000 && connib < 0x00005000) { content = "Sports"; }
+	if (connib >= 0x00005000 && connib < 0x00006000) { content = "Children's/Youth programmes"; }
+	if (connib >= 0x00006000 && connib < 0x00007000) { content = "Music/Ballet/Dance"; }
+	if (connib >= 0x00007000 && connib < 0x00008000) { content = "Arts/Culture (without music)"; }
+	if (connib >= 0x00008000 && connib < 0x00009000) { content = "Social/Political issues/Economics"; }
+	if (connib >= 0x00009000 && connib < 0x0000A000) { content = "Education/Science/Factual topics"; }
+	if (connib >= 0x0000A000 && connib < 0x0000B000) { content = "Leisure hobbies"; }
+	if (connib >= 0x0000B000 && connib < 0x0000C000) { content = "Special characteristics"; }
+	alert(connib);
+}
 
 
 function GetSchedule(schchan,tablelength){

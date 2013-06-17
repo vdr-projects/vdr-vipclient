@@ -60,16 +60,12 @@ channelsnames[11] = "RTL8 (S)";
 channels[11] = "S19.2E-53-1097-2035";
 channelsnames[12] = "Nickelodeon (S)";
 channels[12] = "S19.2E-1-1078-28679";
-channelsnames[13] = "Comedy Central/Kindernet (S)";
-channels[13] = "S19.2E-53-1097-2036";
+channelsnames[13] = "ComedyCentral/Kindernet (S)";
+channels[13] = "S23.5E-3-3211-20826";
 channelsnames[14] = "Discovery (S)";
 channels[14] = "S19.2E-53-1097-2015";
-channelsnames[15] = "Animal Planet/TLC (S)";
+channelsnames[15] = "TLC Netherlands (S)";
 channels[15] = "S19.2E-53-1097-2020";
-channelsnames[16] = "NGC (S)";
-channels[16] = "S19.2E-53-1105-4015";
-channelsnames[17] = "Investigation Discovery (T)"
-channels[17] = "T-8720-2244-44"
 channelsnames[18] = "NG Wild DUT (S)";
 channels[18] = "S23.5E-3-3210-5145";
 channelsnames[19] = "History channel DUT (S)";
@@ -108,7 +104,6 @@ channels[34] = "S23.5E-3-3211-20820";
 channelsnames[35] = "Omroep Zeeland Televisie (S)";
 channels[35] = "S23.5E-3-3211-20818";
 
-
 channelsnames[40] = "een (MPEG4) (S)";
 channels[40] = "S19.2E-53-1119-12801";
 channelsnames[41] = "Canvas (MPEG4) (S)";
@@ -121,11 +116,8 @@ channelsnames[44] = "2BE (MPEG4) (S)";
 channels[44] = "S19.2E-53-1119-12812";
 channelsnames[45] = "VIJF (MPEG4) (S)";
 channels[45] = "S19.2E-53-1119-12820";
-channelsnames[46] = "KetOp12 (S)";
+channelsnames[46] = "KetNet (MPEG4) (S)";
 channels[46] = "S19.2E-53-1119-12808";
-
-channelsnames[49] = "Informatiekanaal (S)";
-channels[49] = "S19.2E-53-1119-12826";
 
 channelsnames[50] = "DMAX (S)";
 channels[50] = "S19.2E-133-33-63";
