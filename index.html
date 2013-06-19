@@ -23,7 +23,7 @@
 //
 //
 
-var Version = "0.20.4"
+var Version = "0.20.5"
 
 for (var x = 0;  x < 10; x++) { 
 	if (minChan[x]) {
@@ -2938,6 +2938,7 @@ try {
    xmlhttp.open("POST",(recServ + "/deleteRecording.xml?id=" + recGUID[currMed] ),false);
    xmlhttp.send();
    recList[currMed] = "";
+   recGroup[currMed] = "";
   } catch(e) {
     alert("Delete Recordings problem: " + e);
   }
@@ -2986,6 +2987,7 @@ function MakeRecList2() {
 	{
 	 if (recTitl[i][1]) { 
 					if (recTitl[i][0] != x) {
+						
 						recList[i] = "\uE002\uE003" + recTitl[i][0];
 						xx = xx + 1;
 					} else {
