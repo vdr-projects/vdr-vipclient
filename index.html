@@ -23,7 +23,7 @@
 //
 //
 
-var Version = "0.20.5"
+var Version = "0.20.6"
 
 for (var x = 0;  x < 10; x++) { 
 	if (minChan[x]) {
@@ -2828,21 +2828,25 @@ try {
 	  recStrt[i] = (x[i].getElementsByTagName("start")[0].childNodes[0].nodeValue);
 	  rec_New[i] = (x[i].getElementsByTagName("isnew")[0].childNodes[0].nodeValue);
 	  recGUID[i] = (x[i].getElementsByTagName("guid")[0].childNodes[0].nodeValue);
-	if (recPath == "/recordings.xml") {
-	  //Get channel number from recordings
-	  recDummy = recGUID[i].split(".");
-	  recDummy = recDummy[(recDummy.length-2)].split("-");
-	  recChan[i] = recDummy[0] + "\uE003-\uE003" + channelsnames[(recDummy[0])];
-	} else {
-	  //Media directory
-	  recChan[i] = "Media File";
-	}
-	  }
+		if (recPath == "/recordings.xml") {
+		  //Get channel number from recordings
+		  recDummy = recGUID[i].split(".");
+		  recDummy = recDummy[(recDummy.length-2)].split("-");
+		  recChan[i] = recDummy[0] + "\uE003-\uE003" + channelsnames[(recDummy[0])];
+		} else {
+		  //Media directory
+		  recChan[i] = "Media File";
+		}
+	 }
+//	i = i + 1;
+//	recTitl[i] = "fake";
+//	recTitl[i] = recTitl[i].split("~");
+
 //	if (recPath == "/recordings.xml" && ShowSubDir) {
 	if (ShowSubDir) {
-	MakeRecList2();
+		MakeRecList2();
 	} else {
-	MakeRecList();
+		MakeRecList();
 	}
  	getRecOK = 1;
   } catch(e) {
@@ -2938,7 +2942,7 @@ try {
    xmlhttp.open("POST",(recServ + "/deleteRecording.xml?id=" + recGUID[currMed] ),false);
    xmlhttp.send();
    recList[currMed] = "";
-   recGroup[currMed] = "";
+   recGroup[currMed] = -1;
   } catch(e) {
     alert("Delete Recordings problem: " + e);
   }
@@ -3008,6 +3012,7 @@ function MakeRecList3(GroupID) {
    for (var i=0;i<recTitl.length;i++)
 	{
 		if (recGroup[i] == GroupID) {
+			alert ( recGroup[i] + " " + recTitl[i] + " " + i);
 			if (rec_New[i] == "true" ) { recList[i] = "\uE010\uE003" + recTitl[i]; 
 			} else { recList[i] = "\uE003\uE003" + recTitl[i]; }
 			MaxInGroup = MaxInGroup + 1;
