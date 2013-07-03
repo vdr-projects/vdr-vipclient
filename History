@@ -9,6 +9,7 @@ VDR 1.7.29
 	In guideview you can have updates for all channels in view, was changed because it was too slow on 1910/1960 but 1963/1903 can handle it.
 	Added PG & content info.
 	fixed show double epg info (epg shortinfo = epg ext. info)
+	timer to stop duplicate instant recordings.( Default 15 minutes)
 
 
 0.19	Added SleepTimer in menu 1 Settings. (Key is stopbutton)

@@ -80,7 +80,8 @@ Down	- scroll +1
 OK	- Shows info about timer
 Blue	- Shows info about timer
 Red	- Set switch timer
-Rec	-
+Rec	- Server recording (makes local timer and sends key 'record' when recording should start)
+Green	- local recording (hdd units only)
 
 
 Teletext mode

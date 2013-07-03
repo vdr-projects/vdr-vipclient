@@ -33,6 +33,7 @@ var mediaRecorder = 1; // 0 = no, 1 = yes local recording.
 
 var fullupdate = 1; // If guideview is too slow, set it to 0 (for 1910/1960), faster boxes can use 1
 
+var inst_timeout = 15 * 1000; // 15 minutes
 
 var serverEPGdays = 3 * (60 * 60 * 24); // the higher the longer you wait while getting the epg info
 
@@ -170,10 +171,13 @@ var preChan = 0;
 var timerChan = 10;
 var TimerActions = "";
 var switchtimerID = 0;
-var SwitchTimer = 1; // 1 - switchonly, 2 - record local, 3 - record on server (only 1 & 2 are working)
+var SwitchTimer = 1; // 1 - switchonly, 2 - record on server (localtimer), 3 - record local
 var initialDelayID = 0;
 var SleepTimer = 0;
 var SleepTimerID = -1;
+
+var instanttimer = new Array();
+var inst_timer = 0;
 
 var switchicon = "\uE003";
 var CAicon = "\uE00F";

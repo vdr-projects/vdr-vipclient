@@ -1169,7 +1169,7 @@ function GetEPG(epgchan)
 	EPG[0][4][epgchan] = "";
 	EPG[0][5][epgchan] = "";
 	if (event.parentalRating) {
-		EPG[0][8][epgchan] = "<br>( from " + (event.parentalRating + 3) + ")";
+		EPG[0][8][epgchan] = "<br>( from " + (event.parentalRating + 3) + " )";
 	} else {
 		EPG[0][8][epgchan] = "";
 	}
@@ -1215,7 +1215,7 @@ function GetEPG(epgchan)
 	EPG[1][4][epgchan] = "";
 	EPG[1][5][epgchan] = "";
 	if (event.parentalRating) {
-		EPG[1][8][epgchan] = "<br>( from " + (event.parentalRating + 3) + ")";
+		EPG[1][8][epgchan] = "<br>( from " + (event.parentalRating + 3) + " )";
 	} else {
 		EPG[1][8][epgchan] = "";
 	}
@@ -3275,13 +3275,31 @@ function onStateChanged(ev) {
 
 function ServerRecordStart() {
 //Instant recording on server
-try {
+
+//Check if no recording on this channel is started the last 15 min.
+//
+var ii = SwitchTimer;
+SwitchTimer = 0;
+
+var trec = "OK";
+for (var i=0; i<instanttimer.length; i++) {
+ if (instanttimer[i] == currChan) { trec = "NOK" } 
+}
+
+//only record if nothing is running 
+ if (trec == "OK"){
+  try {
    xmlhttp=new XMLHttpRequest();
 	//switch server to current channel
    xmlhttp.open("POST",(RestFulAPI + "/remote/switch/" + channels[currChan]),true);
    xmlhttp.send();
 	//start recording
 	setTimeout("xmlhttp.open('POST',(RestFulAPI + '/remote/Record'),false);xmlhttp.send();",5000);
+
+	//set timer to ignore duplicate recordings within inst_timeout
+	instanttimer[inst_timer] = currChan;
+	setTimeout("instanttimer[inst_timer] = '';", inst_timeout);
+	inst_timer = inst_timer + 1;
 
 	//Show some info on screen
 	settimer(EPG[NowNext][2][currChan],EPG[NowNext][1][currChan],0);
@@ -3291,6 +3309,14 @@ try {
   } catch(e) {
    alert("Sending Record key to server problem: " + e);
   }
+ } else {
+	settimer(EPG[NowNext][2][currChan],"ERROR recording already running",0);
+	switchtimer.style.opacity = 1;
+	setTimeout("switchtimer.style.opacity = 0; ", 2000);
+ }
+
+SwitchTimer = ii;
+//end of function
 }
 
 function ServerRecordStop() {
@@ -3392,9 +3418,9 @@ function ShowMediaOSD() {
 		x = pos3;
 		pos6 = Right(pos5,140 - pos3);
 		}
-		pos4 = pos4 + "</font><font color=red>" + pos6 + "</font>";
-		var x = (Number(recDura[currMed])/60).toFixed(0);
-		if (pos/60 > x) { x = (pos/60).toFixed(0);}
+	pos4 = pos4 + "</font><font color=red>" + pos6 + "</font>";
+	var x = (Number(recDura[currMed])/60).toFixed(0);
+	if (pos/60 > x) { x = (pos/60).toFixed(0);}
 	osdmedia.innerHTML = "<pre style='color:white;font-size:" + fsMedia +";'>  " + (pos/60).toFixed(0) + " / " + x + "  " + Left(recTitl[currMed],40) + "\n  " + pos4 + " </pre>";
 }
 
