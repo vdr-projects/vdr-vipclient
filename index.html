@@ -1277,7 +1277,7 @@ function Nibbles() {
 	if (connib >= 0x00009000 && connib < 0x0000A000) { content = "Education/Science/Factual topics"; }
 	if (connib >= 0x0000A000 && connib < 0x0000B000) { content = "Leisure hobbies"; }
 	if (connib >= 0x0000B000 && connib < 0x0000C000) { content = "Special characteristics"; }
-	alert(connib);
+	// alert(connib);
 }
 
 
@@ -2838,9 +2838,11 @@ try {
 		  recChan[i] = "Media File";
 		}
 	 }
-//	i = i + 1;
-//	recTitl[i] = "fake";
-//	recTitl[i] = recTitl[i].split("~");
+
+	// try to fix display double entries in the last directory.
+	recTitl[i] = "fake";
+	recGroup[i] = 0;
+	//
 
 //	if (recPath == "/recordings.xml" && ShowSubDir) {
 	if (ShowSubDir) {
@@ -2922,11 +2924,6 @@ try {
 function DelRec() {
 	if (osdepginfo.style.opacity == 1) {osdepginfo.style.opacity = 0;}
 try {
-//   xmlhttp=new XMLHttpRequest();
-//   xmlhttp.open("GET",(RestFulAPI + "/recordings/" + currMed + ".xml?" + new Date().getTime()),false);
-//   xmlhttp.send();
-//   xmlDoc=xmlhttp.responseXML; 
-//   var x=xmlDoc.getElementsByTagName("recording");
 	//popup for confirm
 	switchtimer.style.opacity = 1;
 	switchtimer.innerHTML = "<pre><center> OK to delete \n other to abort \n\n " + Left(recTitl[currMed],30) + "</center></pre>"; // Recording Name
@@ -3013,6 +3010,7 @@ function MakeRecList3(GroupID) {
 	{
 		if (recGroup[i] == GroupID) {
 			alert ( recGroup[i] + " " + recTitl[i] + " " + i);
+			
 			if (rec_New[i] == "true" ) { recList[i] = "\uE010\uE003" + recTitl[i]; 
 			} else { recList[i] = "\uE003\uE003" + recTitl[i]; }
 			MaxInGroup = MaxInGroup + 1;
