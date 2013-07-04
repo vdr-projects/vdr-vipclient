@@ -657,6 +657,12 @@ function onKeyDown(event) {
 
    case "Menu":
 		if(isFullscreen) {
+			if(count) {
+				count = 0;
+				osdnr.style.opacity = 0;
+				showDisplay((currChan.toString()), false, 100, 0 );
+				Change = 0;
+			}
 		osdepginfo.style.opacity = 0;
 		osdepginfonext.style.opacity = 0;
 		isSetupMenu = 1;
@@ -2578,6 +2584,13 @@ if (DelisOK) {
 			setTimeout("switchtimer.style.opacity = 0; ", 2000);
 	 } 
         break;
+   case KEY_0:
+	if (getRecOK == 1 && (recGroup[currMed] == 0 || subgroup == 1)) { 
+	// Only rewind file if it isn't a subdir marker
+	setResumeNull();
+	showMediaList();
+	}
+	break;
 
 	default:
         break;
@@ -2904,6 +2917,20 @@ try {
   }
 
 }
+
+
+function setResumeNull() {
+try {
+        var xmlhttp = new XMLHttpRequest();
+        xmlhttp.open("POST", recServ + "/setResume.xml?guid=" + recGUID[currMed] + "&resume=0", false);
+        xmlhttp.send();
+	recList[currMed] = "\uE010" + Right(recList[currMed], recList[currMed].length -1 );
+  } catch(e) {
+    alert("Setting Resume problem: " + e);
+  }
+
+}
+
 
 function getVDRstatus() {
 try {

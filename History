@@ -10,6 +10,7 @@ VDR 1.7.29
 	Added PG & content info.
 	fixed show double epg info (epg shortinfo = epg ext. info)
 	timer to stop duplicate instant recordings.( Default 15 minutes)
+	In recordings menu 0 rewinds recording to 0.
 
 
 0.19	Added SleepTimer in menu 1 Settings. (Key is stopbutton)
