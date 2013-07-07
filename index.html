@@ -2852,7 +2852,7 @@ try {
 		}
 	 }
 
-	// try to fix display double entries in the last directory.
+	// try to fix display double entries in the last directory. (Only shown for some time after deleting files, should be fixed now)
 	recTitl[i] = "fake";
 	recGroup[i] = 0;
 	//
@@ -3024,8 +3024,11 @@ function MakeRecList2() {
 					recGroup[i] = xx;
 				} else { 
 					recGroup[i] = 0;
-						if (rec_New[i] == "true" ) { recList[i] = "\uE003\uE010\uE003" + recTitl[i]; 
-							} else { recList[i] = "\uE003\uE003\uE003" + recTitl[i]; }
+						if (rec_New[i] == "true" ) { 
+							recList[i] = "\uE003\uE010\uE003" + recTitl[i]; 
+						} else { 
+							recList[i] = "\uE003\uE003\uE003" + recTitl[i];
+						}
 				}
 	x = recTitl[i][0];
 	}
@@ -3036,10 +3039,18 @@ function MakeRecList3(GroupID) {
    for (var i=0;i<recTitl.length;i++)
 	{
 		if (recGroup[i] == GroupID) {
-			alert ( recGroup[i] + " " + recTitl[i] + " " + i);
-			
-			if (rec_New[i] == "true" ) { recList[i] = "\uE010\uE003" + recTitl[i]; 
-			} else { recList[i] = "\uE003\uE003" + recTitl[i]; }
+			var tmp = "";
+			   for (var ii=1;ii<recTitl[i].length;ii++)
+				{
+				tmp = tmp + "\uE003" + recTitl[i][ii];
+				}
+
+			if (rec_New[i] == "true" ) { 
+				recList[i] = "\uE010" + tmp; // recTitl[i]; 
+			} else { 
+				recList[i] = "\uE003" + tmp; //recTitl[i]; 
+			}
+
 			MaxInGroup = MaxInGroup + 1;
 		} else {
 			recList[i] = "" ; 
@@ -3079,23 +3090,26 @@ function showMediaList() {
 	if (MaxMed < 0 ) { MaxMed = 0; }
 
 	for(var i=currMed; i<=currMed + MaxMed; i++) {
-		if (listMed<0) {
-			listMed=nrMedia;
-			}
-		if (listMed>nrMedia-1) {
-			listMed= -1;
-			}
-			do
+		if (listMed<0) { listMed=nrMedia; }
+		if (listMed>nrMedia-1) { listMed= -1; }
+
+		do
 			{
 				listMed = listMed + 1;
 			}
-			while (!recList[listMed] && (listMed<nrMedia));
+		while (!recList[listMed] && (listMed<nrMedia));
+
+
 		if ( listMed == currMed) { 
 			liststyle = " style='background:#fc5;-webkit-border-radius:25px;";
 		}  else {
 			liststyle = " style='";
 		}
+
+		if (recList[listMed]) {
+		//Solves empty string at the end.
 		htmlstring = htmlstring + "<td" + liststyle + "font-size:" + fsReclist + ";'>\uE003" + Left(recList[listMed],60) + "\uE003\uE003</td></tr>";
+		}
 	}
 	mediaList.innerHTML = htmlstring + "</table>";
 	//ShowInfo();
