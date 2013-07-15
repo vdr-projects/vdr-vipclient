@@ -3,6 +3,10 @@ Motorola Vip : 1960, 1910, 1903, 1963.
 
 VDR 1.7.29
 
+0.21	Language in sepate file.
+	Updated EPG filter, (DVB-T defaults to German)
+
+
 0.20	Updated EPG filter
 	SearchTimers Submenu.
 	Channels updates

@@ -37,15 +37,9 @@ var inst_timeout = 15 * 1000; // 15 minutes
 
 var serverEPGdays = 3 * (60 * 60 * 24); // the higher the longer you wait while getting the epg info
 
-months = new Array('January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December');
-days = new Array('Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday');
-
 var NN = new Array();
-NN[0] = "Now";
-NN[1] = "Next";
-NN[2] = "Schedule";
-NN[3] = "TIMER";
-NN[4] = "-----";
+var Lang = new Array();
+var CLang = new Array();
 
 var VolumeStep = 5; // Steps the volume buttons make
 
@@ -242,8 +236,6 @@ var searchtimersID = new Array();
 var searchtimersSearch = new Array();
 var searchtimersFlag = new Array();
 var SearchTimer = new Array();
-searchmode = new Array('phrase', 'all words', 'at least one word', 'match exactly', 'regex', 'fuzzy');
-searchchan = new Array('no', 'interval', 'channel group', 'only FTA');
 
 var getRecOK = 0;
 var position = 0;

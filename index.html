@@ -1,6 +1,7 @@
 <html>
     <head>
       <script type="text/javascript" src="settings.js" />
+      <script type="text/javascript" src="language.js" />
       <script type="text/javascript" src="channels.js" />
       <script type="text/javascript" src="channels1.js" />
       <script type="text/javascript" src="channels5.js" />
@@ -23,7 +24,7 @@
 //
 //
 
-var Version = "0.20"
+var Version = "0.21.1"
 
 for (var x = 0;  x < 10; x++) { 
 	if (minChan[x]) {
@@ -76,7 +77,7 @@ function onLoad() {
 
 	showOSD();
 	colorkeys.style.fontSize = fsKeys;
-	colorkeys.innerHTML = "<font color=red>" +  NN[4] + "</font><font color=green >" + NN[1] + "</font><font color=yellow> Schedule </font><font color=blue> INFO </font>";
+	colorkeys.innerHTML = "<font color=red>" +  NN[4] + "</font><font color=green >" + NN[1] + "</font><font color=yellow>" + NN[2] + "</font><font color=blue>" + NN[5] + "</font>";
 	osdvolume.style.fontSize = fsCA;
 	osdvolume.style.color = "green";
 	osdtime.style.fontSize = fsTime;
@@ -92,7 +93,7 @@ function onLoad() {
 	osdepginfo.style.fontSize = fsEpginfo;
 	osdepginfonext.style.fontSize = fsEpginfo;
 	videoplane.subtitles = Boolean(ShowSubs);
-	mediaList.innerHTML = "<h1><center style='font-size:" + fsRec + ";color:white;'> Please WAIT </center></h1>";
+	mediaList.innerHTML = "<h1><center style='font-size:" + fsRec + ";color:white;'>" + Lang[0] + "</center></h1>";
 }
 
 function onEvent(event) {
@@ -520,7 +521,7 @@ function onKeyDown(event) {
 			}
 		}
 	} else if(isSchedule == 0 && !epgactive){
-		colorkeys.innerHTML = "<font color=red>" +  NN[3 + NowNext] + "</font><font color=green>" + NN[NowNext] + "</font><font color=yellow> Schedule </font><font color=blue> INFO </font>";
+		colorkeys.innerHTML = "<font color=red>" +  NN[3 + NowNext] + "</font><font color=green>" + NN[NowNext] + "</font><font color=yellow>" + NN[2] + "</font><font color=blue>" + NN[5] + "</font>";
 		NowNext = 1 - NowNext;
 		showChannelList();
 	}
@@ -546,9 +547,9 @@ function onKeyDown(event) {
 		schedule.style.opacity = 1 - schedule.style.opacity;
 		isSchedule = schedule.style.opacity;
 		if(isSchedule == 1){
-			colorkeys.innerHTML = "<font color=red>" +  NN[4] + "</font><font color=green>" + NN[4] + "</font><font color=yellow> BACK </font><font color=blue>" + NN[4] + "</font>";
+			colorkeys.innerHTML = "<font color=red>" +  NN[4] + "</font><font color=green>" + NN[4] + "</font><font color=yellow>" + NN[6] + "</font><font color=blue>" + NN[4] + "</font>";
 			} else {
-			colorkeys.innerHTML = "<font color=red>" +  NN[3 + (1 - NowNext)] + "</font><font color=green>" + NN[1 - NowNext] + "</font><font color=yellow> Schedule </font><font color=blue> INFO </font>";
+			colorkeys.innerHTML = "<font color=red>" +  NN[3 + (1 - NowNext)] + "</font><font color=green>" + NN[1 - NowNext] + "</font><font color=yellow>" + NN[2] + "</font><font color=blue>" + NN[5] + "</font>";
 			}
 	}
 	break;
@@ -682,7 +683,7 @@ function onKeyDown(event) {
 			isFullscreen = 0;
 			ClearScreen();
 			channelList.style.opacity = 1;
-			colorkeys.innerHTML = "<font color=red>" +  NN[3 + (1 - NowNext)] + "</font><font color=green>" + NN[1 - NowNext] + "</font><font color=yellow> Schedule </font><font color=blue> INFO </font>";
+			colorkeys.innerHTML = "<font color=red>" +  NN[3 + (1 - NowNext)] + "</font><font color=green>" + NN[1 - NowNext] + "</font><font color=yellow>" + NN[2] + "</font><font color=blue>" + NN[5] + "</font>";
 			colorkeys.style.opacity = 1;
 			showChannelList();
 			if(!SwitchGuide) {
@@ -929,7 +930,7 @@ function showVolume() {
 	if (osdVolumetimeout) {
 		clearTimeout(osdVolumetimeout);
 	}
-	osdvolume.innerHTML = "VOLUME : \uE007" + (new Array(Volume)).join("\uE008") + (new Array(100 - Volume)).join("\uE009") + "\uE00A";
+	osdvolume.innerHTML = Lang[1] + " : \uE007" + (new Array(Volume)).join("\uE008") + (new Array(100 - Volume)).join("\uE009") + "\uE00A";
 	osdvolume.style.opacity = 1;
 	osdVolumetimeout = setTimeout("osdvolume.style.opacity = 0;", 3000);
 }
@@ -1033,7 +1034,7 @@ function settimer(ProgTime,ProgName,ProgDura) {
 	var th = tijd.getHours();
 	th=addzero(th);
 	tm=addzero(tm);
-	switchtimer.innerHTML = "<pre>  Name      : " + Left(ProgName,30) + "\n  channel   : " + channelsnames[currChan] +  "\n  Starttime : " + th + ":" + tm + "</pre>";
+	switchtimer.innerHTML = "<pre>" + Lang[2] + Left(ProgName,30) + "\n" + Lang[3] + channelsnames[currChan] + "\n" + Lang[4] + th + ":" + tm + "</pre>";
 	setOSDtimer();
 
 }
@@ -1175,7 +1176,7 @@ function GetEPG(epgchan)
 	EPG[0][4][epgchan] = "";
 	EPG[0][5][epgchan] = "";
 	if (event.parentalRating) {
-		EPG[0][8][epgchan] = "<br>( from " + (event.parentalRating + 3) + " )";
+		EPG[0][8][epgchan] = "<br>(" + Lang[5] + (event.parentalRating + 3) + " )";
 	} else {
 		EPG[0][8][epgchan] = "";
 	}
@@ -1221,7 +1222,7 @@ function GetEPG(epgchan)
 	EPG[1][4][epgchan] = "";
 	EPG[1][5][epgchan] = "";
 	if (event.parentalRating) {
-		EPG[1][8][epgchan] = "<br>( from " + (event.parentalRating + 3) + " )";
+		EPG[1][8][epgchan] = "<br>(" + Lang[5] + (event.parentalRating + 3) + " )";
 	} else {
 		EPG[1][8][epgchan] = "";
 	}
@@ -1272,17 +1273,17 @@ function GetEPG(epgchan)
 
 function Nibbles() {
 	content = "";
-	if (connib >= 0x00001000 && connib < 0x00002000) { content = "Movie/Drama"; }
-	if (connib >= 0x00002000 && connib < 0x00003000) { content = "News/Current affairs"; }
-	if (connib >= 0x00003000 && connib < 0x00004000) { content = "Show/Game show"; }
-	if (connib >= 0x00004000 && connib < 0x00005000) { content = "Sports"; }
-	if (connib >= 0x00005000 && connib < 0x00006000) { content = "Children's/Youth programmes"; }
-	if (connib >= 0x00006000 && connib < 0x00007000) { content = "Music/Ballet/Dance"; }
-	if (connib >= 0x00007000 && connib < 0x00008000) { content = "Arts/Culture (without music)"; }
-	if (connib >= 0x00008000 && connib < 0x00009000) { content = "Social/Political issues/Economics"; }
-	if (connib >= 0x00009000 && connib < 0x0000A000) { content = "Education/Science/Factual topics"; }
-	if (connib >= 0x0000A000 && connib < 0x0000B000) { content = "Leisure hobbies"; }
-	if (connib >= 0x0000B000 && connib < 0x0000C000) { content = "Special characteristics"; }
+	if (connib >= 0x00001000 && connib < 0x00002000) { content = CLang[0]; }
+	if (connib >= 0x00002000 && connib < 0x00003000) { content = CLang[10]; }
+	if (connib >= 0x00003000 && connib < 0x00004000) { content = CLang[20]; }
+	if (connib >= 0x00004000 && connib < 0x00005000) { content = CLang[30]; }
+	if (connib >= 0x00005000 && connib < 0x00006000) { content = CLang[40]; }
+	if (connib >= 0x00006000 && connib < 0x00007000) { content = CLang[50]; }
+	if (connib >= 0x00007000 && connib < 0x00008000) { content = CLang[60]; }
+	if (connib >= 0x00008000 && connib < 0x00009000) { content = CLang[70]; }
+	if (connib >= 0x00009000 && connib < 0x0000A000) { content = CLang[80]; }
+	if (connib >= 0x0000A000 && connib < 0x0000B000) { content = CLang[90]; }
+	if (connib >= 0x0000B000 && connib < 0x0000C000) { content = CLang[100]; }
 	// alert(connib);
 }
 
@@ -1331,7 +1332,7 @@ function GetSchedule(schchan,tablelength){
 
   } catch(e) {
     alert("Get EPG problem: " + e);
-	  schedule.innerHTML = "<p style='color:white;font-size:" + fsSched + ";'>" + "\uE003" + schchan + "\uE003" + channelsnames[schchan] + "</p><p> NO EPG </p>";
+	  schedule.innerHTML = "<p style='color:white;font-size:" + fsSched + ";'>" + "\uE003" + schchan + "\uE003" + channelsnames[schchan] + "</p><p>" + Lang[6] + "</p>";
   }
 
 }
@@ -1353,6 +1354,17 @@ function StreamInfo(si) {
 	}
 
 
+	if(SI[0]=="T") {
+	// DVB-T default German.
+	is.setObject("cfg.locale.ui","ger",is.STORAGE_VOLATILE);
+	}
+
+	if(SI[1]=="8720") {
+	// KPN DVB-T
+	is.setObject("cfg.locale.ui","dut",is.STORAGE_VOLATILE);
+	}
+
+
 	if(SI[0]=="S19.2E") {
 	// Default on 19E German.
 	is.setObject("cfg.locale.ui","ger",is.STORAGE_VOLATILE);
@@ -1362,11 +1374,6 @@ function StreamInfo(si) {
 	// Default on 28E English
 	is.setObject("cfg.locale.ui","eng",is.STORAGE_VOLATILE);
 	} 
-
-	if(SI[1]=="8720") {
-	// KPN DVB-T
-	is.setObject("cfg.locale.ui","dut",is.STORAGE_VOLATILE);
-	}
 
 	if(SI[1]=="133") {
 	//sky deutchland
@@ -1754,7 +1761,7 @@ function onKeyMenu(keyCode) {
 		}
 	} else 	if (menu == 5) {
 		osdepginfo.style.opacity = 0;
-		mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'> Timers </center></h1><pre style='color:black;font-size:" + fsMenu + ";'>\n\n\n<center> PLEASE WAIT </center></pre>";
+		mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'>" + Lang[7] + "</center></h1><pre style='color:black;font-size:" + fsMenu + ";'>\n\n\n<center>" + Lang[0] + "</center></pre>";
 		DeleteTimers();
 		setTimeout("LoadTimersServer();InitMenu(menu);",100);
 	}
@@ -1874,7 +1881,7 @@ function onKeyMenu(keyCode) {
 	break;
 	case KEY_5:
 		if (menu == MainMenu) {
-			mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'> Timers </center></h1><pre style='color:black;font-size:" + fsMenu + ";'>\n\n\n<center> PLEASE WAIT </center></pre>";
+			mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'>" + Lang[7] + "</center></h1><pre style='color:black;font-size:" + fsMenu + ";'>\n\n\n<center>" + Lang[0] + "</center></pre>";
 			timerID = 0;
 			menu = 5;
 			setTimeout("LoadTimersServer();InitMenu(menu);",200);
@@ -1938,7 +1945,7 @@ function onKeyMenu(keyCode) {
 		pipplay(channels[604]);
 		}
 		if (menu == MainMenu) {
-			mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'> SearchTimers </center></h1><pre style='color:black;font-size:" + fsMenu + ";'>\n\n\n<center> PLEASE WAIT </center></pre>";
+			mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'>" + Lang[8] + "</center></h1><pre style='color:black;font-size:" + fsMenu + ";'>\n\n\n<center>" + Lang[0] + "</center></pre>";
 			timerID = 0;
 			menu = 7;
 			setTimeout("LoadSearchTimersServer();InitMenu(menu);",200);
@@ -2001,32 +2008,32 @@ osdepginfo.style.opacity = 0;
 
 if(menu == 0) { // Main Menu
 	MainMenu = 0;
-	mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'> MainMenu \n ( " + Version + " )</center></h1><pre style='color:black;font-size:" + fsMenu + ";'>   1 - Settings \n   2 - Timers\n   3 - EPG\n   4 - Server : Recordings\n   5 - Server : Timers\n   6 - Server : EPG\n   7 - Server : Media Directory\n   8 - Server : SearchTimers\n   9 - MPD Server Connection\n\n   BLUE - Restart Portal </pre>";
+	mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'>" + Lang[9] + "\n ( " + Version + " )</center></h1><pre style='color:black;font-size:" + fsMenu + ";'>   1 -" + Lang[10] + "\n   2 -" + Lang[7] + "\n   3 -" + Lang[11] + "\n   4 -" + Lang[12] + "\n   5 -" + Lang[13] + "\n   6 -" + Lang[14] + "\n   7 -" + Lang[15] + "\n   8 -" + Lang[16] + "\n   9 -" + Lang[17] + "\n\n" + Lang[18] + "</pre>";
 }
 
 if(menu == 6) { // Main Menu when watching recording
 	MainMenu = 6;
-	mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'> MainMenu \n ( " + Version + " )</center></h1><pre style='color:black;font-size:" + fsMenu + ";'>   1 - Settings \n   2 - Timers\n\n\n   5 - Server : Timers\n\n\n   8 - Server : SearchTimers\n\n\n </pre>";
+	mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'>" + Lang[9] + "\n ( " + Version + " )</center></h1><pre style='color:black;font-size:" + fsMenu + ";'>   1 -" + Lang[10] + "\n   2 -" + Lang[7] + "\n\n\n   5 -" + Lang[13] + "\n\n\n   8 -" + Lang[16] + "\n\n\n </pre>";
 }
 
 
 if(menu == 1) { // settings menu
-	var htmltext = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'> Settings </center></h1><pre style='color:black;font-size:" + fsMenu + ";'>   1 - ";
+	var htmltext = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'>" + Lang[10] + "</center></h1><pre style='color:black;font-size:" + fsMenu + ";'>   1 - ";
 	if (ShowSubs) { htmltext = htmltext + "\uE017"; } else { htmltext = htmltext + "\uE016"; }
-	htmltext = htmltext + " Show Subs \n   2 - \uE003 Subs Type Prio\uE003\uE003\uE003: " + (toi.informationService.getObject("cfg.media.subtitling.typepriority")) + "\n   3 - \uE003 Subs Mode Prio\uE003\uE003\uE003: " + (toi.informationService.getObject("cfg.media.subtitling.modepriority")) + "\n   4 - \uE003 Audio Type Prio\uE003\uE003\uE003: " + Left(toi.informationService.getObject("cfg.media.audio.typepriority"),20) + "\n   5 - \uE003 Prio audio track\uE003\uE003\uE003: " + (toi.informationService.getObject("cfg.media.audio.languagepriority")) + "\n   6 - ";
+	htmltext = htmltext + Lang[20] + "\n   2 - \uE003" + Lang[21] + "\uE003\uE003\uE003: " + (toi.informationService.getObject("cfg.media.subtitling.typepriority")) + "\n   3 - \uE003" + Lang[22] + "\uE003\uE003\uE003: " + (toi.informationService.getObject("cfg.media.subtitling.modepriority")) + "\n   4 - \uE003" + Lang[23] + "\uE003\uE003\uE003: " + Left(toi.informationService.getObject("cfg.media.audio.typepriority"),20) + "\n   5 - \uE003" + Lang[24] + "\uE003\uE003\uE003: " + (toi.informationService.getObject("cfg.media.audio.languagepriority")) + "\n   6 - ";
 	if (showClock) { htmltext = htmltext + "\uE017"; } else { htmltext = htmltext + "\uE016"; }
-	htmltext = htmltext + " Frontdisplay Clock\n   7 - ";
+	htmltext = htmltext + Lang[25] + "\n   7 - ";
 	if (ShowProtectedChannels) { htmltext = htmltext + "\uE017"; } else { htmltext = htmltext + "\uE016"; }
-	htmltext = htmltext + " Protection\n   8 - ";
+	htmltext = htmltext + Lang[26] + "\n   8 - ";
 	if (SwitchGuide) { htmltext = htmltext + "\uE017"; } else { htmltext = htmltext + "\uE016"; }
-	htmltext = htmltext +  " Preview guide\n   9 - Show INFO\n   S - SleepTimer : ";
-	if (SleepTimer) { htmltext = htmltext + SleepTimer + " minutes"; } else { htmltext = htmltext + "OFF"; }
-	htmltext = htmltext +  "\n   0 - MainMenu </pre>";
+	htmltext = htmltext + Lang[27] + "\n   9 -" + Lang[28] + "\n   S -" + Lang[29];
+	if (SleepTimer) { htmltext = htmltext + SleepTimer + Lang[30]; } else { htmltext = htmltext + Lang[31]; }
+	htmltext = htmltext +  "\n   0 -" + Lang[9] +"</pre>";
 	mainmenu.innerHTML = htmltext;
 }
 
 if(menu == 2) { // Timers menu
-	booking = "<center> PRESS RED-KEY TO REMOVE </center>";
+	booking = "<center>" + Lang[32] + "</center>";
 	var x = timerID - 1;
 	var y = toi.schedulerService.getBookingIds("*", 0, 0);
 	if (y.length !== 0) {
@@ -2048,15 +2055,15 @@ if(menu == 2) { // Timers menu
 	}
 
 
-	mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'> Timers </center></h1><pre style='color:black;font-size:" + fsMenu + ";'>\n   0 - MainMenu \n" + booking + "</pre>";
+	mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'>" + Lang[7] + "</center></h1><pre style='color:black;font-size:" + fsMenu + ";'>\n   0 -" + Lang[9] + "\n" + booking + "</pre>";
 }
 
 if(menu == 3) { // MPD Menu
-	mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'> MPD Connection </center></h1><pre style='color:black;font-size:" + fsMenu + ";'> MENU to exit \n 0 - back to MainMenu </pre>";
+	mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'>" + Lang[33] + "</center></h1><pre style='color:black;font-size:" + fsMenu + ";'>" + Lang[34] + "\n 0 -" + Lang[9] + "</pre>";
 }
 
 if(menu == 4) { // INFO Menu
-	var htmltext = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'> INFO </center></h1><pre style='color:black;font-size:" + fsMenu + ";'>";
+	var htmltext = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'>" + Lang[35] + "</center></h1><pre style='color:black;font-size:" + fsMenu + ";'>";
 	try {
 		is = toi.informationService;
 	
@@ -2074,14 +2081,14 @@ if(menu == 4) { // INFO Menu
 	} catch(e) {
 		alert("Error : " + e);
 	}
-	htmltext = htmltext + "\n\n\n\n\n   0 - back to MainMenu </pre>";
+	htmltext = htmltext + "\n\n\n\n\n   0 -" + Lang[9] + "</pre>";
 	mainmenu.innerHTML = htmltext;
 
 }
 
 if(menu == 5) { // Timers from Server
 	if (timerOK) {
-	booking = "<center> PRESS RED-KEY TO REMOVE </center>";
+	booking = "<center>" + Lang[32] + "</center>";
 	booking = booking + "<font style='background:#fc5;-webkit-border-radius:25px;color:black;font-size:" + fsMenu + ";'>";
 	var x = timerID - 1;
 	for (var i=0;i<11;i++) {
@@ -2089,7 +2096,7 @@ if(menu == 5) { // Timers from Server
 		if (timers.length > x) { booking = booking + timers[x]; } else { booking = booking +"\n"; }
 		if (i == 0) { booking = booking + "</font>"; } 
 	}
-	mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'> Timers </center></h1><pre style='color:black;font-size:" + fsMenu + ";'>\n" + booking + "</pre>";
+	mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'>" + Lang[7] + "</center></h1><pre style='color:black;font-size:" + fsMenu + ";'>\n" + booking + "</pre>";
 
 	}
 }
@@ -2097,7 +2104,7 @@ if(menu == 5) { // Timers from Server
 
 if(menu == 7) { // SearchTimers from Server
 	if (timerOK) {
-	// booking = "<center> PRESS RED-KEY TO REMOVE </center>";
+	// 	booking = "<center>" + Lang[32] + "</center>";
 	booking = "";
 	booking = booking + "<font style='background:#fc5;-webkit-border-radius:25px;color:black;font-size:" + fsMenu + ";'>";
 	var x = timerID - 1;
@@ -2106,7 +2113,7 @@ if(menu == 7) { // SearchTimers from Server
 		if (searchtimers.length > x) { booking = booking + searchtimers[x]; } else { booking = booking +"\n"; }
 		if (i == 0) { booking = booking + "</font>"; } 
 	}
-	mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'> SearchTimers </center></h1><pre style='color:black;font-size:" + fsMenu + ";'>\n" + booking + "</pre>";
+	mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'>" + Lang[8] + "</center></h1><pre style='color:black;font-size:" + fsMenu + ";'>\n" + booking + "</pre>";
 
 	}
 }
@@ -2201,7 +2208,7 @@ try {
   } catch(e) {
     timerOK = 0;
     alert("Get Timers problem: " + e);
-    mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'> Timers </center></h1><pre style='color:black;font-size:" + fsMenu + ";'><center>\n   ERROR Getting Timers from : \n " + RestFulAPI + "</center></pre>";
+    mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'>" + Lang[7] + "</center></h1><pre style='color:black;font-size:" + fsMenu + ";'><center>\n  " + Lang[36] + ": \n " + RestFulAPI + "</center></pre>";
   }
 }
 
@@ -2234,7 +2241,7 @@ function ShowTimerInfo() {
 
 	  }
   } else {
-	info3 = " NO INFO ";
+	info3 = Lang[37];
   }
        	osdepginfo.innerHTML = "<center><pre style='color:white;'>" + Left(info1,60) + "\n " + timersDays[timerID] + " " + 
 	timersStrt[timerID] + " - " + timersStop[timerID] + "\n" + info2 + "\n </pre><p>" + info3 + Left(info4,750) + "</p></center>" ;
@@ -2266,22 +2273,22 @@ try {
 		// Extended INFO
 		SearchTimer[i] = "<center><pre style='color:white;'>" + x[i].getElementsByTagName("search")[0].childNodes[0].nodeValue + "\n </pre></center><pre>";
 		if ((x[i].getElementsByTagName("use_as_searchtimer")[0].childNodes[0].nodeValue) == 0) {
-			SearchTimer[i]  = SearchTimer[i]  + "\uE003\uE016\uE003Use as Search Timer"  + "\n";
+			SearchTimer[i]  = SearchTimer[i]  + "\uE003\uE016\uE003" + Lang[40] + "\n";
 		} else {
-			SearchTimer[i]  = SearchTimer[i]  + "\uE003\uE017\uE003Use as Search Timer"  + "\n";
+			SearchTimer[i]  = SearchTimer[i]  + "\uE003\uE017\uE003" + Lang[40] + "\n";
 		}
 		SearchTimer[i] = SearchTimer[i] + "\uE003\uE003\uE003Mode :\uE003" + (searchmode[x[i].getElementsByTagName("mode")[0].childNodes[0].nodeValue]) + "\n";
 		if ((x[i].getElementsByTagName("use_time")[0].childNodes[0].nodeValue) == 1) {
-			SearchTimer[i]  = SearchTimer[i]  + "\uE003\uE017\uE003Use Time\uE003" + 
+			SearchTimer[i]  = SearchTimer[i]  + "\uE003\uE017\uE003" + Lang[41] + "\uE003" + 
 					x[i].getElementsByTagName("start_time")[0].childNodes[0].nodeValue + 
 					"\uE003-\uE003" + x[i].getElementsByTagName("stop_time")[0].childNodes[0].nodeValue  + "\n";
 		} else {
-			SearchTimer[i]  = SearchTimer[i] + "\uE003\uE016\uE003Use Time\uE003" + "\n";
+			SearchTimer[i]  = SearchTimer[i] + "\uE003\uE016\uE003" + Lang[41] + "\uE003" + "\n";
 		}
 		if ((x[i].getElementsByTagName("use_channel")[0].childNodes[0].nodeValue) == 0) {
-			SearchTimer[i] = SearchTimer[i] + "\uE003\uE016\uE003Channel Mode\uE003" + "\n";
+			SearchTimer[i] = SearchTimer[i] + "\uE003\uE016\uE003" + Lang[42] + "\uE003" + "\n";
 		} else {
-			SearchTimer[i] = SearchTimer[i] + "\uE003\uE017\uE003Channel Mode\uE003:\uE003" + 
+			SearchTimer[i] = SearchTimer[i] + "\uE003\uE017\uE003" + Lang[42] + "\uE003:\uE003" + 
 					searchchan[(x[i].getElementsByTagName("use_channel")[0].childNodes[0].nodeValue)] + "\uE003" + 
 					x[i].getElementsByTagName("channels")[0].childNodes[0].nodeValue + "\n";
 		}
@@ -2295,7 +2302,7 @@ try {
   } catch(e) {
     timerOK = 0;
     alert("Get SearchTimers problem: " + e);
-    mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'> SearchTimers </center></h1><pre style='color:black;font-size:" + fsMenu + ";'><center>\n   ERROR Getting SearchTimers from : \n " + RestFulAPI + "</center></pre>";
+    mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'>" + Lang[8] + "</center></h1><pre style='color:black;font-size:" + fsMenu + ";'><center>\n  " + Lang[43] + ": \n " + RestFulAPI + "</center></pre>";
   }
 }
 
@@ -2370,16 +2377,16 @@ if (MPDListener == 0) {
 } else {
 	if ( ev.state == 6 && ev.reason == "HostUnreachable" ) {
 	    showDisplay("ERRR", false, 100, 0 );
-	mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'> MPD Connection </center></h1><pre style='color:black;font-size:" + fsMenu + ";'>   MENU to exit \n   0 - back to MainMenu \n   9 - Retry \n\n<center style='color:white;'>ERROR Connecting to MPD server : \n" + MPDAddress + "</center></pre>";
+	mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'>" + Lang[60] + "</center></h1><pre style='color:black;font-size:" + fsMenu + ";'>" + Lang[34] + "\n   0 -" + Lang[8] + "\n   9 -" + Lang[61] + "\n\n<center style='color:white;'>" + Lang[62] + ": \n" + MPDAddress + "</center></pre>";
 	  } else if ( ev.state == 2 ) { // && ev.reason == "PositionEnd" ) {
 	    showDisplay("STOP", false, 100, 0 );
-	mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'> MPD Connection </center></h1><pre style='color:black;font-size:" + fsMenu + ";'>   MENU to exit \n   0 - back to MainMenu \n   9 - Reconnect \n\n<center style='color:white;'>Connected to MPD server : \n" + MPDAddress + "\nbut streaming ended</center></pre>";
+	mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'>" + Lang[60] + "</center></h1><pre style='color:black;font-size:" + fsMenu + ";'>" + Lang[34] + "\n   0 -" + Lang[8] + "\n   9 -" + Lang[63] + "\n\n<center style='color:white;'>" + Lang[64] + ": \n" + MPDAddress + "\n" + Lang[65] + "</center></pre>";
 	  } else if ( ev.state == 3 && ev.reason == "CommandPlay" ) {
 	showDisplay("MPD", false, 100, 0 );
-	mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'> MPD Connection </center></h1><pre style='color:black;font-size:" + fsMenu + ";'>   MENU to exit \n   0 - back to MainMenu \n\n\n<center style='color:white;'>Connected to MPD server : \n" + MPDAddress + "</center></pre>";
+	mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'>" + Lang[60] + "</center></h1><pre style='color:black;font-size:" + fsMenu + ";'>" + Lang[34] + "\n   0 -" + Lang[8] + "\n\n\n<center style='color:white;'>" + Lang[64] + ": \n" + MPDAddress + "</center></pre>";
 	  } else {
 	    showDisplay("ERRR", false, 100, 0 );
-	mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'> MPD Connection </center></h1><pre style='color:black;font-size:" + fsMenu + ";'>   MENU to exit \n   0 - back to MainMenu \n   9 - Reconnect \n\n<center style='color:white;'>Error : " + ev.state + "\n Reason : " + ev.reason + "</center></pre>";
+	mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'>" + Lang[60] + "</center></h1><pre style='color:black;font-size:" + fsMenu + ";'>" + Lang[34] + "\n   0 -" + Lang[8] + "\n   9 -" + Lang[63] + "\n\n<center style='color:white;'>Error : " + ev.state + "\n" + Lang[66] + ": " + ev.reason + "</center></pre>";
 	}
 }
 
@@ -2421,7 +2428,7 @@ function UnloadMediaSettings() {
 	mediaList.style.opacity = 0;
 	osdmedia.style.opacity = 0;
 	osdepginfo.style.opacity = 0;
-	mediaList.innerHTML = "<h1><center style='font-size:" + fsRec + ";color:white;'> Please WAIT </center></h1>";
+	mediaList.innerHTML = "<h1><center style='font-size:" + fsRec + ";color:white;'>" + Lang[0] + "</center></h1>";
  	showDisplay((currChan.toString()), false, 100, 0 );
 	isMediaMenu = 0;
 	isFullscreen = 1;
@@ -2436,7 +2443,7 @@ function onKeyMedia(keyCode) {
 if (DelisOK) {
 	switch(keyCode) {
 	case "Accept":
-	  mediaList.innerHTML = "<h1><center style='font-size:" + fsRec + ";color:white;'> Please WAIT </center></h1>";
+	  mediaList.innerHTML = "<h1><center style='font-size:" + fsRec + ";color:white;'>" + Lang[0] + "</center></h1>";
 	  switchtimer.style.opacity = 0;
 	  setTimeout("DelRec2(); getRecList(); showMediaList();",100)
 	default:
@@ -2448,7 +2455,7 @@ if (DelisOK) {
   switch(keyCode) {
     case "BrowserBack":
 	if (subgroup && osdepginfo.style.opacity == 0) { 	
-		mediaList.innerHTML = "<h1><center style='font-size:" + fsRec + ";color:white;'> Please WAIT </center></h1>";
+		mediaList.innerHTML = "<h1><center style='font-size:" + fsRec + ";color:white;'>" + Lang[0] + "</center></h1>";
 		setTimeout("getRecList(); showMediaList();",100)
 		subgroup = 0;
 		break;
@@ -2867,7 +2874,7 @@ try {
   } catch(e) {
     alert("Get Recordings problem: " + e);
 	getRecOK = 0;
-	mediaList.innerHTML = "<h1><center style='font-size:" + fsRec + ";color:white;'> RECORDINGS </center><pre>\n\n\nERROR getting RECORDINGS !!!</pre></h1>";
+	mediaList.innerHTML = "<h1><center style='font-size:" + fsRec + ";color:white;'>" + Lang[38] + "</center><pre>\n\n\n" + Lang[39] + "</pre></h1>";
   }
 }
 
@@ -2953,7 +2960,7 @@ function DelRec() {
 try {
 	//popup for confirm
 	switchtimer.style.opacity = 1;
-	switchtimer.innerHTML = "<pre><center> OK to delete \n other to abort \n\n " + Left(recTitl[currMed],30) + "</center></pre>"; // Recording Name
+	switchtimer.innerHTML = "<pre><center>" + Lang[44] +"\n" + Lang[45] + "\n\n " + Left(recTitl[currMed],30) + "</center></pre>"; // Recording Name
 	DelisOK = 1
   } catch(e) {
     alert("Delete Recordings problem: " + e);
@@ -3069,7 +3076,7 @@ function showMediaList() {
 	var MaxMed = -1;
 
 	if (getRecOK == 1) {
-		var htmlstring = "<h1><center style='font-size:" + fsRec + ";color:white;'> RECORDINGS (free " + (100 - perc_space) + "%, " + (free_space/1024).toFixed(0) + " GB) </center></h1><table border='0'><tr>";
+		var htmlstring = "<h1><center style='font-size:" + fsRec + ";color:white;'>" + Lang[38] + "(" + Lang[46] + (100 - perc_space) + "%, " + (free_space/1024).toFixed(0) + " GB) </center></h1><table border='0'><tr>";
 
 		if (subgroup) { 
 			if (MaxInGroup < 14){ MaxMed = MaxInGroup; } else {MaxMed = 14; }
@@ -3083,7 +3090,7 @@ function showMediaList() {
 	} else {
 
 		if (nrMedia < 14) {MaxMed = nrMedia; } else {MaxMed = 14; }
-		var htmlstring = "<h1><center style='font-size:" + fsRec + ";color:white;'> EPG " + channelsnames[currChan] + " </center></h1><table border='0'><tr>";
+		var htmlstring = "<h1><center style='font-size:" + fsRec + ";color:white;'>" + Lang[11] + channelsnames[currChan] + " </center></h1><table border='0'><tr>";
 	}
 
 	if (MaxMed > 14) { MaxMed = 14; }
@@ -3179,7 +3186,7 @@ try {
   } catch(e) {
     alert("Get EPG problem: " + e);
 	getRecOK = 0;
-	mediaList.innerHTML = "<h1><center style='font-size:" + fsRec + ";color:white;'> Server EPG </center><pre>\n\n\nERROR getting Server EPG !!!</pre></h1>";
+	mediaList.innerHTML = "<h1><center style='font-size:" + fsRec + ";color:white;'>" + Lang[50] + "</center><pre>\n\n\n" + Lang[51] + "</pre></h1>";
   }
 }
 
@@ -3229,11 +3236,11 @@ function getSchedule(schchan){
 	getRecOK = 2;
 	} else {
 	getRecOK = 0;
-	mediaList.innerHTML = "<h1><center style='font-size:" + fsRec + ";color:white;'> EPG </center><pre>\n\n\nNO EPG on this channel!!!</pre></h1>";
+	mediaList.innerHTML = "<h1><center style='font-size:" + fsRec + ";color:white;'>" + Lang[11] + "</center><pre>\n\n\n" + Lang[52] + "</pre></h1>";
 	}
   } catch(e) {
 	getRecOK = 0;
-	mediaList.innerHTML = "<h1><center style='font-size:" + fsRec + ";color:white;'> EPG </center><pre>\n\n\nERROR getting EPG !!!</pre></h1>";
+	mediaList.innerHTML = "<h1><center style='font-size:" + fsRec + ";color:white;'>" + Lang[11] + "</center><pre>\n\n\n" + Lang[53] + "</pre></h1>";
   }
 
 }
@@ -3354,7 +3361,7 @@ for (var i=0; i<instanttimer.length; i++) {
    alert("Sending Record key to server problem: " + e);
   }
  } else {
-	settimer(EPG[NowNext][2][currChan],"ERROR recording already running",0);
+	settimer(EPG[NowNext][2][currChan],Lang[55],0);
 	switchtimer.style.opacity = 1;
 	setTimeout("switchtimer.style.opacity = 0; ", 2000);
  }
@@ -3482,7 +3489,7 @@ function ShowInfo() {
         result = ''+days[day]+' '+d+' '+months[month]+' '+year+' '+h+':'+m;
 	if (year!==1970) { 	
        		osdepginfo.innerHTML = "<center><pre style='color:white;'>" + Left(recTitl[currMed],60) + "\n " + result + "\n " 
-					+ (recDura[currMed] / 60).toFixed(0) + " Minutes \n " + recChan[currMed] + "  " 
+					+ (recDura[currMed] / 60).toFixed(0) + Lang[54] + "\n " + recChan[currMed] + "  " 
 					+ "\n </pre><p>" + Left(recDesc[currMed],750) + "</p></center>";
 	} else {
 		//info for non-vdr recordings
