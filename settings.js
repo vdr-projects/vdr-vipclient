@@ -59,7 +59,7 @@ var channeldigits = 2; // 0 - Max 9, 1 max 99, 2 max 999 or 3 max 9999 channels 
 
 var isFullscreen = 1;
 var Volume = StartVolume;
-var AudioOut = 3;
+var AudioOut = 3; // AUDIO_CONNECTION_TYPE_ANALOG = 0; AUDIO_CONNECTION_TYPE_SPDIF = 1; AUDIO_CONNECTION_TYPE_HDMI = 2;AUDIO_CONNECTION_TYPE_DECODER = 3;AUDIO_CONNECTION_TYPE_BUFFER = 4;AUDIO_CONNECTION_TYPE_I2S = 5;
 
 var epgchan = currChan;
 var prevChan = currChan;

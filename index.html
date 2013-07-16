@@ -499,21 +499,21 @@ function onKeyDown(event) {
 			audio = audio + 1;
 			is = toi.informationService;
 			if(audio == 1) {	
-				is.setObject("cfg.media.audio.languagepriority","dut,eng",is.STORAGE_VOLATILE);
+				is.setObject("cfg.media.audio.languagepriority","dut,eng",is.STORAGE_PERMANENT);
 				osdlang.style.opacity = 1;
 				osdlang.style.fontSize = fsAudio;
 				osdlang.style.color = "blue";
 				osdlang.innerHTML = "<img src='unmute.png'> Nederlands ";
 				setTimeout("osdlang.style.opacity = 0; ", 3000);
 			} else if(audio == 2) {
-				is.setObject("cfg.media.audio.languagepriority","ger,deu,eng",is.STORAGE_VOLATILE);
+				is.setObject("cfg.media.audio.languagepriority","ger,deu,eng",is.STORAGE_PERMANENT);
 				osdlang.style.opacity = 1;
 				osdlang.style.fontSize = fsAudio;
 				osdlang.style.color = "red";
 				osdlang.innerHTML = "<img src='unmute.png'> Deutsch ";
 				setTimeout("osdlang.style.opacity = 0; ", 3000);
 			} else if(audio == 3) {
-				is.setObject("cfg.media.audio.languagepriority","eng",is.STORAGE_VOLATILE);
+				is.setObject("cfg.media.audio.languagepriority","eng",is.STORAGE_PERMANENT);
 				osdlang.style.opacity = 1;
 				osdlang.style.fontSize = fsAudio;
 				osdlang.style.color = "black";
@@ -1831,10 +1831,10 @@ function onKeyMenu(keyCode) {
 		if (menu == 1) {
 			is = toi.informationService;
 			if(substype == 0 ) { 	
-				is.setObject("cfg.media.subtitling.typepriority","hearing_impaired",is.STORAGE_VOLATILE);
+				is.setObject("cfg.media.subtitling.typepriority","hearing_impaired",is.STORAGE_PERMANENT);
 				substype = 1;
 			} else {
-				is.setObject("cfg.media.subtitling.typepriority","normal",is.STORAGE_VOLATILE);
+				is.setObject("cfg.media.subtitling.typepriority","normal",is.STORAGE_PERMANENT);
 				substype = 0;
 			}
 		}
@@ -1849,10 +1849,10 @@ function onKeyMenu(keyCode) {
 	} else	if (menu == 1) {
 			is = toi.informationService;
 			if(subsmode == 0 ) {	
-				is.setObject("cfg.media.subtitling.modepriority","Teletext,DVB",is.STORAGE_VOLATILE);
+				is.setObject("cfg.media.subtitling.modepriority","Teletext,DVB",is.STORAGE_PERMANENT);
 				subsmode = 1;
 			} else {
-				is.setObject("cfg.media.subtitling.modepriority","DVB,Teletext",is.STORAGE_VOLATILE);
+				is.setObject("cfg.media.subtitling.modepriority","DVB,Teletext",is.STORAGE_PERMANENT);
 				subsmode = 0;
 			}
 		} 
@@ -1871,11 +1871,11 @@ function onKeyMenu(keyCode) {
 			audiotype = audiotype + 1;
 			is = toi.informationService;
 			if(audiotype == 1) {	
-				is.setObject("cfg.media.audio.typepriority","normal",is.STORAGE_VOLATILE);
+				is.setObject("cfg.media.audio.typepriority","normal",is.STORAGE_PERMANENT);
 			} else if(audiotype == 2) {
-				is.setObject("cfg.media.audio.typepriority","hearing_impaired",is.STORAGE_VOLATILE);
+				is.setObject("cfg.media.audio.typepriority","hearing_impaired",is.STORAGE_PERMANENT);
 			} else if(audiotype == 3) {
-				is.setObject("cfg.media.audio.typepriority","visually_impaired",is.STORAGE_VOLATILE);
+				is.setObject("cfg.media.audio.typepriority","visually_impaired",is.STORAGE_PERMANENT);
 				audiotype = 0;
 			}
 			InitMenu(menu);
@@ -1893,11 +1893,11 @@ function onKeyMenu(keyCode) {
 			audio = audio + 1;
 			is = toi.informationService;
 			if(audio == 1) {	
-				is.setObject("cfg.media.audio.languagepriority","dut,eng",is.STORAGE_VOLATILE);
+				is.setObject("cfg.media.audio.languagepriority","dut,eng",is.STORAGE_PERMANENT);
 			} else if(audio == 2) {
-				is.setObject("cfg.media.audio.languagepriority","ger,deu,eng",is.STORAGE_VOLATILE);
+				is.setObject("cfg.media.audio.languagepriority","ger,deu,eng",is.STORAGE_PERMANENT);
 			} else if(audio == 3) {
-				is.setObject("cfg.media.audio.languagepriority","eng,swe",is.STORAGE_VOLATILE);
+				is.setObject("cfg.media.audio.languagepriority","eng,swe",is.STORAGE_PERMANENT);
 				audio = 0;
 			}
 		}
@@ -2640,21 +2640,21 @@ if (DelisOK) {
 			audio = audio + 1;
 			is = toi.informationService;
 			if(audio == 1) {	
-				is.setObject("cfg.media.audio.languagepriority","dut,eng",is.STORAGE_VOLATILE);
+				is.setObject("cfg.media.audio.languagepriority","dut,eng",is.STORAGE_PERMANENT);
 				osdlang.style.opacity = 1;
 				osdlang.style.fontSize = fsAudio;
 				osdlang.style.color = "white";
 				osdlang.innerHTML = "<img src='unmute.png'> Nederlands ";
 				setTimeout("osdlang.style.opacity = 0; ", 3000);
 			} else if(audio == 2) {
-				is.setObject("cfg.media.audio.languagepriority","ger,deu,eng",is.STORAGE_VOLATILE);
+				is.setObject("cfg.media.audio.languagepriority","ger,deu,eng",is.STORAGE_PERMANENT);
 				osdlang.style.opacity = 1;
 				osdlang.style.fontSize = fsAudio;
 				osdlang.style.color = "red";
 				osdlang.innerHTML = "<img src='unmute.png'> Deutsch ";
 				setTimeout("osdlang.style.opacity = 0; ", 3000);
 			} else if(audio == 3) {
-				is.setObject("cfg.media.audio.languagepriority","eng",is.STORAGE_VOLATILE);
+				is.setObject("cfg.media.audio.languagepriority","eng",is.STORAGE_PERMANENT);
 				osdlang.style.opacity = 1;
 				osdlang.style.fontSize = fsAudio;
 				osdlang.style.color = "black";
