@@ -27,6 +27,8 @@
 var Version = "0.21.1"
 
 for (var x = 0;  x < 10; x++) { 
+	searchtimers[i] = "" ; // To solve displaying undefined
+	timers[i] = "" ;
 	if (minChan[x]) {
 		for (var i = minChan[x];  i < (maxChan[x]+1); i++) { 
 			EPG[0][4][i] = "";EPG[1][4][i] = "";EPG[0][5][i] = "";EPG[1][5][i] = "";EPG[0][7][i] = "";EPG[1][7][i] = ""; 
@@ -77,7 +79,7 @@ function onLoad() {
 
 	showOSD();
 	colorkeys.style.fontSize = fsKeys;
-	colorkeys.innerHTML = "<font color=red>" +  NN[4] + "</font><font color=green >" + NN[1] + "</font><font color=yellow>" + NN[2] + "</font><font color=blue>" + NN[5] + "</font>";
+	colorkeys.innerHTML = "<font color=red> " +  NN[4] + " </font><font color=green > " + NN[1] + " </font><font color=yellow> " + NN[2] + " </font><font color=blue> " + NN[5] + " </font>";
 	osdvolume.style.fontSize = fsCA;
 	osdvolume.style.color = "green";
 	osdtime.style.fontSize = fsTime;
@@ -521,7 +523,7 @@ function onKeyDown(event) {
 			}
 		}
 	} else if(isSchedule == 0 && !epgactive){
-		colorkeys.innerHTML = "<font color=red>" +  NN[3 + NowNext] + "</font><font color=green>" + NN[NowNext] + "</font><font color=yellow>" + NN[2] + "</font><font color=blue>" + NN[5] + "</font>";
+		colorkeys.innerHTML = "<font color=red> " +  NN[3 + NowNext] + " </font><font color=green> " + NN[NowNext] + " </font><font color=yellow> " + NN[2] + " </font><font color=blue> " + NN[5] + " </font>";
 		NowNext = 1 - NowNext;
 		showChannelList();
 	}
@@ -547,9 +549,9 @@ function onKeyDown(event) {
 		schedule.style.opacity = 1 - schedule.style.opacity;
 		isSchedule = schedule.style.opacity;
 		if(isSchedule == 1){
-			colorkeys.innerHTML = "<font color=red>" +  NN[4] + "</font><font color=green>" + NN[4] + "</font><font color=yellow>" + NN[6] + "</font><font color=blue>" + NN[4] + "</font>";
+			colorkeys.innerHTML = "<font color=red> " +  NN[4] + " </font><font color=green> " + NN[4] + " </font><font color=yellow> " + NN[6] + " </font><font color=blue> " + NN[4] + " </font>";
 			} else {
-			colorkeys.innerHTML = "<font color=red>" +  NN[3 + (1 - NowNext)] + "</font><font color=green>" + NN[1 - NowNext] + "</font><font color=yellow>" + NN[2] + "</font><font color=blue>" + NN[5] + "</font>";
+			colorkeys.innerHTML = "<font color=red> " +  NN[3 + (1 - NowNext)] + " </font><font color=green> " + NN[1 - NowNext] + " </font><font color=yellow> " + NN[2] + " </font><font color=blue> " + NN[5] + " </font>";
 			}
 	}
 	break;
@@ -683,7 +685,7 @@ function onKeyDown(event) {
 			isFullscreen = 0;
 			ClearScreen();
 			channelList.style.opacity = 1;
-			colorkeys.innerHTML = "<font color=red>" +  NN[3 + (1 - NowNext)] + "</font><font color=green>" + NN[1 - NowNext] + "</font><font color=yellow>" + NN[2] + "</font><font color=blue>" + NN[5] + "</font>";
+			colorkeys.innerHTML = "<font color=red> " +  NN[3 + (1 - NowNext)] + " </font><font color=green> " + NN[1 - NowNext] + " </font><font color=yellow> " + NN[2] + " </font><font color=blue> " + NN[5] + " </font>";
 			colorkeys.style.opacity = 1;
 			showChannelList();
 			if(!SwitchGuide) {
@@ -2377,16 +2379,16 @@ if (MPDListener == 0) {
 } else {
 	if ( ev.state == 6 && ev.reason == "HostUnreachable" ) {
 	    showDisplay("ERRR", false, 100, 0 );
-	mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'>" + Lang[60] + "</center></h1><pre style='color:black;font-size:" + fsMenu + ";'>" + Lang[34] + "\n   0 -" + Lang[8] + "\n   9 -" + Lang[61] + "\n\n<center style='color:white;'>" + Lang[62] + ": \n" + MPDAddress + "</center></pre>";
+	mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'>" + Lang[60] + "</center></h1><pre style='color:black;font-size:" + fsMenu + ";'>" + Lang[34] + "\n   0 -" + Lang[9] + "\n   9 -" + Lang[61] + "\n\n<center style='color:white;'>" + Lang[62] + ": \n" + MPDAddress + "</center></pre>";
 	  } else if ( ev.state == 2 ) { // && ev.reason == "PositionEnd" ) {
 	    showDisplay("STOP", false, 100, 0 );
-	mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'>" + Lang[60] + "</center></h1><pre style='color:black;font-size:" + fsMenu + ";'>" + Lang[34] + "\n   0 -" + Lang[8] + "\n   9 -" + Lang[63] + "\n\n<center style='color:white;'>" + Lang[64] + ": \n" + MPDAddress + "\n" + Lang[65] + "</center></pre>";
+	mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'>" + Lang[60] + "</center></h1><pre style='color:black;font-size:" + fsMenu + ";'>" + Lang[34] + "\n   0 -" + Lang[9] + "\n   9 -" + Lang[63] + "\n\n<center style='color:white;'>" + Lang[64] + ": \n" + MPDAddress + "\n" + Lang[65] + "</center></pre>";
 	  } else if ( ev.state == 3 && ev.reason == "CommandPlay" ) {
 	showDisplay("MPD", false, 100, 0 );
-	mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'>" + Lang[60] + "</center></h1><pre style='color:black;font-size:" + fsMenu + ";'>" + Lang[34] + "\n   0 -" + Lang[8] + "\n\n\n<center style='color:white;'>" + Lang[64] + ": \n" + MPDAddress + "</center></pre>";
+	mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'>" + Lang[60] + "</center></h1><pre style='color:black;font-size:" + fsMenu + ";'>" + Lang[34] + "\n   0 -" + Lang[9] + "\n\n\n<center style='color:white;'>" + Lang[64] + ": \n" + MPDAddress + "</center></pre>";
 	  } else {
 	    showDisplay("ERRR", false, 100, 0 );
-	mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'>" + Lang[60] + "</center></h1><pre style='color:black;font-size:" + fsMenu + ";'>" + Lang[34] + "\n   0 -" + Lang[8] + "\n   9 -" + Lang[63] + "\n\n<center style='color:white;'>Error : " + ev.state + "\n" + Lang[66] + ": " + ev.reason + "</center></pre>";
+	mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'>" + Lang[60] + "</center></h1><pre style='color:black;font-size:" + fsMenu + ";'>" + Lang[34] + "\n   0 -" + Lang[9] + "\n   9 -" + Lang[63] + "\n\n<center style='color:white;'>Error : " + ev.state + "\n" + Lang[66] + ": " + ev.reason + "</center></pre>";
 	}
 }
 

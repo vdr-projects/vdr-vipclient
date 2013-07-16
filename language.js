@@ -1,1 +1,1 @@
-lang_eng.js
+lang_dut.js
