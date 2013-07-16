@@ -63,6 +63,13 @@ function onLoad() {
 		// No harddisk, no recorder functions possible
 	}
 
+	if (toi.informationService.getObject("config.productdisplayname") !== "Motorola VIP1903" && 
+	    toi.informationService.getObject("config.productdisplayname") !== "Motorola VIP1963" && fullupdate !== 2) { 
+		fullupdate = 0;
+		// No 19x3 so better turn fullupdate EPG off
+	}
+
+
 	if (mediaRecorder) {
 		createRecorder();
 		mediaRecorder.addEventListener(mediaRecorder.ON_STATE_CHANGED, onRecorderStateChanged);
@@ -2078,7 +2085,8 @@ if(menu == 4) { // INFO Menu
 		var x = is.getObject("var.capabilities.dvr");
 		if (x !== "FALSE") { htmltext = htmltext + "\n \uE017 "; } else { htmltext = htmltext + "\n \uE016 "; }
 		htmltext = htmltext + "DVR ";
-
+		if (fullupdate !== 0) { htmltext = htmltext + "\n \uE017 "; } else { htmltext = htmltext + "\n \uE016 "; }
+		htmltext = htmltext + "Full EPG Update ";
 
 	} catch(e) {
 		alert("Error : " + e);

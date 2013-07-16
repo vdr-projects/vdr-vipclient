@@ -3,8 +3,9 @@ Motorola Vip : 1960, 1910, 1903, 1963.
 
 VDR 1.7.29
 
-0.21	Language in sepate file.
+0.21	Language in sepate file, link your lang_XXX.js to language.js to activate it.
 	Updated EPG filter, (DVB-T defaults to German)
+	Audio, subs etc settings are now stored on the box. So they are kept after reboot. 
 
 
 0.20	Updated EPG filter

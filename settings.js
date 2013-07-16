@@ -32,6 +32,7 @@ var pipPlayer = 0; // 0 = no, 1 = yes Pip
 var mediaRecorder = 1; // 0 = no, 1 = yes local recording.
 
 var fullupdate = 1; // If guideview is too slow, set it to 0 (for 1910/1960), faster boxes can use 1
+// to force the use on boxes other then 19x3 use 2!!
 
 var inst_timeout = 15 * 1000; // 15 minutes
 

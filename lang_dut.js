@@ -51,9 +51,9 @@ Lang[17] = " MPD Server Verbinding ";
 Lang[18] = "   BLUE - Herstart Portal ";
 
 //Settings menu
-Lang[20] = " Toon Ondertiteling ";
-Lang[21] = "      Type Prio ";
-Lang[22] = "      Mode Prio ";
+Lang[20] = " Ondertiteling ";
+Lang[21] = "  ''  ''  Type Prio ";
+Lang[22] = "  ''  ''  Mode Prio ";
 Lang[23] = " Audio Type Prio ";
 Lang[24] = " Voorkeurstaal ";
 Lang[25] = " Frontdisplay Klok ";
