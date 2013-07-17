@@ -30,22 +30,18 @@ var ShowProtectedChannels = 1; // 0 = yes show, 1 = don't show protected channel
 var ShowSource = 1; // show source in OSD
 var pipPlayer = 0; // 0 = no, 1 = yes Pip
 var mediaRecorder = 1; // 0 = no, 1 = yes local recording.
+var PauseOnServer = 1; // 0 = no pause on server, 1 = pause live TV on server
 
 var fullupdate = 1; // If guideview is too slow, set it to 0 (for 1910/1960), faster boxes can use 1
 // to force the use on boxes other then 19x3 use 2!!
 
+
+var ShowOsdTime = 5000; //Time to show OSD, in seconds * 1000
 var inst_timeout = 15 * 1000; // 15 minutes
 
 var serverEPGdays = 3 * (60 * 60 * 24); // the higher the longer you wait while getting the epg info
 
-var NN = new Array();
-var Lang = new Array();
-var CLang = new Array();
-
 var VolumeStep = 5; // Steps the volume buttons make
-
-var ChanGroup = Number(String((currChan / 1000)).substring(0,1)); // default group
-var minChan = new Array(); var maxChan = new Array(); var defChan = new Array(); var baseChn = new Array(); var protChn = new Array(); var ServerAdres = new Array(); // Define settings for Channels.
 
 // Server for Recordings
 var recServ = server_ip + ":8000";
@@ -57,6 +53,14 @@ var channeldigits = 2; // 0 - Max 9, 1 max 99, 2 max 999 or 3 max 9999 channels 
 //
 // No need to change anything from here on.
 //
+
+var ChanGroup = Number(String((currChan / 1000)).substring(0,1)); // default group
+var minChan = new Array(); var maxChan = new Array(); var defChan = new Array(); var baseChn = new Array(); var protChn = new Array(); var ServerAdres = new Array(); // Define settings for Channels.
+
+
+var NN = new Array();
+var Lang = new Array();
+var CLang = new Array();
 
 var isFullscreen = 1;
 var Volume = StartVolume;

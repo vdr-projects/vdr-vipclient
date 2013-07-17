@@ -804,6 +804,23 @@ function onKeyDown(event) {
 	      mediaPlayer.play(mediaPlayer.PACE_FASTFORWARD);
 		break;
 	case "MediaPlayPause":
+
+		if(isFullscreen && PauseOnServer) {
+		   	if(mediaPlayer.getState() == mediaPlayer.STATE_PLAYING) {
+				ServerPause();
+				SetLed(1,1,10);
+				setTimeout("mediaPlayer.play(0);",5000);
+				break;
+			}
+			if(mediaPlayer.getState() == mediaPlayer.STATE_PAUSED || mediaPlayer.getState() == mediaPlayer.STATE_FASTFORWARDING ||
+			   mediaPlayer.getState() == mediaPlayer.STATE_REWINDING) {
+				SetLed(1,1,0);
+				mediaPlayer.play(mediaPlayer.PACE_PLAY);
+				break;
+			}
+
+		}
+
 		if(TimeShift){
 			if(mediaPlayer.getState() == mediaPlayer.STATE_PAUSED || mediaPlayer.getState() == mediaPlayer.STATE_FASTFORWARDING || mediaPlayer.getState() == mediaPlayer.STATE_REWINDING) {
 				SetLed(1,1,0);
@@ -932,7 +949,7 @@ function showOSD() {
 	SetOsdInfo();
 	opacity = 1;
 	OSD(opacity);
-	osdtimeout = setTimeout("fadeOut(); osdtimeout = 0;", 3000);
+	osdtimeout = setTimeout("fadeOut(); osdtimeout = 0;", ShowOsdTime);
 }
 
 function showVolume() {
@@ -941,7 +958,7 @@ function showVolume() {
 	}
 	osdvolume.innerHTML = Lang[1] + " : \uE007" + (new Array(Volume)).join("\uE008") + (new Array(100 - Volume)).join("\uE009") + "\uE00A";
 	osdvolume.style.opacity = 1;
-	osdVolumetimeout = setTimeout("osdvolume.style.opacity = 0;", 3000);
+	osdVolumetimeout = setTimeout("osdvolume.style.opacity = 0;", ShowOsdTime);
 }
 
 
@@ -3379,6 +3396,33 @@ for (var i=0; i<instanttimer.length; i++) {
 SwitchTimer = ii;
 //end of function
 }
+
+function ServerPause() {
+//Instant pause on server
+
+  try {
+   xmlhttp=new XMLHttpRequest();
+	//switch server to current channel
+   xmlhttp.open("POST",(RestFulAPI + "/remote/switch/" + channels[currChan]),true);
+   xmlhttp.send();
+	//start pause
+   setTimeout("xmlhttp.open('POST',(RestFulAPI + '/remote/Record'),false);xmlhttp.send();",5000);
+
+	//Show some info on screen
+   settimer(EPG[NowNext][2][currChan],"PAUSE",0);
+   switchtimer.style.opacity = 1;
+   setTimeout("switchtimer.style.opacity = 0; ", 7000);
+
+  } catch(e) {
+   alert("Sending Pause key to server problem: " + e);
+  }
+	//Next steps:
+	//Find recording using restfulapi
+	//Open recording and pause.
+
+//end of function
+}
+
 
 function ServerRecordStop() {
 try {
