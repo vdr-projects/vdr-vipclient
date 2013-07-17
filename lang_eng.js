@@ -95,3 +95,5 @@ Lang[63] = " Reconnect ";
 Lang[64] = " Connected to MPD server ";
 Lang[65] = " but streaming ended ";
 Lang[66] = " Reason ";
+
+Lang[70] = "Pause";

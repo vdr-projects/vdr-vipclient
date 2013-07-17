@@ -807,9 +807,11 @@ function onKeyDown(event) {
 
 		if(isFullscreen && PauseOnServer) {
 		   	if(mediaPlayer.getState() == mediaPlayer.STATE_PLAYING) {
+				isPause = 1;
 				ServerPause();
 				SetLed(1,1,10);
-				setTimeout("mediaPlayer.play(0);",5000);
+//				setTimeout("mediaPlayer.play(0);",5000);
+				mediaPlayer.play(0);
 				break;
 			}
 			if(mediaPlayer.getState() == mediaPlayer.STATE_PAUSED || mediaPlayer.getState() == mediaPlayer.STATE_FASTFORWARDING ||
@@ -2459,6 +2461,7 @@ function UnloadMediaSettings() {
  	showDisplay((currChan.toString()), false, 100, 0 );
 	isMediaMenu = 0;
 	isFullscreen = 1;
+	isPause = 0;
 	if (mediaPlayer.getState() != mediaPlayer.STATE_PLAYING ) {
         play(channels[currChan]);
 	}
@@ -2693,8 +2696,10 @@ if (DelisOK) {
 	 videoplane.subtitles = Boolean(ShowSubs); // Enable subtitles or Disable subtitles
 	break;
     case "Blue":
-	ShowInfo();
-	osdepginfo.style.opacity = 1 - osdepginfo.style.opacity;
+	if ( isPause == 0 ) {
+		ShowInfo();
+		osdepginfo.style.opacity = 1 - osdepginfo.style.opacity;
+	}
 	break;
    case "Menu":
 	osdepginfo.style.opacity = 0;
@@ -2747,7 +2752,7 @@ if (DelisOK) {
 	    }
     break;
     case "MediaStop":
-	    if (currMed == -1) {
+	    if (currMed == -1 || isPause == 1) {
 		    osdepginfo.style.opacity = 0;
 		    isFullscreen = 1; play(channels[currChan]); 
 		    UnloadMediaSettings();		
@@ -3304,6 +3309,23 @@ function playRec(uri) {
 }
 
 
+function pauseRec(uri) {
+  try {
+    if (mediaPlayer.getState() != mediaPlayer.STATE_IDLE) {
+      mediaPlayer.close();
+    }
+	if (osdepginfo.style.opacity == 1) {osdepginfo.style.opacity = 0;}
+	mediaPlayer.open(uri);
+	mediaPlayer.play(0);
+	showDisplay("PAUS", false, 100, 0 );
+  } catch (e) {
+    alert("Failed opening recording: " + e);
+    return;
+  }
+}
+
+
+
 function createNewAsset() {
 	try {
 		assetId = toi.assetManagerService.createAsset(toi.assetManagerService.ASSET_PVR);
@@ -3409,17 +3431,15 @@ function ServerPause() {
    setTimeout("xmlhttp.open('POST',(RestFulAPI + '/remote/Record'),false);xmlhttp.send();",5000);
 
 	//Show some info on screen
-   settimer(EPG[NowNext][2][currChan],"PAUSE",0);
+   settimer(EPG[NowNext][2][currChan],Lang[70],0);
    switchtimer.style.opacity = 1;
    setTimeout("switchtimer.style.opacity = 0; ", 7000);
 
   } catch(e) {
    alert("Sending Pause key to server problem: " + e);
   }
-	//Next steps:
-	//Find recording using restfulapi
-	//Open recording and pause.
 
+	setTimeout("getPauseFile();",6000);
 //end of function
 }
 
@@ -3434,6 +3454,42 @@ try {
    alert("Sending Stop key to server problem: " + e);
   }
 }
+
+
+function getPauseFile() {
+
+try {
+   xmlhttp=new XMLHttpRequest();
+   xmlhttp.open("GET",(RestFulAPI + "/recordings.xml?" + new Date().getTime()),false);
+   xmlhttp.send();
+   xmlDoc=xmlhttp.responseXML; 
+   var x=xmlDoc.getElementsByTagName("recording");
+   nrMedia = x.length - 1;
+   for (var i=0;i<x.length;i++)
+	  { 
+	var xx = x[i].getElementsByTagName("param")[2].childNodes[0].nodeValue.split(".");
+	xx = xx[(xx.length-2)].split("-");
+
+	if ( xx[0] == currChan ) {
+		recLink[0] = recServ + x[i].getElementsByTagName("param")[2].childNodes[0].nodeValue;
+//		recDura[0] = x[i].getElementsByTagName("param")[8].childNodes[0].nodeValue;
+		}
+
+	 }
+
+  } catch(e) {
+    alert("Get Recordings problem: " + e);
+  }
+	getRecOK = 0;
+	recDura[0] = 3600;// set to 1 hour
+	LoadMediaSettings();// sets currMed to 0
+	recTitl[0] = "Time Shift File"
+	position = 0;
+	pauseRec(recLink[0]);
+
+}
+
+
 
 function ServerRecordTimer(SC) {
 //Timed Instant recording on server
@@ -3471,9 +3527,13 @@ try {
 
 function BackToTV() {
 	    play(channels[currChan]);
-	    mediaList.style.opacity = 0.9;
-	    showDisplay("STOP", false, 100, 0 );
-	    showMediaList();
+	    if (isPause == 1) { 
+		UnloadMediaSettings(); 
+	    } else {
+	    	mediaList.style.opacity = 0.9;
+	    	showDisplay("STOP", false, 100, 0 );
+	    	showMediaList();
+	    }
 }
 
 

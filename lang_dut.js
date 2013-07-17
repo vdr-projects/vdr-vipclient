@@ -95,3 +95,5 @@ Lang[63] = " Opnieuw verbinden ";
 Lang[64] = " Verbonden met MPD server ";
 Lang[65] = " maar streaming gestopt ";
 Lang[66] = " Reden ";
+
+Lang[70] = "Pause";
