@@ -506,7 +506,7 @@ function onKeyDown(event) {
 			audio = audio + 1;
 			is = toi.informationService;
 			if(audio == 1) {	
-				is.setObject("cfg.media.audio.languagepriority","dut,eng",is.STORAGE_PERMANENT);
+				is.setObject("cfg.media.audio.languagepriority","dut,eng,und",is.STORAGE_PERMANENT);
 				osdlang.style.opacity = 1;
 				osdlang.style.fontSize = fsAudio;
 				osdlang.style.color = "blue";
@@ -520,11 +520,18 @@ function onKeyDown(event) {
 				osdlang.innerHTML = "<img src='unmute.png'> Deutsch ";
 				setTimeout("osdlang.style.opacity = 0; ", 3000);
 			} else if(audio == 3) {
-				is.setObject("cfg.media.audio.languagepriority","eng",is.STORAGE_PERMANENT);
+				is.setObject("cfg.media.audio.languagepriority","eng,und",is.STORAGE_PERMANENT);
 				osdlang.style.opacity = 1;
 				osdlang.style.fontSize = fsAudio;
 				osdlang.style.color = "black";
 				osdlang.innerHTML = "<img src='unmute.png'> English ";
+				setTimeout("osdlang.style.opacity = 0; ", 3000);
+			} else if(audio == 4) {
+				is.unsetObject("cfg.media.audio.languagepriority",is.STORAGE_PERMANENT);
+				osdlang.style.opacity = 1;
+				osdlang.style.fontSize = fsAudio;
+				osdlang.style.color = "black";
+				osdlang.innerHTML = "<img src='unmute.png'> None ";
 				setTimeout("osdlang.style.opacity = 0; ", 3000);
 				audio = 0;
 			}
@@ -1925,11 +1932,13 @@ function onKeyMenu(keyCode) {
 			audio = audio + 1;
 			is = toi.informationService;
 			if(audio == 1) {	
-				is.setObject("cfg.media.audio.languagepriority","dut,eng",is.STORAGE_PERMANENT);
+				is.setObject("cfg.media.audio.languagepriority","dut,eng,und",is.STORAGE_PERMANENT);
 			} else if(audio == 2) {
 				is.setObject("cfg.media.audio.languagepriority","ger,deu,eng",is.STORAGE_PERMANENT);
 			} else if(audio == 3) {
-				is.setObject("cfg.media.audio.languagepriority","eng,swe",is.STORAGE_PERMANENT);
+				is.setObject("cfg.media.audio.languagepriority","eng,swe,und",is.STORAGE_PERMANENT);
+			} else if(audio == 4) {
+				is.unsetObject("cfg.media.audio.languagepriority",is.STORAGE_PERMANENT);
 				audio = 0;
 			}
 		}
@@ -2674,7 +2683,7 @@ if (DelisOK) {
 			audio = audio + 1;
 			is = toi.informationService;
 			if(audio == 1) {	
-				is.setObject("cfg.media.audio.languagepriority","dut,eng",is.STORAGE_PERMANENT);
+				is.setObject("cfg.media.audio.languagepriority","dut,eng,und",is.STORAGE_PERMANENT);
 				osdlang.style.opacity = 1;
 				osdlang.style.fontSize = fsAudio;
 				osdlang.style.color = "white";
@@ -2688,11 +2697,18 @@ if (DelisOK) {
 				osdlang.innerHTML = "<img src='unmute.png'> Deutsch ";
 				setTimeout("osdlang.style.opacity = 0; ", 3000);
 			} else if(audio == 3) {
-				is.setObject("cfg.media.audio.languagepriority","eng",is.STORAGE_PERMANENT);
+				is.setObject("cfg.media.audio.languagepriority","eng,und",is.STORAGE_PERMANENT);
 				osdlang.style.opacity = 1;
 				osdlang.style.fontSize = fsAudio;
 				osdlang.style.color = "black";
 				osdlang.innerHTML = "<img src='unmute.png'> English ";
+				setTimeout("osdlang.style.opacity = 0; ", 3000);
+			} else if(audio == 4) {
+				is.unsetObject("cfg.media.audio.languagepriority",is.STORAGE_PERMANENT);
+				osdlang.style.opacity = 1;
+				osdlang.style.fontSize = fsAudio;
+				osdlang.style.color = "black";
+				osdlang.innerHTML = "<img src='unmute.png'> None ";
 				setTimeout("osdlang.style.opacity = 0; ", 3000);
 				audio = 0;
 			}
