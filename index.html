@@ -872,6 +872,12 @@ function onKeyDown(event) {
 	case KEY_FILM:
 	// jump to recordings menu.
 		if(isFullscreen) {
+			if(count) {
+				count = 0;
+				osdnr.style.opacity = 0;
+				showDisplay((currChan.toString()), false, 100, 0 );
+				Change = 0;
+			}
 		osdepginfo.style.opacity = 0;
 		osdepginfonext.style.opacity = 0;
 		mediaList.style.opacity = 0.9;
@@ -2210,8 +2216,8 @@ try {
 		var fill = "\uE003\uE003\uE003\uE003\uE003\uE003\uE003\uE003\uE003\uE003";
 	  timersID[i] = x[i].getElementsByTagName("param")[0].childNodes[0].nodeValue;
 	  timersFlag[i] = x[i].getElementsByTagName("param")[1].childNodes[0].nodeValue;
-	  timersStrt[i] = Right("00" + x[i].getElementsByTagName("param")[2].childNodes[0].nodeValue,4);
-	  timersStop[i] = Right("00" + x[i].getElementsByTagName("param")[3].childNodes[0].nodeValue,4);
+	  timersStrt[i] = Right("000" + x[i].getElementsByTagName("param")[2].childNodes[0].nodeValue,4);
+	  timersStop[i] = Right("000" + x[i].getElementsByTagName("param")[3].childNodes[0].nodeValue,4);
 	  timersDays[i] = x[i].getElementsByTagName("param")[9].childNodes[0].nodeValue;
 	  if (timersDays[i] == "-------" ) { 
 		timersDays[i] = x[i].getElementsByTagName("param")[10].childNodes[0].nodeValue;
