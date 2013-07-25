@@ -8,6 +8,8 @@ VDR 1.7.29
 	Audio, subs etc settings are now stored on the box. So they are kept after reboot.
 	OSD Time out can be set from settings.js
 	Pause Live TV on Server
+	Added a 'none' to audio prio settings, which restores the factory setting.
+	Timer ADD/ Timer DEL is now possible by using SmartTVWeb (Show Timers still uses restfulapi)
 
 
 

@@ -4,6 +4,7 @@
       <script type="text/javascript" src="language.js" />
       <script type="text/javascript" src="channels.js" />
       <script type="text/javascript" src="channels1.js" />
+      <script type="text/javascript" src="channels3.js" />
       <script type="text/javascript" src="channels5.js" />
       <script type="text/javascript" src="channels6.js" />
       <script type="text/javascript" src="channels8.js" />
@@ -16,15 +17,10 @@
 //
 // Martin Voerman Rekordc@gmail.com
 //
-// TODO 
-//
-// 
-// make VDR connection for
-// 	set/create/edit timers
 //
 //
 
-var Version = "0.21.1"
+var Version = "0.21.2"
 
 for (var x = 0;  x < 10; x++) { 
 	searchtimers[i] = "" ; // To solve displaying undefined
@@ -860,14 +856,14 @@ function onKeyDown(event) {
 	case "MediaRecord":
 	if(isFullscreen) {
 		ServerRecordStart();
-		//ServerTimer();
 	} else if(isSchedule == 0){
-		if(NowNext) {	
-			SwitchTimer = 2;
-			settimer(EPG[NowNext][2][currChan],EPG[NowNext][1][currChan],(EPG[NowNext][3][currChan]*60));
-			SwitchTimer = 1;
-			switchtimer.style.opacity = 1;
-			setTimeout("switchtimer.style.opacity = 0; ", 2000);
+		if(NowNext) {
+//			// make timer for recording	
+//			SwitchTimer = 2;
+//			settimer(EPG[NowNext][2][currChan],EPG[NowNext][1][currChan],(EPG[NowNext][3][currChan]*60));
+//			SwitchTimer = 1;
+//			switchtimer.style.opacity = 1;
+//			setTimeout("switchtimer.style.opacity = 0; ", 2000);
 		} else {
 			ServerRecordStart();
 		}
@@ -1051,7 +1047,7 @@ function settimer(ProgTime,ProgName,ProgDura) {
 		  }
 	} else if(SwitchTimer == 2) {	
 		  try {
-		    toi.schedulerService.setParameter(toi.schedulerService.schedule("RecServer","notification", ProgTime , ProgDura), "Channel", currChan.toString() );
+		    //toi.schedulerService.setParameter(toi.schedulerService.schedule("RecServer","notification", ProgTime , ProgDura), "Channel", currChan.toString() );
 		  }
 		  catch (e) {
 		    alert(e);
@@ -2197,11 +2193,73 @@ function LoadTimers() {
 				}
 }
 
-function DeleteTimers() {
+
+function LoadTimersServer_1() {
 try {
-	alert(timersID[timerID]);
+   xmlhttp=new XMLHttpRequest();
+   xmlhttp.open("GET",(recServ + "/timers.xml?" + new Date().getTime()),false); //"),false);  // 
+   xmlhttp.send();
+   xmlDoc=xmlhttp.responseXML; 
+   var x=xmlDoc.getElementsByTagName("timer");
+   maxTimers = x.length;
+	   for (var i=0;i<(x.length+10);i++) { timers[i] = 0 ;} // clear timers[i] tries to clear crap if current x.length < previous x.length
+   for (var i=0;i<x.length;i++)
+	  { 
+		var fill = "\uE003\uE003\uE003\uE003\uE003\uE003\uE003\uE003\uE003\uE003";
+	  timersFlag[i] = x[i].getElementsByTagName("flags")[0].childNodes[0].nodeValue;
+	  timersStrt[i] = Right("000" + x[i].getElementsByTagName("start")[0].childNodes[0].nodeValue,4);
+	  timersStop[i] = Right("000" + x[i].getElementsByTagName("stop")[0].childNodes[0].nodeValue,4);
+
+	  timersEvnt[i] = 0; // x[i].getElementsByTagName("eventid")[0].childNodes[0].nodeValue; // event_id
+	  timersID[i] = x[i].getElementsByTagName("channelid")[0].childNodes[0].nodeValue; // channel_id
+	  timersName[i] = x[i].getElementsByTagName("channelname")[0].childNodes[0].nodeValue + fill;
+	  timersDay[i] = x[i].getElementsByTagName("day")[0].childNodes[0].nodeValue;
+	  timersDays[i] = new Date(timersDay[i]*1000);
+	  timersDays[i] = timersDays[i].getDate() + "\uE003" + months[timersDays[i].getMonth()];
+
+	  if (timersFlag[i] == "1") { 
+		timers[i] = "\uE003\uE00C\uE003";
+	  } else if (timersFlag[i] == "9" || timersFlag[i] == "11" ) { 
+		timers[i] = "\uE003\uE00B\uE003";
+	  } else if (timersFlag[i] == "0") { 
+		timers[i] = "\uE003\uE003\uE003";
+	  }  else { 
+		timers[i] = "\uE003?\uE003";
+	  }
+	  timersFile[i] = x[i].getElementsByTagName("file")[0].childNodes[0].nodeValue + fill + fill;
+
+	  timers[i] = timers[i] + timersDays[i] + "\uE003" + timersStrt[i] + "\uE003" + timersStop[i] + "\uE003" + Left(timersName[i],8) + "\uE003" + Left(timersFile[i],15) + "\n" ;
+	  timerOK = 1;
+	  }
+
+  } catch(e) {
+    timerOK = 0;
+    alert("Get Timers problem: " + e);
+    mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'>" + Lang[7] + "</center></h1><pre style='color:black;font-size:" + fsMenu + ";'><center>\n  " + Lang[36] + ": \n " + recServ + "</center></pre>";
+  }
+}
+
+function DeleteTimers_1() {
+try {
+
 	xmlhttp=new XMLHttpRequest();
-	xmlhttp.open("POST",(RestFulAPI + "/timers/" + timersID[timerID]),false);
+	xmlhttp.open("POST",(recServ + "/deleteTimer.xml?guid=" + timersID[timerID] + "&dy=" + timersDay[timerID] 
+								+ "&st=" + timersStrt[timerID] + "&sp=" + timersStop[timerID]),false);
+	xmlhttp.send();
+	alert(xmlhttp.responseText);
+
+  } catch(e) {
+    alert("Deleting Timers problem: " + e);
+  }
+}
+
+function DeleteTimers() {
+//smarttvweb delete & restful reading
+try {
+
+	xmlhttp=new XMLHttpRequest();
+	var x = timersID[timerID].split(":");
+	xmlhttp.open("POST",(recServ + "/deleteTimer.xml?guid=" + x[0] + "&dy=" + x[2] + "&st=" + x[3] + "&sp=" + x[4]),false);
 	xmlhttp.send();
 	alert(xmlhttp.responseText);
 
@@ -2392,7 +2450,7 @@ function ShowSearchTimerInfo() {
 			info2 = Left(days[day],3) + "\uE003" + d + "\uE003" + Left(months[month],3) + "\uE003" + h + ':' + m;
 			info1 = info1 + info2;
 			info2 = "\uE003\uE003" + x[i].getElementsByTagName("param")[7].childNodes[0].nodeValue/60 + "\uE003"; // Duration
-			info1 = info1 + "\uE003" + Right(info2,3) + x[i].getElementsByTagName("param")[5].childNodes[0].nodeValue + "\uE003"; // Channel
+			info1 = info1 + "\uE003" + Right(info2,3) + Lang[56] + "\uE003" + x[i].getElementsByTagName("param")[5].childNodes[0].nodeValue + "\uE003"; // Channel
 			info1 = info1 + "\uE003" + Left(x[i].getElementsByTagName("param")[1].childNodes[0].nodeValue,25) + "\uE003"; // Programm Title
 			info1 = info1 + "\n";
 			
@@ -2627,10 +2685,11 @@ if (DelisOK) {
 
     case KEY_REC:
     case "MediaRecord":
-	// make timer for timer server recording
+	// make timer for recording
 	if (getRecOK == 2) { //set timer
 			SwitchTimer = 2;
 			settimer(recStrt[currMed],recTitl[currMed],recDura[currMed]);
+				ServerTimer(channels[currChan],recGUID[currMed]);
 			SwitchTimer = 1;
 			switchtimer.style.opacity = 1;
 			setTimeout("switchtimer.style.opacity = 0; ", 2000);
@@ -3223,6 +3282,7 @@ try {
 	recDura[i] = x[i].getElementsByTagName("param")[7].childNodes[0].nodeValue;
 	recStrt[i] = x[i].getElementsByTagName("param")[6].childNodes[0].nodeValue;
 	recChan[i] = currChan + "\uE003-\uE003" + channelsnames[currChan];
+	recGUID[i] = x[i].getElementsByTagName("param")[0].childNodes[0].nodeValue;
 
         date = new Date(Number(recStrt[i])*1000);
 	        year = date.getFullYear();
@@ -3275,6 +3335,7 @@ function getSchedule(schchan){
 		recDura[i] = events.infoSequence[i].duration;
 		recStrt[i] = events.infoSequence[i].time;
 		recChan[i] = schchan + "\uE003-\uE003" + channelsnames[schchan];
+		recGUID[i] = events.infoSequence[i].eventId;
 
 	        date = new Date(Number(recStrt[i])*1000);
 		        year = date.getFullYear();
@@ -3530,13 +3591,11 @@ try {
 
 
 
-function ServerTimer() {
-var x = "file=TestFile&flags=1&start=1400&stop=1615&day=2013-12-24&channel=S19.2E-53-1105-4016"
+function ServerTimer(guid,evid) {
 
 try {
    xmlhttp=new XMLHttpRequest();
-	//switch server to current channel
-   xmlhttp.open("POST",(RestFulAPI + "/timers?" + x),false);
+   xmlhttp.open("POST",(recServ + "/addTimer.xml?guid=" + guid + "&evid=" + evid),false);
    xmlhttp.send();
   } catch(e) {
     alert("Sending Timers to server problem: " + e);
