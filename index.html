@@ -375,7 +375,7 @@ function onKeyDown(event) {
     case "ChannelUp":
     case "Up":
 	if(isFullscreen) {
-		count = 0;
+		count = 0; Change = 0;
 		prevChan = currChan;
 		do
 		{
@@ -385,7 +385,7 @@ function onKeyDown(event) {
 	        play(channels[currChan]);
 	} else {
 	// swap up <> down in guide mode
-		count = 0;
+		count = 0; Change = 0;
 		do
 		{
 		        decChan(1);
@@ -397,7 +397,7 @@ function onKeyDown(event) {
     case "ChannelDown":
     case "Down":
 	if(isFullscreen) {
-		count = 0;
+		count = 0; Change = 0;
 		prevChan = currChan;
 		do
 		{
@@ -407,7 +407,7 @@ function onKeyDown(event) {
 	        play(channels[currChan]);
 	} else {
 	// swap up <> down in guide mode
-		count = 0;
+		count = 0; Change = 0;
 		do
 		{
 		        incChan(1);
@@ -417,7 +417,7 @@ function onKeyDown(event) {
 	}
 	break;
     case "Left":
-	count = 0;
+	count = 0; Change = 0;
 	if(isFullscreen) {
 	defChan[ChanGroup] = currChan;
 	do
@@ -448,7 +448,7 @@ function onKeyDown(event) {
 	}
 	break;
     case "Right":
-	count = 0;
+	count = 0; Change = 0;
 	if(isFullscreen) {
 	defChan[ChanGroup] = currChan;
 	do
@@ -2132,8 +2132,8 @@ if(menu == 5) { // Timers from Server
 	booking = booking + "<font style='background:#fc5;-webkit-border-radius:25px;color:black;font-size:" + fsMenu + ";'>";
 	var x = timerID - 1;
 	for (var i=0;i<11;i++) {
-		if (timers.length !== 0) { do { x = x + 1; } while (!timers[x] && (x < timers.length)) }
-		if (timers.length > x) { booking = booking + timers[x]; } else { booking = booking +"\n"; }
+		if (maxTimers !== 0) { do { x = x + 1; } while (!timers[x] && (x < maxTimers)) }
+		if (maxTimers > x) { booking = booking + timers[x]; } else { booking = booking +"\n"; }
 		if (i == 0) { booking = booking + "</font>"; } 
 	}
 	mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'>" + Lang[7] + "</center></h1><pre style='color:black;font-size:" + fsMenu + ";'>\n" + booking + "</pre>";
@@ -2149,8 +2149,8 @@ if(menu == 7) { // SearchTimers from Server
 	booking = booking + "<font style='background:#fc5;-webkit-border-radius:25px;color:black;font-size:" + fsMenu + ";'>";
 	var x = timerID - 1;
 	for (var i=0;i<11;i++) {
-		if (searchtimers.length !== 0) { do { x = x + 1; } while (!searchtimers[x] && (x < searchtimers.length)) }
-		if (searchtimers.length > x) { booking = booking + searchtimers[x]; } else { booking = booking +"\n"; }
+		if (maxTimers !== 0) { do { x = x + 1; } while (!searchtimers[x] && (x < maxTimers)) }
+		if (maxTimers > x) { booking = booking + searchtimers[x]; } else { booking = booking +"\n"; }
 		if (i == 0) { booking = booking + "</font>"; } 
 	}
 	mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'>" + Lang[8] + "</center></h1><pre style='color:black;font-size:" + fsMenu + ";'>\n" + booking + "</pre>";
@@ -2197,7 +2197,7 @@ function LoadTimers() {
 function LoadTimersServer_1() {
 try {
    xmlhttp=new XMLHttpRequest();
-   xmlhttp.open("GET",(recServ + "/timers.xml?" + new Date().getTime()),false); //"),false);  // 
+   xmlhttp.open("GET",(recServ + "/timers.xml?" + new Date().getTime()),false);
    xmlhttp.send();
    xmlDoc=xmlhttp.responseXML; 
    var x=xmlDoc.getElementsByTagName("timer");
@@ -2239,27 +2239,19 @@ try {
   }
 }
 
-function DeleteTimers_1() {
-try {
-
-	xmlhttp=new XMLHttpRequest();
-	xmlhttp.open("POST",(recServ + "/deleteTimer.xml?guid=" + timersID[timerID] + "&dy=" + timersDay[timerID] 
-								+ "&st=" + timersStrt[timerID] + "&sp=" + timersStop[timerID]),false);
-	xmlhttp.send();
-	alert(xmlhttp.responseText);
-
-  } catch(e) {
-    alert("Deleting Timers problem: " + e);
-  }
-}
-
 function DeleteTimers() {
-//smarttvweb delete & restful reading
 try {
 
 	xmlhttp=new XMLHttpRequest();
+//
+// SmartTVWeb
+//	xmlhttp.open("POST",(recServ + "/deleteTimer.xml?guid=" + timersID[timerID] + "&dy=" + timersDay[timerID] 
+//								+ "&st=" + timersStrt[timerID] + "&sp=" + timersStop[timerID]),false);
+// smarttvweb delete & restful reading
 	var x = timersID[timerID].split(":");
 	xmlhttp.open("POST",(recServ + "/deleteTimer.xml?guid=" + x[0] + "&dy=" + x[2] + "&st=" + x[3] + "&sp=" + x[4]),false);
+//
+//
 	xmlhttp.send();
 	alert(xmlhttp.responseText);
 
@@ -2272,7 +2264,7 @@ try {
 function LoadTimersServer() {
 try {
    xmlhttp=new XMLHttpRequest();
-   xmlhttp.open("GET",(RestFulAPI + "/timers.xml?" + new Date().getTime()),false); //"),false);  // 
+   xmlhttp.open("GET",(RestFulAPI + "/timers.xml?" + new Date().getTime()),false); 
    xmlhttp.send();
    xmlDoc=xmlhttp.responseXML; 
    var x=xmlDoc.getElementsByTagName("timer");
@@ -3454,12 +3446,12 @@ function onStateChanged(ev) {
 
 }
 
-// Make timers/ start recording/ timeshift
+// Start recording/ timeshift
 
 function ServerRecordStart() {
 //Instant recording on server
 
-//Check if no recording on this channel is started the last 15 min.
+//Check if no recording on this channel is started the last xx min.
 //
 var ii = SwitchTimer;
 SwitchTimer = 0;
@@ -3527,16 +3519,6 @@ function ServerPause() {
 }
 
 
-function ServerRecordStop() {
-try {
-   xmlhttp=new XMLHttpRequest();
-	//stop recording
-   xmlhttp.open('POST',(RestFulAPI + '/remote/Stop'),false);
-   xmlhttp.send();
-  } catch(e) {
-   alert("Sending Stop key to server problem: " + e);
-  }
-}
 
 
 function getPauseFile() {
@@ -3555,7 +3537,6 @@ try {
 
 	if ( xx[0] == currChan ) {
 		recLink[0] = recServ + x[i].getElementsByTagName("param")[2].childNodes[0].nodeValue;
-//		recDura[0] = x[i].getElementsByTagName("param")[8].childNodes[0].nodeValue;
 		}
 
 	 }
@@ -3570,23 +3551,6 @@ try {
 	position = 0;
 	pauseRec(recLink[0]);
 
-}
-
-
-
-function ServerRecordTimer(SC) {
-//Timed Instant recording on server
-//Can be replaced if timer exchange is possible
-try {
-   xmlhttp=new XMLHttpRequest();
-	//switch server to current channel
-   xmlhttp.open("POST",(RestFulAPI + "/remote/switch/" + channels[SC]),true);
-   xmlhttp.send();
-	//start recording
-	setTimeout("xmlhttp.open('POST',(RestFulAPI + '/remote/Record'),false);xmlhttp.send();",5000);
-  } catch(e) {
-   alert("Sending Record key to server problem: " + e);
-  }
 }
 
 
@@ -3717,8 +3681,8 @@ function onScheduledStart(event) {
 	if (currChan !== prevChan) {
 		play(channels[currChan]);
 	} 
-  } if ( timertype == "RecServer") {
-	ServerRecordTimer(Number(toi.schedulerService.getParameter(event.booking.id, "Channel")));
+//  } if ( timertype == "RecServer") {
+//	ServerRecordTimer(Number(toi.schedulerService.getParameter(event.booking.id, "Channel")));
   } else {
 	  try {
 	    createNewAsset();
@@ -3757,9 +3721,9 @@ function onScheduledStop(event) {
 	if ( timertype == "SwitchOnly") {
 	    toi.schedulerService.remove(event.booking.id);
 	    setOSDtimer();
-	} else if ( timertype == "RecServer") {
-	    // Sending stop isn't possible yet.
-	    toi.schedulerService.remove(event.booking.id);
+//	} else if ( timertype == "RecServer") {
+//	    // Sending stop isn't possible yet.
+//	    toi.schedulerService.remove(event.booking.id);
 	} else {
 	  try {
 	    mediaRecorder.close();
