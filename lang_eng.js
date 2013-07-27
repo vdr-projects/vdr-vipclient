@@ -86,7 +86,7 @@ Lang[51] = " ERROR getting Server EPG !!! ";
 Lang[52] = " NO EPG on this channel!!! ";
 Lang[53] = " ERROR getting EPG !!! ";
 Lang[54] = " Minutes ";
-Lang[55] = "ERROR recording already running";
+Lang[55] = "ERROR starting recording";
 Lang[56] = "Min.";
 
 Lang[60] = " MPD Connection ";

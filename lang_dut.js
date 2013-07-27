@@ -86,7 +86,7 @@ Lang[51] = " Problemen met het opvragen van de EPG !!! ";
 Lang[52] = " GEEN EPG op dit kanaal!!! ";
 Lang[53] = " Problemen met het opvragen van de EPG !!! ";
 Lang[54] = " Minuten ";
-Lang[55] = "FOUT opname reeds bezig";
+Lang[55] = "FOUT met instellen opname";
 Lang[56] = "Min.";
 
 

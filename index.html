@@ -490,7 +490,7 @@ function onKeyDown(event) {
 		}
 	} else if(isSchedule == 0){
 		if(NowNext) {	
-			settimer(EPG[NowNext][2][currChan],EPG[NowNext][1][currChan],0);
+			settimer(EPG[NowNext][2][currChan],EPG[NowNext][1][currChan],0,1);
 			switchtimer.style.opacity = 1;
 			setTimeout("switchtimer.style.opacity = 0; ", 2000);
 		}
@@ -859,9 +859,7 @@ function onKeyDown(event) {
 	} else if(isSchedule == 0){
 		if(NowNext) {
 //			// make timer for recording	
-//			SwitchTimer = 2;
-//			settimer(EPG[NowNext][2][currChan],EPG[NowNext][1][currChan],(EPG[NowNext][3][currChan]*60));
-//			SwitchTimer = 1;
+//			settimer(EPG[NowNext][2][currChan],EPG[NowNext][1][currChan],(EPG[NowNext][3][currChan]*60),2);
 //			switchtimer.style.opacity = 1;
 //			setTimeout("switchtimer.style.opacity = 0; ", 2000);
 		} else {
@@ -1036,7 +1034,8 @@ function updateOSDtime(timchan) {
 }
 
 
-function settimer(ProgTime,ProgName,ProgDura) {
+function settimer(ProgTime,ProgName,ProgDura,SwitchTimer) {
+// 1 - switchonly, 2 - record on server (display info only), 3 - record local
 	if(SwitchTimer == 1) {	
 		  try {
 		    switchtimerID = toi.schedulerService.schedule("SwitchOnly","notification", ProgTime , 0);
@@ -2195,6 +2194,7 @@ function LoadTimers() {
 
 
 function LoadTimersServer_1() {
+//Get timers from SmartTVweb
 try {
    xmlhttp=new XMLHttpRequest();
    xmlhttp.open("GET",(recServ + "/timers.xml?" + new Date().getTime()),false);
@@ -2202,7 +2202,7 @@ try {
    xmlDoc=xmlhttp.responseXML; 
    var x=xmlDoc.getElementsByTagName("timer");
    maxTimers = x.length;
-	   for (var i=0;i<(x.length+10);i++) { timers[i] = 0 ;} // clear timers[i] tries to clear crap if current x.length < previous x.length
+	timers.length = 0; // clear timers[i] tries to clear crap if current x.length < previous x.length
    for (var i=0;i<x.length;i++)
 	  { 
 		var fill = "\uE003\uE003\uE003\uE003\uE003\uE003\uE003\uE003\uE003\uE003";
@@ -2232,6 +2232,9 @@ try {
 	  timerOK = 1;
 	  }
 
+//	timers.sort(); // sorts only timers, (so all others are way off timers[0] <> timersflag[0] etc)
+
+
   } catch(e) {
     timerOK = 0;
     alert("Get Timers problem: " + e);
@@ -2239,7 +2242,7 @@ try {
   }
 }
 
-function DeleteTimers() {
+function DeleteTimers_1() {
 try {
 
 	xmlhttp=new XMLHttpRequest();
@@ -2261,7 +2264,23 @@ try {
 }
 
 
+function DeleteTimers() {
+try {
+	alert(timersID[timerID]);
+	xmlhttp=new XMLHttpRequest();
+	xmlhttp.open("POST",(RestFulAPI + "/timers/" + timersID[timerID]),false);
+	xmlhttp.send();
+	alert(xmlhttp.responseText);
+
+  } catch(e) {
+    alert("Deleting Timers problem: " + e);
+  }
+}
+
+
+
 function LoadTimersServer() {
+//Get timers from RestFulApi
 try {
    xmlhttp=new XMLHttpRequest();
    xmlhttp.open("GET",(RestFulAPI + "/timers.xml?" + new Date().getTime()),false); 
@@ -2269,7 +2288,7 @@ try {
    xmlDoc=xmlhttp.responseXML; 
    var x=xmlDoc.getElementsByTagName("timer");
    maxTimers = x.length;
-	   for (var i=0;i<(x.length+10);i++) { timers[i] = "" ;} // clear timers[i] tries to clear crap if current x.length < previous x.length
+	timers.length = 0; // clear timers[i] tries to clear crap if current x.length < previous x.length
    for (var i=0;i<x.length;i++)
 	  { 
 		var fill = "\uE003\uE003\uE003\uE003\uE003\uE003\uE003\uE003\uE003\uE003";
@@ -2277,8 +2296,8 @@ try {
 	  timersFlag[i] = x[i].getElementsByTagName("param")[1].childNodes[0].nodeValue;
 	  timersStrt[i] = Right("000" + x[i].getElementsByTagName("param")[2].childNodes[0].nodeValue,4);
 	  timersStop[i] = Right("000" + x[i].getElementsByTagName("param")[3].childNodes[0].nodeValue,4);
-	  timersDays[i] = x[i].getElementsByTagName("param")[9].childNodes[0].nodeValue;
-	  if (timersDays[i] == "-------" ) { 
+	  timersDays[i] = x[i].getElementsByTagName("param")[9].childNodes[0].nodeValue; // param name="weekdays"
+	  if (timersDays[i] == "-------" ) {
 		timersDays[i] = x[i].getElementsByTagName("param")[10].childNodes[0].nodeValue;
 	  } else { 
 		timersDays[i] = timersDays[i] + "\uE003\uE003\uE003";
@@ -2299,6 +2318,7 @@ try {
 	  timers[i] = timers[i] + timersDays[i] + "\uE003" + timersStrt[i] + "\uE003" + timersStop[i] + "\uE003" + Left(timersName[i],8) + "\uE003" + Left(timersFile[i],15) + "\n" ;
 	  timerOK = 1;
 	  }
+
   } catch(e) {
     timerOK = 0;
     alert("Get Timers problem: " + e);
@@ -2349,7 +2369,7 @@ try {
    xmlDoc=xmlhttp.responseXML; 
    var x=xmlDoc.getElementsByTagName("searchtimer");
    maxTimers = x.length;
-	   for (var i=0;i<(x.length+10);i++) { searchtimers[i] = "" ;} // clear timers[i] tries to clear crap if current x.length < previous x.length
+	searchtimers.length = 0; // clear timers[i] tries to clear crap if current x.length < previous x.length
    for (var i=0;i<x.length;i++)
 	  { 
 		var fill = "\uE003\uE003\uE003\uE003\uE003\uE003\uE003\uE003\uE003\uE003";
@@ -2630,7 +2650,7 @@ if (DelisOK) {
 	   DelRec(); 
 	}
 	if (getRecOK == 2) { //set timer
-			settimer(recStrt[currMed],recTitl[currMed],recDura[currMed]);
+			settimer(recStrt[currMed],recTitl[currMed],recDura[currMed],1);
 			switchtimer.style.opacity = 1;
 			setTimeout("switchtimer.style.opacity = 0; ", 2000);
 	 }
@@ -2644,9 +2664,7 @@ if (DelisOK) {
 	break;
     case "Green":
 	if (getRecOK == 2) { //set timer
-			SwitchTimer = 3;
-			settimer(recStrt[currMed],recTitl[currMed],recDura[currMed]);
-			SwitchTimer = 1;
+			settimer(recStrt[currMed],recTitl[currMed],recDura[currMed],3);
 			switchtimer.style.opacity = 1;
 			setTimeout("switchtimer.style.opacity = 0; ", 2000);
 	 }
@@ -2679,10 +2697,8 @@ if (DelisOK) {
     case "MediaRecord":
 	// make timer for recording
 	if (getRecOK == 2) { //set timer
-			SwitchTimer = 2;
-			settimer(recStrt[currMed],recTitl[currMed],recDura[currMed]);
-				ServerTimer(channels[currChan],recGUID[currMed]);
-			SwitchTimer = 1;
+			settimer(recStrt[currMed],recTitl[currMed],recDura[currMed],2);
+			ServerTimer(channels[currChan],recGUID[currMed]);
 			switchtimer.style.opacity = 1;
 			setTimeout("switchtimer.style.opacity = 0; ", 2000);
 	 } 
@@ -3449,49 +3465,27 @@ function onStateChanged(ev) {
 // Start recording/ timeshift
 
 function ServerRecordStart() {
-//Instant recording on server
+//Record current program
 
-//Check if no recording on this channel is started the last xx min.
-//
-var ii = SwitchTimer;
-SwitchTimer = 0;
+	try {
+	   xmlhttp=new XMLHttpRequest();
+	   xmlhttp.open("POST",(recServ + "/addTimer.xml?guid=" + channels[currChan] ),false);
+	   xmlhttp.send();
 
-var trec = "OK";
-for (var i=0; i<instanttimer.length; i++) {
- if (instanttimer[i] == currChan) { trec = "NOK" } 
-}
+		if (xmlhttp.responseXML == null) {
+		    settimer(EPG[NowNext][2][currChan],Lang[55],0,2);
+		    switchtimer.style.opacity = 1;
+		    setTimeout("switchtimer.style.opacity = 0; ", 2000);
+		} else {
+		   settimer(EPG[NowNext][2][currChan],EPG[NowNext][1][currChan],0,2);
+		   switchtimer.style.opacity = 1;
+		   setTimeout("switchtimer.style.opacity = 0; ", 2000);
+		}
 
-//only record if nothing is running 
- if (trec == "OK"){
-  try {
-   xmlhttp=new XMLHttpRequest();
-	//switch server to current channel
-   xmlhttp.open("POST",(RestFulAPI + "/remote/switch/" + channels[currChan]),true);
-   xmlhttp.send();
-	//start recording
-	setTimeout("xmlhttp.open('POST',(RestFulAPI + '/remote/Record'),false);xmlhttp.send();",5000);
+	  } catch(e) {
+	    alert("Sending Timers to server problem: " + e);
+	  }
 
-	//set timer to ignore duplicate recordings within inst_timeout
-	instanttimer[inst_timer] = currChan;
-	setTimeout("instanttimer[inst_timer] = '';", inst_timeout);
-	inst_timer = inst_timer + 1;
-
-	//Show some info on screen
-	settimer(EPG[NowNext][2][currChan],EPG[NowNext][1][currChan],0);
-	switchtimer.style.opacity = 1;
-	setTimeout("switchtimer.style.opacity = 0; ", 2000);
-
-  } catch(e) {
-   alert("Sending Record key to server problem: " + e);
-  }
- } else {
-	settimer(EPG[NowNext][2][currChan],Lang[55],0);
-	switchtimer.style.opacity = 1;
-	setTimeout("switchtimer.style.opacity = 0; ", 2000);
- }
-
-SwitchTimer = ii;
-//end of function
 }
 
 function ServerPause() {
@@ -3506,7 +3500,7 @@ function ServerPause() {
    setTimeout("xmlhttp.open('POST',(RestFulAPI + '/remote/Record'),false);xmlhttp.send();",5000);
 
 	//Show some info on screen
-   settimer(EPG[NowNext][2][currChan],Lang[70],0);
+   settimer(EPG[NowNext][2][currChan],Lang[70],0,2);
    switchtimer.style.opacity = 1;
    setTimeout("switchtimer.style.opacity = 0; ", 7000);
 

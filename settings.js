@@ -170,7 +170,6 @@ var preChan = 0;
 var timerChan = 10;
 var TimerActions = "";
 var switchtimerID = 0;
-var SwitchTimer = 1; // 1 - switchonly, 2 - record on server (localtimer), 3 - record local
 var initialDelayID = 0;
 var SleepTimer = 0;
 var SleepTimerID = -1;
