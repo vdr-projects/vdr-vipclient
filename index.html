@@ -20,7 +20,7 @@
 //
 //
 
-var Version = "0.21.2"
+var Version = "0.21.3"
 
 for (var x = 0;  x < 10; x++) { 
 	searchtimers[i] = "" ; // To solve displaying undefined
@@ -858,10 +858,11 @@ function onKeyDown(event) {
 		ServerRecordStart();
 	} else if(isSchedule == 0){
 		if(NowNext) {
-//			// make timer for recording	
-//			settimer(EPG[NowNext][2][currChan],EPG[NowNext][1][currChan],(EPG[NowNext][3][currChan]*60),2);
-//			switchtimer.style.opacity = 1;
-//			setTimeout("switchtimer.style.opacity = 0; ", 2000);
+			// make timer for recording
+			ServerTimer(channels[currChan],EPG[NowNext][6][currChan]);	
+			settimer(EPG[NowNext][2][currChan],EPG[NowNext][1][currChan],(EPG[NowNext][3][currChan]*60),2);
+			switchtimer.style.opacity = 1;
+			setTimeout("switchtimer.style.opacity = 0; ", 2000);
 		} else {
 			ServerRecordStart();
 		}
@@ -1040,13 +1041,6 @@ function settimer(ProgTime,ProgName,ProgDura,SwitchTimer) {
 		  try {
 		    switchtimerID = toi.schedulerService.schedule("SwitchOnly","notification", ProgTime , 0);
 		    toi.schedulerService.setParameter(switchtimerID, "Channel", currChan.toString() );
-		  }
-		  catch (e) {
-		    alert(e);
-		  }
-	} else if(SwitchTimer == 2) {	
-		  try {
-		    //toi.schedulerService.setParameter(toi.schedulerService.schedule("RecServer","notification", ProgTime , ProgDura), "Channel", currChan.toString() );
 		  }
 		  catch (e) {
 		    alert(e);
@@ -2242,17 +2236,17 @@ try {
   }
 }
 
-function DeleteTimers_1() {
+function DeleteTimers() {
 try {
 
 	xmlhttp=new XMLHttpRequest();
 //
 // SmartTVWeb
-//	xmlhttp.open("POST",(recServ + "/deleteTimer.xml?guid=" + timersID[timerID] + "&dy=" + timersDay[timerID] 
+//	xmlhttp.open("GET",(recServ + "/deleteTimer?guid=" + timersID[timerID] + "&dy=" + timersDay[timerID] 
 //								+ "&st=" + timersStrt[timerID] + "&sp=" + timersStop[timerID]),false);
 // smarttvweb delete & restful reading
 	var x = timersID[timerID].split(":");
-	xmlhttp.open("POST",(recServ + "/deleteTimer.xml?guid=" + x[0] + "&dy=" + x[2] + "&st=" + x[3] + "&sp=" + x[4]),false);
+	xmlhttp.open("GET",(recServ + "/deleteTimer?guid=" + x[0] + "&dy=" + x[2] + "&st=" + x[3] + "&sp=" + x[4]),false);
 //
 //
 	xmlhttp.send();
@@ -2264,9 +2258,8 @@ try {
 }
 
 
-function DeleteTimers() {
+function DeleteTimers_old() {
 try {
-	alert(timersID[timerID]);
 	xmlhttp=new XMLHttpRequest();
 	xmlhttp.open("POST",(RestFulAPI + "/timers/" + timersID[timerID]),false);
 	xmlhttp.send();
@@ -2640,7 +2633,7 @@ if (DelisOK) {
 			subgroup = 1;
 		} else {
 			mediaList.style.opacity = 0;
-			setTimeout("GetMarks(); getResume(); playRec(recLink[currMed]+ '?time=' + position);",100);
+			setTimeout("GetMarks(); getResume(); playRec(recLink[currMed]+ '?mode=streamtoend&time=' + position);",100);
 		}
 	}
         break;
@@ -2738,7 +2731,7 @@ if (DelisOK) {
 		      mediaPlayer.play(1000);
 		} else {		
 		      position = position + (mediaPlayer.getPosition()/1000);
-		      playRec((recLink[currMed] + "?time=" + position));
+		      playRec((recLink[currMed] + "?mode=streamtoend&time=" + position));
 		}
 	}
 	break;
@@ -2869,44 +2862,44 @@ if (DelisOK) {
 		      mediaPlayer.play(1000);
 		} else {		
 			position = position + (mediaPlayer.getPosition()/1000);
-			playRec((recLink[currMed] + "?time=" + position));
+			playRec((recLink[currMed] + "?mode=streamtoend&time=" + position));
 		}
     	    }
 	break;
     case KEY_1:
 	position = position + (mediaPlayer.getPosition()/1000) - 30;
 	if (position <= 0) { position = 0;} 
-			playRec((recLink[currMed] + "?time=" + position));
+			playRec((recLink[currMed] + "?mode=streamtoend&time=" + position));
 	break;
     case KEY_4:
 	position = position + (mediaPlayer.getPosition()/1000) - 60;
 	if (position <= 0) { position = 0;} 
-			playRec((recLink[currMed] + "?time=" + position));
+			playRec((recLink[currMed] + "?mode=streamtoend&time=" + position));
 	break;
     case KEY_7:
 	position = position + (mediaPlayer.getPosition()/1000) - 240;
 	if (position <= 0) { position = 0;} 
-			playRec((recLink[currMed] + "?time=" + position));
+			playRec((recLink[currMed] + "?mode=streamtoend&time=" + position));
 	break;
 
     case KEY_5:
 	if (recMark.length>posMark) {	
 		position = recMark[posMark]; 
-		playRec(recLink[currMed] + "?time=" + position); 
+		playRec(recLink[currMed] + "?mode=streamtoend&time=" + position); 
 	}
 	break;
     case KEY_2:
 	if (posMark>0) {	
 		posMark = posMark - 1;
 		position = recMark[posMark]; 
-		playRec(recLink[currMed] + "?time=" + position); 
+		playRec(recLink[currMed] + "?mode=streamtoend&time=" + position); 
 	}
 	break;
     case KEY_8:
 	if (recMark[posMark+1]) {	
 		posMark = posMark + 1;
 		position = recMark[posMark]; 
-		playRec(recLink[currMed] + "?time=" + position); 
+		playRec(recLink[currMed] + "?mode=streamtoend&time=" + position); 
 	}
 	break;
 
@@ -2917,7 +2910,7 @@ if (DelisOK) {
 	if (position >= recDura[currMed]) {
 	 	    BackToTV();
 	} else {
-			playRec((recLink[currMed] + "?time=" + position));
+			playRec((recLink[currMed] + "?mode=streamtoend&time=" + position));
 	}
 	break;
     case KEY_6:
@@ -2925,7 +2918,7 @@ if (DelisOK) {
 	if (position >= recDura[currMed]) {
 	 	    BackToTV();
 	} else {
-			playRec((recLink[currMed] + "?time=" + position));
+			playRec((recLink[currMed] + "?mode=streamtoend&time=" + position));
 	}
 	break;
     case KEY_9:
@@ -2933,12 +2926,12 @@ if (DelisOK) {
 	if (position >= recDura[currMed]) {
 	 	    BackToTV();
 	} else {
-			playRec((recLink[currMed] + "?time=" + position));
+			playRec((recLink[currMed] + "?mode=streamtoend&time=" + position));
 	}
 	break;
    case KEY_0:
 	position = 0;
-	playRec((recLink[currMed] + "?time=" + position));
+	playRec((recLink[currMed] + "?mode=streamtoend&time=" + position));
 	break;
 
 	default:
@@ -3469,7 +3462,7 @@ function ServerRecordStart() {
 
 	try {
 	   xmlhttp=new XMLHttpRequest();
-	   xmlhttp.open("POST",(recServ + "/addTimer.xml?guid=" + channels[currChan] ),false);
+	   xmlhttp.open("GET",(recServ + "/addTimer?guid=" + channels[currChan] ),false);
 	   xmlhttp.send();
 
 		if (xmlhttp.responseXML == null) {
@@ -3539,7 +3532,7 @@ try {
     alert("Get Recordings problem: " + e);
   }
 	getRecOK = 0;
-	recDura[0] = 3600;// set to 1 hour
+	recDura[0] = 0; // 3600;// set to 1 hour
 	LoadMediaSettings();// sets currMed to 0
 	recTitl[0] = "Time Shift File"
 	position = 0;
@@ -3553,7 +3546,7 @@ function ServerTimer(guid,evid) {
 
 try {
    xmlhttp=new XMLHttpRequest();
-   xmlhttp.open("POST",(recServ + "/addTimer.xml?guid=" + guid + "&evid=" + evid),false);
+   xmlhttp.open("GET",(recServ + "/addTimer?guid=" + guid + "&evid=" + evid),false);
    xmlhttp.send();
   } catch(e) {
     alert("Sending Timers to server problem: " + e);
@@ -3675,8 +3668,6 @@ function onScheduledStart(event) {
 	if (currChan !== prevChan) {
 		play(channels[currChan]);
 	} 
-//  } if ( timertype == "RecServer") {
-//	ServerRecordTimer(Number(toi.schedulerService.getParameter(event.booking.id, "Channel")));
   } else {
 	  try {
 	    createNewAsset();
@@ -3715,9 +3706,6 @@ function onScheduledStop(event) {
 	if ( timertype == "SwitchOnly") {
 	    toi.schedulerService.remove(event.booking.id);
 	    setOSDtimer();
-//	} else if ( timertype == "RecServer") {
-//	    // Sending stop isn't possible yet.
-//	    toi.schedulerService.remove(event.booking.id);
 	} else {
 	  try {
 	    mediaRecorder.close();
