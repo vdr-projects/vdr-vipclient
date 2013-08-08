@@ -20,11 +20,11 @@
 //
 //
 
-var Version = "0.21.3"
+var Version = "0.21.5"
 
 for (var x = 0;  x < 10; x++) { 
-	searchtimers[i] = "" ; // To solve displaying undefined
-	timers[i] = "" ;
+	searchtimers[x] = "" ; // To solve displaying undefined
+	timers[x] = "" ;
 	if (minChan[x]) {
 		for (var i = minChan[x];  i < (maxChan[x]+1); i++) { 
 			EPG[0][4][i] = "";EPG[1][4][i] = "";EPG[0][5][i] = "";EPG[1][5][i] = "";EPG[0][7][i] = "";EPG[1][7][i] = ""; 
@@ -539,6 +539,7 @@ function onKeyDown(event) {
 	}
 
 	if(epgactive) {
+		NowNext = 1 - NowNext;
 		osdepginfo.style.opacity = 1 - osdepginfo.style.opacity ;
 		osdepginfonext.style.opacity = 1 - osdepginfo.style.opacity;
 	}
@@ -854,19 +855,30 @@ function onKeyDown(event) {
 	break;
 	case KEY_REC:
 	case "MediaRecord":
-	if(isFullscreen) {
-		ServerRecordStart();
-	} else if(isSchedule == 0){
-		if(NowNext) {
-			// make timer for recording
-			ServerTimer(channels[currChan],EPG[NowNext][6][currChan]);	
-			settimer(EPG[NowNext][2][currChan],EPG[NowNext][1][currChan],(EPG[NowNext][3][currChan]*60),2);
-			switchtimer.style.opacity = 1;
-			setTimeout("switchtimer.style.opacity = 0; ", 2000);
-		} else {
-			ServerRecordStart();
-		}
+	if(isSchedule == 0) {
+			if(epgactive) {
+				ServerTimer(channels[currChan],EPG[NowNext][6][currChan]);
+				settimer(EPG[NowNext][2][currChan],EPG[NowNext][1][currChan],(EPG[NowNext][3][currChan]*60),2);
+				switchtimer.style.opacity = 1;
+				setTimeout("switchtimer.style.opacity = 0; ", 2000);
+			} else {
+				ServerRecordStart();
+			}
 	}
+//	if(isFullscreen && !epgactive) {
+//		ServerRecordStart();
+//	} else if(isSchedule == 0){
+//		if(NowNext) {
+//		} else {
+//			// make timer for recording
+//			ServerTimer(channels[currChan],EPG[NowNext][6][currChan]);
+//			settimer(EPG[NowNext][2][currChan],EPG[NowNext][1][currChan],(EPG[NowNext][3][currChan]*60),2);
+//			switchtimer.style.opacity = 1;
+//			setTimeout("switchtimer.style.opacity = 0; ", 2000);
+//		} else {
+//			ServerRecordStart();
+//		}
+//	}
 
 
 	break;
@@ -1205,6 +1217,7 @@ function GetEPG(epgchan)
 	EPG[0][3][epgchan] = (event.duration/60);
 	EPG[0][4][epgchan] = "";
 	EPG[0][5][epgchan] = "";
+	EPG[0][6][epgchan] = event.eventId;
 	if (event.parentalRating) {
 		EPG[0][8][epgchan] = "<br>(" + Lang[5] + (event.parentalRating + 3) + " )";
 	} else {
@@ -1251,6 +1264,7 @@ function GetEPG(epgchan)
 	EPG[1][3][epgchan] = (event.duration/60);
 	EPG[1][4][epgchan] = "";
 	EPG[1][5][epgchan] = "";
+	EPG[1][6][epgchan] = event.eventId;
 	if (event.parentalRating) {
 		EPG[1][8][epgchan] = "<br>(" + Lang[5] + (event.parentalRating + 3) + " )";
 	} else {
@@ -2246,11 +2260,10 @@ try {
 //								+ "&st=" + timersStrt[timerID] + "&sp=" + timersStop[timerID]),false);
 // smarttvweb delete & restful reading
 	var x = timersID[timerID].split(":");
-	xmlhttp.open("GET",(recServ + "/deleteTimer?guid=" + x[0] + "&dy=" + x[2] + "&st=" + x[3] + "&sp=" + x[4]),false);
+	xmlhttp.open("GET",(recServ + "/deleteTimer?guid=" + x[0] + "&dy=" + x[2] + "&st=" + x[3] + "&sp=" + x[4] + "&" + new Date().getTime()),false);
 //
 //
 	xmlhttp.send();
-	alert(xmlhttp.responseText);
 
   } catch(e) {
     alert("Deleting Timers problem: " + e);
@@ -2263,7 +2276,6 @@ try {
 	xmlhttp=new XMLHttpRequest();
 	xmlhttp.open("POST",(RestFulAPI + "/timers/" + timersID[timerID]),false);
 	xmlhttp.send();
-	alert(xmlhttp.responseText);
 
   } catch(e) {
     alert("Deleting Timers problem: " + e);
@@ -3462,7 +3474,7 @@ function ServerRecordStart() {
 
 	try {
 	   xmlhttp=new XMLHttpRequest();
-	   xmlhttp.open("GET",(recServ + "/addTimer?guid=" + channels[currChan] ),false);
+	   xmlhttp.open("GET",(recServ + "/addTimer?guid=" + channels[currChan] + "&" + new Date().getTime() ),false);
 	   xmlhttp.send();
 
 		if (xmlhttp.responseXML == null) {
@@ -3546,7 +3558,7 @@ function ServerTimer(guid,evid) {
 
 try {
    xmlhttp=new XMLHttpRequest();
-   xmlhttp.open("GET",(recServ + "/addTimer?guid=" + guid + "&evid=" + evid),false);
+   xmlhttp.open("GET",(recServ + "/addTimer?guid=" + guid + "&evid=" + evid + "&" + new Date().getTime() ),false);
    xmlhttp.send();
   } catch(e) {
     alert("Sending Timers to server problem: " + e);
@@ -3765,7 +3777,7 @@ function ClearScreen() {
 	<div id="mainmenu"  style="background:#3366ff;width:80%; position:absolute; left:10%; top:10%; bottom:10%;z-index:520;opacity:0;-webkit-border-radius:50px;font-family:'VDRSymbols Sans';"></div>
 	<div id="mediaList" style="background:#3366ff;width:80%; position:absolute; left:10%; top:10%; bottom:10%;z-index:520;opacity:0;-webkit-border-radius:50px;"></div>
 
-	<div id="switchtimer" style="background:red;width:45%; position:absolute; left:21%; top:26%;z-index:525;opacity:0;"></div>
+	<div id="switchtimer" style="background:red;width:45%; position:absolute; left:21%; top:26%;z-index:530;opacity:0;"></div>
 	<div id="osdepginfo" style="background:#3366ff;width:80%; position:absolute; left:10%; top:10%;z-index:525;opacity:0;-webkit-border-radius:50px;"></div>
 	<div id="osdepginfonext" style="background:#3366ff;width:80%; position:absolute; left:10%; top:10%;z-index:525;opacity:0;-webkit-border-radius:50px;"></div>
 </body>
