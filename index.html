@@ -573,8 +573,13 @@ function onKeyDown(event) {
 	if(isSchedule == 0) {
 			if(!epgactive) {
 			SetOsdInfo();
-			osdepginfo.style.opacity = 1;
-			osdepginfonext.style.opacity = 0;
+				if (NowNext) {
+					osdepginfo.style.opacity = 0;
+					osdepginfonext.style.opacity = 1;
+				} else {
+					osdepginfo.style.opacity = 1;
+					osdepginfonext.style.opacity = 0;
+				}			
 			epgactive = 1;		
 			} else {
 			osdepginfo.style.opacity = 0;
@@ -3135,7 +3140,14 @@ function MakeRecList() {
 				} else { 
 					recList[i] = "\uE003" + recTitl[i];
 				}
-	if (rec_New[i] == "true" ) { recList[i] = "\uE010\uE003" + recList[i]; } else { recList[i] = "\uE003\uE003" + recList[i]; }
+	AddDateInfo(i);
+	if (rec_New[i] == "true" ) 
+		{ 
+		recList[i] = "\uE010" + result + "\uE003" + recList[i]; 
+		} else { 
+		recList[i] = "\uE003" + result + "\uE003" + recList[i]; 
+		}
+
 	x = recTitl[i][recMap];
 	xx = recTitl[i][recMap + 1];
 	}
@@ -3157,10 +3169,11 @@ function MakeRecList2() {
 					recGroup[i] = xx;
 				} else { 
 					recGroup[i] = 0;
+						AddDateInfo(i);
 						if (rec_New[i] == "true" ) { 
-							recList[i] = "\uE003\uE010\uE003" + recTitl[i]; 
+							recList[i] = "\uE003\uE010" + result + "\uE003" + recTitl[i]; 
 						} else { 
-							recList[i] = "\uE003\uE003\uE003" + recTitl[i];
+							recList[i] = "\uE003\uE003" + result + "\uE003" + recTitl[i];
 						}
 				}
 	x = recTitl[i][0];
@@ -3177,11 +3190,11 @@ function MakeRecList3(GroupID) {
 				{
 				tmp = tmp + "\uE003" + recTitl[i][ii];
 				}
-
+			AddDateInfo(i);
 			if (rec_New[i] == "true" ) { 
-				recList[i] = "\uE010" + tmp; // recTitl[i]; 
+				recList[i] = "\uE010" + result + tmp; // recTitl[i]; 
 			} else { 
-				recList[i] = "\uE003" + tmp; //recTitl[i]; 
+				recList[i] = "\uE003" + result + tmp; //recTitl[i]; 
 			}
 
 			MaxInGroup = MaxInGroup + 1;
@@ -3191,8 +3204,21 @@ function MakeRecList3(GroupID) {
 	}
 }
 
-
-
+function AddDateInfo(info) {
+//Add Date to item
+        date = new Date(Number(recStrt[info])*1000);
+        year = date.getFullYear();
+        month = date.getMonth();
+        d = date.getDate();
+        h = date.getHours();
+        m = date.getMinutes();
+	month=addzero(month);
+	d=addzero(d);
+	h=addzero(h);
+	m=addzero(m);
+        result = "\uE003" + d + '-' + month + '-' + year + ' ' + h + ':' + m;
+//
+}
 
 function showMediaList() {
 	if (osdepginfo.style.opacity == 1) {osdepginfo.style.opacity = 0;}

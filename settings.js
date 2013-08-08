@@ -37,7 +37,6 @@ var fullupdate = 1; // If guideview is too slow, set it to 0 (for 1910/1960), fa
 
 
 var ShowOsdTime = 5000; //Time to show OSD, in seconds * 1000
-var inst_timeout = 120 * 1000; // 120 minutes, time to lock recording (So pressing twice record won't start a new recording of the same channel)
 
 var serverEPGdays = 3 * (60 * 60 * 24); // the higher the longer you wait while getting the epg info
 
