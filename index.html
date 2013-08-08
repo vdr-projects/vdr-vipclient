@@ -3114,6 +3114,7 @@ try {
 
 
 function MakeRecList() {
+//old style list
    var x = "";
    var xx = "";
    for (var i=0;i<recTitl.length;i++)
@@ -3140,7 +3141,7 @@ function MakeRecList() {
 				} else { 
 					recList[i] = "\uE003" + recTitl[i];
 				}
-	AddDateInfo(i);
+	AddInfo(i);
 	if (rec_New[i] == "true" ) 
 		{ 
 		recList[i] = "\uE010" + result + "\uE003" + recList[i]; 
@@ -3154,6 +3155,7 @@ function MakeRecList() {
 }
 
 function MakeRecList2() {
+//new style with sub maps
    var x = "";
    var xx = 0;
    for (var i=0;i<recTitl.length;i++)
@@ -3169,7 +3171,7 @@ function MakeRecList2() {
 					recGroup[i] = xx;
 				} else { 
 					recGroup[i] = 0;
-						AddDateInfo(i);
+						AddInfo(i);
 						if (rec_New[i] == "true" ) { 
 							recList[i] = "\uE003\uE010" + result + "\uE003" + recTitl[i]; 
 						} else { 
@@ -3190,7 +3192,7 @@ function MakeRecList3(GroupID) {
 				{
 				tmp = tmp + "\uE003" + recTitl[i][ii];
 				}
-			AddDateInfo(i);
+			AddInfo(i);
 			if (rec_New[i] == "true" ) { 
 				recList[i] = "\uE010" + result + tmp; // recTitl[i]; 
 			} else { 
@@ -3204,7 +3206,7 @@ function MakeRecList3(GroupID) {
 	}
 }
 
-function AddDateInfo(info) {
+function AddInfo(info) {
 //Add Date to item
         date = new Date(Number(recStrt[info])*1000);
         year = date.getFullYear();
