@@ -13,6 +13,7 @@ VDR 1.7.29
 	Instant REC now only records current program ( no EPG, no recording )
 	Recordsmenu shows recording date/time
 	Protection uses Timeout to reprotect.
+	Protection of recordings based on group the channel is in.
 
 
 0.20	Updated EPG filter
