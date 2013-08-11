@@ -831,8 +831,7 @@ channelsnames[610] = "VH1 (S)";
 channels[610] = "S19.2E-1-1066-28656";
 channelsnames[611] = "MTV Music 24 (S)";
 channels[611] = "S19.2E-1-1078-28671";
-channelsnames[612] = "GUNAZ TV (S)";
-channels[612] = "S13.0E-318-13400-4763";
+
 channelsnames[613] = "Greatest Hits TV (S)";
 channels[613] = "S28.2E-2-2311-52010";
 channelsnames[614] = "Blissmas (S)";

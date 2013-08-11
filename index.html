@@ -1552,6 +1552,12 @@ function StreamInfo(si) {
 		is.setObject("cfg.locale.ui","fra",is.STORAGE_VOLATILE);
 	}
 
+	// MTV transponder
+	if(SI[0]=="S19.2E" && SI[2]=="1066") {
+		is.setObject("cfg.locale.ui","eng",is.STORAGE_VOLATILE);
+	}
+
+
 	if(SI[0]=="S19.2E" && SI[2]=="1078" && SI[3]=="28679") {
 	//Nick NL
 		is.setObject("cfg.locale.ui","dut",is.STORAGE_VOLATILE);
@@ -1982,10 +1988,14 @@ function onKeyMenu(keyCode) {
 
 
 		if (menu == 1) {
-		ShowProtectedChannels = 1 - ShowProtectedChannels;
-		if (ShowProtectedChannels == 1 && protChn[ChanGroup] == 1) { ChanGroup = 0; currChan = defChan[ChanGroup]; play(currChan); }
-		isSetupMenu = 0;
-		mainmenu.style.opacity = 0;
+			ShowProtectedChannels = 1 - ShowProtectedChannels;
+			if (ProtectID) { clearTimeout(ProtectID); }
+			if (ShowProtectedChannels == 0 && ProtectTimeOut !== 0 ) {
+				ProtectID = setTimeout("ShowProtectedChannels = 1; if (protChn[ChanGroup] == 1) {ChanGroup = 0; currChan = defChan[ChanGroup]; play(currChan); }",ProtectTimeOut);
+				}
+			if (ShowProtectedChannels == 1 && protChn[ChanGroup] == 1) { ChanGroup = 0; currChan = defChan[ChanGroup]; play(currChan); }
+			isSetupMenu = 0;
+			mainmenu.style.opacity = 0;
 		}
 	break;
 	case KEY_8:
@@ -2984,9 +2994,11 @@ try {
 		  recDummy = recGUID[i].split(".");
 		  recDummy = recDummy[(recDummy.length-2)].split("-");
 		  recChan[i] = recDummy[0] + "\uE003-\uE003" + channelsnames[(recDummy[0])];
+		  recProt[i] = protChn[Number(Left((recDummy[0] / 1000),1))];
 		} else {
 		  //Media directory
 		  recChan[i] = "Media File";
+		  recProt[i] = 0; // No protection for Media Files.
 		}
 	 }
 
@@ -3105,6 +3117,7 @@ try {
    xmlhttp.send();
    recList[currMed] = "";
    recGroup[currMed] = -1;
+   recProt[currMed] = 0;
   } catch(e) {
     alert("Delete Recordings problem: " + e);
   }
@@ -3148,9 +3161,9 @@ function MakeRecList() {
 		} else { 
 		recList[i] = "\uE003" + result + "\uE003" + recList[i]; 
 		}
-
 	x = recTitl[i][recMap];
 	xx = recTitl[i][recMap + 1];
+	if ((recProt[i] == 1) && (ShowProtectedChannels == 1)) { recList[i] = "";}
 	}
 }
 
@@ -3178,6 +3191,9 @@ function MakeRecList2() {
 							recList[i] = "\uE003\uE003" + result + "\uE003" + recTitl[i];
 						}
 				}
+
+	if ((recProt[i] == 1) && (ShowProtectedChannels == 1)) { recList[i] = "";}
+
 	x = recTitl[i][0];
 	}
 }
@@ -3200,6 +3216,8 @@ function MakeRecList3(GroupID) {
 			}
 
 			MaxInGroup = MaxInGroup + 1;
+			if ((recProt[i] == 1) && (ShowProtectedChannels == 1)) { recList[i] = "";}
+
 		} else {
 			recList[i] = "" ; 
 		}
@@ -3218,7 +3236,11 @@ function AddInfo(info) {
 	d=addzero(d);
 	h=addzero(h);
 	m=addzero(m);
-        result = "\uE003" + d + '-' + month + '-' + year + ' ' + h + ':' + m;
+	if ( year==1970 ) { 
+		result = "\uE003";
+	} else {
+	        result = "\uE003" + d + '-' + month + '-' + year + ' ' + h + ':' + m;
+	}
 //
 }
 

@@ -27,6 +27,7 @@ var TimeShift = 0;   // 0 = no, 1 = yes timeshift
 var ShowSubs = 1;    // 0 = no, 1 = yes (default)
 var KillStream = 1;  // 1 = Close stream on Standby
 var ShowProtectedChannels = 1; // 0 = yes show, 1 = don't show protected channels (default)
+var ProtectTimeOut = 60 * (60 * 1000); //time out in minutes (0 = no timeout)
 var ShowSource = 1; // show source in OSD
 var pipPlayer = 0; // 0 = no, 1 = yes Pip
 var mediaRecorder = 1; // 0 = no, 1 = yes local recording.
@@ -170,6 +171,7 @@ var timerChan = 10;
 var TimerActions = "";
 var switchtimerID = 0;
 var initialDelayID = 0;
+var ProtectID = 0;
 var SleepTimer = 0;
 var SleepTimerID = -1;
 
@@ -217,6 +219,7 @@ var recGUID = new Array(); // GUID of recording
 var recChan = new Array(); // Channel ID
 var recDummy= new Array(); //
 var recGroup= new Array(); // group index
+var recProt = new Array(); // protect recording based on channelgroup
 var subgroup= 0 ; // Used for subdirs in recording view
 var MaxInGroup=14; // Used for subdirs in recording view
 

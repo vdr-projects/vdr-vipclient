@@ -4,7 +4,7 @@ Motorola Vip : 1960, 1910, 1903, 1963.
 VDR 1.7.29
 
 0.21	Language in sepate file, link your lang_XXX.js to language.js to activate it.
-	Updated EPG filter, (DVB-T defaults to German)
+	Updated EPG filter, (DVB-T defaults to German), added MTV transponder on 19E.
 	Audio, subs etc settings are now stored on the box. So they are kept after reboot.
 	OSD Time out can be set from settings.js
 	Pause Live TV on Server
@@ -12,7 +12,7 @@ VDR 1.7.29
 	Timer ADD/ Timer DEL is now possible by using SmartTVWeb (Show Timers still uses restfulapi) (No more patching of restfulapi is needed!)
 	Instant REC now only records current program ( no EPG, no recording )
 	Recordsmenu shows recording date/time
-
+	Protection uses Timeout to reprotect.
 
 
 0.20	Updated EPG filter
