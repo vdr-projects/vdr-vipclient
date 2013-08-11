@@ -2659,6 +2659,7 @@ if (DelisOK) {
 			setTimeout("MakeRecList3(recGroup[currMed]); showMediaList();",100)
 			subgroup = 1;
 		} else {
+			recList[currMed] = "\u0003" + recList[currMed].substr(1);
 			mediaList.style.opacity = 0;
 			setTimeout("GetMarks(); getResume(); playRec(recLink[currMed]+ '?mode=streamtoend&time=' + position);",100);
 		}
@@ -3186,9 +3187,9 @@ function MakeRecList2() {
 					recGroup[i] = 0;
 						AddInfo(i);
 						if (rec_New[i] == "true" ) { 
-							recList[i] = "\uE003\uE010" + result + "\uE003" + recTitl[i]; 
+							recList[i] = "\uE010" + result + "\uE003" + recTitl[i]; 
 						} else { 
-							recList[i] = "\uE003\uE003" + result + "\uE003" + recTitl[i];
+							recList[i] = "\uE003" + result + "\uE003" + recTitl[i];
 						}
 				}
 
