@@ -20,7 +20,7 @@
 //
 //
 
-var Version = "0.21.5"
+var Version = "0.21"
 
 for (var x = 0;  x < 10; x++) { 
 	searchtimers[x] = "" ; // To solve displaying undefined
@@ -2659,7 +2659,7 @@ if (DelisOK) {
 			setTimeout("MakeRecList3(recGroup[currMed]); showMediaList();",100)
 			subgroup = 1;
 		} else {
-			recList[currMed] = "\u0003" + recList[currMed].substr(1);
+			recList[currMed] = "\u0003" + recList[currMed].substring(1);
 			mediaList.style.opacity = 0;
 			setTimeout("GetMarks(); getResume(); playRec(recLink[currMed]+ '?mode=streamtoend&time=' + position);",100);
 		}
@@ -3048,7 +3048,7 @@ try {
         var xmlhttp = new XMLHttpRequest();
         xmlhttp.open("POST", recServ + "/setResume.xml?guid=" + recGUID[currMed] + "&resume=" + position, false);
         xmlhttp.send();
-	recList[currMed] = "\uE003" + Right(recList[currMed], recList[currMed].length -1 );
+	recList[currMed] = "\uE003" + recList[currMed].substring(1);
   } catch(e) {
     alert("Setting Resume problem: " + e);
   }
@@ -3075,7 +3075,7 @@ try {
         var xmlhttp = new XMLHttpRequest();
         xmlhttp.open("POST", recServ + "/setResume.xml?guid=" + recGUID[currMed] + "&resume=0", false);
         xmlhttp.send();
-	recList[currMed] = "\uE010" + Right(recList[currMed], recList[currMed].length -1 );
+	recList[currMed] = "\uE010" + recList[currMed].substring(1);
   } catch(e) {
     alert("Setting Resume problem: " + e);
   }
