@@ -20,7 +20,7 @@
 //
 //
 
-var Version = "0.21"
+var Version = "0.22.1"
 
 for (var x = 0;  x < 10; x++) { 
 	searchtimers[x] = "" ; // To solve displaying undefined
@@ -1501,6 +1501,10 @@ function StreamInfo(si) {
 	if(SI[1]=="3" && ( SI[2]=="3217") ) {
 	// 23E - Deluxe HD
 	is.setObject("cfg.locale.ui","DEU",is.STORAGE_VOLATILE);
+	}
+
+	if(SI[1]=="3" && SI[2]=="3212" && ( SI[3]=="14052" || SI[3]=="14055" ) ) {
+	is.setObject("cfg.locale.ui","CZE",is.STORAGE_VOLATILE);
 	}
 
 
@@ -3233,7 +3237,7 @@ function AddInfo(info) {
         d = date.getDate();
         h = date.getHours();
         m = date.getMinutes();
-	month=addzero(month);
+	month=addzero(month + 1);
 	d=addzero(d);
 	h=addzero(h);
 	m=addzero(m);
