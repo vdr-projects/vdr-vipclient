@@ -20,7 +20,7 @@
 //
 //
 
-var Version = "0.22.1"
+var Version = "0.22.2"
 
 for (var x = 0;  x < 10; x++) { 
 	searchtimers[x] = "" ; // To solve displaying undefined
@@ -1388,7 +1388,7 @@ function GetSchedule(schchan,tablelength){
 
 
 function StreamInfo(si) {
-
+	// EPG Filter
 	// streaminfo
 	// SI[x] 0-sat,1-NID,2-TID,3-SID
  	SI=channels[si].split("-");
@@ -1422,6 +1422,11 @@ function StreamInfo(si) {
 	if(SI[0]=="S28.2E") {
 	// Default on 28E English
 	is.setObject("cfg.locale.ui","eng",is.STORAGE_VOLATILE);
+	} 
+
+	if(SI[0]=="S42.0E") {
+	// Default on 28E English
+	is.setObject("cfg.locale.ui","tur",is.STORAGE_VOLATILE);
 	} 
 
 	if(SI[1]=="133") {
