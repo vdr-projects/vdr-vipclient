@@ -3688,9 +3688,9 @@ function ShowInfo() {
         day = date.getDay();
         h = date.getHours();
         m = date.getMinutes();
-	h=addzero(h);
-	m=addzero(m);
-        result = ''+days[day]+' '+d+' '+months[month]+' '+year+' '+h+':'+m;
+	h = addzero(h);
+	m = addzero(m);
+        result = '' + days[day] + ' ' + d + ' ' + months[month] + ' ' + year + ' ' + h + ':' + m;
 	if ( mediaList.style.opacity == 0 ) { updateStreamInfo(currMed);} else { AvInfo[currMed] = "";}
 
 	if (year!==1970) { 	
@@ -3702,7 +3702,7 @@ function ShowInfo() {
 	} else {
 		//info for non-vdr recordings
 	       	osdepginfo.innerHTML = "<center><pre style='color:white;'>" + Left(recTitl[currMed],60) 
-					+ "\n </pre><p>" + AvInfo[currMed] + " " + "\n \n </pre></center>";
+					+ "\n </pre><p>" + AvInfo[currMed] + " " + "\n \n </p></center>";
 	}
 }
 
