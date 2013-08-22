@@ -199,7 +199,7 @@ var fsReclist = (19*Yfactor) + "px";
 var fsMedia = (27*Yfactor) + "px";
 var fsKeys = (19*Yfactor) + "px";
 
-var AudioInfo = new Array();
+var AvInfo = new Array();
 var xx = 0;
 
 var isRecording = 0; // set by recording subroutine

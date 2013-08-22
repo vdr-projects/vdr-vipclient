@@ -20,7 +20,7 @@
 //
 //
 
-var Version = "0.22.2"
+var Version = "0.22.3"
 
 for (var x = 0;  x < 10; x++) { 
 	searchtimers[x] = "" ; // To solve displaying undefined
@@ -272,12 +272,12 @@ function onDataAvailableEvent(event) {
 	dataAvailable = event.status;
 	//alert("onDataAvailableEvent : " + event.status);
 	if(event.status==true) {
-		updateStreamInfo();
+		updateStreamInfo(currChan);
 	} 
 }
 
 
-function updateStreamInfo() {
+function updateStreamInfo(currStream) {
 
 //alert("What can this stream do : " + mediaPlayer.getCapabilities());
 	var mpCap = "";
@@ -315,16 +315,16 @@ var streamInfo = mediaPlayer.getStreamInfo();
 var cList = streamInfo.availableComponents;
 var x;
 xx = 0;
-AudioInfo[currChan] = "";
+AvInfo[currStream] = "";
 for(x=0; x<cList.length;x++) {
 	if(cList[x].type == 0) {
 	xx = xx + 1;
-	AudioInfo[currChan] = AudioInfo[currChan] + " Audio " + xx + " " + mediaPlayer.getAudioStreamInfo(cList[x]).encoding + " - " + mediaPlayer.getAudioStreamInfo(cList[x]).language + " , ";
+	AvInfo[currStream] = AvInfo[currStream] + " Audio " + xx + " " + mediaPlayer.getAudioStreamInfo(cList[x]).encoding + " - " + mediaPlayer.getAudioStreamInfo(cList[x]).language + " , ";
 	}
 	if(cList[x].type == 1) {
-	AudioInfo[currChan] = AudioInfo[currChan] + " Video " + mediaPlayer.getVideoStreamInfo(cList[x]).encoding + " size : " + mediaPlayer.getVideoStreamInfo(cList[x]).resolutionX + " x " + mediaPlayer.getVideoStreamInfo(cList[x]).resolutionY;
-	if (mediaPlayer.getVideoStreamInfo(cList[x]).aspectRatio == "1") { AudioInfo[currChan] = AudioInfo[currChan] + " (4:3)"; }
-	if (mediaPlayer.getVideoStreamInfo(cList[x]).aspectRatio == "2") { AudioInfo[currChan] = AudioInfo[currChan] + " (16:9)"; }
+	AvInfo[currStream] = AvInfo[currStream] + " Video " + mediaPlayer.getVideoStreamInfo(cList[x]).encoding + " size : " + mediaPlayer.getVideoStreamInfo(cList[x]).resolutionX + " x " + mediaPlayer.getVideoStreamInfo(cList[x]).resolutionY;
+	if (mediaPlayer.getVideoStreamInfo(cList[x]).aspectRatio == "1") { AvInfo[currStream] = AvInfo[currStream] + " (4:3)"; }
+	if (mediaPlayer.getVideoStreamInfo(cList[x]).aspectRatio == "2") { AvInfo[currStream] = AvInfo[currStream] + " (16:9)"; }
 	}
 
 	}
@@ -1026,7 +1026,7 @@ function OSDhtml(){
 	    osdname.innerHTML = Left(channelsnames[currChan],30);
 	}
     osdepg.innerHTML = "<p>" + EPG[0][7][currChan] + "</p>\n<p>" + EPG[1][7][currChan] + "</p>";
-    osdepginfo.innerHTML =  "<center><p style='color:white;' >" + currChan + "\uE003" + channelsnames[currChan] + "</p>" + AudioInfo[currChan] + "<p style='color:white;'>" + EPG[0][7][currChan] + EPG[0][9][currChan] + EPG[0][8][currChan] + "</p>\n<p style='color:yellow;'>" + EPG[0][4][currChan] + "</p>\n<p>" + Left(EPG[0][5][currChan],750) + "</p></center>";
+    osdepginfo.innerHTML =  "<center><p style='color:white;' >" + currChan + "\uE003" + channelsnames[currChan] + "</p>" + AvInfo[currChan] + "<p style='color:white;'>" + EPG[0][7][currChan] + EPG[0][9][currChan] + EPG[0][8][currChan] + "</p>\n<p style='color:yellow;'>" + EPG[0][4][currChan] + "</p>\n<p>" + Left(EPG[0][5][currChan],750) + "</p></center>";
     osdepginfonext.innerHTML =  "<center><p style='color:white;'>"  + currChan + "\uE003" + channelsnames[currChan] + "</p><p style='color:white;'>" +  EPG[1][7][currChan] + EPG[1][9][currChan] + EPG[1][8][currChan] + "</p>\n<p style='color:yellow;'>" + EPG[1][4][currChan] + "</p>\n<p>" + Left(EPG[1][5][currChan],750) + "</p></center>";
 }
 
@@ -2225,7 +2225,7 @@ function LoadTimers() {
 }
 
 
-function LoadTimersServer_1() {
+function LoadTimersServer() {
 //Get timers from SmartTVweb
 try {
    xmlhttp=new XMLHttpRequest();
@@ -2242,8 +2242,9 @@ try {
 	  timersStrt[i] = Right("000" + x[i].getElementsByTagName("start")[0].childNodes[0].nodeValue,4);
 	  timersStop[i] = Right("000" + x[i].getElementsByTagName("stop")[0].childNodes[0].nodeValue,4);
 
-	  timersEvnt[i] = 0; // x[i].getElementsByTagName("eventid")[0].childNodes[0].nodeValue; // event_id
-	  timersID[i] = x[i].getElementsByTagName("channelid")[0].childNodes[0].nodeValue; // channel_id
+	  timersEvnt[i] = x[i].getElementsByTagName("eventid")[0].childNodes[0].nodeValue; // event_id
+//	  timersID[i] = x[i].getElementsByTagName("channelid")[0].childNodes[0].nodeValue; // channel_id
+	  timersChan[i]  = x[i].getElementsByTagName("channelid")[0].childNodes[0].nodeValue; // channel_id
 	  timersName[i] = x[i].getElementsByTagName("channelname")[0].childNodes[0].nodeValue + fill;
 	  timersDay[i] = x[i].getElementsByTagName("day")[0].childNodes[0].nodeValue;
 	  timersDays[i] = new Date(timersDay[i]*1000);
@@ -2264,9 +2265,6 @@ try {
 	  timerOK = 1;
 	  }
 
-//	timers.sort(); // sorts only timers, (so all others are way off timers[0] <> timersflag[0] etc)
-
-
   } catch(e) {
     timerOK = 0;
     alert("Get Timers problem: " + e);
@@ -2280,11 +2278,11 @@ try {
 	xmlhttp=new XMLHttpRequest();
 //
 // SmartTVWeb
-//	xmlhttp.open("GET",(recServ + "/deleteTimer?guid=" + timersID[timerID] + "&dy=" + timersDay[timerID] 
-//								+ "&st=" + timersStrt[timerID] + "&sp=" + timersStop[timerID]),false);
+	xmlhttp.open("GET",(recServ + "/deleteTimer?guid=" + timersChan[timerID] + "&dy=" + timersDay[timerID] 
+			+ "&st=" + timersStrt[timerID] + "&sp=" + timersStop[timerID] + "&" + new Date().getTime()),false);
 // smarttvweb delete & restful reading
-	var x = timersID[timerID].split(":");
-	xmlhttp.open("GET",(recServ + "/deleteTimer?guid=" + x[0] + "&dy=" + x[2] + "&st=" + x[3] + "&sp=" + x[4] + "&" + new Date().getTime()),false);
+//	var x = timersID[timerID].split(":");
+//	xmlhttp.open("GET",(recServ + "/deleteTimer?guid=" + x[0] + "&dy=" + x[2] + "&st=" + x[3] + "&sp=" + x[4] + "&" + new Date().getTime()),false);
 //
 //
 	xmlhttp.send();
@@ -2295,20 +2293,7 @@ try {
 }
 
 
-function DeleteTimers_old() {
-try {
-	xmlhttp=new XMLHttpRequest();
-	xmlhttp.open("POST",(RestFulAPI + "/timers/" + timersID[timerID]),false);
-	xmlhttp.send();
-
-  } catch(e) {
-    alert("Deleting Timers problem: " + e);
-  }
-}
-
-
-
-function LoadTimersServer() {
+function LoadTimersServer_1() {
 //Get timers from RestFulApi
 try {
    xmlhttp=new XMLHttpRequest();
@@ -3637,6 +3622,7 @@ function BackToTV() {
 	    	mediaList.style.opacity = 0.9;
 	    	showDisplay("STOP", false, 100, 0 );
 	    	showMediaList();
+		AvInfo.length = 0;
 	    }
 }
 
@@ -3705,13 +3691,18 @@ function ShowInfo() {
 	h=addzero(h);
 	m=addzero(m);
         result = ''+days[day]+' '+d+' '+months[month]+' '+year+' '+h+':'+m;
+	if ( mediaList.style.opacity == 0 ) { updateStreamInfo(currMed);} else { AvInfo[currMed] = "";}
+
 	if (year!==1970) { 	
-       		osdepginfo.innerHTML = "<center><pre style='color:white;'>" + Left(recTitl[currMed],60) + "\n " + result + "\n " 
-					+ (recDura[currMed] / 60).toFixed(0) + Lang[54] + "\n " + recChan[currMed] + "  " 
+       		osdepginfo.innerHTML = "<center><pre style='color:white;'>" + Left(recTitl[currMed],60) 
+					+ "</pre> " + AvInfo[currMed] + "<pre style='color:white;'> " 
+					+ result + "\n " 
+					+ (recDura[currMed] / 60).toFixed(0) + Lang[54] + "\n " + recChan[currMed] + "  "
 					+ "\n </pre><p>" + Left(recDesc[currMed],750) + "</p></center>";
 	} else {
 		//info for non-vdr recordings
-	       	osdepginfo.innerHTML = "<center><pre style='color:white;'>" + Left(recTitl[currMed],60) + "\n \n </pre></center>";
+	       	osdepginfo.innerHTML = "<center><pre style='color:white;'>" + Left(recTitl[currMed],60) 
+					+ "\n </pre><p>" + AvInfo[currMed] + " " + "\n \n </pre></center>";
 	}
 }
 

@@ -164,38 +164,48 @@ channelsnames[3201] = "NRK2 (S)";
 channels[3201] = "S5.0E-86-28-1502";
 channelsnames[3202] = "NRK Super / NRK3 (S)";
 channels[3202] = "S5.0E-86-28-3510";
+
+//TurkSat 42E scan
+//Channels with English soundtrack
+
 channelsnames[3500] = "DISCOVERY CHANNEL (S)";
 channels[3500] = "S42.0E-42-55000-3601";
-channelsnames[3501] = "CNN TÜRK (S)";
-channels[3501] = "S42.0E-66-3-1";
-channelsnames[3502] = "EURO D (S)";
-channels[3502] = "S42.0E-66-3-3";
-channelsnames[3503] = "ONE SUPER TV (S)";
-channels[3503] = "S42.0E-66-3-4";
-channelsnames[3504] = "DERMAN TV (S)";
-channels[3504] = "S42.0E-66-3-5";
-channelsnames[3505] = "KRAL POP (S)";
-channels[3505] = "S42.0E-66-3-6";
-channelsnames[3506] = "RETRO TV (S)";
-channels[3506] = "S42.0E-66-3-7";
-channelsnames[3507] = "BEATZ TV (S)";
-channels[3507] = "S42.0E-66-3-8";
-channelsnames[3508] = "BAL TV (S)";
-channels[3508] = "S42.0E-66-3-10";
-channelsnames[3509] = "CNN TÜRK RADYO (S)";
-channels[3509] = "S42.0E-66-3-11";
-channelsnames[3510] = "RADYO D (S)";
-channels[3510] = "S42.0E-66-3-12";
-channelsnames[3511] = "SLOW TÜRK (S)";
-channels[3511] = "S42.0E-66-3-13";
-channelsnames[3512] = "BEST FM (S)";
-channels[3512] = "S42.0E-66-3-14";
-channelsnames[3513] = "POP MUSIC TV (S)";
-channels[3513] = "S42.0E-66-3-32";
-channelsnames[3514] = "MUSICBOX TV (S)";
-channels[3514] = "S42.0E-66-3-33";
-channelsnames[3515] = "TV2 (S)";
-channels[3515] = "S42.0E-66-3-35";
+channelsnames[3501] = "TV2 (S)";
+channels[3501] = "S42.0E-66-3-35";
+channelsnames[3502] = "TRT BELGESEL (S)";
+channels[3502] = "S42.0E-1-1-18";
+channelsnames[3503] = "KIDZ/ANIMEZ (S)";
+channels[3503] = "S42.0E-42-55-100";
+channelsnames[3504] = "SPORTS TV (S)";
+channels[3504] = "S42.0E-42-502-14";
+channelsnames[3505] = "DUBLE TV (S)";
+channels[3505] = "S42.0E-42-55-2800";
+channelsnames[3506] = "World Travel Channel";
+channels[3506] = "S42.0E-42-1089-2";
+channelsnames[3507] = "CNN TÜRK (S)";
+channels[3507] = "S42.0E-66-3-1";
+channelsnames[3508] = "EURO D (S)";
+channels[3508] = "S42.0E-66-3-3";
+
+//TurkSat 42E scan
+//Unsorted
+
+channelsnames[3509] = "ONE SUPER TV (S)";
+channels[3508] = "S42.0E-66-3-4";
+channelsnames[3510] = "KRAL POP (S)";
+channels[3510] = "S42.0E-66-3-6";
+channelsnames[3511] = "RETRO TV (S)";
+channels[3511] = "S42.0E-66-3-7";
+channelsnames[3512] = "BEATZ TV (S)";
+channels[3512] = "S42.0E-66-3-8";
+channelsnames[3513] = "DERMAN TV (S)";
+channels[3513] = "S42.0E-66-3-5";
+
+channelsnames[3514] = "POP MUSIC TV (S)";
+channels[3514] = "S42.0E-66-3-32";
+channelsnames[3515] = "MUSICBOX TV (S)";
+channels[3515] = "S42.0E-66-3-33";
+
 channelsnames[3516] = "SILA TV (S)";
 channels[3516] = "S42.0E-66-3-37";
 channelsnames[3517] = "DHA FEED (S)";
@@ -214,62 +224,25 @@ channelsnames[3523] = "MEDYA TV (S)";
 channels[3523] = "S42.0E-66-3-48";
 channelsnames[3524] = "MÜJDE TV (S)";
 channels[3524] = "S42.0E-66-3-49";
-channelsnames[3525] = "SERVICE 1 (S)";
-channels[3525] = "S42.0E-66-3-81";
-channelsnames[3526] = "SERVICE 2 (S)";
-channels[3526] = "S42.0E-66-3-82";
-channelsnames[3527] = "SERVICE 3 (S)";
-channels[3527] = "S42.0E-66-3-83";
-channelsnames[3528] = "SERVICE 4 (S)";
-channels[3528] = "S42.0E-66-3-84";
+channelsnames[3525] = "BAL TV (S)";
+channels[3525] = "S42.0E-66-3-10";
+
+
 channelsnames[3529] = "TRT 1 (S)";
 channels[3529] = "S42.0E-1-1-1";
-channelsnames[3530] = "RADYO 1 (S)";
-channels[3530] = "S42.0E-1-1-2";
-channelsnames[3531] = "RADYO 3 (S)";
-channels[3531] = "S42.0E-1-1-3";
-channelsnames[3532] = "Radyo GAP (S)";
-channels[3532] = "S42.0E-1-1-4";
 channelsnames[3533] = "TRT HABER (S)";
 channels[3533] = "S42.0E-1-1-5";
-channelsnames[3534] = "RADYO 2 (TRT FM) (S)";
-channels[3534] = "S42.0E-1-1-6";
-channelsnames[3535] = "RADYO 4 (S)";
-channels[3535] = "S42.0E-1-1-7";
-channelsnames[3536] = "Radyo 6 (S)";
-channels[3536] = "S42.0E-1-1-8";
 channelsnames[3537] = "TRT TURK (S)";
 channels[3537] = "S42.0E-1-1-9";
-channelsnames[3538] = "VOT World (S)";
-channels[3538] = "S42.0E-1-1-10";
-channelsnames[3539] = "TSR Turkce (S)";
-channels[3539] = "S42.0E-1-1-11";
+
 channelsnames[3540] = "TRT 3 (S)";
 channels[3540] = "S42.0E-1-1-12";
-channelsnames[3541] = "Meteorolojinin Sesi (S)";
-channels[3541] = "S42.0E-1-1-13";
-channelsnames[3542] = "VOT West (S)";
-channels[3542] = "S42.0E-1-1-14";
-channelsnames[3543] = "VOT East (S)";
-channels[3543] = "S42.0E-1-1-15";
 channelsnames[3544] = "TRT 4-COCUK (S)";
 channels[3544] = "S42.0E-1-1-16";
-channelsnames[3545] = "TRT NAGME (S)";
-channels[3545] = "S42.0E-1-1-17";
-channelsnames[3546] = "TRT BELGESEL (S)";
-channels[3546] = "S42.0E-1-1-18";
-channelsnames[3547] = "TRT AVRUPA FM (S)";
-channels[3547] = "S42.0E-1-1-19";
-channelsnames[3548] = "TRT TURKU (S)";
-channels[3548] = "S42.0E-1-1-20";
-channelsnames[3549] = "TRT Intercom (S)";
-channels[3549] = "S42.0E-1-1-21";
+
 channelsnames[3550] = "TRT OKUL (S)";
 channels[3550] = "S42.0E-1-1-22";
-channelsnames[3551] = "RDS (S)";
-channels[3551] = "S42.0E-1-1-23";
-channelsnames[3552] = "KIDZ/ANIMEZ (S)";
-channels[3552] = "S42.0E-42-55-100";
+
 channelsnames[3553] = "Sci Tech TV (S)";
 channels[3553] = "S42.0E-42-55-300";
 channelsnames[3554] = "SINEMA TV (S)";
@@ -300,8 +273,7 @@ channelsnames[3566] = "DEPOMEPO TV (S)";
 channels[3566] = "S42.0E-42-55-2600";
 channelsnames[3567] = "LAGUN TV (S)";
 channels[3567] = "S42.0E-42-55-2700";
-channelsnames[3568] = "DUBLE TV (S)";
-channels[3568] = "S42.0E-42-55-2800";
+
 channelsnames[3569] = "KON TV (S)";
 channels[3569] = "S42.0E-42-3-1";
 channelsnames[3570] = "HALK TV (S)";
@@ -328,24 +300,7 @@ channelsnames[3580] = "TATLISES TV (S)";
 channels[3580] = "S42.0E-42-3-13";
 channelsnames[3581] = "REHBER TV (S)";
 channels[3581] = "S42.0E-42-3-14";
-channelsnames[3582] = "YON RADYO (S)";
-channels[3582] = "S42.0E-42-3-18";
-channelsnames[3583] = "RIBAT FM (S)";
-channels[3583] = "S42.0E-42-3-19";
-channelsnames[3584] = "RADYO MEGA (S)";
-channels[3584] = "S42.0E-42-3-20";
-channelsnames[3585] = "MUJDE AKDENIZ (S)";
-channels[3585] = "S42.0E-42-3-21";
-channelsnames[3586] = "KONYA FM (S)";
-channels[3586] = "S42.0E-42-3-26";
-channelsnames[3587] = "VIZYON TURK (S)";
-channels[3587] = "S42.0E-42-3-27";
-channelsnames[3588] = "CAGRI FM (S)";
-channels[3588] = "S42.0E-42-3-29";
-channelsnames[3589] = "T KACKAR (S)";
-channels[3589] = "S42.0E-42-3-30";
-channelsnames[3590] = "ANC RADYO (S)";
-channels[3590] = "S42.0E-42-3-31";
+
 channelsnames[3591] = "EM TV (S)";
 channels[3591] = "S42.0E-42-502-1";
 channelsnames[3592] = "UZAY TV (S)";
@@ -370,16 +325,9 @@ channelsnames[3601] = "TURKIYEM TV (S)";
 channels[3601] = "S42.0E-42-502-11";
 channelsnames[3602] = "MCJ MEDIASA (S)";
 channels[3602] = "S42.0E-42-502-12";
-channelsnames[3603] = "DOLUNAY FM (S)";
-channels[3603] = "S42.0E-42-502-13";
-channelsnames[3604] = "SPORTS TV (S)";
-channels[3604] = "S42.0E-42-502-14";
-channelsnames[3605] = "BAYRAM FM (S)";
-channels[3605] = "S42.0E-42-502-15";
 channelsnames[3606] = "SUN TV (S)";
 channels[3606] = "S42.0E-42-502-16";
-channelsnames[3607] = "SILA RADYO (S)";
-channels[3607] = "S42.0E-42-502-17";
+
 
 
 maxChan[3] = 3607; // set to max channel else you see 'undefined' in guide view
