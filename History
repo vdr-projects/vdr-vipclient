@@ -5,10 +5,12 @@ VDR 1.7.29
 
 0.22	Updated EPG filter for 42E
 	Fix: Right month is now shown in recordings menu.
+	Fix: multiple EPG languages on 1 transponder.
 	Added some channels for 42E to group 3
-	Updated UK channels
-	SmartwebTV timer handling added
+	Updated channels.conf
+	SmartwebTV timer handling added (No more restfulapi needed for timers)
 	Info about audio/video in Infobox when playing Recording
+	
 
 
 0.21	Language in sepate file, link your lang_XXX.js to language.js to activate it.

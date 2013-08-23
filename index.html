@@ -1197,6 +1197,8 @@ function GetEPG(epgchan)
 	SI="";
   try {
 
+	eitCache.clearServices();
+
 	 StreamInfo(epgchan);
 
 	 eitService = toi.statics.ToiDvbEitCacheServiceItem.create(SI[1],SI[2],SI[3]);
@@ -1425,7 +1427,6 @@ function StreamInfo(si) {
 	} 
 
 	if(SI[0]=="S42.0E") {
-	// Default on 28E English
 	is.setObject("cfg.locale.ui","tur",is.STORAGE_VOLATILE);
 	} 
 
@@ -1442,6 +1443,11 @@ function StreamInfo(si) {
 	if(SI[2]=="1055" || SI[2]=="1053" || SI[2]=="1041" || SI[2]=="1017" || SI[2]=="1109") {
 	//HD+ transponder
 	is.setObject("cfg.locale.ui","DEU",is.STORAGE_VOLATILE);
+	}
+
+	if(SI[1]=="113") {
+	//PolSat
+	is.setObject("cfg.locale.ui","pol",is.STORAGE_VOLATILE);
 	}
 
 
@@ -1555,23 +1561,27 @@ function StreamInfo(si) {
 	}
 
 
-	// MTV transponder
-	if(SI[0]=="S19.2E" && SI[2]=="1078" && ( SI[3]=="28674" || SI[3]=="28675" || SI[3]=="28677")) {
+	// MTV transponder 1078 / 1066
+	if(SI[0]=="S19.2E" && SI[2]=="1078" && ( SI[3]=="28674" || SI[3]=="28675" || SI[3]=="28677" )) {
 	//Nick JR France
 		is.setObject("cfg.locale.ui","fra",is.STORAGE_VOLATILE);
 	}
-
-	// MTV transponder
-	if(SI[0]=="S19.2E" && SI[2]=="1066") {
-		is.setObject("cfg.locale.ui","eng",is.STORAGE_VOLATILE);
-	}
-
-
 	if(SI[0]=="S19.2E" && SI[2]=="1078" && SI[3]=="28679") {
 	//Nick NL
 		is.setObject("cfg.locale.ui","dut",is.STORAGE_VOLATILE);
 	}
+	if(SI[0]=="S19.2E" && SI[2]=="1078" && ( SI[3]=="28673" || SI[3]=="28676" )) {
+	//Deutsch
+		is.setObject("cfg.locale.ui","ger",is.STORAGE_VOLATILE);
+	}
 
+
+	if(SI[0]=="S19.2E" && SI[2]=="1066") {
+		is.setObject("cfg.locale.ui","eng",is.STORAGE_VOLATILE);
+	}
+	if(SI[0]=="S19.2E" && SI[2]=="1066" && ( SI[3]=="28652" || SI[3]=="28661" )) {
+		is.setObject("cfg.locale.ui","fra",is.STORAGE_VOLATILE);
+	}
 
 }
 
