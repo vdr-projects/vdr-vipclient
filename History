@@ -3,13 +3,15 @@ Motorola Vip : 1960, 1910, 1903, 1963.
 
 VDR 1.7.29
 
-0.22	Updated EPG filter for 42E, canal sat (tid 1088), canal+ (tid 1060)
+0.22	Updated EPG filter for 42E, canal sat (tid 1088), canal+ (tid 1060), CDS (veronica)
 	Fix: Right month is now shown in recordings menu.
 	Fix: multiple EPG languages on 1 transponder.
 	Added some channels for 42E to group 3
 	Updated channels.conf
 	SmartwebTV timer handling added (No more restfulapi needed for timers)
 	Info about audio/video in Infobox when playing Recording
+	Update dutch tv/radio channels on 19E
+
 	
 
 

@@ -20,7 +20,7 @@
 //
 //
 
-var Version = "0.22.3"
+var Version = "0.22.4"
 
 for (var x = 0;  x < 10; x++) { 
 	searchtimers[x] = "" ; // To solve displaying undefined
@@ -1462,7 +1462,7 @@ function StreamInfo(si) {
 	is.setObject("cfg.locale.ui","ita",is.STORAGE_VOLATILE);
 	}
 
-	if(SI[1]=="53") {
+	if(SI[1]=="53" || (SI[0]=="S19.2E" && SI[2]=="1037") ) {
 	//Canal Digitaal/ TV Vlaanderen 
 	is.setObject("cfg.locale.ui","dut",is.STORAGE_VOLATILE);
 	}
