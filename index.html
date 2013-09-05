@@ -20,7 +20,7 @@
 //
 //
 
-var Version = "0.22.4"
+var Version = "0.22.5"
 
 for (var x = 0;  x < 10; x++) { 
 	searchtimers[x] = "" ; // To solve displaying undefined
@@ -2453,6 +2453,21 @@ try {
 		} else {
 			SearchTimer[i]  = SearchTimer[i] + "\uE003\uE016\uE003" + Lang[41] + "\uE003" + "\n";
 		}
+		if ((x[i].getElementsByTagName("use_dayofweek")[0].childNodes[0].nodeValue) == 0) {
+			SearchTimer[i] = SearchTimer[i] + "\uE003\uE016\uE003" + Lang[47] + "\uE003" + "\n";
+		} else {
+			//bit is used for dayofweek.
+			var dowx = Math.abs(x[i].getElementsByTagName("dayofweek")[0].childNodes[0].nodeValue);
+			var dow = "";
+			for (var dowi=0; dowi<7; dowi++)
+			{
+				var mask = 1 << dowi;
+				if ((dowx & mask) != 0) { dow = dow + days[dowi] + "\uE003";}
+			}
+			SearchTimer[i] = SearchTimer[i] + "\uE003\uE017\uE003" + Lang[47] + "\uE003:\uE003" + dow + "\n";
+		}
+
+
 		if ((x[i].getElementsByTagName("use_channel")[0].childNodes[0].nodeValue) == 0) {
 			SearchTimer[i] = SearchTimer[i] + "\uE003\uE016\uE003" + Lang[42] + "\uE003" + "\n";
 		} else {
@@ -2460,6 +2475,7 @@ try {
 					searchchan[(x[i].getElementsByTagName("use_channel")[0].childNodes[0].nodeValue)] + "\uE003" + 
 					x[i].getElementsByTagName("channels")[0].childNodes[0].nodeValue + "\n";
 		}
+
 		SearchTimer[i]  = SearchTimer[i] + "\n</pre>";
 		// End of Extended INFO
 
@@ -2595,6 +2611,7 @@ function UnloadMediaSettings() {
 	mediaPlayer.removeEventListener(mediaPlayer.ON_STATE_CHANGED, onStateChanged);
 	mediaList.style.opacity = 0;
 	osdmedia.style.opacity = 0;
+	osdtime.style.opacity = 0;
 	osdepginfo.style.opacity = 0;
 	mediaList.innerHTML = "<h1><center style='font-size:" + fsRec + ";color:white;'>" + Lang[0] + "</center></h1>";
  	showDisplay((currChan.toString()), false, 100, 0 );
@@ -2799,6 +2816,7 @@ if (DelisOK) {
 	break;
   case "Accept":
 	osdmedia.style.opacity = 1 - osdmedia.style.opacity;
+	osdtime.style.opacity = osdmedia.style.opacity;
 	ShowMediaOSD();
         break;
    case "Green":
@@ -3282,6 +3300,7 @@ function AddInfo(info) {
 function showMediaList() {
 	if (osdepginfo.style.opacity == 1) {osdepginfo.style.opacity = 0;}
 	osdmedia.style.opacity = 0;
+	osdtime.style.opacity = 0;
 	var liststyle = "";
 	listMed = currMed - 1;
 	var MaxMed = -1;
@@ -3716,7 +3735,9 @@ function ShowMediaOSD() {
 	pos4 = pos4 + "</font><font color=red>" + pos6 + "</font>";
 	var x = (Number(recDura[currMed])/60).toFixed(0);
 	if (pos/60 > x) { x = (pos/60).toFixed(0);}
-	osdmedia.innerHTML = "<pre style='color:white;font-size:" + fsMedia +";'>  " + (pos/60).toFixed(0) + " / " + x + "  " + Left(recTitl[currMed],40) + "\n  " + pos4 + " </pre>";
+	date_time();
+	osdtime.innerHTML = result;
+	osdmedia.innerHTML = "<pre style='color:white;font-size:" + fsMedia +";'> \n  " + (pos/60).toFixed(0) + " / " + x + "  " + Left(recTitl[currMed],40) + "\n  " + pos4 + " </pre>";
 }
 
 function ShowInfo() {
@@ -3849,9 +3870,9 @@ function ClearScreen() {
 	<div id="pipVideoDiv" ></div>
 
 	<div id="osdvolume" style="width:63%; position:absolute; left:10%; top:80%;z-index:501;font-family:'VDRSymbols Sans';opacity:0;">Volume : </div>
-	<div id="osdmedia" style="background:#3366ff;-webkit-border-radius:50px;width:80%; position:absolute; left:10%; top:70%;z-index:505;opacity:0;"></div>
+	<div id="osdmedia" style="background:#3366ff;-webkit-border-radius:50px;width:80%;position:absolute;left:10%;top:60%;z-index:505;opacity:0;"></div>
 
-	<div id="osdmain" style="background:#3366ff;width:80%; position:absolute; left:10%; top:60%; bottom:9%;z-index:505;-webkit-border-radius:50px;"></div>
+	<div id="osdmain" style="background:#3366ff;width:80%; position:absolute;left:10%;top:60%;bottom:9%;z-index:505;-webkit-border-radius:50px;"></div>
 	<div id="osdtime" style="width:42%; position:absolute; left:58%; top:63%;z-index:505;"></div>
 	<div id="osdname" style="width:69%;height:4%; position:absolute; left:12%; top:66%;z-index:505;"></div>
 	<div id="osdepg" style="width:63%; position:absolute; left:21%; top:69%;z-index:505;"></div>
@@ -3868,7 +3889,7 @@ function ClearScreen() {
 	<div id="mainmenu"  style="background:#3366ff;width:80%; position:absolute; left:10%; top:10%; bottom:10%;z-index:520;opacity:0;-webkit-border-radius:50px;font-family:'VDRSymbols Sans';"></div>
 	<div id="mediaList" style="background:#3366ff;width:80%; position:absolute; left:10%; top:10%; bottom:10%;z-index:520;opacity:0;-webkit-border-radius:50px;"></div>
 
-	<div id="switchtimer" style="background:red;width:45%; position:absolute; left:21%; top:26%;z-index:530;opacity:0;"></div>
+	<div id="switchtimer" style="background:red;width:45%; position:absolute; left:21%; top:26%;z-index:530;opacity:0;-webkit-border-radius:25px;"></div>
 	<div id="osdepginfo" style="background:#3366ff;width:80%; position:absolute; left:10%; top:10%;z-index:525;opacity:0;-webkit-border-radius:50px;"></div>
 	<div id="osdepginfonext" style="background:#3366ff;width:80%; position:absolute; left:10%; top:10%;z-index:525;opacity:0;-webkit-border-radius:50px;"></div>
 </body>

@@ -76,10 +76,12 @@ Lang[40] = "Use as Search Timer";
 Lang[41] = "Use Time";
 Lang[42] = "Channel Mode";
 Lang[43] = " ERROR Getting SearchTimers from ";
+Lang[47] = "Use day of the week";
 
 Lang[44] = " OK to delete ";
 Lang[45] = " other to abort ";
 Lang[46] = "free ";
+
 
 Lang[50] = " Server EPG ";
 Lang[51] = " ERROR getting Server EPG !!! ";
