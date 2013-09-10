@@ -15,6 +15,8 @@ VDR 1.7.29
 	More info for SearchTimer
 	audio/subs type only from "Onload" function for now. (Need the space in the settings menu)
 	Change (preset) server from settings menu.
+	Save audio priority permanent (removed 'none' setting)
+	Dynamic audio selection with green button while watching. (Settings menu as before)
 
 
 0.21	Language in sepate file, link your lang_XXX.js to language.js to activate it.

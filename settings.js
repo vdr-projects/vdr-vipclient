@@ -51,6 +51,11 @@ var MPDAddress = ":8888";
 
 var channeldigits = 2; // 0 - Max 9, 1 max 99, 2 max 999 or 3 max 9999 channels directly selectable by numbers (Don't set it to > 2 it crashes the player)
 
+var audio = 0;
+var audio_dyn = 0;
+lang_prio = new Array("dut,eng,und","ger,deu,eng","eng,und");
+var lang_prio_dyn = new Array(); //Used for dynamic audio track selection
+
 //
 // No need to change anything from here on.
 //
@@ -113,7 +118,6 @@ var events = null;
 var eitService = null;
 var EPGShortnext = "";
 var EPGShortnow = "";
-var audio = 0;
 var listChan = 0;
 var NowNext = 0;
 var EpgInfo = new Array();

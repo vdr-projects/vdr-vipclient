@@ -44,6 +44,18 @@ function onLoad() {
 		toi.informationService.setObject("vip.serveraddress","0",toi.informationService.STORAGE_PERMANENT)
 	}
 
+	try {
+		if (!toi.informationService.getObject("vip.languagepriority")) {} 
+	} catch(e) {
+	//	toi.informationService.setObject("vip.*","0",toi.informationService.STORAGE_PERMANENT)
+		toi.informationService.setObject("vip.languagepriority","0",toi.informationService.STORAGE_PERMANENT)
+	}
+
+
+
+
+
+	audio = Number(toi.informationService.getObject("vip.languagepriority"));
 	server_ip = server_ip_array[Number(toi.informationService.getObject("vip.serveraddress"))];
 	for (var i=0;i<10;i++) { if (ServerAdres[i] !== "FullURL" && ServerAdres[i] !== "MultiCast") {ServerAdres[i] = server_ip + ":3000/";} }
 
@@ -336,10 +348,13 @@ var cList = streamInfo.availableComponents;
 var x;
 xx = 0;
 AvInfo[currStream] = "";
+lang_prio_dyn.length = 0
+
 for(x=0; x<cList.length;x++) {
 	if(cList[x].type == 0) {
-	xx = xx + 1;
+	lang_prio_dyn[xx] = mediaPlayer.getAudioStreamInfo(cList[x]).language;
 	AvInfo[currStream] = AvInfo[currStream] + " Audio " + xx + " " + mediaPlayer.getAudioStreamInfo(cList[x]).encoding + " - " + mediaPlayer.getAudioStreamInfo(cList[x]).language + " , ";
+	xx = xx + 1;	
 	}
 	if(cList[x].type == 1) {
 	AvInfo[currStream] = AvInfo[currStream] + " Video " + mediaPlayer.getVideoStreamInfo(cList[x]).encoding + " size : " + mediaPlayer.getVideoStreamInfo(cList[x]).resolutionX + " x " + mediaPlayer.getVideoStreamInfo(cList[x]).resolutionY;
@@ -519,38 +534,14 @@ function onKeyDown(event) {
    case "Green":
 	if(isFullscreen) {
 		if(!epgactive) {
-			audio = audio + 1;
+			if (audio_dyn < (lang_prio_dyn.length -1)) { audio_dyn = audio_dyn + 1} else { audio_dyn = 0 }
 			is = toi.informationService;
-			if(audio == 1) {	
-				is.setObject("cfg.media.audio.languagepriority","dut,eng,und",is.STORAGE_PERMANENT);
+				is.setObject("cfg.media.audio.languagepriority",lang_prio_dyn[audio_dyn] + "," + lang_prio[audio],is.STORAGE_PERMANENT);
 				osdlang.style.opacity = 1;
 				osdlang.style.fontSize = fsAudio;
-				osdlang.style.color = "blue";
-				osdlang.innerHTML = "<img src='unmute.png'> Nederlands ";
+				osdlang.style.color = "white";
+				osdlang.innerHTML = "<img src='unmute.png'> " + lang_prio_dyn[audio_dyn] + " ";
 				setTimeout("osdlang.style.opacity = 0; ", 3000);
-			} else if(audio == 2) {
-				is.setObject("cfg.media.audio.languagepriority","ger,deu,eng",is.STORAGE_PERMANENT);
-				osdlang.style.opacity = 1;
-				osdlang.style.fontSize = fsAudio;
-				osdlang.style.color = "red";
-				osdlang.innerHTML = "<img src='unmute.png'> Deutsch ";
-				setTimeout("osdlang.style.opacity = 0; ", 3000);
-			} else if(audio == 3) {
-				is.setObject("cfg.media.audio.languagepriority","eng,und",is.STORAGE_PERMANENT);
-				osdlang.style.opacity = 1;
-				osdlang.style.fontSize = fsAudio;
-				osdlang.style.color = "black";
-				osdlang.innerHTML = "<img src='unmute.png'> English ";
-				setTimeout("osdlang.style.opacity = 0; ", 3000);
-			} else if(audio == 4) {
-				is.unsetObject("cfg.media.audio.languagepriority",is.STORAGE_PERMANENT);
-				osdlang.style.opacity = 1;
-				osdlang.style.fontSize = fsAudio;
-				osdlang.style.color = "black";
-				osdlang.innerHTML = "<img src='unmute.png'> None ";
-				setTimeout("osdlang.style.opacity = 0; ", 3000);
-				audio = 0;
-			}
 		}
 	} else if(isSchedule == 0 && !epgactive){
 		colorkeys.innerHTML = "<font color=red> " +  NN[3 + NowNext] + " </font><font color=green> " + NN[NowNext] + " </font><font color=yellow> " + NN[2] + " </font><font color=blue> " + NN[5] + " </font>";
@@ -1990,18 +1981,10 @@ function onKeyMenu(keyCode) {
 			mainmenu.style.opacity = 0;
 			setTimeout("getSchedule(currChan);LoadMediaSettings();",100);
 	} else	if (menu == 1) {
-			audio = audio + 1;
+			if (audio < (lang_prio.length -1)) { audio = audio + 1} else { audio = 0 }
 			is = toi.informationService;
-			if(audio == 1) {	
-				is.setObject("cfg.media.audio.languagepriority","dut,eng,und",is.STORAGE_PERMANENT);
-			} else if(audio == 2) {
-				is.setObject("cfg.media.audio.languagepriority","ger,deu,eng",is.STORAGE_PERMANENT);
-			} else if(audio == 3) {
-				is.setObject("cfg.media.audio.languagepriority","eng,swe,und",is.STORAGE_PERMANENT);
-			} else if(audio == 4) {
-				is.unsetObject("cfg.media.audio.languagepriority",is.STORAGE_PERMANENT);
-				audio = 0;
-			}
+				is.setObject("vip.languagepriority",audio.toString(),is.STORAGE_PERMANENT);
+				is.setObject("cfg.media.audio.languagepriority",lang_prio[audio],is.STORAGE_PERMANENT);
 		InitMenu(menu);
 		} 
 	break;
@@ -2852,38 +2835,14 @@ if (DelisOK) {
 	ShowMediaOSD();
         break;
    case "Green":
-			audio = audio + 1;
-			is = toi.informationService;
-			if(audio == 1) {	
-				is.setObject("cfg.media.audio.languagepriority","dut,eng,und",is.STORAGE_PERMANENT);
-				osdlang.style.opacity = 1;
-				osdlang.style.fontSize = fsAudio;
-				osdlang.style.color = "white";
-				osdlang.innerHTML = "<img src='unmute.png'> Nederlands ";
-				setTimeout("osdlang.style.opacity = 0; ", 3000);
-			} else if(audio == 2) {
-				is.setObject("cfg.media.audio.languagepriority","ger,deu,eng",is.STORAGE_PERMANENT);
-				osdlang.style.opacity = 1;
-				osdlang.style.fontSize = fsAudio;
-				osdlang.style.color = "red";
-				osdlang.innerHTML = "<img src='unmute.png'> Deutsch ";
-				setTimeout("osdlang.style.opacity = 0; ", 3000);
-			} else if(audio == 3) {
-				is.setObject("cfg.media.audio.languagepriority","eng,und",is.STORAGE_PERMANENT);
-				osdlang.style.opacity = 1;
-				osdlang.style.fontSize = fsAudio;
-				osdlang.style.color = "black";
-				osdlang.innerHTML = "<img src='unmute.png'> English ";
-				setTimeout("osdlang.style.opacity = 0; ", 3000);
-			} else if(audio == 4) {
-				is.unsetObject("cfg.media.audio.languagepriority",is.STORAGE_PERMANENT);
-				osdlang.style.opacity = 1;
-				osdlang.style.fontSize = fsAudio;
-				osdlang.style.color = "black";
-				osdlang.innerHTML = "<img src='unmute.png'> None ";
-				setTimeout("osdlang.style.opacity = 0; ", 3000);
-				audio = 0;
-			}
+		if (audio_dyn < (lang_prio_dyn.length -1)) { audio_dyn = audio_dyn + 1} else { audio_dyn = 0 }
+		is = toi.informationService;
+		is.setObject("cfg.media.audio.languagepriority",lang_prio_dyn[audio_dyn] + "," + lang_prio[audio],is.STORAGE_PERMANENT);
+		osdlang.style.opacity = 1;
+		osdlang.style.fontSize = fsAudio;
+		osdlang.style.color = "white";
+		osdlang.innerHTML = "<img src='unmute.png'> " + lang_prio_dyn[audio_dyn] + " ";
+		setTimeout("osdlang.style.opacity = 0; ", 3000);
 	break;
     case "Yellow":
 	 ShowSubs = 1 - ShowSubs;

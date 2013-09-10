@@ -11,6 +11,7 @@ NN[4] = "-----";
 NN[5] = "INFO";
 NN[6] = "Terug";
 
+lang_prio_lang = new Array("Nederlands", "Duits", "Engels");
 months = new Array('Januari', 'Februari', 'Maart', 'April', 'Mei', 'Juni', 'Juli', 'Augustus', 'September', 'Oktober', 'November', 'December');
 days = new Array('Zondag', 'Maandag', 'Dinsdag', 'Woensdag', 'Donderdag', 'Vrijdag', 'Zaterdag');
 
