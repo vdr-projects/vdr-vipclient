@@ -65,16 +65,6 @@ function onLoad() {
 		// No 19x3 so better turn fullupdate EPG off
 	}
 
-	try {
-		if (!toi.informationService.getObject("vip.serveraddress")) {} //test for settings, create if not excists.
-	} catch(e) {
-	//	toi.informationService.setObject("vip.*","0",toi.informationService.STORAGE_PERMANENT)
-		toi.informationService.setObject("vip.serveraddress","0",toi.informationService.STORAGE_PERMANENT)
-	}
-
-	//var server_ip = server_ip_array[Number(toi.informationService.getObject("vip.serveraddress"))];
-
-
 	if (mediaRecorder) {
 		createRecorder();
 		mediaRecorder.addEventListener(mediaRecorder.ON_STATE_CHANGED, onRecorderStateChanged);
@@ -2030,17 +2020,6 @@ function onKeyMenu(keyCode) {
 		}
 
 	if (menu == 1) {
-//		var x = toi.informationService.getObject("vip.serveraddress");
-//		x = Number(x);
-//		if (x < (server_ip_array.length -1)) { x = x + 1} else { x = 0 }
-//		toi.informationService.setObject("vip.serveraddress",x.toString(),toi.informationService.STORAGE_PERMANENT);
-
-//		server_ip = server_ip_array[x];
-//		for (var i=0;i<10;i++) {
-//			if (ServerAdres[i] !== "FullURL" && ServerAdres[i] !== "MultiCast") {ServerAdres[i] = server_ip + ":3000/";}
-//		}
-
-//		InitMenu(menu);
 		}
 	break;
 	case KEY_6:
