@@ -1687,7 +1687,7 @@ function showChannelList() {
 		}
 		EpgInfo[0] = EPG[0][7][listChan];
 		EpgInfo[1] = EPG[1][7][listChan];
-		htmlstring = htmlstring + "<td style='" + liststyle + "font-size:" + fsList + ";'>" + listChan + "\uE003</td><td style='" + liststyle + "font-size:" + fsList + ";'>" + Left(channelsnames[listChan],15) + "\uE003</td><td style='" + liststyle + "font-size:" + fsList + ";'>"  + Left(EpgInfo[NowNext],64) + "</td></tr>";
+		htmlstring = htmlstring + "<td style='" + liststyle + "font-size:" + fsList + ";'>\uE003\uE003" + listChan + "\uE003</td><td style='" + liststyle + "font-size:" + fsList + ";'>" + Left(channelsnames[listChan],15) + "\uE003</td><td style='" + liststyle + "font-size:" + fsList + ";'>"  + Left(EpgInfo[NowNext],64) + "</td></tr>";
 	}
 	htmlstring = htmlstring + "</table>";
 	channelList.innerHTML = htmlstring;
