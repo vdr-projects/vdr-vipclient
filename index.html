@@ -349,7 +349,8 @@ var cList = streamInfo.availableComponents;
 var x;
 xx = 0;
 AvInfo[currStream] = "";
-lang_prio_dyn.length = 0
+lang_prio_dyn.length = 0;
+Radioicon = "\uE00E";
 
 for(x=0; x<cList.length;x++) {
 	if(cList[x].type == 0) {
@@ -358,14 +359,13 @@ for(x=0; x<cList.length;x++) {
 	xx = xx + 1;	
 	}
 	if(cList[x].type == 1) {
+	Radioicon = "\uE00F";
 	AvInfo[currStream] = AvInfo[currStream] + " Video " + mediaPlayer.getVideoStreamInfo(cList[x]).encoding + " size : " + mediaPlayer.getVideoStreamInfo(cList[x]).resolutionX + " x " + mediaPlayer.getVideoStreamInfo(cList[x]).resolutionY;
 	if (mediaPlayer.getVideoStreamInfo(cList[x]).aspectRatio == "1") { AvInfo[currStream] = AvInfo[currStream] + " (4:3)"; }
 	if (mediaPlayer.getVideoStreamInfo(cList[x]).aspectRatio == "2") { AvInfo[currStream] = AvInfo[currStream] + " (16:9)"; }
 	}
 
 	}
-
-
 }
 
 function addzero(zero)
@@ -1240,7 +1240,7 @@ function GetEPG(epgchan)
 	if(event.freeCaMode){
 		CAicon = "\uE00D";
 	} else {
-		CAicon = "\uE00F";
+		CAicon = Radioicon;
 	}
 
 		osdca.innerHTML = CAicon + switchicon + RECicon;

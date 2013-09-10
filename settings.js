@@ -186,6 +186,7 @@ var inst_timer = 0;
 var switchicon = "\uE003";
 var CAicon = "\uE00F";
 var RECicon = "\uE003";
+var Radioicon = "\uE003";
 
 var fsAudio = (16*Yfactor) + "px";
 var fsTime = (16*Yfactor) + "px";
