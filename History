@@ -7,6 +7,7 @@ VDR 1.7.29
 	Fix: Right month is now shown in recordings menu.
 	Fix: multiple EPG languages on 1 transponder.
 	Fix: crash when media/recordings directory is empty
+	Fix: 'epg now' (it wasn't always the right info on some UK channels.)
 	Added some channels for 42E to group 3
 	Updated channels.conf
 	SmartwebTV timer handling added (No more restfulapi needed for timers)

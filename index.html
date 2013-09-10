@@ -1244,8 +1244,9 @@ function GetEPG(epgchan)
 	}
 
 		osdca.innerHTML = CAicon + switchicon + RECicon;
+
 	if (event.name)	{
-	 events = eitCache.getEvents(eitService, 1000000000, 2000000000);
+	 events = eitCache.getEvents(eitService, (Math.round(new Date().getTime()/1000.0)), 2000000000);
  	    extEventsnow = eitCache.getExtendedEventInfo(eitService, events.infoSequence[0].eventId);
 	    EPGShortnow = extEventsnow.shortInfo;
 	    EPGExtnow = extEventsnow.extendedInfo;
@@ -1373,6 +1374,7 @@ function Nibbles() {
 
 
 function GetSchedule(schchan,tablelength){
+	//Old style Schedule, used in Guide View.
 	SI = "";
   try {
 	 StreamInfo(schchan);
@@ -1380,11 +1382,11 @@ function GetSchedule(schchan,tablelength){
 	 eitService = toi.statics.ToiDvbEitCacheServiceItem.create(SI[1],SI[2],SI[3]);
 	 eitCache.addService(eitService);
 	 event = eitCache.getPresentEvent(eitService);
-	 events = eitCache.getEvents(eitService, 1000000000, 2000000000);
+	 events = eitCache.getEvents(eitService, (Math.round(new Date().getTime()/1000.0)), 2000000000);
 
 	if (event.name)	{
 	    if (events.more) {
-	      var t = eitCache.getEvents(eitService, 1000000000, 2000000000);
+	      var t = eitCache.getEvents(eitService, (Math.round(new Date().getTime()/1000.0)), 2000000000);
 	      events.infoSequence.concat(t.infoSequence);
 	      events.more = t.more;
 	    }
@@ -3426,11 +3428,11 @@ function getSchedule(schchan){
 	 eitService = toi.statics.ToiDvbEitCacheServiceItem.create(SI[1],SI[2],SI[3]);
 	 eitCache.addService(eitService);
 	 event = eitCache.getPresentEvent(eitService);
-	 events = eitCache.getEvents(eitService, 1000000000, 2000000000);
+	 events = eitCache.getEvents(eitService, (Math.round(new Date().getTime()/1000.0)), 2000000000);
 
 	if (event.name)	{
 	    if (events.more) {
-	      var t = eitCache.getEvents(eitService, 1000000000, 2000000000);
+	      var t = eitCache.getEvents(eitService, (Math.round(new Date().getTime()/1000.0)), 2000000000);
 	      events.infoSequence.concat(t.infoSequence);
 	      events.more = t.more;
 	    }
