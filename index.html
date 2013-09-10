@@ -3058,7 +3058,10 @@ try {
 	} else {
 		MakeRecList();
 	}
- 	getRecOK = 1;
+	if (i!==0) { getRecOK = 1; } else {
+	getRecOK = 0;
+	mediaList.innerHTML = "<h1><center style='font-size:" + fsRec + ";color:white;'>" + Lang[38] + "</center><pre>\n\n\n" + Lang[37] + "</pre></h1>";
+	}
   } catch(e) {
     alert("Get Recordings problem: " + e);
 	getRecOK = 0;
