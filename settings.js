@@ -11,7 +11,7 @@ var Xfactor = 1920 / 720; var Yfactor = 1080 / 576;
 
 server_ip_array = new Array("http://192.168.1.15","http://192.168.3.15","http://192.168.3.100");
 
-var server_ip = server_ip_array[1]; // default server
+var server_ip = server_ip_array[0]; // default server
 var StartVolume = 15; // Volume on (re)start of the portal.
 var currChan = 10; // default channel
 
@@ -45,9 +45,9 @@ var serverEPGdays = 3 * (60 * 60 * 24); // the higher the longer you wait while 
 var VolumeStep = 5; // Steps the volume buttons make
 
 // Server for Recordings
-var recServ = server_ip + ":8000";
-var RestFulAPI = server_ip + ":8002";
-var MPDAddress = server_ip + ":8888";
+var recServ = ":8000";
+var RestFulAPI = ":8002";
+var MPDAddress = ":8888";
 
 var channeldigits = 2; // 0 - Max 9, 1 max 99, 2 max 999 or 3 max 9999 channels directly selectable by numbers (Don't set it to > 2 it crashes the player)
 

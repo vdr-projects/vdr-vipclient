@@ -20,7 +20,7 @@
 //
 //
 
-var Version = "0.22.6"
+var Version = "0.22.7"
 
 for (var x = 0;  x < 10; x++) { 
 	searchtimers[x] = "" ; // To solve displaying undefined
@@ -35,6 +35,18 @@ for (var x = 0;  x < 10; x++) {
 window.onkeydown = onKeyDown;
 
 function onLoad() {
+
+	//test for settings, create if not excists.
+	try {
+		if (!toi.informationService.getObject("vip.serveraddress")) {} 
+	} catch(e) {
+	//	toi.informationService.setObject("vip.*","0",toi.informationService.STORAGE_PERMANENT)
+		toi.informationService.setObject("vip.serveraddress","0",toi.informationService.STORAGE_PERMANENT)
+	}
+
+	server_ip = server_ip_array[Number(toi.informationService.getObject("vip.serveraddress"))];
+	for (var i=0;i<10;i++) { if (ServerAdres[i] !== "FullURL" && ServerAdres[i] !== "MultiCast") {ServerAdres[i] = server_ip + ":3000/";} }
+
 	createPlayer();
 
 	if(pipPlayer){
@@ -1900,10 +1912,6 @@ function onKeyMenu(keyCode) {
 	}
     break;
     case "Green":
-	if (menu == 0) {
-	//change ip server
-	InitMenu(menu);
-	}
     break;
     case "Yellow":
     break;
@@ -2020,6 +2028,16 @@ function onKeyMenu(keyCode) {
 		}
 
 	if (menu == 1) {
+		var x = toi.informationService.getObject("vip.serveraddress");
+		x = Number(x);
+		if (x < (server_ip_array.length -1)) { x = x + 1} else { x = 0 }
+		toi.informationService.setObject("vip.serveraddress",x.toString(),toi.informationService.STORAGE_PERMANENT);
+
+		server_ip = server_ip_array[x];
+		for (var i=0;i<10;i++) {
+			if (ServerAdres[i] !== "FullURL" && ServerAdres[i] !== "MultiCast") {ServerAdres[i] = server_ip + ":3000/";}
+		}
+		InitMenu(menu);
 		}
 	break;
 	case KEY_6:
@@ -2087,7 +2105,7 @@ function onKeyMenu(keyCode) {
 	case KEY_9:
 		if (menu == 0 || menu == 3) {
 		menu = 3;
-		playMPD(MPDAddress);
+		playMPD(server_ip + MPDAddress);
 		} else if (menu == 1) {
 		menu = 4; // INFO menu
 		}
@@ -2145,7 +2163,7 @@ if(menu == 6) { // Main Menu when watching recording
 if(menu == 1) { // settings menu
 	var htmltext = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'>" + Lang[10] + "</center></h1><pre style='color:black;font-size:" + fsMenu + ";'>   1 - ";
 	if (ShowSubs) { htmltext = htmltext + "\uE017"; } else { htmltext = htmltext + "\uE016"; }
-	htmltext = htmltext + Lang[20] + "\n   2 - \uE003" + Lang[22] + "\uE003\uE003\uE003: " + (toi.informationService.getObject("cfg.media.subtitling.modepriority")) + "\n   3 - \uE003" + Lang[24] + "\uE003\uE003\uE003: " + (toi.informationService.getObject("cfg.media.audio.languagepriority")) + "\n   4 - \uE003" + "\n   5 - " + "\n   6 - ";
+	htmltext = htmltext + Lang[20] + "\n   2 - \uE003" + Lang[22] + "\uE003\uE003\uE003: " + (toi.informationService.getObject("cfg.media.subtitling.modepriority")) + "\n   3 - \uE003" + Lang[24] + "\uE003\uE003\uE003: " + (toi.informationService.getObject("cfg.media.audio.languagepriority")) + "\n   4 - \uE003" + "\n   5 - VDR : " + server_ip + "\n   6 - ";
 	if (showClock) { htmltext = htmltext + "\uE017"; } else { htmltext = htmltext + "\uE016"; }
 	htmltext = htmltext + Lang[25] + "\n   7 - ";
 	if (ShowProtectedChannels) { htmltext = htmltext + "\uE017"; } else { htmltext = htmltext + "\uE016"; }
@@ -2285,7 +2303,7 @@ function LoadTimersServer() {
 //Get timers from SmartTVweb
 try {
    xmlhttp=new XMLHttpRequest();
-   xmlhttp.open("GET",(recServ + "/timers.xml?" + new Date().getTime()),false);
+   xmlhttp.open("GET",(server_ip + recServ + "/timers.xml?" + new Date().getTime()),false);
    xmlhttp.send();
    xmlDoc=xmlhttp.responseXML; 
    var x=xmlDoc.getElementsByTagName("timer");
@@ -2324,7 +2342,7 @@ try {
   } catch(e) {
     timerOK = 0;
     alert("Get Timers problem: " + e);
-    mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'>" + Lang[7] + "</center></h1><pre style='color:black;font-size:" + fsMenu + ";'><center>\n  " + Lang[36] + ": \n " + recServ + "</center></pre>";
+    mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'>" + Lang[7] + "</center></h1><pre style='color:black;font-size:" + fsMenu + ";'><center>\n  " + Lang[36] + ": \n " + server_ip + recServ + "</center></pre>";
   }
 }
 
@@ -2334,11 +2352,11 @@ try {
 	xmlhttp=new XMLHttpRequest();
 //
 // SmartTVWeb
-	xmlhttp.open("GET",(recServ + "/deleteTimer?guid=" + timersChan[timerID] + "&dy=" + timersDay[timerID] 
+	xmlhttp.open("GET",(server_ip + recServ + "/deleteTimer?guid=" + timersChan[timerID] + "&dy=" + timersDay[timerID] 
 			+ "&st=" + timersStrt[timerID] + "&sp=" + timersStop[timerID] + "&" + new Date().getTime()),false);
 // smarttvweb delete & restful reading
 //	var x = timersID[timerID].split(":");
-//	xmlhttp.open("GET",(recServ + "/deleteTimer?guid=" + x[0] + "&dy=" + x[2] + "&st=" + x[3] + "&sp=" + x[4] + "&" + new Date().getTime()),false);
+//	xmlhttp.open("GET",(server_ip + recServ + "/deleteTimer?guid=" + x[0] + "&dy=" + x[2] + "&st=" + x[3] + "&sp=" + x[4] + "&" + new Date().getTime()),false);
 //
 //
 	xmlhttp.send();
@@ -2350,10 +2368,10 @@ try {
 
 
 function LoadTimersServer_1() {
-//Get timers from RestFulApi
+//Get timers from server_ip + RestFulAPI
 try {
    xmlhttp=new XMLHttpRequest();
-   xmlhttp.open("GET",(RestFulAPI + "/timers.xml?" + new Date().getTime()),false); 
+   xmlhttp.open("GET",(server_ip + RestFulAPI + "/timers.xml?" + new Date().getTime()),false); 
    xmlhttp.send();
    xmlDoc=xmlhttp.responseXML; 
    var x=xmlDoc.getElementsByTagName("timer");
@@ -2392,7 +2410,7 @@ try {
   } catch(e) {
     timerOK = 0;
     alert("Get Timers problem: " + e);
-    mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'>" + Lang[7] + "</center></h1><pre style='color:black;font-size:" + fsMenu + ";'><center>\n  " + Lang[36] + ": \n " + RestFulAPI + "</center></pre>";
+    mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'>" + Lang[7] + "</center></h1><pre style='color:black;font-size:" + fsMenu + ";'><center>\n  " + Lang[36] + ": \n " + server_ip + RestFulAPI + "</center></pre>";
   }
 }
 
@@ -2406,7 +2424,7 @@ function ShowTimerInfo() {
 
 	try {
 	   xmlhttp=new XMLHttpRequest();
-	   xmlhttp.open("GET",(RestFulAPI + "/events/" + timersChan[timerID] + "/" + timersEvnt[timerID] + ".xml?" + new Date().getTime()),false);  
+	   xmlhttp.open("GET",(server_ip + RestFulAPI + "/events/" + timersChan[timerID] + "/" + timersEvnt[timerID] + ".xml?" + new Date().getTime()),false);  
 	   xmlhttp.send();
 	   xmlDoc=xmlhttp.responseXML;
 	   var x=xmlDoc.getElementsByTagName("event");
@@ -2434,7 +2452,7 @@ function ShowTimerInfo() {
 function LoadSearchTimersServer() {
 try {
    xmlhttp=new XMLHttpRequest();
-   xmlhttp.open("GET",(RestFulAPI + "/searchtimers.xml?" + new Date().getTime()),false); //"),false);  // 
+   xmlhttp.open("GET",(server_ip + RestFulAPI + "/searchtimers.xml?" + new Date().getTime()),false); //"),false);  // 
    xmlhttp.send();
    xmlDoc=xmlhttp.responseXML; 
    var x=xmlDoc.getElementsByTagName("searchtimer");
@@ -2502,7 +2520,7 @@ try {
   } catch(e) {
     timerOK = 0;
     alert("Get SearchTimers problem: " + e);
-    mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'>" + Lang[8] + "</center></h1><pre style='color:black;font-size:" + fsMenu + ";'><center>\n  " + Lang[43] + ": \n " + RestFulAPI + "</center></pre>";
+    mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'>" + Lang[8] + "</center></h1><pre style='color:black;font-size:" + fsMenu + ";'><center>\n  " + Lang[43] + ": \n " + server_ip + RestFulAPI + "</center></pre>";
   }
 }
 
@@ -2515,7 +2533,7 @@ function ShowSearchTimerInfo() {
 
 	try {
 	   xmlhttp=new XMLHttpRequest();
-	   xmlhttp.open("GET",(RestFulAPI + "/searchtimers/search/" + searchtimersID[timerID] + ".xml?" + new Date().getTime()),false);  
+	   xmlhttp.open("GET",(server_ip + RestFulAPI + "/searchtimers/search/" + searchtimersID[timerID] + ".xml?" + new Date().getTime()),false);  
 	   xmlhttp.send();
 	   xmlDoc=xmlhttp.responseXML;
 	   var x=xmlDoc.getElementsByTagName("event");
@@ -2575,13 +2593,13 @@ if (MPDListener == 0) {
 } else {
 	if ( ev.state == 6 && ev.reason == "HostUnreachable" ) {
 	    showDisplay("ERRR", false, 100, 0 );
-	mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'>" + Lang[60] + "</center></h1><pre style='color:black;font-size:" + fsMenu + ";'>" + Lang[34] + "\n   0 -" + Lang[9] + "\n   9 -" + Lang[61] + "\n\n<center style='color:white;'>" + Lang[62] + ": \n" + MPDAddress + "</center></pre>";
+	mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'>" + Lang[60] + "</center></h1><pre style='color:black;font-size:" + fsMenu + ";'>" + Lang[34] + "\n   0 -" + Lang[9] + "\n   9 -" + Lang[61] + "\n\n<center style='color:white;'>" + Lang[62] + ": \n" + server_ip + MPDAddress + "</center></pre>";
 	  } else if ( ev.state == 2 ) { // && ev.reason == "PositionEnd" ) {
 	    showDisplay("STOP", false, 100, 0 );
-	mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'>" + Lang[60] + "</center></h1><pre style='color:black;font-size:" + fsMenu + ";'>" + Lang[34] + "\n   0 -" + Lang[9] + "\n   9 -" + Lang[63] + "\n\n<center style='color:white;'>" + Lang[64] + ": \n" + MPDAddress + "\n" + Lang[65] + "</center></pre>";
+	mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'>" + Lang[60] + "</center></h1><pre style='color:black;font-size:" + fsMenu + ";'>" + Lang[34] + "\n   0 -" + Lang[9] + "\n   9 -" + Lang[63] + "\n\n<center style='color:white;'>" + Lang[64] + ": \n" + server_ip + MPDAddress + "\n" + Lang[65] + "</center></pre>";
 	  } else if ( ev.state == 3 && ev.reason == "CommandPlay" ) {
 	showDisplay("MPD", false, 100, 0 );
-	mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'>" + Lang[60] + "</center></h1><pre style='color:black;font-size:" + fsMenu + ";'>" + Lang[34] + "\n   0 -" + Lang[9] + "\n\n\n<center style='color:white;'>" + Lang[64] + ": \n" + MPDAddress + "</center></pre>";
+	mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'>" + Lang[60] + "</center></h1><pre style='color:black;font-size:" + fsMenu + ";'>" + Lang[34] + "\n   0 -" + Lang[9] + "\n\n\n<center style='color:white;'>" + Lang[64] + ": \n" + server_ip + MPDAddress + "</center></pre>";
 	  } else {
 	    showDisplay("ERRR", false, 100, 0 );
 	mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'>" + Lang[60] + "</center></h1><pre style='color:black;font-size:" + fsMenu + ";'>" + Lang[34] + "\n   0 -" + Lang[9] + "\n   9 -" + Lang[63] + "\n\n<center style='color:white;'>Error : " + ev.state + "\n" + Lang[66] + ": " + ev.reason + "</center></pre>";
@@ -3040,7 +3058,7 @@ function getRecList() {
 	subgroup = 0;
 try {
    xmlhttp=new XMLHttpRequest();
-   xmlhttp.open("GET",(recServ + recPath + "?" + new Date().getTime()),false);
+   xmlhttp.open("GET",(server_ip + recServ + recPath + "?" + new Date().getTime()),false);
    xmlhttp.send();
    xmlDoc=xmlhttp.responseXML; 
    var x=xmlDoc.getElementsByTagName("item");
@@ -3092,7 +3110,7 @@ function GetMarks() {
 try {
    posMark = 0;
    xmlhttp=new XMLHttpRequest();
-   xmlhttp.open("GET",(RestFulAPI + "/recordings/" + currMed + ".xml?marks=true&" + new Date().getTime()),false);
+   xmlhttp.open("GET",(server_ip + RestFulAPI + "/recordings/" + currMed + ".xml?marks=true&" + new Date().getTime()),false);
    xmlhttp.send();
    xmlDoc=xmlhttp.responseXML;
    recMark = [];
@@ -3112,7 +3130,7 @@ function setResume() {
 try {
 	position = position + (mediaPlayer.getPosition()/1000)
         var xmlhttp = new XMLHttpRequest();
-        xmlhttp.open("POST", recServ + "/setResume.xml?guid=" + recGUID[currMed] + "&resume=" + position, false);
+        xmlhttp.open("POST", server_ip + recServ + "/setResume.xml?guid=" + recGUID[currMed] + "&resume=" + position, false);
         xmlhttp.send();
 	recList[currMed] = "\uE003" + recList[currMed].substring(1);
   } catch(e) {
@@ -3125,7 +3143,7 @@ function getResume() {
 position = 0;
 try {
 	  var xmlhttp = new XMLHttpRequest();
-	  xmlhttp.open("GET", recServ + "/getResume.xml?guid=" + recGUID[currMed] + "&" + new Date().getTime(), false);
+	  xmlhttp.open("GET", server_ip + recServ + "/getResume.xml?guid=" + recGUID[currMed] + "&" + new Date().getTime(), false);
 	  xmlhttp.send();
 	  xmlDoc=xmlhttp.responseXML; 
 	  position = Number(xmlDoc.getElementsByTagName("resume")[0].childNodes[0].nodeValue);
@@ -3139,7 +3157,7 @@ try {
 function setResumeNull() {
 try {
         var xmlhttp = new XMLHttpRequest();
-        xmlhttp.open("POST", recServ + "/setResume.xml?guid=" + recGUID[currMed] + "&resume=0", false);
+        xmlhttp.open("POST", server_ip + recServ + "/setResume.xml?guid=" + recGUID[currMed] + "&resume=0", false);
         xmlhttp.send();
 	recList[currMed] = "\uE010" + recList[currMed].substring(1);
   } catch(e) {
@@ -3152,7 +3170,7 @@ try {
 function getVDRstatus() {
 try {
    xmlhttp=new XMLHttpRequest();
-   xmlhttp.open("GET",(recServ + "/vdrstatus.xml?" + new Date().getTime()),false);
+   xmlhttp.open("GET",(server_ip + recServ + "/vdrstatus.xml?" + new Date().getTime()),false);
    xmlhttp.send();
    xmlDoc=xmlhttp.responseXML; 
 //   var x=xmlDoc.getElementsByTagName("vdrstatus");
@@ -3180,7 +3198,7 @@ try {
 function DelRec2() {
 try {
    xmlhttp=new XMLHttpRequest();
-   xmlhttp.open("POST",(recServ + "/deleteRecording.xml?id=" + recGUID[currMed] ),false);
+   xmlhttp.open("POST",(server_ip + recServ + "/deleteRecording.xml?id=" + recGUID[currMed] ),false);
    xmlhttp.send();
    recList[currMed] = "";
    recGroup[currMed] = -1;
@@ -3369,7 +3387,7 @@ function showMediaList() {
 function getServerSchedule() {
 try {
    xmlhttp=new XMLHttpRequest();
-   xmlhttp.open("GET",(RestFulAPI + "/events/" + channels[currChan] + ".xml?timespan=" + serverEPGdays + "&" + new Date().getTime()),false);
+   xmlhttp.open("GET",(server_ip + RestFulAPI + "/events/" + channels[currChan] + ".xml?timespan=" + serverEPGdays + "&" + new Date().getTime()),false);
    xmlhttp.send();
    xmlDoc=xmlhttp.responseXML; 
    var x=xmlDoc.getElementsByTagName("event");
@@ -3592,7 +3610,7 @@ function ServerRecordStart() {
 
 	try {
 	   xmlhttp=new XMLHttpRequest();
-	   xmlhttp.open("GET",(recServ + "/addTimer?guid=" + channels[currChan] + "&" + new Date().getTime() ),false);
+	   xmlhttp.open("GET",(server_ip + recServ + "/addTimer?guid=" + channels[currChan] + "&" + new Date().getTime() ),false);
 	   xmlhttp.send();
 
 		if (xmlhttp.responseXML == null) {
@@ -3617,10 +3635,10 @@ function ServerPause() {
   try {
    xmlhttp=new XMLHttpRequest();
 	//switch server to current channel
-   xmlhttp.open("POST",(RestFulAPI + "/remote/switch/" + channels[currChan]),true);
+   xmlhttp.open("POST",(server_ip + RestFulAPI + "/remote/switch/" + channels[currChan]),true);
    xmlhttp.send();
 	//start pause
-   setTimeout("xmlhttp.open('POST',(RestFulAPI + '/remote/Record'),false);xmlhttp.send();",5000);
+   setTimeout("xmlhttp.open('POST',(server_ip + RestFulAPI + '/remote/Record'),false);xmlhttp.send();",5000);
 
 	//Show some info on screen
    settimer(EPG[NowNext][2][currChan],Lang[70],0,2);
@@ -3642,7 +3660,7 @@ function getPauseFile() {
 
 try {
    xmlhttp=new XMLHttpRequest();
-   xmlhttp.open("GET",(RestFulAPI + "/recordings.xml?" + new Date().getTime()),false);
+   xmlhttp.open("GET",(server_ip + RestFulAPI + "/recordings.xml?" + new Date().getTime()),false);
    xmlhttp.send();
    xmlDoc=xmlhttp.responseXML; 
    var x=xmlDoc.getElementsByTagName("recording");
@@ -3653,7 +3671,7 @@ try {
 	xx = xx[(xx.length-2)].split("-");
 
 	if ( xx[0] == currChan ) {
-		recLink[0] = recServ + x[i].getElementsByTagName("param")[2].childNodes[0].nodeValue;
+		recLink[0] = server_ip + recServ + x[i].getElementsByTagName("param")[2].childNodes[0].nodeValue;
 		}
 
 	 }
@@ -3676,7 +3694,7 @@ function ServerTimer(guid,evid) {
 
 try {
    xmlhttp=new XMLHttpRequest();
-   xmlhttp.open("GET",(recServ + "/addTimer?guid=" + guid + "&evid=" + evid + "&" + new Date().getTime() ),false);
+   xmlhttp.open("GET",(server_ip + recServ + "/addTimer?guid=" + guid + "&evid=" + evid + "&" + new Date().getTime() ),false);
    xmlhttp.send();
   } catch(e) {
     alert("Sending Timers to server problem: " + e);
