@@ -9,8 +9,9 @@
 // 1920x1080
 var Xfactor = 1920 / 720; var Yfactor = 1080 / 576;
 
+server_ip_array = new Array("http://192.168.1.15","http://192.168.3.15","http://192.168.3.100");
 
-var server_ip = "http://192.168.3.15";
+var server_ip = server_ip_array[1]; // default server
 var StartVolume = 15; // Volume on (re)start of the portal.
 var currChan = 10; // default channel
 

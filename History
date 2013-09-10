@@ -10,9 +10,10 @@ VDR 1.7.29
 	Updated channels.conf
 	SmartwebTV timer handling added (No more restfulapi needed for timers)
 	Info about audio/video in Infobox when playing Recording
+	Date/Time info during play
 	Update dutch tv/radio channels on 19E
-
-	
+	More info for SearchTimer
+	audio/subs type only from "Onload" function for now. (Need the space in the settings menu)
 
 
 0.21	Language in sepate file, link your lang_XXX.js to language.js to activate it.

@@ -20,7 +20,7 @@
 //
 //
 
-var Version = "0.22.5"
+var Version = "0.22.6"
 
 for (var x = 0;  x < 10; x++) { 
 	searchtimers[x] = "" ; // To solve displaying undefined
@@ -65,6 +65,15 @@ function onLoad() {
 		// No 19x3 so better turn fullupdate EPG off
 	}
 
+	try {
+		if (!toi.informationService.getObject("vip.serveraddress")) {} //test for settings, create if not excists.
+	} catch(e) {
+	//	toi.informationService.setObject("vip.*","0",toi.informationService.STORAGE_PERMANENT)
+		toi.informationService.setObject("vip.serveraddress","0",toi.informationService.STORAGE_PERMANENT)
+	}
+
+	//var server_ip = server_ip_array[Number(toi.informationService.getObject("vip.serveraddress"))];
+
 
 	if (mediaRecorder) {
 		createRecorder();
@@ -78,6 +87,15 @@ function onLoad() {
 	    toi.schedulerService.addEventListener(toi.schedulerService.ON_SCHEDULED_STOP, onScheduledStop);
 	    toi.schedulerService.setCategorySubscription(onScheduledStart, "*");
 	    toi.schedulerService.setCategorySubscription(onScheduledStop, "*");
+
+	//if needed types can be set here. Default of the box is normal.
+	//is = toi.informationService;
+	//is.setObject("cfg.media.subtitling.typepriority","hearing_impaired",is.STORAGE_PERMANENT);
+	//is.setObject("cfg.media.subtitling.typepriority","normal",is.STORAGE_PERMANENT);
+	//is.setObject("cfg.media.audio.typepriority","normal",is.STORAGE_PERMANENT);
+	//is.setObject("cfg.media.audio.typepriority","hearing_impaired",is.STORAGE_PERMANENT);
+	//is.setObject("cfg.media.audio.typepriority","visually_impaired",is.STORAGE_PERMANENT);
+
 	setOSDtimer();
 
 	showOSD();
@@ -1184,6 +1202,27 @@ function date_time()
         return;
 }
 
+function date_time_rec()
+{
+        date = new Date(Number(recStrt[currMed])*1000);
+        year = date.getFullYear();
+        month = date.getMonth();
+	month = addzero(month);
+        d = date.getDate();
+	d = addzero(d);
+        day = date.getDay();
+        h = date.getHours();
+        m = date.getMinutes();
+	h = addzero(h);
+	m = addzero(m);
+	if (year!==1970) { 
+        	result = ' ' + d + '-' + month + '-' + year + ' ' + h + ':' + m;
+	} else {
+		result = "";
+	}
+	return;
+}
+
 // EPG Section
 
 function GetEPG(epgchan)
@@ -1871,6 +1910,10 @@ function onKeyMenu(keyCode) {
 	}
     break;
     case "Green":
+	if (menu == 0) {
+	//change ip server
+	InitMenu(menu);
+	}
     break;
     case "Yellow":
     break;
@@ -1932,12 +1975,12 @@ function onKeyMenu(keyCode) {
 
 		if (menu == 1) {
 			is = toi.informationService;
-			if(substype == 0 ) { 	
-				is.setObject("cfg.media.subtitling.typepriority","hearing_impaired",is.STORAGE_PERMANENT);
-				substype = 1;
+			if(subsmode == 0 ) {	
+				is.setObject("cfg.media.subtitling.modepriority","Teletext,DVB",is.STORAGE_PERMANENT);
+				subsmode = 1;
 			} else {
-				is.setObject("cfg.media.subtitling.typepriority","normal",is.STORAGE_PERMANENT);
-				substype = 0;
+				is.setObject("cfg.media.subtitling.modepriority","DVB,Teletext",is.STORAGE_PERMANENT);
+				subsmode = 0;
 			}
 		}
 		InitMenu(menu);
@@ -1949,49 +1992,6 @@ function onKeyMenu(keyCode) {
 			mainmenu.style.opacity = 0;
 			setTimeout("getSchedule(currChan);LoadMediaSettings();",100);
 	} else	if (menu == 1) {
-			is = toi.informationService;
-			if(subsmode == 0 ) {	
-				is.setObject("cfg.media.subtitling.modepriority","Teletext,DVB",is.STORAGE_PERMANENT);
-				subsmode = 1;
-			} else {
-				is.setObject("cfg.media.subtitling.modepriority","DVB,Teletext",is.STORAGE_PERMANENT);
-				subsmode = 0;
-			}
-		} 
-	InitMenu(menu);
-	break;
-	case KEY_4:
-		if (menu == 0) {
-			isSetupMenu = 0;
-			mediaList.style.opacity = 0.9;
-			mainmenu.style.opacity = 0;
-			recPath = "/recordings.xml";
-			setTimeout("getRecList();LoadMediaSettings();",100);
-		}
-
-		 if (menu == 1) {
-			audiotype = audiotype + 1;
-			is = toi.informationService;
-			if(audiotype == 1) {	
-				is.setObject("cfg.media.audio.typepriority","normal",is.STORAGE_PERMANENT);
-			} else if(audiotype == 2) {
-				is.setObject("cfg.media.audio.typepriority","hearing_impaired",is.STORAGE_PERMANENT);
-			} else if(audiotype == 3) {
-				is.setObject("cfg.media.audio.typepriority","visually_impaired",is.STORAGE_PERMANENT);
-				audiotype = 0;
-			}
-			InitMenu(menu);
-		}
-	break;
-	case KEY_5:
-		if (menu == MainMenu) {
-			mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'>" + Lang[7] + "</center></h1><pre style='color:black;font-size:" + fsMenu + ";'>\n\n\n<center>" + Lang[0] + "</center></pre>";
-			timerID = 0;
-			menu = 5;
-			setTimeout("LoadTimersServer();InitMenu(menu);",200);
-		}
-
-	if (menu == 1) {
 			audio = audio + 1;
 			is = toi.informationService;
 			if(audio == 1) {	
@@ -2004,8 +2004,44 @@ function onKeyMenu(keyCode) {
 				is.unsetObject("cfg.media.audio.languagepriority",is.STORAGE_PERMANENT);
 				audio = 0;
 			}
+		InitMenu(menu);
+		} 
+	break;
+	case KEY_4:
+		if (menu == 0) {
+			isSetupMenu = 0;
+			mediaList.style.opacity = 0.9;
+			mainmenu.style.opacity = 0;
+			recPath = "/recordings.xml";
+			setTimeout("getRecList();LoadMediaSettings();",100);
 		}
-	InitMenu(menu);
+
+		 if (menu == 1) {
+		//Init here. menu = 0 don't need init!
+		InitMenu(menu);
+		}
+	break;
+	case KEY_5:
+		if (menu == MainMenu) {
+			mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'>" + Lang[7] + "</center></h1><pre style='color:black;font-size:" + fsMenu + ";'>\n\n\n<center>" + Lang[0] + "</center></pre>";
+			timerID = 0;
+			menu = 5;
+			setTimeout("LoadTimersServer();InitMenu(menu);",200);
+		}
+
+	if (menu == 1) {
+//		var x = toi.informationService.getObject("vip.serveraddress");
+//		x = Number(x);
+//		if (x < (server_ip_array.length -1)) { x = x + 1} else { x = 0 }
+//		toi.informationService.setObject("vip.serveraddress",x.toString(),toi.informationService.STORAGE_PERMANENT);
+
+//		server_ip = server_ip_array[x];
+//		for (var i=0;i<10;i++) {
+//			if (ServerAdres[i] !== "FullURL" && ServerAdres[i] !== "MultiCast") {ServerAdres[i] = server_ip + ":3000/";}
+//		}
+
+//		InitMenu(menu);
+		}
 	break;
 	case KEY_6:
 	if (menu == 0) {
@@ -2023,8 +2059,8 @@ function onKeyMenu(keyCode) {
 			showClock = 0;
 	 		showDisplay((currChan.toString()), false, 100, 0 );
 		}
+		InitMenu(menu);
 	}
-	InitMenu(menu);
 	break;
 	case KEY_7:
 		if (menu == 0) {
@@ -2066,8 +2102,8 @@ function onKeyMenu(keyCode) {
 		} else if(SwitchGuide == 1 ) {
 			SwitchGuide = 0;
 		}
+		InitMenu(menu);
 	}
-	InitMenu(menu);
 	break;
 	case KEY_9:
 		if (menu == 0 || menu == 3) {
@@ -2130,7 +2166,7 @@ if(menu == 6) { // Main Menu when watching recording
 if(menu == 1) { // settings menu
 	var htmltext = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'>" + Lang[10] + "</center></h1><pre style='color:black;font-size:" + fsMenu + ";'>   1 - ";
 	if (ShowSubs) { htmltext = htmltext + "\uE017"; } else { htmltext = htmltext + "\uE016"; }
-	htmltext = htmltext + Lang[20] + "\n   2 - \uE003" + Lang[21] + "\uE003\uE003\uE003: " + (toi.informationService.getObject("cfg.media.subtitling.typepriority")) + "\n   3 - \uE003" + Lang[22] + "\uE003\uE003\uE003: " + (toi.informationService.getObject("cfg.media.subtitling.modepriority")) + "\n   4 - \uE003" + Lang[23] + "\uE003\uE003\uE003: " + Left(toi.informationService.getObject("cfg.media.audio.typepriority"),20) + "\n   5 - \uE003" + Lang[24] + "\uE003\uE003\uE003: " + (toi.informationService.getObject("cfg.media.audio.languagepriority")) + "\n   6 - ";
+	htmltext = htmltext + Lang[20] + "\n   2 - \uE003" + Lang[22] + "\uE003\uE003\uE003: " + (toi.informationService.getObject("cfg.media.subtitling.modepriority")) + "\n   3 - \uE003" + Lang[24] + "\uE003\uE003\uE003: " + (toi.informationService.getObject("cfg.media.audio.languagepriority")) + "\n   4 - \uE003" + "\n   5 - " + "\n   6 - ";
 	if (showClock) { htmltext = htmltext + "\uE017"; } else { htmltext = htmltext + "\uE016"; }
 	htmltext = htmltext + Lang[25] + "\n   7 - ";
 	if (ShowProtectedChannels) { htmltext = htmltext + "\uE017"; } else { htmltext = htmltext + "\uE016"; }
@@ -2179,7 +2215,8 @@ if(menu == 4) { // INFO Menu
 	
 		htmltext = htmltext + "\n   Product name: " + is.getObject("config.productdisplayname");
 		htmltext = htmltext + "\n   Build date : " + is.getObject("config.build.date");
-		htmltext = htmltext + "\n\n   IP address:" + is.getObject("config.ipaddress");
+		htmltext = htmltext + "\n\n   IP address : " + is.getObject("config.ipaddress");
+		htmltext = htmltext + "\n   VDR address : " + server_ip + "\n";
 		var x = is.getObject("cfg.ip.eth0.mode");
 		if (x == "DHCP") { htmltext = htmltext + "\n \uE017 "; } else { htmltext = htmltext + "\n \uE016 "; }
 		htmltext = htmltext + "DHCP";
@@ -2546,8 +2583,6 @@ function ShowSearchTimerInfo() {
        	osdepginfo.innerHTML = "<center><pre style='color:white;'>" + searchtimersSearch[timerID] + "\n </pre></center><pre>" + info1 + "</pre>" ;
 
 }
-
-
 
 // End of Menu section
 
@@ -3737,7 +3772,8 @@ function ShowMediaOSD() {
 	if (pos/60 > x) { x = (pos/60).toFixed(0);}
 	date_time();
 	osdtime.innerHTML = result;
-	osdmedia.innerHTML = "<pre style='color:white;font-size:" + fsMedia +";'> \n  " + (pos/60).toFixed(0) + " / " + x + "  " + Left(recTitl[currMed],40) + "\n  " + pos4 + " </pre>";
+	date_time_rec();
+	osdmedia.innerHTML = "<pre style='color:white;font-size:" + fsMedia +";'> \n  " + (pos/60).toFixed(0) + " / " + x + "  " + Left(recTitl[currMed],40) + "\n  " + pos4 + "\n " + result + " </pre>";
 }
 
 function ShowInfo() {
