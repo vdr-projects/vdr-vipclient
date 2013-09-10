@@ -22,43 +22,11 @@
 
 var Version = "0.22.7"
 
-for (var x = 0;  x < 10; x++) { 
-	searchtimers[x] = "" ; // To solve displaying undefined
-	timers[x] = "" ;
-	if (minChan[x]) {
-		for (var i = minChan[x];  i < (maxChan[x]+1); i++) { 
-			EPG[0][4][i] = "";EPG[1][4][i] = "";EPG[0][5][i] = "";EPG[1][5][i] = "";EPG[0][7][i] = "";EPG[1][7][i] = ""; 
-		}
-	}
-}
-
 window.onkeydown = onKeyDown;
 
 function onLoad() {
 
-	//test for settings, create if not excists.
-	try {
-		if (!toi.informationService.getObject("vip.serveraddress")) {} 
-	} catch(e) {
-	//	toi.informationService.setObject("vip.*","0",toi.informationService.STORAGE_PERMANENT)
-		toi.informationService.setObject("vip.serveraddress","0",toi.informationService.STORAGE_PERMANENT)
-	}
-
-	try {
-		if (!toi.informationService.getObject("vip.languagepriority")) {} 
-	} catch(e) {
-	//	toi.informationService.setObject("vip.*","0",toi.informationService.STORAGE_PERMANENT)
-		toi.informationService.setObject("vip.languagepriority","0",toi.informationService.STORAGE_PERMANENT)
-	}
-
-
-
-
-
-	audio = Number(toi.informationService.getObject("vip.languagepriority"));
-	server_ip = server_ip_array[Number(toi.informationService.getObject("vip.serveraddress"))];
-	for (var i=0;i<10;i++) { if (ServerAdres[i] !== "FullURL" && ServerAdres[i] !== "MultiCast") {ServerAdres[i] = server_ip + ":3000/";} }
-
+	GetSettings();
 	createPlayer();
 
 	if(pipPlayer){
@@ -102,14 +70,6 @@ function onLoad() {
 	    toi.schedulerService.setCategorySubscription(onScheduledStart, "*");
 	    toi.schedulerService.setCategorySubscription(onScheduledStop, "*");
 
-	//if needed types can be set here. Default of the box is normal.
-	//is = toi.informationService;
-	//is.setObject("cfg.media.subtitling.typepriority","hearing_impaired",is.STORAGE_PERMANENT);
-	//is.setObject("cfg.media.subtitling.typepriority","normal",is.STORAGE_PERMANENT);
-	//is.setObject("cfg.media.audio.typepriority","normal",is.STORAGE_PERMANENT);
-	//is.setObject("cfg.media.audio.typepriority","hearing_impaired",is.STORAGE_PERMANENT);
-	//is.setObject("cfg.media.audio.typepriority","visually_impaired",is.STORAGE_PERMANENT);
-
 	setOSDtimer();
 
 	showOSD();
@@ -131,6 +91,47 @@ function onLoad() {
 	osdepginfonext.style.fontSize = fsEpginfo;
 	videoplane.subtitles = Boolean(ShowSubs);
 	mediaList.innerHTML = "<h1><center style='font-size:" + fsRec + ";color:white;'>" + Lang[0] + "</center></h1>";
+}
+
+
+function GetSettings() {
+	//test for settings, create if not excists.
+	try {
+		if (!toi.informationService.getObject("vip.serveraddress")) {} 
+	} catch(e) {
+		toi.informationService.setObject("vip.serveraddress","0",toi.informationService.STORAGE_PERMANENT)
+	}
+
+	try {
+		if (!toi.informationService.getObject("vip.languagepriority")) {} 
+	} catch(e) {
+		toi.informationService.setObject("vip.languagepriority","0",toi.informationService.STORAGE_PERMANENT)
+	}
+
+	audio = Number(toi.informationService.getObject("vip.languagepriority"));
+	server_ip = server_ip_array[Number(toi.informationService.getObject("vip.serveraddress"))];
+	for (var i=0;i<10;i++) { if (ServerAdres[i] !== "FullURL" && ServerAdres[i] !== "MultiCast") {ServerAdres[i] = server_ip + ":3000/";} }
+
+	//if needed types can be set here. Default of the box is normal.
+	//is = toi.informationService;
+	//is.setObject("cfg.media.subtitling.typepriority","hearing_impaired",is.STORAGE_PERMANENT);
+	//is.setObject("cfg.media.subtitling.typepriority","normal",is.STORAGE_PERMANENT);
+	//is.setObject("cfg.media.audio.typepriority","normal",is.STORAGE_PERMANENT);
+	//is.setObject("cfg.media.audio.typepriority","hearing_impaired",is.STORAGE_PERMANENT);
+	//is.setObject("cfg.media.audio.typepriority","visually_impaired",is.STORAGE_PERMANENT);
+
+
+	for (var x = 0;  x < 10; x++) { 
+		searchtimers[x] = "" ; // To solve displaying undefined
+		timers[x] = "" ;
+		if (minChan[x]) {
+			for (var i = minChan[x];  i < (maxChan[x]+1); i++) { 
+			EPG[0][4][i] = "";EPG[1][4][i] = "";EPG[0][5][i] = "";EPG[1][5][i] = "";
+			EPG[0][7][i] = "";EPG[1][7][i] = "";AvInfo[i] = "";
+			}
+		}
+	}
+
 }
 
 function onEvent(event) {
