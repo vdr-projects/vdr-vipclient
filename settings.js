@@ -53,7 +53,8 @@ var channeldigits = 2; // 0 - Max 9, 1 max 99, 2 max 999 or 3 max 9999 channels 
 
 var audio = 0;
 var audio_dyn = 0;
-lang_prio = new Array("dut,eng,und","ger,deu,eng","eng,und");
+
+lang_prio = new Array("dut,eng,und","ger,deu,eng","eng,und","fre,fra,eng");
 var lang_prio_dyn = new Array(); //Used for dynamic audio track selection
 
 //
@@ -187,6 +188,8 @@ var switchicon = "\uE003";
 var CAicon = "\uE00F";
 var RECicon = "\uE003";
 var Radioicon = "\uE003";
+
+var color_bg = "";
 
 var fsAudio = (16*Yfactor) + "px";
 var fsTime = (16*Yfactor) + "px";

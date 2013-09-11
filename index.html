@@ -20,7 +20,7 @@
 //
 //
 
-var Version = "0.22.7"
+var Version = "0.22.8"
 
 window.onkeydown = onKeyDown;
 
@@ -73,24 +73,46 @@ function onLoad() {
 	setOSDtimer();
 
 	showOSD();
-	colorkeys.style.fontSize = fsKeys;
+	SetupFonts();
+	videoplane.subtitles = Boolean(ShowSubs);
 	colorkeys.innerHTML = "<font color=red> " +  NN[4] + " </font><font color=green > " + NN[1] + " </font><font color=yellow> " + NN[2] + " </font><font color=blue> " + NN[5] + " </font>";
+	mediaList.innerHTML = "<h1><center style='font-size:" + fsRec + ";color:white;'>" + Lang[0] + "</center></h1>";
+}
+
+function SetupFonts() {
+//setup fontsize
+	colorkeys.style.fontSize = fsKeys;
 	osdvolume.style.fontSize = fsCA;
-	osdvolume.style.color = "green";
 	osdtime.style.fontSize = fsTime;
-	osdtime.style.color = "white";
 	osdname.style.fontSize = fsName;
-	osdname.style.color = "black";
 	osdepg.style.fontSize = fsEpg;
-	osdepg.style.color = "white";
 	osdca.style.fontSize = fsCA;
-	osdca.style.color = "black";
-	switchtimer.style.color = "white";
 	switchtimer.style.fontSize = fsEpg;
 	osdepginfo.style.fontSize = fsEpginfo;
 	osdepginfonext.style.fontSize = fsEpginfo;
-	videoplane.subtitles = Boolean(ShowSubs);
-	mediaList.innerHTML = "<h1><center style='font-size:" + fsRec + ";color:white;'>" + Lang[0] + "</center></h1>";
+	osdnr.style.fontSize = fsChan;
+	osdlang.style.fontSize = fsAudio;
+//setup fontcolors/ backgroundcolor
+	document.body.style.backgroundColor = "#ccc";
+	osdvolume.style.color = "green";
+	osdtime.style.color = "white";
+	osdname.style.color = "black";
+	osdepg.style.color = "white";
+	osdca.style.color = "black";
+	switchtimer.style.color = "white";
+	switchtimer.style.background = "red";
+	osdmedia.style.background = "#3366ff";
+	osdmain.style.background = "#3366ff";
+	schedule.style.background = "#3366ff";
+	mainmenu.style.background = "#3366ff";
+	mediaList.style.background = "#3366ff";
+	osdepginfo.style.background = "#3366ff";
+	osdepginfonext.style.background = "#3366ff";
+	osdnr.style.background = "red";
+	channelList.style.background = "#bbb";
+	osdnr.style.color = "black";
+	osdlang.style.color = "white";
+	color_bg = "#fc5";
 }
 
 
@@ -539,8 +561,6 @@ function onKeyDown(event) {
 			is = toi.informationService;
 				is.setObject("cfg.media.audio.languagepriority",lang_prio_dyn[audio_dyn] + "," + lang_prio[audio],is.STORAGE_PERMANENT);
 				osdlang.style.opacity = 1;
-				osdlang.style.fontSize = fsAudio;
-				osdlang.style.color = "white";
 				osdlang.innerHTML = "<img src='unmute.png'> " + lang_prio_dyn[audio_dyn] + " ";
 				setTimeout("osdlang.style.opacity = 0; ", 3000);
 		}
@@ -1026,8 +1046,6 @@ function onCacheUpdated() {
 
 function OSDchannr(channr) {
     osdnr.innerHTML = "<center>" + Right(channr,3) + "</center>";
-    osdnr.style.fontSize = fsChan;
-    osdnr.style.color = "black";
 }
 
 function OSDhtml(){
@@ -1683,7 +1701,7 @@ function showChannelList() {
 		if (fullupdate) { GetEPG(listChan); }
 		if ( listChan == currChan) { 
 			if (!fullupdate) { GetEPG(listChan); }
-			liststyle = "background:#fc5;";
+			liststyle = "background:" + color_bg + ";";
 		}  else {
 			liststyle = "";
 		}
@@ -2170,7 +2188,7 @@ if(menu == 2) { // Timers menu
 		if (timer.length !== 0) { do { x = x + 1; } while (!timer[x] && (x < timer.length)) }
 
 			if (i == 0) {
-			booking = booking + "<font style='background:#fc5;-webkit-border-radius:25px;color:black;font-size:" + fsMenu + ";'>";
+			booking = booking + "<font style='background:" + color_bg + ";-webkit-border-radius:25px;color:black;font-size:" + fsMenu + ";'>";
 			} else if (i == 1) {
 			booking = booking + "</font>";
 			} 
@@ -2220,7 +2238,7 @@ if(menu == 4) { // INFO Menu
 if(menu == 5) { // Timers from Server
 	if (timerOK) {
 	booking = "<center>" + Lang[32] + "</center>";
-	booking = booking + "<font style='background:#fc5;-webkit-border-radius:25px;color:black;font-size:" + fsMenu + ";'>";
+	booking = booking + "<font style='background:" + color_bg + ";-webkit-border-radius:25px;color:black;font-size:" + fsMenu + ";'>";
 	var x = timerID - 1;
 	for (var i=0;i<11;i++) {
 		if (maxTimers !== 0) { do { x = x + 1; } while (!timers[x] && (x < maxTimers)) }
@@ -2237,7 +2255,7 @@ if(menu == 7) { // SearchTimers from Server
 	if (timerOK) {
 	// 	booking = "<center>" + Lang[32] + "</center>";
 	booking = "";
-	booking = booking + "<font style='background:#fc5;-webkit-border-radius:25px;color:black;font-size:" + fsMenu + ";'>";
+	booking = booking + "<font style='background:" + color_bg + ";-webkit-border-radius:25px;color:black;font-size:" + fsMenu + ";'>";
 	var x = timerID - 1;
 	for (var i=0;i<11;i++) {
 		if (maxTimers !== 0) { do { x = x + 1; } while (!searchtimers[x] && (x < maxTimers)) }
@@ -2842,8 +2860,6 @@ if (DelisOK) {
 		is = toi.informationService;
 		is.setObject("cfg.media.audio.languagepriority",lang_prio_dyn[audio_dyn] + "," + lang_prio[audio],is.STORAGE_PERMANENT);
 		osdlang.style.opacity = 1;
-		osdlang.style.fontSize = fsAudio;
-		osdlang.style.color = "white";
 		osdlang.innerHTML = "<img src='unmute.png'> " + lang_prio_dyn[audio_dyn] + " ";
 		setTimeout("osdlang.style.opacity = 0; ", 3000);
 	break;
@@ -3335,7 +3351,7 @@ function showMediaList() {
 
 
 		if ( listMed == currMed) { 
-			liststyle = " style='background:#fc5;-webkit-border-radius:25px;";
+			liststyle = " style='background:" + color_bg + ";-webkit-border-radius:25px;";
 		}  else {
 			liststyle = " style='";
 		}
@@ -3849,15 +3865,13 @@ function ClearScreen() {
 	mainmenu.style.opacity = 0;
 }
 
-
-
 </script>
 
 
-	<body style="background:#ccc;font-family:'VDRSymbols Sans';" onload="onLoad()" onunload="onUnload()">
+	<body style="font-family:'VDRSymbols Sans';" onload="onLoad()" onunload="onUnload()">
     <embed type="application/x-motorola-toi" hidden="true">
 
-	<div id="channelList" style="background:#bbb; width:100%; height:48%; position:absolute; left:7%; top:4%;"></div>
+	<div id="channelList" style="width:100%; height:48%; position:absolute; left:7%; top:4%;"></div>
 
 
 	<div id="colorkeys" style="width:100%; position:absolute; left:10%; top:84%;"></div>
@@ -3868,28 +3882,28 @@ function ClearScreen() {
 	<div id="pipVideoDiv" ></div>
 
 	<div id="osdvolume" style="width:63%; position:absolute; left:10%; top:80%;z-index:501;font-family:'VDRSymbols Sans';opacity:0;">Volume : </div>
-	<div id="osdmedia" style="background:#3366ff;-webkit-border-radius:50px;width:80%;position:absolute;left:10%;top:60%;z-index:505;opacity:0;"></div>
+	<div id="osdmedia" style="width:80%;position:absolute;left:10%;top:60%;z-index:505;opacity:0;-webkit-border-radius:50px;"></div>
 
-	<div id="osdmain" style="background:#3366ff;width:80%; position:absolute;left:10%;top:60%;bottom:9%;z-index:505;-webkit-border-radius:50px;"></div>
+	<div id="osdmain" style="width:80%; position:absolute;left:10%;top:60%;bottom:9%;z-index:505;-webkit-border-radius:50px;"></div>
 	<div id="osdtime" style="width:42%; position:absolute; left:58%; top:63%;z-index:505;"></div>
 	<div id="osdname" style="width:69%;height:4%; position:absolute; left:12%; top:66%;z-index:505;"></div>
 	<div id="osdepg" style="width:63%; position:absolute; left:21%; top:69%;z-index:505;"></div>
 	<div id="osdtimer" style="width:7%; position:absolute; left:12%; top:69%;z-index:505;"></div>
 	<div id="osdca" style="width:5%; position:absolute; left:75%; top:67%;z-index:505;font-family:'VDRSymbols Sans';"></div>
 
-	<div id="osdnr" style="background:red;width:10%;height:9%; position:absolute; left:12%; top:56%;z-index:505;opacity:0;-webkit-border-radius:25px;"></div>
+	<div id="osdnr" style="width:10%;height:9%; position:absolute; left:12%; top:56%;z-index:505;opacity:0;-webkit-border-radius:25px;"></div>
 
-	<div id="schedule" style="background:#3366ff; width:50%; height:75%; position:absolute; left:25%; top:10%;opacity:0;z-index:510;-webkit-border-radius:50px;"></div>
+	<div id="schedule" style="width:50%; height:75%; position:absolute; left:25%; top:10%;opacity:0;z-index:510;-webkit-border-radius:50px;"></div>
 
 	<div id="osdmute" style="width:7%; position:absolute; left:76%; top:9%;z-index:515;opacity:0;"><img src="mute.png"></div>
 	<div id="osdlang" style="width:7%; position:absolute; left:76%; top:9%;z-index:515;opacity:0;"></div>
 
-	<div id="mainmenu"  style="background:#3366ff;width:80%; position:absolute; left:10%; top:10%; bottom:10%;z-index:520;opacity:0;-webkit-border-radius:50px;font-family:'VDRSymbols Sans';"></div>
-	<div id="mediaList" style="background:#3366ff;width:80%; position:absolute; left:10%; top:10%; bottom:10%;z-index:520;opacity:0;-webkit-border-radius:50px;"></div>
+	<div id="mainmenu"  style="width:80%; position:absolute; left:10%; top:10%; bottom:10%;z-index:520;opacity:0;-webkit-border-radius:50px;font-family:'VDRSymbols Sans';"></div>
+	<div id="mediaList" style="width:80%; position:absolute; left:10%; top:10%; bottom:10%;z-index:520;opacity:0;-webkit-border-radius:50px;"></div>
 
-	<div id="switchtimer" style="background:red;width:45%; position:absolute; left:21%; top:26%;z-index:530;opacity:0;-webkit-border-radius:25px;"></div>
-	<div id="osdepginfo" style="background:#3366ff;width:80%; position:absolute; left:10%; top:10%;z-index:525;opacity:0;-webkit-border-radius:50px;"></div>
-	<div id="osdepginfonext" style="background:#3366ff;width:80%; position:absolute; left:10%; top:10%;z-index:525;opacity:0;-webkit-border-radius:50px;"></div>
+	<div id="switchtimer" style="width:45%; position:absolute; left:21%; top:26%;z-index:530;opacity:0;-webkit-border-radius:25px;"></div>
+	<div id="osdepginfo" style="width:80%; position:absolute; left:10%; top:10%;z-index:525;opacity:0;-webkit-border-radius:50px;"></div>
+	<div id="osdepginfonext" style="width:80%; position:absolute; left:10%; top:10%;z-index:525;opacity:0;-webkit-border-radius:50px;"></div>
 </body>
 </html>
 
