@@ -6,7 +6,7 @@ minChan[3] = 3000;
 defChan[3] = 3000;
 baseChn[3] = 3000;
 protChn[3] = 0;
-ServerAdres[3] = server_ip + ":3000/";
+
 
 channelsnames[3000] = "TV3 Lithuania (S)";
 channels[3000] = "S5.0E-85-14-6340";

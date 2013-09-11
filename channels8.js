@@ -6,7 +6,6 @@ minChan[8] = 8001;
 defChan[8] = 8001;
 baseChn[8] = 8000;
 protChn[8] = 0;
-ServerAdres[8] = server_ip + ":3000/";
 
 channelsnames[8001] = "Nederland 1 (T)"
 channels[8001] = "T-8720-2214-1101"

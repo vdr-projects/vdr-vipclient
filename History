@@ -16,7 +16,7 @@ VDR 1.7.29
 	Update dutch tv/radio channels on 19E
 	More info for SearchTimer
 	audio/subs type only from "Onload" function for now. (Need the space in the settings menu)
-	Change (preset) server from settings menu.
+	Change (preset) server from settings menu, (all channelsx.js have to use the same server-ip)
 	Save audio priority permanent (removed 'none' setting)
 	Dynamic audio selection with green button while watching. (Settings menu as before)
 	Added EPG Icon for radio channels.

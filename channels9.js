@@ -8,7 +8,7 @@ minChan[9] = 9001;
 defChan[9] = 9051;
 baseChn[9] = 9000;
 protChn[9] = 0;
-ServerAdres[9] = server_ip + ":3000/";
+
 
 channelsnames[9001] = "NL-Radio 1 (S)";
 channels[9001] = "S19.2E-1-1037-5281";

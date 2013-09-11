@@ -7,7 +7,6 @@ minChan[6] = 6001;
 defChan[6] = 6001;
 baseChn[6] = 6000;
 protChn[6] = 1;
-ServerAdres[6] = server_ip + ":3000/";
 
 channelsnames[6001] = "Meiden van Holland Hard (T)";
 channels[6001]="T-8720-2213-38";
