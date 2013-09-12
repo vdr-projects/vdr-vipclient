@@ -76,7 +76,7 @@ function onLoad() {
 	SetupFonts();
 	videoplane.subtitles = Boolean(ShowSubs);
 	colorkeys.innerHTML = "<font color=red> " +  NN[4] + " </font><font color=green > " + NN[1] + " </font><font color=yellow> " + NN[2] + " </font><font color=blue> " + NN[5] + " </font>";
-	mediaList.innerHTML = "<h1><center style='font-size:" + fsRec + ";color:white;'>" + Lang[0] + "</center></h1>";
+	mediaList.innerHTML = "<h1><center style='font-size:" + fsRec + ";" + color_main_head + ";'>" + Lang[0] + "</center></h1>";
 }
 
 function SetupFonts() {
@@ -101,18 +101,33 @@ function SetupFonts() {
 	osdca.style.color = "black";
 	switchtimer.style.color = "white";
 	switchtimer.style.background = "red";
-	osdmedia.style.background = "#3366ff";
-	osdmain.style.background = "#3366ff";
-	schedule.style.background = "#3366ff";
-	mainmenu.style.background = "#3366ff";
-	mediaList.style.background = "#3366ff";
-	osdepginfo.style.background = "#3366ff";
-	osdepginfonext.style.background = "#3366ff";
 	osdnr.style.background = "red";
+	var i = "#3366ff";
+	osdmedia.style.background = i;
+	osdmain.style.background = i;
+	schedule.style.background = i;
+	mainmenu.style.background = i;
+	mediaList.style.background = i;
+	osdepginfo.style.background = i;
+	osdepginfonext.style.background = i;
 	channelList.style.background = "#bbb";
 	osdnr.style.color = "black";
 	osdlang.style.color = "white";
 	color_bg = "#fc5";
+	color_main_head = "color:white";
+	color_main_font = "color:black";
+	color_epg_head = "color:white";
+	color_epg_title = "color:white";
+	color_epg_avinfo = "color:black";
+	color_epg_info = "color:yellow";
+	color_sched_head = "color:white";
+	color_sched_font = "color:black";
+	color_chan_epg = "color:black";
+	color_osdtimer = "color:black";
+	color_timerinfo = "color:white";
+	color_media_osd = "color:white";
+	color_progress1 = "<font color=red>";
+	color_progress2 = "<font color=white>";
 }
 
 
@@ -1056,8 +1071,8 @@ function OSDhtml(){
 	    osdname.innerHTML = Left(channelsnames[currChan],30);
 	}
     osdepg.innerHTML = "<p>" + EPG[0][7][currChan] + "</p>\n<p>" + EPG[1][7][currChan] + "</p>";
-    osdepginfo.innerHTML =  "<center><p style='color:white;' >" + currChan + "\uE003" + channelsnames[currChan] + "</p>" + AvInfo[currChan] + "<p style='color:white;'>" + EPG[0][7][currChan] + EPG[0][9][currChan] + EPG[0][8][currChan] + "</p>\n<p style='color:yellow;'>" + EPG[0][4][currChan] + "</p>\n<p>" + Left(EPG[0][5][currChan],750) + "</p></center>";
-    osdepginfonext.innerHTML =  "<center><p style='color:white;'>"  + currChan + "\uE003" + channelsnames[currChan] + "</p><p style='color:white;'>" +  EPG[1][7][currChan] + EPG[1][9][currChan] + EPG[1][8][currChan] + "</p>\n<p style='color:yellow;'>" + EPG[1][4][currChan] + "</p>\n<p>" + Left(EPG[1][5][currChan],750) + "</p></center>";
+    osdepginfo.innerHTML =  "<center><p style='" + color_epg_head + ";' >" + currChan + "\uE003" + channelsnames[currChan] + "</p><p style='" + color_epg_avinfo + ";' >" + AvInfo[currChan] + "</p><p style='" + color_epg_title + ";'>" + EPG[0][7][currChan] + EPG[0][9][currChan] + EPG[0][8][currChan] + "</p>\n<p style='" + color_epg_info + ";'>" + EPG[0][4][currChan] + "</p>\n<p>" + Left(EPG[0][5][currChan],750) + "</p></center>";
+    osdepginfonext.innerHTML =  "<center><p style='" + color_epg_head + ";'>"  + currChan + "\uE003" + channelsnames[currChan] + "</p><p style='" + color_epg_title + ";'>" +  EPG[1][7][currChan] + EPG[1][9][currChan] + EPG[1][8][currChan] + "</p>\n<p style='" + color_epg_info + ";'>" + EPG[1][4][currChan] + "</p>\n<p>" + Left(EPG[1][5][currChan],750) + "</p></center>";
 }
 
 function updateOSDtime(timchan) {
@@ -1131,7 +1146,7 @@ function setOSDtimer() {
 		var th = tijd.getHours();
 		th=addzero(th);
 		tm=addzero(tm);
-		osdtimer.innerHTML = "<p style='color:black;font-size:" + fsList + ";'>" + th + ":" + tm + "</p>";
+		osdtimer.innerHTML = "<p style='" + color_osdtimer + ";font-size:" + fsList + ";'>" + th + ":" + tm + "</p>";
 		SetLed(0,2,1);
 		switchicon = "\uE00C";
 		osdca.innerHTML = CAicon + switchicon + RECicon;
@@ -1426,17 +1441,17 @@ function GetSchedule(schchan,tablelength){
 		th=addzero(th);
 		tm=addzero(tm);
 
-	      txt = txt + "<td style='font-size:" + fsSchedList + ";'>\uE003\uE003\uE003\uE003\uE003" + th + ":" + tm + "     (" + (events.infoSequence[i].duration/60).toFixed(0) + ")  " + Left(events.infoSequence[i].name,30) + "</td></tr>";
+	      txt = txt + "<td style='font-size:" + fsSchedList + ";" + color_sched_font + ";'>\uE003\uE003\uE003\uE003\uE003" + th + ":" + tm + "     (" + (events.infoSequence[i].duration/60).toFixed(0) + ")  " + Left(events.infoSequence[i].name,30) + "</td></tr>";
 	    }
 	   txt = txt + "</table>";
-	   schedule.innerHTML = "<p style='color:white;font-size:" + fsSched + ";'>" + "\uE003" + schchan + "\uE003" + channelsnames[schchan] + txt + "</p>";
+	   schedule.innerHTML = "<p style='" + color_sched_head + ";font-size:" + fsSched + ";'>" + "\uE003" + schchan + "\uE003" + channelsnames[schchan] + txt + "</p>";
 	} else {
-	  schedule.innerHTML = "<p style='color:white;font-size:" + fsSched + ";'>" + "\uE003" + schchan + "\uE003" + channelsnames[schchan] + "</p>";
+	  schedule.innerHTML = "<p style='" + color_sched_head + ";font-size:" + fsSched + ";'>" + "\uE003" + schchan + "\uE003" + channelsnames[schchan] + "</p>";
 	}
 
   } catch(e) {
     alert("Get EPG problem: " + e);
-	  schedule.innerHTML = "<p style='color:white;font-size:" + fsSched + ";'>" + "\uE003" + schchan + "\uE003" + channelsnames[schchan] + "</p><p>" + Lang[6] + "</p>";
+	  schedule.innerHTML = "<p style='" + color_sched_head + ";font-size:" + fsSched + ";'>" + "\uE003" + schchan + "\uE003" + channelsnames[schchan] + "</p><p>" + Lang[6] + "</p>";
   }
 
 }
@@ -1711,7 +1726,7 @@ function showChannelList() {
 	}
 	htmlstring = htmlstring + "</table>";
 	channelList.innerHTML = htmlstring;
-        chanlistepg.innerHTML = "<center><p style='color:black;font-size:" + fsEpg + ";'>" + EPG[NowNext][1][currChan] + "</p><p style='color:black;font-size:" + fsList + ";'>" + Left(EPG[NowNext][4][currChan],250) + "</p></center>" ;
+        chanlistepg.innerHTML = "<center><p style='" + color_chan_epg + ";font-size:" + fsEpg + ";'>" + EPG[NowNext][1][currChan] + "</p><p style='" + color_chan_epg + ";font-size:" + fsList + ";'>" + Left(EPG[NowNext][4][currChan],250) + "</p></center>" ;
 
 }
 
@@ -1918,7 +1933,7 @@ function onKeyMenu(keyCode) {
 		}
 	} else 	if (menu == 5) {
 		osdepginfo.style.opacity = 0;
-		mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'>" + Lang[7] + "</center></h1><pre style='color:black;font-size:" + fsMenu + ";'>\n\n\n<center>" + Lang[0] + "</center></pre>";
+		mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";" + color_main_head + ";'>" + Lang[7] + "</center></h1><pre style='" + color_main_font + ";font-size:" + fsMenu + ";'>\n\n\n<center>" + Lang[0] + "</center></pre>";
 		DeleteTimers();
 		setTimeout("LoadTimersServer();InitMenu(menu);",100);
 	}
@@ -2025,7 +2040,7 @@ function onKeyMenu(keyCode) {
 	break;
 	case KEY_5:
 		if (menu == MainMenu) {
-			mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'>" + Lang[7] + "</center></h1><pre style='color:black;font-size:" + fsMenu + ";'>\n\n\n<center>" + Lang[0] + "</center></pre>";
+			mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";" + color_main_head + ";'>" + Lang[7] + "</center></h1><pre style='" + color_main_font + ";font-size:" + fsMenu + ";'>\n\n\n<center>" + Lang[0] + "</center></pre>";
 			timerID = 0;
 			menu = 5;
 			setTimeout("LoadTimersServer();InitMenu(menu);",200);
@@ -2092,7 +2107,7 @@ function onKeyMenu(keyCode) {
 		pipplay(channels[604]);
 		}
 		if (menu == MainMenu) {
-			mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'>" + Lang[8] + "</center></h1><pre style='color:black;font-size:" + fsMenu + ";'>\n\n\n<center>" + Lang[0] + "</center></pre>";
+			mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";" + color_main_head + ";'>" + Lang[8] + "</center></h1><pre style='" + color_main_font + ";font-size:" + fsMenu + ";'>\n\n\n<center>" + Lang[0] + "</center></pre>";
 			timerID = 0;
 			menu = 7;
 			setTimeout("LoadSearchTimersServer();InitMenu(menu);",200);
@@ -2155,17 +2170,17 @@ osdepginfo.style.opacity = 0;
 
 if(menu == 0) { // Main Menu
 	MainMenu = 0;
-	mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'>" + Lang[9] + "\n ( " + Version + " )</center></h1><pre style='color:black;font-size:" + fsMenu + ";'>   1 -" + Lang[10] + "\n   2 -" + Lang[7] + "\n   3 -" + Lang[11] + "\n   4 -" + Lang[12] + "\n   5 -" + Lang[13] + "\n   6 -" + Lang[14] + "\n   7 -" + Lang[15] + "\n   8 -" + Lang[16] + "\n   9 -" + Lang[17] + "\n\n" + Lang[18] + "</pre>";
+	mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";" + color_main_head + ";'>" + Lang[9] + "\n ( " + Version + " )</center></h1><pre style='" + color_main_font + ";font-size:" + fsMenu + ";'>   1 -" + Lang[10] + "\n   2 -" + Lang[7] + "\n   3 -" + Lang[11] + "\n   4 -" + Lang[12] + "\n   5 -" + Lang[13] + "\n   6 -" + Lang[14] + "\n   7 -" + Lang[15] + "\n   8 -" + Lang[16] + "\n   9 -" + Lang[17] + "\n\n" + Lang[18] + "</pre>";
 }
 
 if(menu == 6) { // Main Menu when watching recording
 	MainMenu = 6;
-	mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'>" + Lang[9] + "\n ( " + Version + " )</center></h1><pre style='color:black;font-size:" + fsMenu + ";'>   1 -" + Lang[10] + "\n   2 -" + Lang[7] + "\n\n\n   5 -" + Lang[13] + "\n\n\n   8 -" + Lang[16] + "\n\n\n </pre>";
+	mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";" + color_main_head + ";'>" + Lang[9] + "\n ( " + Version + " )</center></h1><pre style='" + color_main_font + ";font-size:" + fsMenu + ";'>   1 -" + Lang[10] + "\n   2 -" + Lang[7] + "\n\n\n   5 -" + Lang[13] + "\n\n\n   8 -" + Lang[16] + "\n\n\n </pre>";
 }
 
 
 if(menu == 1) { // settings menu
-	var htmltext = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'>" + Lang[10] + "</center></h1><pre style='color:black;font-size:" + fsMenu + ";'>   1 - ";
+	var htmltext = "<h1><center style='font-size:" + fsMenuMain + ";" + color_main_head + ";'>" + Lang[10] + "</center></h1><pre style='" + color_main_font + ";font-size:" + fsMenu + ";'>   1 - ";
 	if (ShowSubs) { htmltext = htmltext + "\uE017"; } else { htmltext = htmltext + "\uE016"; }
 	htmltext = htmltext + Lang[20] + "\n   2 - \uE003" + Lang[22] + "\uE003\uE003\uE003: " + (toi.informationService.getObject("cfg.media.subtitling.modepriority")) + "\n   3 - \uE003" + Lang[24] + "\uE003\uE003\uE003: " + (toi.informationService.getObject("cfg.media.audio.languagepriority")) + "\n   4 - \uE003" + "\n   5 - VDR : " + server_ip + "\n   6 - ";
 	if (showClock) { htmltext = htmltext + "\uE017"; } else { htmltext = htmltext + "\uE016"; }
@@ -2188,7 +2203,7 @@ if(menu == 2) { // Timers menu
 		if (timer.length !== 0) { do { x = x + 1; } while (!timer[x] && (x < timer.length)) }
 
 			if (i == 0) {
-			booking = booking + "<font style='background:" + color_bg + ";-webkit-border-radius:25px;color:black;font-size:" + fsMenu + ";'>";
+			booking = booking + "<font style='background:" + color_bg + ";-webkit-border-radius:25px;" + color_main_font + ";font-size:" + fsMenu + ";'>";
 			} else if (i == 1) {
 			booking = booking + "</font>";
 			} 
@@ -2202,15 +2217,15 @@ if(menu == 2) { // Timers menu
 	}
 
 
-	mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'>" + Lang[7] + "</center></h1><pre style='color:black;font-size:" + fsMenu + ";'>\n   0 -" + Lang[9] + "\n" + booking + "</pre>";
+	mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";" + color_main_head + ";'>" + Lang[7] + "</center></h1><pre style='" + color_main_font + ";font-size:" + fsMenu + ";'>\n   0 -" + Lang[9] + "\n" + booking + "</pre>";
 }
 
 if(menu == 3) { // MPD Menu
-	mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'>" + Lang[33] + "</center></h1><pre style='color:black;font-size:" + fsMenu + ";'>" + Lang[34] + "\n 0 -" + Lang[9] + "</pre>";
+	mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";" + color_main_head + ";'>" + Lang[33] + "</center></h1><pre style='" + color_main_font + ";font-size:" + fsMenu + ";'>" + Lang[34] + "\n 0 -" + Lang[9] + "</pre>";
 }
 
 if(menu == 4) { // INFO Menu
-	var htmltext = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'>" + Lang[35] + "</center></h1><pre style='color:black;font-size:" + fsMenu + ";'>";
+	var htmltext = "<h1><center style='font-size:" + fsMenuMain + ";" + color_main_head + ";'>" + Lang[35] + "</center></h1><pre style='" + color_main_font + ";font-size:" + fsMenu + ";'>";
 	try {
 		is = toi.informationService;
 	
@@ -2238,14 +2253,14 @@ if(menu == 4) { // INFO Menu
 if(menu == 5) { // Timers from Server
 	if (timerOK) {
 	booking = "<center>" + Lang[32] + "</center>";
-	booking = booking + "<font style='background:" + color_bg + ";-webkit-border-radius:25px;color:black;font-size:" + fsMenu + ";'>";
+	booking = booking + "<font style='background:" + color_bg + ";-webkit-border-radius:25px;" + color_main_font + ";font-size:" + fsMenu + ";'>";
 	var x = timerID - 1;
 	for (var i=0;i<11;i++) {
 		if (maxTimers !== 0) { do { x = x + 1; } while (!timers[x] && (x < maxTimers)) }
 		if (maxTimers > x) { booking = booking + timers[x]; } else { booking = booking +"\n"; }
 		if (i == 0) { booking = booking + "</font>"; } 
 	}
-	mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'>" + Lang[7] + "</center></h1><pre style='color:black;font-size:" + fsMenu + ";'>\n" + booking + "</pre>";
+	mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";" + color_main_head + ";'>" + Lang[7] + "</center></h1><pre style='" + color_main_font + ";font-size:" + fsMenu + ";'>\n" + booking + "</pre>";
 
 	}
 }
@@ -2255,14 +2270,14 @@ if(menu == 7) { // SearchTimers from Server
 	if (timerOK) {
 	// 	booking = "<center>" + Lang[32] + "</center>";
 	booking = "";
-	booking = booking + "<font style='background:" + color_bg + ";-webkit-border-radius:25px;color:black;font-size:" + fsMenu + ";'>";
+	booking = booking + "<font style='background:" + color_bg + ";-webkit-border-radius:25px;" + color_main_font + ";font-size:" + fsMenu + ";'>";
 	var x = timerID - 1;
 	for (var i=0;i<11;i++) {
 		if (maxTimers !== 0) { do { x = x + 1; } while (!searchtimers[x] && (x < maxTimers)) }
 		if (maxTimers > x) { booking = booking + searchtimers[x]; } else { booking = booking +"\n"; }
 		if (i == 0) { booking = booking + "</font>"; } 
 	}
-	mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'>" + Lang[8] + "</center></h1><pre style='color:black;font-size:" + fsMenu + ";'>\n" + booking + "</pre>";
+	mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";" + color_main_head + ";'>" + Lang[8] + "</center></h1><pre style='" + color_main_font + ";font-size:" + fsMenu + ";'>\n" + booking + "</pre>";
 
 	}
 }
@@ -2346,7 +2361,7 @@ try {
   } catch(e) {
     timerOK = 0;
     alert("Get Timers problem: " + e);
-    mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'>" + Lang[7] + "</center></h1><pre style='color:black;font-size:" + fsMenu + ";'><center>\n  " + Lang[36] + ": \n " + server_ip + recServ + "</center></pre>";
+    mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";" + color_main_head + ";'>" + Lang[7] + "</center></h1><pre style='" + color_main_font + ";font-size:" + fsMenu + ";'><center>\n  " + Lang[36] + ": \n " + server_ip + recServ + "</center></pre>";
   }
 }
 
@@ -2414,7 +2429,7 @@ try {
   } catch(e) {
     timerOK = 0;
     alert("Get Timers problem: " + e);
-    mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'>" + Lang[7] + "</center></h1><pre style='color:black;font-size:" + fsMenu + ";'><center>\n  " + Lang[36] + ": \n " + server_ip + RestFulAPI + "</center></pre>";
+    mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";" + color_main_head + ";'>" + Lang[7] + "</center></h1><pre style='" + color_main_font + ";font-size:" + fsMenu + ";'><center>\n  " + Lang[36] + ": \n " + server_ip + RestFulAPI + "</center></pre>";
   }
 }
 
@@ -2449,7 +2464,7 @@ function ShowTimerInfo() {
   } else {
 	info3 = Lang[37];
   }
-       	osdepginfo.innerHTML = "<center><pre style='color:white;'>" + Left(info1,60) + "\n " + timersDays[timerID] + " " + 
+       	osdepginfo.innerHTML = "<center><pre style='" + color_timerinfo + ";'>" + Left(info1,60) + "\n " + timersDays[timerID] + " " + 
 	timersStrt[timerID] + " - " + timersStop[timerID] + "\n" + info2 + "\n </pre><p>" + info3 + Left(info4,750) + "</p></center>" ;
 }
 
@@ -2477,7 +2492,7 @@ try {
 	  }
 
 		// Extended INFO
-		SearchTimer[i] = "<center><pre style='color:white;'>" + x[i].getElementsByTagName("search")[0].childNodes[0].nodeValue + "\n </pre></center><pre>";
+		SearchTimer[i] = "<center><pre style='" + color_main_head + ";'>" + x[i].getElementsByTagName("search")[0].childNodes[0].nodeValue + "\n </pre></center><pre>";
 		if ((x[i].getElementsByTagName("use_as_searchtimer")[0].childNodes[0].nodeValue) == 0) {
 			SearchTimer[i]  = SearchTimer[i]  + "\uE003\uE016\uE003" + Lang[40] + "\n";
 		} else {
@@ -2524,7 +2539,7 @@ try {
   } catch(e) {
     timerOK = 0;
     alert("Get SearchTimers problem: " + e);
-    mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'>" + Lang[8] + "</center></h1><pre style='color:black;font-size:" + fsMenu + ";'><center>\n  " + Lang[43] + ": \n " + server_ip + RestFulAPI + "</center></pre>";
+    mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";" + color_main_head + ";'>" + Lang[8] + "</center></h1><pre style='" + color_main_font + ";font-size:" + fsMenu + ";'><center>\n  " + Lang[43] + ": \n " + server_ip + RestFulAPI + "</center></pre>";
   }
 }
 
@@ -2581,7 +2596,7 @@ function ShowSearchTimerInfo() {
 
 	  }
 
-       	osdepginfo.innerHTML = "<center><pre style='color:white;'>" + searchtimersSearch[timerID] + "\n </pre></center><pre>" + info1 + "</pre>" ;
+       	osdepginfo.innerHTML = "<center><pre style='" + color_main_head + ";'>" + searchtimersSearch[timerID] + "\n </pre></center><pre>" + info1 + "</pre>" ;
 
 }
 
@@ -2597,16 +2612,16 @@ if (MPDListener == 0) {
 } else {
 	if ( ev.state == 6 && ev.reason == "HostUnreachable" ) {
 	    showDisplay("ERRR", false, 100, 0 );
-	mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'>" + Lang[60] + "</center></h1><pre style='color:black;font-size:" + fsMenu + ";'>" + Lang[34] + "\n   0 -" + Lang[9] + "\n   9 -" + Lang[61] + "\n\n<center style='color:white;'>" + Lang[62] + ": \n" + server_ip + MPDAddress + "</center></pre>";
+	mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";" + color_main_head + ";'>" + Lang[60] + "</center></h1><pre style='" + color_main_font + ";font-size:" + fsMenu + ";'>" + Lang[34] + "\n   0 -" + Lang[9] + "\n   9 -" + Lang[61] + "\n\n<center style='" + color_main_head + ";'>" + Lang[62] + ": \n" + server_ip + MPDAddress + "</center></pre>";
 	  } else if ( ev.state == 2 ) { // && ev.reason == "PositionEnd" ) {
 	    showDisplay("STOP", false, 100, 0 );
-	mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'>" + Lang[60] + "</center></h1><pre style='color:black;font-size:" + fsMenu + ";'>" + Lang[34] + "\n   0 -" + Lang[9] + "\n   9 -" + Lang[63] + "\n\n<center style='color:white;'>" + Lang[64] + ": \n" + server_ip + MPDAddress + "\n" + Lang[65] + "</center></pre>";
+	mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";" + color_main_head + ";'>" + Lang[60] + "</center></h1><pre style='" + color_main_font + ";font-size:" + fsMenu + ";'>" + Lang[34] + "\n   0 -" + Lang[9] + "\n   9 -" + Lang[63] + "\n\n<center style='" + color_main_head + ";'>" + Lang[64] + ": \n" + server_ip + MPDAddress + "\n" + Lang[65] + "</center></pre>";
 	  } else if ( ev.state == 3 && ev.reason == "CommandPlay" ) {
 	showDisplay("MPD", false, 100, 0 );
-	mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'>" + Lang[60] + "</center></h1><pre style='color:black;font-size:" + fsMenu + ";'>" + Lang[34] + "\n   0 -" + Lang[9] + "\n\n\n<center style='color:white;'>" + Lang[64] + ": \n" + server_ip + MPDAddress + "</center></pre>";
+	mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";" + color_main_head + ";'>" + Lang[60] + "</center></h1><pre style='" + color_main_font + ";font-size:" + fsMenu + ";'>" + Lang[34] + "\n   0 -" + Lang[9] + "\n\n\n<center style='" + color_main_head + ";'>" + Lang[64] + ": \n" + server_ip + MPDAddress + "</center></pre>";
 	  } else {
 	    showDisplay("ERRR", false, 100, 0 );
-	mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";color:white;'>" + Lang[60] + "</center></h1><pre style='color:black;font-size:" + fsMenu + ";'>" + Lang[34] + "\n   0 -" + Lang[9] + "\n   9 -" + Lang[63] + "\n\n<center style='color:white;'>Error : " + ev.state + "\n" + Lang[66] + ": " + ev.reason + "</center></pre>";
+	mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";" + color_main_head + ";'>" + Lang[60] + "</center></h1><pre style='" + color_main_font + ";font-size:" + fsMenu + ";'>" + Lang[34] + "\n   0 -" + Lang[9] + "\n   9 -" + Lang[63] + "\n\n<center style='" + color_main_head + ";'>Error : " + ev.state + "\n" + Lang[66] + ": " + ev.reason + "</center></pre>";
 	}
 }
 
@@ -2649,7 +2664,7 @@ function UnloadMediaSettings() {
 	osdmedia.style.opacity = 0;
 	osdtime.style.opacity = 0;
 	osdepginfo.style.opacity = 0;
-	mediaList.innerHTML = "<h1><center style='font-size:" + fsRec + ";color:white;'>" + Lang[0] + "</center></h1>";
+	mediaList.innerHTML = "<h1><center style='font-size:" + fsRec + ";" + color_main_head + ";'>" + Lang[0] + "</center></h1>";
  	showDisplay((currChan.toString()), false, 100, 0 );
 	isMediaMenu = 0;
 	isFullscreen = 1;
@@ -2665,7 +2680,7 @@ function onKeyMedia(keyCode) {
 if (DelisOK) {
 	switch(keyCode) {
 	case "Accept":
-	  mediaList.innerHTML = "<h1><center style='font-size:" + fsRec + ";color:white;'>" + Lang[0] + "</center></h1>";
+	  mediaList.innerHTML = "<h1><center style='font-size:" + fsRec + ";" + color_main_head + ";'>" + Lang[0] + "</center></h1>";
 	  switchtimer.style.opacity = 0;
 	  setTimeout("DelRec2(); getRecList(); showMediaList();",100)
 	default:
@@ -2677,7 +2692,7 @@ if (DelisOK) {
   switch(keyCode) {
     case "BrowserBack":
 	if (subgroup && osdepginfo.style.opacity == 0) { 	
-		mediaList.innerHTML = "<h1><center style='font-size:" + fsRec + ";color:white;'>" + Lang[0] + "</center></h1>";
+		mediaList.innerHTML = "<h1><center style='font-size:" + fsRec + ";" + color_main_head + ";'>" + Lang[0] + "</center></h1>";
 		setTimeout("getRecList(); showMediaList();",100)
 		subgroup = 0;
 		break;
@@ -3078,12 +3093,12 @@ try {
 	}
 	if (i!==0) { getRecOK = 1; } else {
 	getRecOK = 0;
-	mediaList.innerHTML = "<h1><center style='font-size:" + fsRec + ";color:white;'>" + Lang[38] + "</center><pre>\n\n\n" + Lang[37] + "</pre></h1>";
+	mediaList.innerHTML = "<h1><center style='font-size:" + fsRec + ";" + color_main_head + ";'>" + Lang[38] + "</center><pre>\n\n\n" + Lang[37] + "</pre></h1>";
 	}
   } catch(e) {
     alert("Get Recordings problem: " + e);
 	getRecOK = 0;
-	mediaList.innerHTML = "<h1><center style='font-size:" + fsRec + ";color:white;'>" + Lang[38] + "</center><pre>\n\n\n" + Lang[39] + "</pre></h1>";
+	mediaList.innerHTML = "<h1><center style='font-size:" + fsRec + ";" + color_main_head + ";'>" + Lang[38] + "</center><pre>\n\n\n" + Lang[39] + "</pre></h1>";
   }
 }
 
@@ -3319,7 +3334,7 @@ function showMediaList() {
 	var MaxMed = -1;
 
 	if (getRecOK == 1) {
-		var htmlstring = "<h1><center style='font-size:" + fsRec + ";color:white;'>" + Lang[38] + "(" + Lang[46] + (100 - perc_space) + "%, " + (free_space/1024).toFixed(0) + " GB) </center></h1><table border='0'><tr>";
+		var htmlstring = "<h1><center style='font-size:" + fsRec + ";" + color_main_head + ";'>" + Lang[38] + "(" + Lang[46] + (100 - perc_space) + "%, " + (free_space/1024).toFixed(0) + " GB) </center></h1><table border='0'><tr>";
 
 		if (subgroup) { 
 			if (MaxInGroup < 14){ MaxMed = MaxInGroup; } else {MaxMed = 14; }
@@ -3333,7 +3348,7 @@ function showMediaList() {
 	} else {
 
 		if (nrMedia < 14) {MaxMed = nrMedia; } else {MaxMed = 14; }
-		var htmlstring = "<h1><center style='font-size:" + fsRec + ";color:white;'>" + Lang[11] + channelsnames[currChan] + " </center></h1><table border='0'><tr>";
+		var htmlstring = "<h1><center style='font-size:" + fsRec + ";" + color_main_head + ";'>" + Lang[11] + channelsnames[currChan] + " </center></h1><table border='0'><tr>";
 	}
 
 	if (MaxMed > 14) { MaxMed = 14; }
@@ -3430,7 +3445,7 @@ try {
   } catch(e) {
     alert("Get EPG problem: " + e);
 	getRecOK = 0;
-	mediaList.innerHTML = "<h1><center style='font-size:" + fsRec + ";color:white;'>" + Lang[50] + "</center><pre>\n\n\n" + Lang[51] + "</pre></h1>";
+	mediaList.innerHTML = "<h1><center style='font-size:" + fsRec + ";" + color_main_head + ";'>" + Lang[50] + "</center><pre>\n\n\n" + Lang[51] + "</pre></h1>";
   }
 }
 
@@ -3481,11 +3496,11 @@ function getSchedule(schchan){
 	getRecOK = 2;
 	} else {
 	getRecOK = 0;
-	mediaList.innerHTML = "<h1><center style='font-size:" + fsRec + ";color:white;'>" + Lang[11] + "</center><pre>\n\n\n" + Lang[52] + "</pre></h1>";
+	mediaList.innerHTML = "<h1><center style='font-size:" + fsRec + ";" + color_main_head + ";'>" + Lang[11] + "</center><pre>\n\n\n" + Lang[52] + "</pre></h1>";
 	}
   } catch(e) {
 	getRecOK = 0;
-	mediaList.innerHTML = "<h1><center style='font-size:" + fsRec + ";color:white;'>" + Lang[11] + "</center><pre>\n\n\n" + Lang[53] + "</pre></h1>";
+	mediaList.innerHTML = "<h1><center style='font-size:" + fsRec + ";" + color_main_head + ";'>" + Lang[11] + "</center><pre>\n\n\n" + Lang[53] + "</pre></h1>";
   }
 
 }
@@ -3735,23 +3750,23 @@ function ShowMediaOSD() {
 	var pos5 = "\uE007" + new Array(pos2 - 1).join("\uE008") + new Array(140 - pos2).join("\uE009") + "\uE00A"
 	var pos4 = "";
 	var pos6 = pos5;
-	var fontc = "<font color=red>";
+	var fontc = color_progress1;
 	var x = 0;
 	  for (var i=0; i<recMark.length; i++) {
 		var pos3 = recMark[i] / Number(recDura[currMed]) * 100;
 		pos3 = ((pos3 * 140) / 100).toFixed(0); // make it 40% bigger
 		pos4 = pos4 + fontc + Left(pos6,pos3 - x);
-		if (fontc == "</font><font color=white>") { fontc = "</font><font color=red>"; } else { fontc = "</font><font color=white>";}
+		if (fontc == "</font>" + color_progress2) { fontc = "</font>" + color_progress1; } else { fontc = "</font>" + color_progress2;}
 		x = pos3;
 		pos6 = Right(pos5,140 - pos3);
 		}
-	pos4 = pos4 + "</font><font color=red>" + pos6 + "</font>";
+	pos4 = pos4 + "</font>" + color_progress1 + pos6 + "</font>";
 	var x = (Number(recDura[currMed])/60).toFixed(0);
 	if (pos/60 > x) { x = (pos/60).toFixed(0);}
 	date_time();
 	osdtime.innerHTML = result;
 	date_time_rec();
-	osdmedia.innerHTML = "<pre style='color:white;font-size:" + fsMedia +";'> \n  " + (pos/60).toFixed(0) + " / " + x + "  " + Left(recTitl[currMed],40) + "\n  " + pos4 + "\n " + result + " </pre>";
+	osdmedia.innerHTML = "<pre style='" + color_media_osd + ";font-size:" + fsMedia +";'> \n  " + (pos/60).toFixed(0) + " / " + x + "  " + Left(recTitl[currMed],40) + "\n  " + pos4 + "\n " + result + " </pre>";
 }
 
 function ShowInfo() {
@@ -3769,15 +3784,15 @@ function ShowInfo() {
 	if ( mediaList.style.opacity == 0 ) { updateStreamInfo(currMed);} else { AvInfo[currMed] = "";}
 
 	if (year!==1970) { 	
-       		osdepginfo.innerHTML = "<center><pre style='color:white;'>" + Left(recTitl[currMed],60) 
-					+ "</pre> " + AvInfo[currMed] + "<pre style='color:white;'> " 
-					+ result + "\n " 
+       		osdepginfo.innerHTML = "<center><pre style='" + color_epg_head + ";'>" + Left(recTitl[currMed],60) 
+					+ "</pre><p style='" + color_epg_avinfo + ";'>" + AvInfo[currMed] 
+					+ "</p><pre style='" + color_epg_title + ";'> " + result + "\n " 
 					+ (recDura[currMed] / 60).toFixed(0) + Lang[54] + "\n " + recChan[currMed] + "  "
-					+ "\n </pre><p>" + Left(recDesc[currMed],750) + "</p></center>";
+					+ "\n </pre><p style='" + color_epg_info + ";'>" + Left(recDesc[currMed],750) + "</p></center>";
 	} else {
 		//info for non-vdr recordings
-	       	osdepginfo.innerHTML = "<center><pre style='color:white;'>" + Left(recTitl[currMed],60) 
-					+ "\n </pre><p>" + AvInfo[currMed] + " " + "\n \n </p></center>";
+	       	osdepginfo.innerHTML = "<center><pre style='" + color_epg_head + ";'>" + Left(recTitl[currMed],60) 
+					+ "\n </pre><p style='" + color_epg_avinfo + ";'>" + AvInfo[currMed] + " " + "\n \n </p></center>";
 	}
 }
 

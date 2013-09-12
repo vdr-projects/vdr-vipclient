@@ -117,8 +117,8 @@ var KEY_DIENSTEN = "Portal";	// old kpn (vip1710/1760)
 var eitCache = null;
 var events = null;
 var eitService = null;
-var EPGShortnext = "";
-var EPGShortnow = "";
+var EPGShortnext;
+var EPGShortnow;
 var listChan = 0;
 var NowNext = 0;
 var EpgInfo = new Array();
@@ -167,14 +167,14 @@ EPG[2][7] = new Array();
 EPG[2][8] = new Array();
 EPG[2][9] = new Array();
 
-var content = "";
+var content;
 var connib = 0x00000000;
 var osdtimeout = 0;
 var osdVolumetimeout = 0;
 var epgactive = 0;
 var preChan = 0;
 var timerChan = 10;
-var TimerActions = "";
+var TimerActions;
 var switchtimerID = 0;
 var initialDelayID = 0;
 var ProtectID = 0;
@@ -189,7 +189,22 @@ var CAicon = "\uE00F";
 var RECicon = "\uE003";
 var Radioicon = "\uE003";
 
-var color_bg = "";
+var color_bg;
+var color_main_head;
+var color_main_font;
+var color_epg_head;
+var color_epg_title;
+var color_epg_avinfo;
+var color_epg_info;
+var color_sched_head;
+var color_sched_font;
+var color_chan_epg;
+var color_osdtimer;
+var color_timerinfo;
+var color_media_osd;
+var color_progress1;
+var color_progress2;
+
 
 var fsAudio = (16*Yfactor) + "px";
 var fsTime = (16*Yfactor) + "px";
@@ -212,9 +227,7 @@ var AvInfo = new Array();
 var xx = 0;
 
 var isRecording = 0; // set by recording subroutine
-var audiotype = 0; // used for selecting "cfg.media.audio.typepriority","normal,hearing_impaired,visually_impaired"
 var subsmode = 0;  // "cfg.media.subtitling.modepriority","Teletext,DVB"
-var substype = 0;  // "cfg.media.subtitling.typepriority","normal,hearing_impaired"
 
 var recTitl = new Array(); // title of recording
 var recLink = new Array(); // link to get recording
