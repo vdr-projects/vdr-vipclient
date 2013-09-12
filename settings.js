@@ -62,7 +62,7 @@ var lang_prio_dyn = new Array(); //Used for dynamic audio track selection
 //
 
 var ChanGroup = Number(String((currChan / 1000)).substring(0,1)); // default group
-var minChan = new Array(); var maxChan = new Array(); var defChan = new Array(); var baseChn = new Array(); var protChn = new Array(); var ServerAdres = new Array(); // Define settings for Channels.
+var minChan = new Array();var minchan = new Array(); var maxChan = new Array(); var defChan = new Array(); var baseChn = new Array(); var protChn = new Array(); var ServerAdres = new Array(); // Define settings for Channels.
 
 
 var NN = new Array();
@@ -204,6 +204,7 @@ var color_timerinfo;
 var color_media_osd;
 var color_progress1;
 var color_progress2;
+var color_notset;
 
 
 var fsAudio = (16*Yfactor) + "px";

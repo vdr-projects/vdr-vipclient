@@ -127,6 +127,7 @@ function SetupFonts() {
 	color_media_osd = "color:white";
 	color_progress1 = "<font color=red>";
 	color_progress2 = "<font color=white>";
+	color_notset = "color:grey";
 }
 
 
@@ -142,6 +143,26 @@ function GetSettings() {
 		if (!toi.informationService.getObject("vip.languagepriority")) {} 
 	} catch(e) {
 		toi.informationService.setObject("vip.languagepriority","0",toi.informationService.STORAGE_PERMANENT)
+	}
+
+	var sel_group;
+	for (var i=0;i<10;i++) {
+		sel_group = "vip.group." + i;
+		try {
+			if (!toi.informationService.getObject(sel_group)) {} 
+		} catch(e) {
+			if (!minChan[i]) {
+				toi.informationService.setObject(sel_group,"0",toi.informationService.STORAGE_PERMANENT)
+			} else {
+				toi.informationService.setObject(sel_group,"1",toi.informationService.STORAGE_PERMANENT)
+			}
+		}
+	}
+
+	for (var i=0;i<10;i++) {
+		if (minChan[i]) {minchan[i] = minChan[i];}
+		sel_group = "vip.group." + i;
+		if (toi.informationService.getObject(sel_group) == "0") { minChan[i] = "";}
 	}
 
 	audio = Number(toi.informationService.getObject("vip.languagepriority"));
@@ -160,7 +181,7 @@ function GetSettings() {
 	for (var x = 0;  x < 10; x++) { 
 		searchtimers[x] = "" ; // To solve displaying undefined
 		timers[x] = "" ;
-		if (minChan[x]) {
+		if (maxChan[x]) { //check changed to maxChan because minChan can be unset from menu
 			for (var i = minChan[x];  i < (maxChan[x]+1); i++) { 
 			EPG[0][4][i] = "";EPG[1][4][i] = "";EPG[0][5][i] = "";EPG[1][5][i] = "";
 			EPG[0][7][i] = "";EPG[1][7][i] = "";AvInfo[i] = "";
@@ -1986,6 +2007,8 @@ function onKeyMenu(keyCode) {
 		} else if (menu == 1) {
 		 ShowSubs = 1 - ShowSubs;
 		 videoplane.subtitles = Boolean(ShowSubs); // Enable subtitles or Disable subtitles
+		} else	if (menu == 8) {
+			SetGroup(1);
 		}
 
 	InitMenu(menu);
@@ -2007,6 +2030,10 @@ function onKeyMenu(keyCode) {
 				subsmode = 0;
 			}
 		}
+
+		if (menu == 8) {
+		SetGroup(2);
+		}
 		InitMenu(menu);
 	break;
 	case KEY_3:
@@ -2021,7 +2048,11 @@ function onKeyMenu(keyCode) {
 				is.setObject("vip.languagepriority",audio.toString(),is.STORAGE_PERMANENT);
 				is.setObject("cfg.media.audio.languagepriority",lang_prio[audio],is.STORAGE_PERMANENT);
 		InitMenu(menu);
-		} 
+	} else	if (menu == 8) {
+		SetGroup(3);
+		InitMenu(menu);
+	} 
+
 	break;
 	case KEY_4:
 		if (menu == 0) {
@@ -2030,12 +2061,15 @@ function onKeyMenu(keyCode) {
 			mainmenu.style.opacity = 0;
 			recPath = "/recordings.xml";
 			setTimeout("getRecList();LoadMediaSettings();",100);
-		}
-
-		 if (menu == 1) {
+		} else if (menu == 1) {
 		//Init here. menu = 0 don't need init!
+		menu = 8;
+		InitMenu(menu);
+		} else if (menu == 8) {
+		SetGroup(4);
 		InitMenu(menu);
 		}
+
 	break;
 	case KEY_5:
 		if (menu == MainMenu) {
@@ -2057,6 +2091,11 @@ function onKeyMenu(keyCode) {
 		}
 		InitMenu(menu);
 		}
+
+		if (menu == 8) {
+		SetGroup(5);
+		InitMenu(menu);
+		}
 	break;
 	case KEY_6:
 	if (menu == 0) {
@@ -2076,6 +2115,11 @@ function onKeyMenu(keyCode) {
 		}
 		InitMenu(menu);
 	}
+		if (menu == 8) {
+		SetGroup(6);
+		InitMenu(menu);
+		}
+
 	break;
 	case KEY_7:
 		if (menu == 0) {
@@ -2097,6 +2141,11 @@ function onKeyMenu(keyCode) {
 			isSetupMenu = 0;
 			mainmenu.style.opacity = 0;
 		}
+		if (menu == 8) {
+		SetGroup(7);
+		InitMenu(menu);
+		}
+
 	break;
 	case KEY_8:
 		// PIP testing
@@ -2119,6 +2168,12 @@ function onKeyMenu(keyCode) {
 		}
 		InitMenu(menu);
 	}
+		if (menu == 8) {
+		SetGroup(8);
+		InitMenu(menu);
+		}
+
+
 	break;
 	case KEY_9:
 		if (menu == 0 || menu == 3) {
@@ -2126,7 +2181,10 @@ function onKeyMenu(keyCode) {
 		playMPD(server_ip + MPDAddress);
 		} else if (menu == 1) {
 		menu = 4; // INFO menu
+		} else if (menu == 8) {
+		SetGroup(9);
 		}
+
 		InitMenu(menu);
 	break;
 	case KEY_0:
@@ -2135,6 +2193,11 @@ function onKeyMenu(keyCode) {
 		menu = MainMenu;	
 		InitMenu(menu);
 		}
+		if (menu == 8) {
+		SetGroup(0);
+		InitMenu(menu);
+		}
+
 	break;
     case "VolumeMute":
 	state = toi.audioOutputService.getMuteState(AudioOut);
@@ -2165,6 +2228,16 @@ function onKeyMenu(keyCode) {
 
 function InitMenu(menu) {
 
+// 0 = Main Menu
+// 1 = settings menu
+// 2 = Timers menu
+// 3 = MPD Menu
+// 4 = INFO Menu
+// 5 = Timers from Server
+// 6 = Main Menu (when watching recording)
+// 7 = SearchTimers from Server
+// 8 = ChannelGroups enable/disable
+
 osdepginfo.style.opacity = 0;
 
 if(menu == 0) { // Main Menu
@@ -2181,7 +2254,7 @@ if(menu == 6) { // Main Menu when watching recording
 if(menu == 1) { // settings menu
 	var htmltext = "<h1><center style='font-size:" + fsMenuMain + ";" + color_main_head + ";'>" + Lang[10] + "</center></h1><pre style='" + color_main_font + ";font-size:" + fsMenu + ";'>   1 - ";
 	if (ShowSubs) { htmltext = htmltext + "\uE017"; } else { htmltext = htmltext + "\uE016"; }
-	htmltext = htmltext + Lang[20] + "\n   2 - \uE003" + Lang[22] + "\uE003\uE003\uE003: " + (toi.informationService.getObject("cfg.media.subtitling.modepriority")) + "\n   3 - \uE003" + Lang[24] + "\uE003\uE003\uE003: " + (toi.informationService.getObject("cfg.media.audio.languagepriority")) + "\n   4 - \uE003" + "\n   5 - VDR : " + server_ip + "\n   6 - ";
+	htmltext = htmltext + Lang[20] + "\n   2 - \uE003" + Lang[22] + "\uE003\uE003\uE003: " + (toi.informationService.getObject("cfg.media.subtitling.modepriority")) + "\n   3 - \uE003" + Lang[24] + "\uE003\uE003\uE003: " + (toi.informationService.getObject("cfg.media.audio.languagepriority")) + "\n   4 - " + Lang[82] + "\n   5 - VDR : " + server_ip + "\n   6 - ";
 	if (showClock) { htmltext = htmltext + "\uE017"; } else { htmltext = htmltext + "\uE016"; }
 	htmltext = htmltext + Lang[25] + "\n   7 - ";
 	if (ShowProtectedChannels) { htmltext = htmltext + "\uE017"; } else { htmltext = htmltext + "\uE016"; }
@@ -2244,7 +2317,7 @@ if(menu == 4) { // INFO Menu
 	} catch(e) {
 		alert("Error : " + e);
 	}
-	htmltext = htmltext + "\n\n\n\n\n   0 -" + Lang[9] + "</pre>";
+	htmltext = htmltext + "\n\n   0 -" + Lang[9] + "</pre>";
 	mainmenu.innerHTML = htmltext;
 
 }
@@ -2281,8 +2354,31 @@ if(menu == 7) { // SearchTimers from Server
 	}
 }
 
+if(menu == 8) { // ChannelGroups enable/disable
+	var htmltext = "<h1><center style='font-size:" + fsMenuMain + ";" + color_main_head + ";'>" + Lang[80] + "</center></h1><pre style='" + color_main_font + ";font-size:" + fsMenu + ";'>\n";
+	for (var i=0;i<10;i++) {
+		if (maxChan[i]) { 
+			htmltext = htmltext + "<font style='" + color_main_font + ";'>"; 
+		} else { 
+			htmltext = htmltext + "<font style='" + color_notset + ";'>"; 
+		}
+
+		htmltext = htmltext + "\uE003" + i + "\uE003-\uE003";
+		if (toi.informationService.getObject(("vip.group." + i)) == "1") { htmltext = htmltext + "\uE017"; } else { htmltext = htmltext + "\uE016"; }
+		htmltext = htmltext + "\uE003" + Lang[81] + i + "\n";
+	}
+	htmltext = htmltext + "</pre>";
+	mainmenu.innerHTML = htmltext;
+	}
+
 
 } // end of initmenu
+
+function SetGroup(isgroup) {
+	is = toi.informationService;
+	is.setObject("vip.group." + isgroup,(1 - is.getObject("vip.group." + isgroup)).toString(),is.STORAGE_PERMANENT);
+	if (is.getObject("vip.group." + isgroup) == "0") { minChan[isgroup] = "";} else {minChan[isgroup] = minchan[isgroup];}
+}
 
 function LoadTimers() {
 		timer.length = 0;
@@ -3468,10 +3564,12 @@ function getSchedule(schchan){
 	    }
 	    nrMedia = events.infoSequence.length - 1;
 	    for (var i = 0; i < events.infoSequence.length; i++) {
-			while ((i > 0) && (events.infoSequence[i].eventId == events.infoSequence[(i-1)].eventId)) {
-				recList[i] = "";
-				i = i + 1;
-			}
+
+// Double info or scrollbar twice on the screen.
+//			while ((i > 0) && (events.infoSequence[i].eventId == events.infoSequence[(i-1)].eventId)) {
+//				recList[i] = "";
+//				i = i + 1;
+//			}
 
 		recTitl[i] = events.infoSequence[i].name;
 		recDesc[i] = eitCache.getExtendedEventInfo(eitService,events.infoSequence[i].eventId).extendedInfo;

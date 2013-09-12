@@ -102,3 +102,6 @@ Lang[65] = " but streaming ended ";
 Lang[66] = " Reason ";
 
 Lang[70] = "Pause";
+Lang[80] = "Show ChannelsGroup";
+Lang[81] = "Group ";
+Lang[82] = "Group Selection";

@@ -54,8 +54,8 @@ Lang[18] = "   BLUE - Herstart Portal ";
 
 //Settings menu
 Lang[20] = " Ondertiteling ";
-Lang[21] = "  ''  ''  Type Prio ";
-Lang[22] = "  ''  ''  Mode Prio ";
+Lang[21] = " Ondertiteling Type Prio ";
+Lang[22] = " Ondertiteling Prio ";
 Lang[23] = " Audio Type Prio ";
 Lang[24] = " Voorkeurstaal ";
 Lang[25] = " Frontdisplay Klok ";
@@ -102,3 +102,6 @@ Lang[65] = " maar streaming gestopt ";
 Lang[66] = " Reden ";
 
 Lang[70] = "Pause";
+Lang[80] = "Toon KanaalGroep";
+Lang[81] = "Groep ";
+Lang[82] = "Groep Selektie";

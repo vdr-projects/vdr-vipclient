@@ -20,6 +20,7 @@ VDR 1.7.29
 	Save audio priority permanent (removed 'none' setting)
 	Dynamic audio selection with green button while watching. (Settings menu as before)
 	Added EPG Icon for radio channels.
+	From settings menu channel groups can be switched off.
 
 0.21	Language in sepate file, link your lang_XXX.js to language.js to activate it.
 	Updated EPG filter, (DVB-T defaults to German), added MTV transponder on 19E.
