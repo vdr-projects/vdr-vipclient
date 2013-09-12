@@ -51,8 +51,7 @@ function onLoad() {
 		// No harddisk, no recorder functions possible
 	}
 
-	if (toi.informationService.getObject("config.productdisplayname") !== "Motorola VIP1903" && 
-	    toi.informationService.getObject("config.productdisplayname") !== "Motorola VIP1963" && fullupdate !== 2) { 
+	if (toi.informationService.getObject("config.architecture.target") !== "vip1903" && fullupdate !== 2) { 
 		fullupdate = 0;
 		// No 19x3 so better turn fullupdate EPG off
 	}
@@ -3883,8 +3882,8 @@ function ClearScreen() {
 </script>
 
 
-	<body style="font-family:'VDRSymbols Sans';" onload="onLoad()" onunload="onUnload()">
-    <embed type="application/x-motorola-toi" hidden="true">
+<body onload="onLoad()" onunload="onUnload()">
+    	<embed type="application/x-motorola-toi" hidden="true">
 
 	<div id="channelList" style="width:100%; height:48%; position:absolute; left:7%; top:4%;"></div>
 
@@ -3896,7 +3895,7 @@ function ClearScreen() {
 	<videoplane id='videoplane' style='position:absolute;left:0px;top:0px;height:100%;width:100%;z-index:500;'></videoplane>
 	<div id="pipVideoDiv" ></div>
 
-	<div id="osdvolume" style="width:63%; position:absolute; left:10%; top:80%;z-index:501;font-family:'VDRSymbols Sans';opacity:0;">Volume : </div>
+	<div id="osdvolume" style="width:63%; position:absolute; left:10%; top:80%;z-index:501;opacity:0;">Volume : </div>
 	<div id="osdmedia" style="width:80%;position:absolute;left:10%;top:60%;z-index:505;opacity:0;-webkit-border-radius:50px;"></div>
 
 	<div id="osdmain" style="width:80%; position:absolute;left:10%;top:60%;bottom:9%;z-index:505;-webkit-border-radius:50px;"></div>
@@ -3904,7 +3903,7 @@ function ClearScreen() {
 	<div id="osdname" style="width:69%;height:4%; position:absolute; left:12%; top:66%;z-index:505;"></div>
 	<div id="osdepg" style="width:63%; position:absolute; left:21%; top:69%;z-index:505;"></div>
 	<div id="osdtimer" style="width:7%; position:absolute; left:12%; top:69%;z-index:505;"></div>
-	<div id="osdca" style="width:5%; position:absolute; left:75%; top:67%;z-index:505;font-family:'VDRSymbols Sans';"></div>
+	<div id="osdca" style="width:5%; position:absolute; left:75%; top:67%;z-index:505;"></div>
 
 	<div id="osdnr" style="width:10%;height:9%; position:absolute; left:12%; top:56%;z-index:505;opacity:0;-webkit-border-radius:25px;"></div>
 
@@ -3913,7 +3912,7 @@ function ClearScreen() {
 	<div id="osdmute" style="width:7%; position:absolute; left:76%; top:9%;z-index:515;opacity:0;"><img src="mute.png"></div>
 	<div id="osdlang" style="width:7%; position:absolute; left:76%; top:9%;z-index:515;opacity:0;"></div>
 
-	<div id="mainmenu"  style="width:80%; position:absolute; left:10%; top:10%; bottom:10%;z-index:520;opacity:0;-webkit-border-radius:50px;font-family:'VDRSymbols Sans';"></div>
+	<div id="mainmenu"  style="width:80%; position:absolute; left:10%; top:10%; bottom:10%;z-index:520;opacity:0;-webkit-border-radius:50px;"></div>
 	<div id="mediaList" style="width:80%; position:absolute; left:10%; top:10%; bottom:10%;z-index:520;opacity:0;-webkit-border-radius:50px;"></div>
 
 	<div id="switchtimer" style="width:45%; position:absolute; left:21%; top:26%;z-index:530;opacity:0;-webkit-border-radius:25px;"></div>
