@@ -3,7 +3,7 @@ Motorola Vip : 1960, 1910, 1903, 1963.
 
 VDR 1.7.29
 
-0.22	Updated EPG filter for 42E, canal sat (tid 1088), canal+ (tid 1060), CDS (veronica)
+0.22	Updated EPG filter for 42E, canal sat (tid 1088), canal+ (tid 1060), CDS (veronica, iConcerts, Animax)
 	Fix: Right month is now shown in recordings menu.
 	Fix: multiple EPG languages on 1 transponder.
 	Fix: crash when media/recordings directory is empty

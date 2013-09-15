@@ -2,18 +2,46 @@
 // Default settings
 // 
 
-//  720x576
-// var Xfactor = 720 / 720; var Yfactor = 576 / 576;
-// 1280x720
-// var Xfactor = 1280 / 720; var Yfactor = 720 / 576;
-// 1920x1080
-var Xfactor = 1920 / 720; var Yfactor = 1080 / 576;
+var videoConfig;
+var Set_Res = 2; // Default VIDEO_MODE_1080I50
+var Xfactor = new Array();
+var Yfactor = new Array();
+VideoOutputModes = new Array(2,5,7); // Modes for the portal.
+// NO_VIDEO_MODE = 0
+// VIDEO_MODE_480I60 = 1
+// VIDEO_MODE_576I50 = 2
+// VIDEO_MODE_480P60 = 3
+// VIDEO_MODE_576P50 = 4
+// VIDEO_MODE_720P50 = 5
+// VIDEO_MODE_720P60 = 6
+// VIDEO_MODE_1080I50 = 7
+// VIDEO_MODE_1080I60 = 8
+// VIDEO_MODE_1080P23976 = 9
+// VIDEO_MODE_1080P24 = 10
+// VIDEO_MODE_1080P25 = 11
+// VIDEO_MODE_1080P29970 = 12
+// VIDEO_MODE_1080P30 = 13
+// VIDEO_MODE_1080P50 = 14
+// VIDEO_MODE_1080P59940 = 15
+// VIDEO_MODE_1080P60 = 16
 
-server_ip_array = new Array("http://192.168.1.15","http://192.168.3.15","http://192.168.3.100");
+// keep scale compliant with outputmodes!!
+
+//  720x576
+Xfactor[0] = 720 / 720; Yfactor[0] = 576 / 576;
+// 1280x720
+Xfactor[1] = 1280 / 720; Yfactor[1] = 720 / 576;
+// 1920x1080
+Xfactor[2] = 1920 / 720; Yfactor[2] = 1080 / 576;
+
+
+server_ip_array = new Array("http://192.168.1.15","http://192.168.3.15","http://192.168.3.100","http://192.168.178.19");
 
 var server_ip = server_ip_array[0]; // default server
 var StartVolume = 15; // Volume on (re)start of the portal.
 var currChan = 10; // default channel
+
+var experimental = "yes" ;// Use some experimental code
 
 //
 //
@@ -49,7 +77,7 @@ var recServ = ":8000";
 var RestFulAPI = ":8002";
 var MPDAddress = ":8888";
 
-var channeldigits = 2; // 0 - Max 9, 1 max 99, 2 max 999 or 3 max 9999 channels directly selectable by numbers (Don't set it to > 2 it crashes the player)
+var channeldigits = 2; // 0 - Max 9, 1 max 99, 2 max 999 or 3 max 9999 channels directly selectable by numbers
 
 var audio = 0;
 var audio_dyn = 0;
@@ -207,22 +235,22 @@ var color_progress2;
 var color_notset;
 
 
-var fsAudio = (16*Yfactor) + "px";
-var fsTime = (16*Yfactor) + "px";
-var fsName = (27*Yfactor) + "px";
-var fsMenu = (27*Yfactor) + "px";
-var fsChan = (43*Yfactor) + "px"; 
-var fsCA = (32*Yfactor) + "px";
-var fsMenuMain = (35*Yfactor) + "px";
-var fsEpg = (19*Yfactor) + "px";
-var fsEpginfo = (21*Yfactor) + "px";
-var fsList = (18*Yfactor) + "px";
-var fsSchedList = (18*Yfactor) + "px";
-var fsSched = (26*Yfactor) + "px";
-var fsRec = (27*Yfactor) + "px";
-var fsReclist = (19*Yfactor) + "px";
-var fsMedia = (27*Yfactor) + "px";
-var fsKeys = (19*Yfactor) + "px";
+var fsAudio = (16*Yfactor[Set_Res]) + "px";
+var fsTime = (16*Yfactor[Set_Res]) + "px";
+var fsName = (27*Yfactor[Set_Res]) + "px";
+var fsMenu = (27*Yfactor[Set_Res]) + "px";
+var fsChan = (43*Yfactor[Set_Res]) + "px"; 
+var fsCA = (32*Yfactor[Set_Res]) + "px";
+var fsMenuMain = (35*Yfactor[Set_Res]) + "px";
+var fsEpg = (19*Yfactor[Set_Res]) + "px";
+var fsEpginfo = (21*Yfactor[Set_Res]) + "px";
+var fsList = (18*Yfactor[Set_Res]) + "px";
+var fsSchedList = (18*Yfactor[Set_Res]) + "px";
+var fsSched = (26*Yfactor[Set_Res]) + "px";
+var fsRec = (27*Yfactor[Set_Res]) + "px";
+var fsReclist = (19*Yfactor[Set_Res]) + "px";
+var fsMedia = (27*Yfactor[Set_Res]) + "px";
+var fsKeys = (19*Yfactor[Set_Res]) + "px";
 
 var AvInfo = new Array();
 var xx = 0;
@@ -284,3 +312,4 @@ var used_space = 0;
 var perc_space = 0;
 
 var isPause = 0; //used by pause routine.
+

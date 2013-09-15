@@ -20,7 +20,7 @@
 //
 //
 
-var Version = "0.22.9"
+var Version = "0.22.10"
 
 window.onkeydown = onKeyDown;
 
@@ -413,6 +413,26 @@ for(x=0; x<cList.length;x++) {
 	if(cList[x].type == 0) {
 	lang_prio_dyn[xx] = mediaPlayer.getAudioStreamInfo(cList[x]).language;
 	AvInfo[currStream] = AvInfo[currStream] + " Audio " + xx + " " + mediaPlayer.getAudioStreamInfo(cList[x]).encoding + " - " + mediaPlayer.getAudioStreamInfo(cList[x]).language + " , ";
+
+	//
+	alert (mediaPlayer.getAudioStreamInfo(cList[x]).sampleRate);
+	alert (mediaPlayer.getAudioStreamInfo(cList[x]).channelFormat);
+	// AUDIO_CHANNEL_FORMAT_UNKNOWN = 0
+	// AUDIO_CHANNEL_FORMAT_SINGLE_MONO = 1
+	// AUDIO_CHANNEL_FORMAT_DUAL_MONO = 2
+	// AUDIO_CHANNEL_FORMAT_STEREO = 3
+	// AUDIO_CHANNEL_FORMAT_3_FRONT_1_BACK = 4
+	// AUDIO_CHANNEL_FORMAT_3_FRONT_2_BACK = 5
+	// AUDIO_CHANNEL_FORMAT_3_FRONT_2_BACK_LFE = 6
+	// AUDIO_CHANNEL_FORMAT_3_FRONT_2_SIDE_2_BACK_LFE = 7
+	alert (mediaPlayer.getAudioStreamInfo(cList[x]).channelMode);
+	// AUDIO_CHANNEL_MODE_NORMAL = 0
+	// AUDIO_CHANNEL_MODE_DUAL_MONO_LEFT_ONLY = 1
+	// AUDIO_CHANNEL_MODE_DUAL_MONO_RIGHT_ONLY = 2
+	// AUDIO_CHANNEL_MODE_DUAL_MONO_STEREO = 3
+	// AUDIO_CHANNEL_MODE_DUAL_MONO_MIXED = 4
+
+
 	xx = xx + 1;	
 	}
 	if(cList[x].type == 1) {
@@ -423,6 +443,58 @@ for(x=0; x<cList.length;x++) {
 	}
 
 	}
+}
+
+
+function VideoOutput() {
+
+videoConfig = toi.videoOutputService.getVideoConfiguration();
+
+ var session = null;
+  try {
+    var currentOutput = 0;
+    displayInfo=videoConfig.getDisplayInfo(videoConfig.getVideoOutputs()[currentOutput]);
+    var desiredMode = VideoOutputModes[Set_Res];
+
+    // create the session
+    session = toi.videoOutputService.createVideoConfigurationSession();
+    session.setDefaultVideoMode(videoConfig.getVideoOutputs()[currentOutput], desiredMode);
+    session.apply();
+    session.releaseInstance();
+
+  }
+  catch (e) {
+    if (session != null) {
+      session.releaseInstance();
+    }
+    alert(e);
+  }
+
+setOSDscale();
+
+Set_Res = Set_Res + 1;
+if (Set_Res > VideoOutputModes.length) { Set_Res = 0;}
+
+
+}
+
+function setOSDscale() {
+	fsAudio = (16*Yfactor[Set_Res]) + "px";
+	fsTime = (16*Yfactor[Set_Res]) + "px";
+	fsName = (27*Yfactor[Set_Res]) + "px";
+	fsMenu = (27*Yfactor[Set_Res]) + "px";
+	fsChan = (43*Yfactor[Set_Res]) + "px"; 
+	fsCA = (32*Yfactor[Set_Res]) + "px";
+	fsMenuMain = (35*Yfactor[Set_Res]) + "px";
+	fsEpg = (19*Yfactor[Set_Res]) + "px";
+	fsEpginfo = (21*Yfactor[Set_Res]) + "px";
+	fsList = (18*Yfactor[Set_Res]) + "px";
+	fsSchedList = (18*Yfactor[Set_Res]) + "px";
+	fsSched = (26*Yfactor[Set_Res]) + "px";
+	fsRec = (27*Yfactor[Set_Res]) + "px";
+	fsReclist = (19*Yfactor[Set_Res]) + "px";
+	fsMedia = (27*Yfactor[Set_Res]) + "px";
+	fsKeys = (19*Yfactor[Set_Res]) + "px";
 }
 
 function addzero(zero)
@@ -761,10 +833,10 @@ function onKeyDown(event) {
    case "Scroll":
 		if(isFullscreen) {
 			NowNext = 0;
-			videoplane.style.width = (320*Xfactor)+"px";
-			videoplane.style.height = (240*Yfactor)+"px";
-			videoplane.style.left = (380*Xfactor)+"px";
-			videoplane.style.top = (300*Yfactor)+"px";
+			videoplane.style.width = (320*Xfactor[Set_Res])+"px";
+			videoplane.style.height = (240*Yfactor[Set_Res])+"px";
+			videoplane.style.left = (380*Xfactor[Set_Res])+"px";
+			videoplane.style.top = (300*Yfactor[Set_Res])+"px";
 			isFullscreen = 0;
 			ClearScreen();
 			channelList.style.opacity = 1;
@@ -1471,7 +1543,7 @@ function GetSchedule(schchan,tablelength){
 
   } catch(e) {
     alert("Get EPG problem: " + e);
-	  schedule.innerHTML = "<p style='" + color_sched_head + ";font-size:" + fsSched + ";'>" + "\uE003" + schchan + "\uE003" + channelsnames[schchan] + "</p><p>" + Lang[6] + "</p>";
+    schedule.innerHTML = "<p style='" + color_sched_head + ";font-size:" + fsSched + ";'>" + "\uE003" + schchan + "\uE003" + channelsnames[schchan] + "</p><p>" + Lang[6] + "</p>";
   }
 
 }
@@ -1566,6 +1638,11 @@ function StreamInfo(si) {
 	is.setObject("cfg.locale.ui","eng",is.STORAGE_VOLATILE);
 	}
 
+	if(SI[0]=="S19.2E" && SI[2]=="1037" && SI[3]=="5253" ) {
+	//Animax
+	is.setObject("cfg.locale.ui","eng",is.STORAGE_VOLATILE);
+	}
+
 
 	if(SI[1]=="53" && (SI[3]=="2045") ) {
 	//Canal Digitaal/ TV Vlaanderen 
@@ -1634,6 +1711,13 @@ function StreamInfo(si) {
 	//JimJam Dutch
 	is.setObject("cfg.locale.ui","dut",is.STORAGE_VOLATILE);
 	}
+
+	if(SI[1]=="3" && SI[2]=="3211" && ( SI[3]=="20823" || SI[3]=="20824") ) {
+	//iConcerts
+	is.setObject("cfg.locale.ui","cze",is.STORAGE_VOLATILE);
+	}
+
+
 
 	if((SI[0]=="S13.0E" && SI[3]=="14003") || (SI[0]=="S13.0E" && SI[3]=="14009") || (SI[0]=="S13.0E" && SI[3]=="14051") || (SI[0]=="S13.0E" && SI[3]=="951")) {
 	//Swiss ITA channels
@@ -1959,6 +2043,7 @@ function onKeyMenu(keyCode) {
 	}
     break;
     case "Green":
+	VideoOutput();
     break;
     case "Yellow":
     break;
@@ -2436,7 +2521,7 @@ try {
 	  timersName[i] = x[i].getElementsByTagName("channelname")[0].childNodes[0].nodeValue + fill;
 	  timersDay[i] = x[i].getElementsByTagName("day")[0].childNodes[0].nodeValue;
 	  timersDays[i] = new Date(timersDay[i]*1000);
-	  timersDays[i] = timersDays[i].getDate() + "\uE003" + months[timersDays[i].getMonth()];
+	  timersDays[i] = timersDays[i].getDate() + "\uE003" + Left(months[timersDays[i].getMonth()],4);
 
 	  if (timersFlag[i] == "1") { 
 		timers[i] = "\uE003\uE00C\uE003";
@@ -3593,7 +3678,13 @@ function getSchedule(schchan){
 	getRecOK = 2;
 	} else {
 	getRecOK = 0;
+
 	mediaList.innerHTML = "<h1><center style='font-size:" + fsRec + ";" + color_main_head + ";'>" + Lang[11] + "</center><pre>\n\n\n" + Lang[52] + "</pre></h1>";
+
+	if (experimental == "yes" ) {
+	mediaList.innerHTML += "<img src='" + channels[schchan] + ".jpg' style='width:100%; position:absolute; left:0%; top:-11%;'>";
+	}
+
 	}
   } catch(e) {
 	getRecOK = 0;
