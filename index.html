@@ -69,10 +69,11 @@ function onLoad() {
 	    toi.schedulerService.setCategorySubscription(onScheduledStart, "*");
 	    toi.schedulerService.setCategorySubscription(onScheduledStop, "*");
 
-	setOSDtimer();
-
-	showOSD();
+	setOSDscale();
 	SetupFonts();
+
+	setOSDtimer();
+	showOSD();
 	videoplane.subtitles = Boolean(ShowSubs);
 	colorkeys.innerHTML = "<font color=red> " +  NN[4] + " </font><font color=green > " + NN[1] + " </font><font color=yellow> " + NN[2] + " </font><font color=blue> " + NN[5] + " </font>";
 	mediaList.innerHTML = "<h1><center style='font-size:" + fsRec + ";" + color_main_head + ";'>" + Lang[0] + "</center></h1>";
@@ -168,6 +169,14 @@ function GetSettings() {
 	audio = Number(toi.informationService.getObject("vip.languagepriority"));
 	server_ip = server_ip_array[Number(toi.informationService.getObject("vip.serveraddress"))];
 	for (var i=0;i<10;i++) { if (ServerAdres[i] !== "FullURL" && ServerAdres[i] !== "MultiCast") {ServerAdres[i] = server_ip + ":3000/";} }
+
+	try {
+		if (!toi.informationService.getObject("vip.resolution")) {} 
+	} catch(e) {
+		toi.informationService.setObject("vip.resolution","2",toi.informationService.STORAGE_PERMANENT)
+	}
+
+	Set_Res = toi.informationService.getObject("vip.resolution");
 
 	//if needed types can be set here. Default of the box is normal.
 	//is = toi.informationService;
@@ -448,6 +457,9 @@ for(x=0; x<cList.length;x++) {
 
 function VideoOutput() {
 
+Set_Res = Set_Res + 1;
+if (Set_Res > VideoOutputModes.length) { Set_Res = 0;}
+
 videoConfig = toi.videoOutputService.getVideoConfiguration();
 
  var session = null;
@@ -471,11 +483,6 @@ videoConfig = toi.videoOutputService.getVideoConfiguration();
   }
 
 setOSDscale();
-InitMenu(menu);
-
-Set_Res = Set_Res + 1;
-if (Set_Res > VideoOutputModes.length) { Set_Res = 0;}
-
 
 }
 
@@ -2044,7 +2051,10 @@ function onKeyMenu(keyCode) {
 	}
     break;
     case "Green":
-	VideoOutput();
+    	if (menu == 1) {
+		VideoOutput();
+		InitMenu(menu);
+	}
     break;
     case "Yellow":
     break;
@@ -2347,8 +2357,12 @@ if(menu == 1) { // settings menu
 	htmltext = htmltext + Lang[26] + "\n   8 - ";
 	if (SwitchGuide) { htmltext = htmltext + "\uE017"; } else { htmltext = htmltext + "\uE016"; }
 	htmltext = htmltext + Lang[27] + "\n   9 -" + Lang[28] + "\n   S -" + Lang[29];
+
 	if (SleepTimer) { htmltext = htmltext + SleepTimer + Lang[30]; } else { htmltext = htmltext + Lang[31]; }
-	htmltext = htmltext +  "\n   0 -" + Lang[9] +"</pre>";
+
+	htmltext += "\n   <font style='color:green;'>G<font style='" + color_main_font + ";'> - VideoMode : ";
+	htmltext += VideoOutputModes_txt[VideoOutputModes[Set_Res]] + "\n";
+//	htmltext = htmltext +  "\n   0 -" + Lang[9] +"</pre>";
 	mainmenu.innerHTML = htmltext;
 }
 
@@ -2387,23 +2401,24 @@ if(menu == 4) { // INFO Menu
 	try {
 		is = toi.informationService;
 	
-		htmltext = htmltext + "\n   Product name: " + is.getObject("config.productdisplayname");
-		htmltext = htmltext + "\n   Build date : " + is.getObject("config.build.date");
-		htmltext = htmltext + "\n\n   IP address : " + is.getObject("config.ipaddress");
-		htmltext = htmltext + "\n   VDR address : " + server_ip + "\n";
+		htmltext += "\n   Product name: " + is.getObject("config.productdisplayname");
+		htmltext += "\n   Build date : " + is.getObject("config.build.date");
+		htmltext += "\n\n   IP address : " + is.getObject("config.ipaddress");
+//		htmltext += "\n   VDR address : " + server_ip + "\n";
+
 		var x = is.getObject("cfg.ip.eth0.mode");
-		if (x == "DHCP") { htmltext = htmltext + "\n \uE017 "; } else { htmltext = htmltext + "\n \uE016 "; }
-		htmltext = htmltext + "DHCP";
+		if (x == "DHCP") { htmltext += "\n \uE017 "; } else { htmltext += "\n \uE016 "; }
+		htmltext += "DHCP";
 		var x = is.getObject("var.capabilities.dvr");
-		if (x !== "FALSE") { htmltext = htmltext + "\n \uE017 "; } else { htmltext = htmltext + "\n \uE016 "; }
-		htmltext = htmltext + "DVR ";
-		if (fullupdate !== 0) { htmltext = htmltext + "\n \uE017 "; } else { htmltext = htmltext + "\n \uE016 "; }
-		htmltext = htmltext + "Full EPG Update ";
+		if (x !== "FALSE") { htmltext += "\n \uE017 "; } else { htmltext += "\n \uE016 "; }
+		htmltext += "DVR ";
+		if (fullupdate !== 0) { htmltext += "\n \uE017 "; } else { htmltext += "\n \uE016 "; }
+		htmltext += "Full EPG Update ";
 
 	} catch(e) {
 		alert("Error : " + e);
 	}
-	htmltext = htmltext + "\n\n   0 -" + Lang[9] + "</pre>";
+	htmltext += "\n\n   0 -" + Lang[9] + "</pre>";
 	mainmenu.innerHTML = htmltext;
 
 }
