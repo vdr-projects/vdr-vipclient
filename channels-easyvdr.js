@@ -5,7 +5,6 @@ minChan[0] = 1;
 defChan[0] = 1;
 baseChn[0] = 0;
 protChn[0] = 0;
-ServerAdres[0] = server_ip + ":3000/";
 
 maxChan[0] = 191; // set to max TV channel else you see 'undefined' in guide view
 
