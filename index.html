@@ -176,7 +176,7 @@ function GetSettings() {
 		toi.informationService.setObject("vip.resolution","2",toi.informationService.STORAGE_PERMANENT)
 	}
 
-	Set_Res = toi.informationService.getObject("vip.resolution");
+	Set_Res = Number(toi.informationService.getObject("vip.resolution"));
 	VideoOutput();
 
 	//if needed types can be set here. Default of the box is normal.
