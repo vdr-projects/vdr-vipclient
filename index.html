@@ -379,38 +379,6 @@ function onDataAvailableEvent(event) {
 
 function updateStreamInfo(currStream) {
 
-//alert("What can this stream do : " + mediaPlayer.getCapabilities());
-	var mpCap = "";
-if (mediaPlayer.getCapabilities() & 1) {
-  // bit is set
-	mpCap = " CAPABILITY_PAUSE ";
-}
-if (mediaPlayer.getCapabilities() & 2) {
-  // bit is set
-	mpCap = mpCap + "CAPABILITY_REWIND ";
-}
-if (mediaPlayer.getCapabilities() & 4) {
-  // bit is set
-	mpCap = mpCap + "CAPABILITY_FASTFORWARD ";
-}
-if (mediaPlayer.getCapabilities() & 8) {
-  // bit is set
-	mpCap = mpCap + "CAPABILITY_GETPOSITION ";
-}
-if (mediaPlayer.getCapabilities() & 16) {
-  // bit is set
-	mpCap = mpCap + "CAPABILITY_SETPOSITION ";
-}
-if (mediaPlayer.getCapabilities() & 32) {
-  // bit is set
-	mpCap = mpCap + "CAPABILITY_FREEZE ";
-}
-if (mediaPlayer.getCapabilities() & 64) {
-  // bit is set
-	mpCap = mpCap + "CAPABILITY_TIMESHIFT ";
-}
-//	alert (mpCap);
-
 var streamInfo = mediaPlayer.getStreamInfo();
 var cList = streamInfo.availableComponents;
 var x;
@@ -471,9 +439,6 @@ videoConfig = toi.videoOutputService.getVideoConfiguration();
     session.setDefaultVideoMode(videoConfig.getVideoOutputs()[currentOutput], desiredMode);
     session.apply();
     session.releaseInstance();
-
-    // save the info
-	toi.informationService.setObject("vip.resolution",Set_Res,toi.informationService.STORAGE_PERMANENT)
 
   }
   catch (e) {
@@ -2056,6 +2021,8 @@ function onKeyMenu(keyCode) {
     	if (menu == 1) {
 		Set_Res = Set_Res + 1;
 		if (Set_Res > (VideoOutputModes.length-1)) { Set_Res = 0;}
+		// save the info
+		toi.informationService.setObject("vip.resolution",Set_Res.toString(),toi.informationService.STORAGE_PERMANENT)
 
 		VideoOutput();
 		InitMenu(menu);
