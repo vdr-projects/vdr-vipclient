@@ -50,7 +50,7 @@ Lang[14] = " Server : EPG ";
 Lang[15] = " Server : Media Directory ";
 Lang[16] = " Server : SearchTimers ";
 Lang[17] = " MPD Server Connection ";
-Lang[18] = "   BLUE - Restart Portal ";
+Lang[18] = " Restart Portal ";
 
 //Settings menu
 Lang[20] = " Show Subs ";

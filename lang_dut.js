@@ -50,7 +50,7 @@ Lang[14] = " Server : EPG ";
 Lang[15] = " Server : Media Directory ";
 Lang[16] = " Server : ZoekTimers ";
 Lang[17] = " MPD Server Verbinding ";
-Lang[18] = "   BLUE - Herstart Portal ";
+Lang[18] = " Herstart Portal ";
 
 //Settings menu
 Lang[20] = " Ondertiteling ";

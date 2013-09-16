@@ -168,7 +168,7 @@ function GetSettings() {
 
 	audio = Number(toi.informationService.getObject("vip.languagepriority"));
 	server_ip = server_ip_array[Number(toi.informationService.getObject("vip.serveraddress"))];
-	for (var i=0;i<10;i++) { if (ServerAdres[i] !== "FullURL" && ServerAdres[i] !== "MultiCast") {ServerAdres[i] = server_ip + ":3000/";} }
+	for (var i=0;i<10;i++) { if (ServerAdres[i] !== "FullURL" && ServerAdres[i] !== "MultiCast") {ServerAdres[i] = server_ip + StreamPort;} }
 
 	try {
 		if (!toi.informationService.getObject("vip.resolution")) {} 
@@ -2186,7 +2186,7 @@ function onKeyMenu(keyCode) {
 
 		server_ip = server_ip_array[x];
 		for (var i=0;i<10;i++) {
-			if (ServerAdres[i] !== "FullURL" && ServerAdres[i] !== "MultiCast") {ServerAdres[i] = server_ip + ":3000/";}
+			if (ServerAdres[i] !== "FullURL" && ServerAdres[i] !== "MultiCast") {ServerAdres[i] = server_ip + StreamPort;}
 		}
 		InitMenu(menu);
 		}
@@ -2341,7 +2341,7 @@ osdepginfo.style.opacity = 0;
 
 if(menu == 0) { // Main Menu
 	MainMenu = 0;
-	mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";" + color_main_head + ";'>" + Lang[9] + "\n ( " + Version + " )</center></h1><pre style='" + color_main_font + ";font-size:" + fsMenu + ";'>   1 -" + Lang[10] + "\n   2 -" + Lang[7] + "\n   3 -" + Lang[11] + "\n   4 -" + Lang[12] + "\n   5 -" + Lang[13] + "\n   6 -" + Lang[14] + "\n   7 -" + Lang[15] + "\n   8 -" + Lang[16] + "\n   9 -" + Lang[17] + "\n\n" + Lang[18] + "</pre>";
+	mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";" + color_main_head + ";'>" + Lang[9] + "\n ( " + Version + " )</center></h1><pre style='" + color_main_font + ";font-size:" + fsMenu + ";'>   1 -" + Lang[10] + "\n   2 -" + Lang[7] + "\n   3 -" + Lang[11] + "\n   4 -" + Lang[12] + "\n   5 -" + Lang[13] + "\n   6 -" + Lang[14] + "\n   7 -" + Lang[15] + "\n   8 -" + Lang[16] + "\n   9 -" + Lang[17] + "\n\n   <font style='color:blue;'>\u25CF<font style='" + color_main_font + ";'> -" + Lang[18] + "</pre>";
 }
 
 if(menu == 6) { // Main Menu when watching recording
@@ -2352,20 +2352,20 @@ if(menu == 6) { // Main Menu when watching recording
 
 if(menu == 1) { // settings menu
 	var htmltext = "<h1><center style='font-size:" + fsMenuMain + ";" + color_main_head + ";'>" + Lang[10] + "</center></h1><pre style='" + color_main_font + ";font-size:" + fsMenu + ";'>   1 - ";
-	if (ShowSubs) { htmltext = htmltext + "\uE017"; } else { htmltext = htmltext + "\uE016"; }
-	htmltext = htmltext + Lang[20] + "\n   2 - \uE003" + Lang[22] + "\uE003\uE003\uE003: " + (toi.informationService.getObject("cfg.media.subtitling.modepriority")) + "\n   3 - \uE003" + Lang[24] + "\uE003\uE003\uE003: " + (toi.informationService.getObject("cfg.media.audio.languagepriority")) + "\n   4 - " + Lang[82] + "\n   5 - VDR : " + server_ip + "\n   6 - ";
-	if (showClock) { htmltext = htmltext + "\uE017"; } else { htmltext = htmltext + "\uE016"; }
-	htmltext = htmltext + Lang[25] + "\n   7 - ";
-	if (ShowProtectedChannels) { htmltext = htmltext + "\uE017"; } else { htmltext = htmltext + "\uE016"; }
-	htmltext = htmltext + Lang[26] + "\n   8 - ";
-	if (SwitchGuide) { htmltext = htmltext + "\uE017"; } else { htmltext = htmltext + "\uE016"; }
-	htmltext = htmltext + Lang[27] + "\n   9 -" + Lang[28] + "\n   S -" + Lang[29];
+	if (ShowSubs) { htmltext += "\uE017"; } else { htmltext += "\uE016"; }
+	htmltext += Lang[20] + "\n   2 - \uE003" + Lang[22] + "\uE003\uE003\uE003: " + (toi.informationService.getObject("cfg.media.subtitling.modepriority")) + "\n   3 - \uE003" + Lang[24] + "\uE003\uE003\uE003: " + (toi.informationService.getObject("cfg.media.audio.languagepriority")) + "\n   4 - " + Lang[82] + "\n   5 - VDR : " + server_ip + "\n   6 - ";
+	if (showClock) { htmltext += "\uE017"; } else { htmltext += "\uE016"; }
+	htmltext += Lang[25] + "\n   7 - ";
+	if (ShowProtectedChannels) { htmltext += "\uE017"; } else { htmltext += "\uE016"; }
+	htmltext += Lang[26] + "\n   8 - ";
+	if (SwitchGuide) { htmltext += "\uE017"; } else { htmltext += "\uE016"; }
+	htmltext += Lang[27] + "\n   9 -" + Lang[28] + "\n   \u25AA -" + Lang[29];
 
-	if (SleepTimer) { htmltext = htmltext + SleepTimer + Lang[30]; } else { htmltext = htmltext + Lang[31]; }
+	if (SleepTimer) { htmltext += SleepTimer + Lang[30]; } else { htmltext += Lang[31]; }
 
-	htmltext += "\n   <font style='color:green;'>G<font style='" + color_main_font + ";'> - VideoMode : ";
+	htmltext += "\n   <font style='color:green;'>\u25CF<font style='" + color_main_font + ";'> - VideoMode : ";
 	htmltext += VideoOutputModes_txt[VideoOutputModes[Set_Res]] + "\n";
-//	htmltext = htmltext +  "\n   0 -" + Lang[9] +"</pre>";
+//	htmltext += "\n   0 -" + Lang[9] +"</pre>";
 	mainmenu.innerHTML = htmltext;
 }
 

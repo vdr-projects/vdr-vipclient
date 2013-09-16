@@ -35,9 +35,10 @@ var serverEPGdays = 3 * (60 * 60 * 24); // the higher the longer you wait while 
 var VolumeStep = 5; // Steps the volume buttons make
 
 // Server for Recordings
-var recServ = ":8000";
-var RestFulAPI = ":8002";
-var MPDAddress = ":8888";
+var recServ = ":" + "8000";
+var RestFulAPI = ":" + "8002";
+var MPDAddress = ":" + "8888";
+var StreamPort = ":" + "3000" + "/";
 
 var channeldigits = 2; // 0 - Max 9, 1 max 99, 2 max 999 or 3 max 9999 channels directly selectable by numbers
 
