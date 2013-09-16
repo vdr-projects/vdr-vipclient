@@ -177,6 +177,7 @@ function GetSettings() {
 	}
 
 	Set_Res = toi.informationService.getObject("vip.resolution");
+	VideoOutput();
 
 	//if needed types can be set here. Default of the box is normal.
 	//is = toi.informationService;
@@ -457,14 +458,11 @@ for(x=0; x<cList.length;x++) {
 
 function VideoOutput() {
 
-Set_Res = Set_Res + 1;
-if (Set_Res > VideoOutputModes.length) { Set_Res = 0;}
-
 videoConfig = toi.videoOutputService.getVideoConfiguration();
 
  var session = null;
   try {
-    var currentOutput = 0;
+    var currentOutput = 0; //0 = normaly HDMI
     displayInfo=videoConfig.getDisplayInfo(videoConfig.getVideoOutputs()[currentOutput]);
     var desiredMode = VideoOutputModes[Set_Res];
 
@@ -473,6 +471,9 @@ videoConfig = toi.videoOutputService.getVideoConfiguration();
     session.setDefaultVideoMode(videoConfig.getVideoOutputs()[currentOutput], desiredMode);
     session.apply();
     session.releaseInstance();
+
+    // save the info
+	toi.informationService.setObject("vip.resolution",Set_Res,toi.informationService.STORAGE_PERMANENT)
 
   }
   catch (e) {
@@ -483,6 +484,7 @@ videoConfig = toi.videoOutputService.getVideoConfiguration();
   }
 
 setOSDscale();
+SetupFonts();
 
 }
 
@@ -2052,6 +2054,9 @@ function onKeyMenu(keyCode) {
     break;
     case "Green":
     	if (menu == 1) {
+		Set_Res = Set_Res + 1;
+		if (Set_Res > (VideoOutputModes.length-1)) { Set_Res = 0;}
+
 		VideoOutput();
 		InitMenu(menu);
 	} else 	if (menu == 5) {
