@@ -20,7 +20,7 @@
 //
 //
 
-var Version = "0.23.1"
+var Version = "0.22"
 
 window.onkeydown = onKeyDown;
 
@@ -393,8 +393,8 @@ for(x=0; x<cList.length;x++) {
 	AvInfo[currStream] = AvInfo[currStream] + " Audio " + xx + " " + mediaPlayer.getAudioStreamInfo(cList[x]).encoding + " - " + mediaPlayer.getAudioStreamInfo(cList[x]).language + " , ";
 
 	//
-	alert (mediaPlayer.getAudioStreamInfo(cList[x]).sampleRate);
-	alert (mediaPlayer.getAudioStreamInfo(cList[x]).channelFormat);
+//	alert (mediaPlayer.getAudioStreamInfo(cList[x]).sampleRate);
+//	alert (mediaPlayer.getAudioStreamInfo(cList[x]).channelFormat);
 	// AUDIO_CHANNEL_FORMAT_UNKNOWN = 0
 	// AUDIO_CHANNEL_FORMAT_SINGLE_MONO = 1
 	// AUDIO_CHANNEL_FORMAT_DUAL_MONO = 2
@@ -403,7 +403,7 @@ for(x=0; x<cList.length;x++) {
 	// AUDIO_CHANNEL_FORMAT_3_FRONT_2_BACK = 5
 	// AUDIO_CHANNEL_FORMAT_3_FRONT_2_BACK_LFE = 6
 	// AUDIO_CHANNEL_FORMAT_3_FRONT_2_SIDE_2_BACK_LFE = 7
-	alert (mediaPlayer.getAudioStreamInfo(cList[x]).channelMode);
+//	alert (mediaPlayer.getAudioStreamInfo(cList[x]).channelMode);
 	// AUDIO_CHANNEL_MODE_NORMAL = 0
 	// AUDIO_CHANNEL_MODE_DUAL_MONO_LEFT_ONLY = 1
 	// AUDIO_CHANNEL_MODE_DUAL_MONO_RIGHT_ONLY = 2

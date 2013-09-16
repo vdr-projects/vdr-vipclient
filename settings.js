@@ -22,7 +22,7 @@ var ProtectTimeOut = 60 * (60 * 1000); //time out in minutes (0 = no timeout)
 var ShowSource = 1; // show source in OSD
 var pipPlayer = 0; // 0 = no, 1 = yes Pip
 var mediaRecorder = 1; // 0 = no, 1 = yes local recording.
-var PauseOnServer = 1; // 0 = no pause on server, 1 = pause live TV on server
+var PauseOnServer = 0; // 0 = no pause on server, 1 = pause live TV on server
 
 var fullupdate = 1; // If guideview is too slow, set it to 0 (for 1910/1960), faster boxes can use 1
 // to force the use on boxes other then 19x3 use 2!!
