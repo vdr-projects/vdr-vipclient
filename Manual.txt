@@ -67,7 +67,8 @@ Blue	- Info about Recording
 TV	- Back to TV mode
 Up	- scroll -1
 Down	- scroll +1
-Red	- Delete Timer (patched restfulapi only!)
+Red	- Delete Timer
+Green	- (De)Activate Timer
 Blue	- Shows info about timer
 
 EPG mode (Yellow button, default view)
@@ -80,7 +81,7 @@ Down	- scroll +1
 OK	- Shows info about timer
 Blue	- Shows info about timer
 Red	- Set switch timer
-Rec	- Server recording (makes local timer and sends key 'record' when recording should start)
+Rec	- Server recording
 Green	- local recording (hdd units only)
 
 

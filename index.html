@@ -2570,13 +2570,9 @@ try {
 	xmlhttp=new XMLHttpRequest();
 //
 // SmartTVWeb
-	xmlhttp.open("GET",(server_ip + recServ + "/deleteTimer?guid=" + timersChan[timerID] + "&dy=" + timersDay[timerID] 
-			+ "&st=" + timersStrt[timerID] + "&sp=" + timersStop[timerID] + "&" + new Date().getTime()),false);
-// smarttvweb delete & restful reading
-//	var x = timersID[timerID].split(":");
-//	xmlhttp.open("GET",(server_ip + recServ + "/deleteTimer?guid=" + x[0] + "&dy=" + x[2] + "&st=" + x[3] + "&sp=" + x[4] + "&" + new Date().getTime()),false);
-//
-//
+//	xmlhttp.open("GET",(server_ip + recServ + "/deleteTimer?guid=" + timersChan[timerID] + "&dy=" + timersDay[timerID] 
+//			+ "&st=" + timersStrt[timerID] + "&sp=" + timersStop[timerID] + "&" + new Date().getTime()),false);
+	xmlhttp.open("GET",(server_ip + recServ + "/deleteTimer?index=" + timersID[timerID] + "&" + new Date().getTime()),false);
 	xmlhttp.send();
 
   } catch(e) {
@@ -2584,24 +2580,24 @@ try {
   }
 }
 
-function activate_timers(thistimer){
+function activate_timers(){
 	// (De)activate timers.
 try {
 
 	xmlhttp=new XMLHttpRequest();
-	if (timersFlag[thistimer] == "0") { 
-	xmlhttp.open("GET",(server_ip + recServ + "/activateTimer?index=" + timersID[thistimer] + "&activate=true&" + new Date().getTime()),false);
+	if (timersFlag[timerID] == "0") { 
+	xmlhttp.open("GET",(server_ip + recServ + "/activateTimer?index=" + timersID[timerID] + "&activate=true&" + new Date().getTime()),false);
 	} else {
-	xmlhttp.open("GET",(server_ip + recServ + "/activateTimer?index=" + timersID[thistimer] + "&activate=false&" + new Date().getTime()),false);
+	xmlhttp.open("GET",(server_ip + recServ + "/activateTimer?index=" + timersID[timerID] + "&activate=false&" + new Date().getTime()),false);
 	}
 	xmlhttp.send();
 
-	if (timersFlag[thistimer] == "0") { 
-		timers[thistimer] = timers[thistimer].substr(0, 1) + "\uE00C" + timers[thistimer].substr(2);
-		timersFlag[thistimer] = "1"
+	if (timersFlag[timerID] == "0") { 
+		timers[timerID] = timers[timerID].substr(0, 1) + "\uE00C" + timers[timerID].substr(2);
+		timersFlag[timerID] = "1"
 	} else {
-		timers[thistimer] = timers[thistimer].substr(0, 1) + "\uE003" + timers[thistimer].substr(2);
-		timersFlag[thistimer] = "0"
+		timers[timerID] = timers[timerID].substr(0, 1) + "\uE003" + timers[timerID].substr(2);
+		timersFlag[timerID] = "0"
 	}
   } catch(e) {
     alert("(De)Activate Timers problem: " + e);
