@@ -20,7 +20,7 @@
 //
 //
 
-var Version = "0.22.10"
+var Version = "0.22.11"
 
 window.onkeydown = onKeyDown;
 
@@ -2054,7 +2054,10 @@ function onKeyMenu(keyCode) {
     	if (menu == 1) {
 		VideoOutput();
 		InitMenu(menu);
-	}
+	} else 	if (menu == 5) {
+		activate_timers(timerID);
+		InitMenu(menu);
+	} 
     break;
     case "Yellow":
     break;
@@ -2532,7 +2535,7 @@ try {
 	  timersStop[i] = Right("000" + x[i].getElementsByTagName("stop")[0].childNodes[0].nodeValue,4);
 
 	  timersEvnt[i] = x[i].getElementsByTagName("eventid")[0].childNodes[0].nodeValue; // event_id
-//	  timersID[i] = x[i].getElementsByTagName("channelid")[0].childNodes[0].nodeValue; // channel_id
+	  timersID[i] = x[i].getElementsByTagName("index")[0].childNodes[0].nodeValue; // index
 	  timersChan[i]  = x[i].getElementsByTagName("channelid")[0].childNodes[0].nodeValue; // channel_id
 	  timersName[i] = x[i].getElementsByTagName("channelname")[0].childNodes[0].nodeValue + fill;
 	  timersDay[i] = x[i].getElementsByTagName("day")[0].childNodes[0].nodeValue;
@@ -2581,54 +2584,30 @@ try {
   }
 }
 
-
-function LoadTimersServer_1() {
-//Get timers from server_ip + RestFulAPI
+function activate_timers(thistimer){
+	// (De)activate timers.
 try {
-   xmlhttp=new XMLHttpRequest();
-   xmlhttp.open("GET",(server_ip + RestFulAPI + "/timers.xml?" + new Date().getTime()),false); 
-   xmlhttp.send();
-   xmlDoc=xmlhttp.responseXML; 
-   var x=xmlDoc.getElementsByTagName("timer");
-   maxTimers = x.length;
-	timers.length = 0; // clear timers[i] tries to clear crap if current x.length < previous x.length
-   for (var i=0;i<x.length;i++)
-	  { 
-		var fill = "\uE003\uE003\uE003\uE003\uE003\uE003\uE003\uE003\uE003\uE003";
-	  timersID[i] = x[i].getElementsByTagName("param")[0].childNodes[0].nodeValue;
-	  timersFlag[i] = x[i].getElementsByTagName("param")[1].childNodes[0].nodeValue;
-	  timersStrt[i] = Right("000" + x[i].getElementsByTagName("param")[2].childNodes[0].nodeValue,4);
-	  timersStop[i] = Right("000" + x[i].getElementsByTagName("param")[3].childNodes[0].nodeValue,4);
-	  timersDays[i] = x[i].getElementsByTagName("param")[9].childNodes[0].nodeValue; // param name="weekdays"
-	  if (timersDays[i] == "-------" ) {
-		timersDays[i] = x[i].getElementsByTagName("param")[10].childNodes[0].nodeValue;
-	  } else { 
-		timersDays[i] = timersDays[i] + "\uE003\uE003\uE003";
-	  }
-	  timersEvnt[i] = x[i].getElementsByTagName("param")[8].childNodes[0].nodeValue; // event_id
-	  timersChan[i] = x[i].getElementsByTagName("param")[11].childNodes[0].nodeValue; // channel_id
-	  timersName[i] = x[i].getElementsByTagName("param")[15].childNodes[0].nodeValue + fill;
-	  if (timersFlag[i] == "1") { 
-		timers[i] = "\uE003\uE00C\uE003";
-	  } else if (timersFlag[i] == "9" || timersFlag[i] == "11" ) { 
-		timers[i] = "\uE003\uE00B\uE003";
-	  } else if (timersFlag[i] == "0") { 
-		timers[i] = "\uE003\uE003\uE003";
-	  }  else { 
-		timers[i] = "\uE003?\uE003";
-	  }
-	  timersFile[i] = x[i].getElementsByTagName("param")[14].childNodes[0].nodeValue + fill + fill;
-	  timers[i] = timers[i] + timersDays[i] + "\uE003" + timersStrt[i] + "\uE003" + timersStop[i] + "\uE003" + Left(timersName[i],8) + "\uE003" + Left(timersFile[i],15) + "\n" ;
-	  timerOK = 1;
-	  }
 
+	xmlhttp=new XMLHttpRequest();
+	if (timersFlag[thistimer] == "0") { 
+	xmlhttp.open("GET",(server_ip + recServ + "/activateTimer?index=" + timersID[thistimer] + "&activate=true&" + new Date().getTime()),false);
+	} else {
+	xmlhttp.open("GET",(server_ip + recServ + "/activateTimer?index=" + timersID[thistimer] + "&activate=false&" + new Date().getTime()),false);
+	}
+	xmlhttp.send();
+
+	if (timersFlag[thistimer] == "0") { 
+		timers[thistimer] = timers[thistimer].substr(0, 1) + "\uE00C" + timers[thistimer].substr(2);
+		timersFlag[thistimer] = "1"
+	} else {
+		timers[thistimer] = timers[thistimer].substr(0, 1) + "\uE003" + timers[thistimer].substr(2);
+		timersFlag[thistimer] = "0"
+	}
   } catch(e) {
-    timerOK = 0;
-    alert("Get Timers problem: " + e);
-    mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";" + color_main_head + ";'>" + Lang[7] + "</center></h1><pre style='" + color_main_font + ";font-size:" + fsMenu + ";'><center>\n  " + Lang[36] + ": \n " + server_ip + RestFulAPI + "</center></pre>";
+    alert("(De)Activate Timers problem: " + e);
   }
-}
 
+}
 
 function ShowTimerInfo() {
   //Like Show EPG Info
