@@ -49,7 +49,7 @@ Lang[13] = " Server : Timers ";
 Lang[14] = " Server : EPG ";
 Lang[15] = " Server : Media Directory ";
 Lang[16] = " Server : ZoekTimers ";
-Lang[17] = " MPD Server Verbinding ";
+Lang[17] = " Server : MPD Verbinding ";
 Lang[18] = " Herstart Portal ";
 
 //Settings menu
@@ -100,6 +100,7 @@ Lang[63] = " Opnieuw verbinden ";
 Lang[64] = " Verbonden met MPD server ";
 Lang[65] = " maar streaming gestopt ";
 Lang[66] = " Reden ";
+Lang[67] = "Verbindings probleem";
 
 Lang[70] = "Pause";
 Lang[80] = "Toon KanaalGroep";

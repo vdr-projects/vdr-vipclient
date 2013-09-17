@@ -3,7 +3,10 @@ Motorola Vip : 1960, 1910, 1903, 1963.
 
 VDR 1.7.29
 
-0.23	
+0.23	Infobox for connection Error, not only ERRR on display but also the Infobox
+	
+
+	
 
 0.22	Updated EPG filter for 42E, canal sat (tid 1088), canal+ (tid 1060), CDS (veronica, iConcerts, Animax)
 	Fix: Right month is now shown in recordings menu.

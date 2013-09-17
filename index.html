@@ -20,7 +20,7 @@
 //
 //
 
-var Version = "0.22"
+var Version = "0.23.2"
 
 window.onkeydown = onKeyDown;
 
@@ -466,7 +466,7 @@ function setOSDscale() {
 	fsList = (18*Yfactor[Set_Res]) + "px";
 	fsSchedList = (18*Yfactor[Set_Res]) + "px";
 	fsSched = (26*Yfactor[Set_Res]) + "px";
-	fsRec = (27*Yfactor[Set_Res]) + "px";
+	fsRec = (35*Yfactor[Set_Res]) + "px";
 	fsReclist = (19*Yfactor[Set_Res]) + "px";
 	fsMedia = (27*Yfactor[Set_Res]) + "px";
 	fsKeys = (19*Yfactor[Set_Res]) + "px";
@@ -2400,8 +2400,8 @@ if(menu == 4) { // INFO Menu
 
 if(menu == 5) { // Timers from Server
 	if (timerOK) {
-	booking = "<center>" + Lang[32] + "</center>";
-	booking = booking + "<font style='background:" + color_bg + ";-webkit-border-radius:25px;" + color_main_font + ";font-size:" + fsMenu + ";'>";
+	//	booking = "<center>" + Lang[32] + "</center>";
+	booking = "<font style='background:" + color_bg + ";-webkit-border-radius:25px;" + color_main_font + ";font-size:" + fsMenu + ";'>";
 	var x = timerID - 1;
 	for (var i=0;i<11;i++) {
 		if (maxTimers !== 0) { do { x = x + 1; } while (!timers[x] && (x < maxTimers)) }
@@ -2417,8 +2417,7 @@ if(menu == 5) { // Timers from Server
 if(menu == 7) { // SearchTimers from Server
 	if (timerOK) {
 	// 	booking = "<center>" + Lang[32] + "</center>";
-	booking = "";
-	booking = booking + "<font style='background:" + color_bg + ";-webkit-border-radius:25px;" + color_main_font + ";font-size:" + fsMenu + ";'>";
+	booking = "<font style='background:" + color_bg + ";-webkit-border-radius:25px;" + color_main_font + ";font-size:" + fsMenu + ";'>";
 	var x = timerID - 1;
 	for (var i=0;i<11;i++) {
 		if (maxTimers !== 0) { do { x = x + 1; } while (!searchtimers[x] && (x < maxTimers)) }
@@ -2748,9 +2747,14 @@ function ShowSearchTimerInfo() {
 // MPD Section
 
 function MPD(ev) {
-    // alert("Media player state changed: state=" + ev.state + ", reason=" + ev.reason); //  + ", code=" + ev.code);
+//     alert("Media player state changed: state=" + ev.state + ", reason=" + ev.reason); //  + ", code=" + ev.code);
 if (MPDListener == 0) {
-	if (ev.state == 6 ) { showDisplay("ERRR", false, 100, 0 ); }
+	if (ev.state == 6 ) { 
+		showDisplay("ERRR", false, 100, 0 ); 
+		    settimer(0,Lang[67],0,2);
+		    switchtimer.style.opacity = 1;
+		    setTimeout("switchtimer.style.opacity = 0; ", 5000);
+		}
 	
 } else {
 	if ( ev.state == 6 && ev.reason == "HostUnreachable" ) {

@@ -49,7 +49,7 @@ Lang[13] = " Server : Timers ";
 Lang[14] = " Server : EPG ";
 Lang[15] = " Server : Media Directory ";
 Lang[16] = " Server : SearchTimers ";
-Lang[17] = " MPD Server Connection ";
+Lang[17] = " Server : MPD Connection ";
 Lang[18] = " Restart Portal ";
 
 //Settings menu
@@ -100,8 +100,10 @@ Lang[63] = " Reconnect ";
 Lang[64] = " Connected to MPD server ";
 Lang[65] = " but streaming ended ";
 Lang[66] = " Reason ";
+Lang[67] = "Connection Error";
 
 Lang[70] = "Pause";
 Lang[80] = "Show ChannelsGroup";
 Lang[81] = "Group ";
 Lang[82] = "Group Selection";
+
