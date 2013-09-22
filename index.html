@@ -3668,11 +3668,11 @@ function getSchedule(schchan){
 	    nrMedia = events.infoSequence.length - 1;
 	    for (var i = 0; i < events.infoSequence.length; i++) {
 
-// Double info or scrollbar twice on the screen.
-//			while ((i > 0) && (events.infoSequence[i].eventId == events.infoSequence[(i-1)].eventId)) {
-//				recList[i] = "";
-//				i = i + 1;
-//			}
+		// Double info or scrollbar twice on the screen if nrMedia < 14
+		while ((i > 0) && (events.infoSequence[i].eventId == events.infoSequence[(i-1)].eventId) && (nrMedia > 14)) {
+			recList[i] = "";
+			i = i + 1;
+		}
 
 		recTitl[i] = events.infoSequence[i].name;
 		recDesc[i] = eitCache.getExtendedEventInfo(eitService,events.infoSequence[i].eventId).extendedInfo;
