@@ -410,8 +410,13 @@ for(x=0; x<cList.length;x++) {
 	// AUDIO_CHANNEL_MODE_DUAL_MONO_STEREO = 3
 	// AUDIO_CHANNEL_MODE_DUAL_MONO_MIXED = 4
 
+	if (lang_prio_dyn[xx] !=="NAR") { 
+		xx = xx + 1; 
+	} else { 
+		lang_prio_dyn.length = xx;
+	}
 
-	xx = xx + 1;	
+
 	}
 	if(cList[x].type == 1) {
 	Radioicon = "\uE00F";
@@ -640,11 +645,13 @@ function onKeyDown(event) {
 	if(isFullscreen) {
 		if(!epgactive) {
 			if (audio_dyn < (lang_prio_dyn.length -1)) { audio_dyn = audio_dyn + 1} else { audio_dyn = 0 }
-			is = toi.informationService;
+			if (lang_prio_dyn.length > 1) {
+				is = toi.informationService;
 				is.setObject("cfg.media.audio.languagepriority",lang_prio_dyn[audio_dyn] + "," + lang_prio[audio],is.STORAGE_PERMANENT);
 				osdlang.style.opacity = 1;
 				osdlang.innerHTML = "<img src='unmute.png'> " + lang_prio_dyn[audio_dyn] + " ";
 				setTimeout("osdlang.style.opacity = 0; ", 3000);
+			}
 		}
 	} else if(isSchedule == 0 && !epgactive){
 		colorkeys.innerHTML = "<font color=red> " +  NN[3 + NowNext] + " </font><font color=green> " + NN[NowNext] + " </font><font color=yellow> " + NN[2] + " </font><font color=blue> " + NN[5] + " </font>";
@@ -1736,8 +1743,13 @@ function StreamInfo(si) {
 		is.setObject("cfg.locale.ui","pol",is.STORAGE_VOLATILE);
 	}
 
+	if((SI[0]=="S19.2E" && SI[2]=="1111" && SI[3]=="7290") ) {
+		//Sky News on WDR HD transponder
+		is.setObject("cfg.locale.ui","eng",is.STORAGE_VOLATILE);
+	}
 
-	if(SI[0]=="S19.2E" && ( (SI[2]=="1018") || (SI[2]=="1020") || (SI[2]=="1022") || (SI[2]=="1024") || (SI[2]=="1068") || (SI[2]=="1070") || (SI[2]=="1072") || (SI[2]=="1074") || (SI[2]=="1076") || (SI[2]=="1080") || (SI[2]=="1084") || (SI[2]=="1086") || (SI[2]=="1090") || (SI[2]=="1092") || (SI[2]=="1094") || (SI[2]=="1096") || (SI[2]=="1100") || (SI[2]=="1102") || (SI[2]=="1106") || (SI[2]=="1110") || (SI[2]=="1112") || (SI[2]=="1114") || (SI[2]=="1116") || (SI[2]=="1118") || (SI[2]=="1120"))) {
+
+	if(SI[0]=="S19.2E" && ( (SI[2]=="1018") || (SI[2]=="1020") || (SI[2]=="1022") || (SI[2]=="1024") || (SI[2]=="1026") || (SI[2]=="1068") || (SI[2]=="1070") || (SI[2]=="1072") || (SI[2]=="1074") || (SI[2]=="1076") || (SI[2]=="1080") || (SI[2]=="1084") || (SI[2]=="1086") || (SI[2]=="1090") || (SI[2]=="1092") || (SI[2]=="1094") || (SI[2]=="1096") || (SI[2]=="1100") || (SI[2]=="1102") || (SI[2]=="1106") || (SI[2]=="1110") || (SI[2]=="1112") || (SI[2]=="1114") || (SI[2]=="1116") || (SI[2]=="1118") || (SI[2]=="1120"))) {
 	//CanalSat S19.2
 		is.setObject("cfg.locale.ui","fra",is.STORAGE_VOLATILE);
 	}
@@ -1773,6 +1785,17 @@ function StreamInfo(si) {
 	if(SI[0]=="S13.0E" && SI[1]=="319") {
 	is.setObject("cfg.locale.ui","fre",is.STORAGE_VOLATILE);
 	}
+
+	//Euronews / Eurosport
+	if(SI[0]=="S13.0E" && SI[1]=="318" && SI[2]=="200") {
+	is.setObject("cfg.locale.ui","fra",is.STORAGE_VOLATILE);
+	}
+
+	//bloomberg 19.2E
+	if(SI[0]=="S19.2E" && SI[2]=="1026" && SI[3]=="10067") {
+	is.setObject("cfg.locale.ui","eng",is.STORAGE_VOLATILE);
+	}
+
 
 	//Canal+
 	if(SI[0]=="S19.2E" && SI[1]=="1" && SI[2]=="1060" ) {
@@ -3043,12 +3066,14 @@ if (DelisOK) {
 	ShowMediaOSD();
         break;
    case "Green":
-		if (audio_dyn < (lang_prio_dyn.length -1)) { audio_dyn = audio_dyn + 1} else { audio_dyn = 0 }
+	if (audio_dyn < (lang_prio_dyn.length -1)) { audio_dyn = audio_dyn + 1} else { audio_dyn = 0 }
+	if (lang_prio_dyn.length > 1) {
 		is = toi.informationService;
 		is.setObject("cfg.media.audio.languagepriority",lang_prio_dyn[audio_dyn] + "," + lang_prio[audio],is.STORAGE_PERMANENT);
 		osdlang.style.opacity = 1;
 		osdlang.innerHTML = "<img src='unmute.png'> " + lang_prio_dyn[audio_dyn] + " ";
 		setTimeout("osdlang.style.opacity = 0; ", 3000);
+	}
 	break;
     case "Yellow":
 	 ShowSubs = 1 - ShowSubs;
