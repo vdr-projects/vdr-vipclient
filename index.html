@@ -694,6 +694,7 @@ function onKeyDown(event) {
 	if(isSchedule == 0) {
 			if(!epgactive) {
 			SetOsdInfo();
+				if(isFullscreen) { NowNext = 0;}
 				if (NowNext) {
 					osdepginfo.style.opacity = 0;
 					osdepginfonext.style.opacity = 1;

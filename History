@@ -6,7 +6,8 @@ VDR 1.7.29
 0.23	Infobox for connection Error, not only ERRR on display but also the Infobox
 	Updated EPG filter for Sat.1/Pro7, Rai (13E), TVP (19E)
 	channels update.
-	Dynamic audio selection only if number of audio channels > 1 and not "NAR" (uk mostly)	
+	Dynamic audio selection only if number of audio channels > 1 and not "NAR" (uk mostly)
+	<blue> key - EPG info always start at Now.
 	
 
 0.22	Updated EPG filter for 42E, canal sat (tid 1088), canal+ (tid 1060), CDS (veronica, iConcerts, Animax)
