@@ -3040,6 +3040,7 @@ if (DelisOK) {
 		osdepginfo.style.opacity = 1 - osdepginfo.style.opacity;
 		break;
     case "TV":
+	setResume();
 	play(channels[currChan]);
 	UnloadMediaSettings();
         break;
