@@ -206,16 +206,22 @@ var numObjs = event.objectNames.length;
   for (var i=0; i<numObjs; i++) {
 	if(event.objectNames[i] == "var.io.state" && toi.informationService.getObject(event.objectNames[i]) == "standby" && KillStream == 1){
 		try {
-		mediaPlayer.close();
+			if (isMediaMenu) { 
+				if (mediaList.style.opacity == 0) {setResume();} // No mediamenu on screen so set resume.
+			}
+			mediaPlayer.close();
 		} catch(e) {
 		alert(e);
 		}
 	} else if(event.objectNames[i] == "var.io.state" && toi.informationService.getObject(event.objectNames[i]) == "normal" && KillStream == 1){
 		play(channels[currChan]);
 		if(isMediaMenu) {
-			    mediaList.style.opacity = 0.9;
-			    showDisplay("STOP", false, 100, 0 );
-			    showMediaList();
+			if (mediaList.style.opacity == 0) {
+				setTimeout("GetMarks(); getResume(); playRec(recLink[currMed]+ '?mode=streamtoend&time=' + position);",100);
+			} else {
+				showDisplay("STOP", false, 100, 0 );
+				showMediaList();
+			}
 		}
 	}
   }
@@ -4012,7 +4018,12 @@ function onScheduledStart(event) {
 	isFullscreen = 1; FullScreen(); 
 	isVisible = 0; setVisible(isVisible); 
 	setOSDtimer();
-	if (isMediaMenu) { UnloadMediaSettings(); }
+
+	//Switch from recordings
+	if (isMediaMenu) { 
+		if (mediaList.style.opacity == 0) {setResume();} // No mediamenu on screen so set resume.
+		UnloadMediaSettings();
+	}
 
 	prevChan = currChan;
 	currChan = Number(toi.schedulerService.getParameter(event.booking.id, "Channel"));
