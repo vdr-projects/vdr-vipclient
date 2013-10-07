@@ -1141,7 +1141,13 @@ function onCacheUpdated() {
 }
 
 function OSDchannr(channr) {
-    osdnr.innerHTML = "<center>" + Right(channr,3) + "</center>";
+	osdnr.innerHTML = "<center>" + Right(channr,3) + "</center>";
+
+//	Show logo's
+//	if (experimental == "yes" ) {
+//		osdnr.innerHTML = "<img src='" + channels[currChan] + ".logo.jpg' style='width:80%; max-height:100%; position:absolute; left:10%;' >"; 
+//	}
+
 }
 
 function OSDhtml(){
@@ -2900,6 +2906,8 @@ if (DelisOK) {
 		break;
 	}
 	if (osdepginfo.style.opacity == 1) { osdepginfo.style.opacity = 0; break; }
+    case "Yellow":
+	//hide/display schedule with same button
     case "TV":
 	UnloadMediaSettings();
         break;
