@@ -10,6 +10,10 @@ var currChan = 10; // default channel
 
 var experimental = "yes" ;// Use some experimental code
 
+var lang_nr;
+OSDLang = new Array ("English", "Nederlands");
+langfile = new Array ("lang_eng.js", "lang_dut.js");
+
 
 var ShowSubDir = 1 ; // 0 = no, 1 = yes (default) // show seperate maps for subdirs in menu recordings
 var showClock = 0;   // 0 = no, 1 = yes
