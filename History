@@ -10,6 +10,7 @@ VDR 1.7.29
 	<blue> key - EPG info always start at Now.
 	Save position when poweroff during playback // Resume on poweron
 	hide/display schedule with same button (yellow)
+	Dynamic OSD/Menu language selection
 
 
 0.22	Updated EPG filter for 42E, canal sat (tid 1088), canal+ (tid 1060), CDS (veronica, iConcerts, Animax)

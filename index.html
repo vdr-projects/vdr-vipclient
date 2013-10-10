@@ -20,7 +20,7 @@
 //
 //
 
-var Version = "0.23.2"
+var Version = "0.23.3"
 
 window.onkeydown = onKeyDown;
 
@@ -198,7 +198,14 @@ function GetSettings() {
 			}
 		}
 	}
+}
 
+function loadjs(filename){
+	var oHead = document.getElementsByTagName('HEAD').item(0);
+	var oScript= document.createElement("script");
+	oScript.type = "text/javascript";
+	oScript.src= filename;
+	oHead.appendChild( oScript);
 }
 
 function onEvent(event) {
@@ -2093,6 +2100,8 @@ function onKeyMenu(keyCode) {
 	} 
     break;
     case "Yellow":
+	loadjs('lang_dut.js');
+	InitMenu(0);
     break;
     case "Blue":
 		if (menu == 0) {
