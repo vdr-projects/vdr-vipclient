@@ -50,25 +50,26 @@ Lang[14] = " Server : EPG ";
 Lang[15] = " Server : Media Directory ";
 Lang[16] = " Server : ZoekTimers ";
 Lang[17] = " Server : MPD Verbinding ";
-Lang[18] = " Herstart Portal ";
+Lang[18] = " Herstart  ";
+Lang[19] = " \uE003\uE003\uE003\uE003\uE003\uE003\uE003\uE003 ";
 
 //Settings menu
 Lang[20] = " Ondertiteling ";
 Lang[21] = " Ondertiteling Type Prio ";
-Lang[22] = " Ondertiteling Prio ";
+Lang[22] = " Ondertiteling Prio   : ";
 Lang[23] = " Menu Taal : ";
-Lang[24] = " Voorkeurstaal ";
+Lang[24] = " AudioVoorkeurstaal : ";
 Lang[25] = " Frontdisplay Klok ";
 Lang[26] = " Protection ";
 Lang[27] = " Preview guide ";
-Lang[28] = " Toon INFO ";
+Lang[28] = " INFO      ";
 Lang[29] = " SlaapTimer : ";
 Lang[30] = " minuten ";
 Lang[31] = "UIT";
 Lang[32] = " DRUK OP ROOD OM TE WISSEN ";
 Lang[33] = " MPD Verbinding ";
 Lang[34] = " MENU om te beeindigen ";
-Lang[35] = " INFO ";
+Lang[35] = " BOX-INFO ";
 Lang[36] = " Problemen met het opvragen van de timers van ";
 Lang[37] = " GEEN INFO ";
 Lang[38] = " OPNAMES ";
@@ -83,6 +84,9 @@ Lang[47] = "Gebruik dag van de week";
 Lang[44] = " OK om te wissen ";
 Lang[45] = " andere toets om dit niet te doen ";
 Lang[46] = "vrij ";
+//Lang[47]
+Lang[48] = " Wissen     ";
+Lang[49] = " In/Active ";
 
 Lang[50] = " Server EPG ";
 Lang[51] = " Problemen met het opvragen van de EPG !!! ";

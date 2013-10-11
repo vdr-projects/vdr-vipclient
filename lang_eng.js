@@ -50,25 +50,26 @@ Lang[14] = " Server : EPG ";
 Lang[15] = " Server : Media Directory ";
 Lang[16] = " Server : SearchTimers ";
 Lang[17] = " Server : MPD Connection ";
-Lang[18] = " Restart Portal ";
+Lang[18] = " Restart   ";
+Lang[19] = " \uE003\uE003\uE003\uE003\uE003\uE003\uE003\uE003 ";
 
 //Settings menu
 Lang[20] = " Show Subs ";
 Lang[21] = " Subs Type Prio ";
-Lang[22] = " Subs Mode Prio ";
+Lang[22] = " Subs Mode Prio   : ";
 Lang[23] = " Menu Language : ";
-Lang[24] = " Prio audio track ";
+Lang[24] = " Prio audio track  : ";
 Lang[25] = " Frontdisplay Clock ";
 Lang[26] = " Protection ";
 Lang[27] = " Preview guide ";
-Lang[28] = " Show INFO ";
+Lang[28] = " INFO      ";
 Lang[29] = " SleepTimer : ";
 Lang[30] = " minutes ";
 Lang[31] = "OFF";
 Lang[32] = " PRESS RED-KEY TO REMOVE ";
 Lang[33] = " MPD Connection ";
 Lang[34] = " MENU to exit ";
-Lang[35] = " INFO ";
+Lang[35] = " BOX-INFO ";
 Lang[36] = " ERROR Getting Timers from ";
 Lang[37] = " NO INFO ";
 Lang[38] = " RECORDINGS ";
@@ -83,7 +84,9 @@ Lang[47] = "Use day of the week";
 Lang[44] = " OK to delete ";
 Lang[45] = " other to abort ";
 Lang[46] = "free ";
-
+//Lang[47]
+Lang[48] = " Delete    ";
+Lang[49] = " Un/Active ";
 
 Lang[50] = " Server EPG ";
 Lang[51] = " ERROR getting Server EPG !!! ";

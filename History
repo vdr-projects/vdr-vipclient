@@ -11,6 +11,7 @@ VDR 1.7.29
 	Save position when poweroff during playback // Resume on poweron
 	hide/display schedule with same button (yellow)
 	Dynamic OSD/Menu language selection
+	Removed action 'display EPG/Info' from key 'back', use 'blue' for epg/info
 
 
 0.22	Updated EPG filter for 42E, canal sat (tid 1088), canal+ (tid 1060), CDS (veronica, iConcerts, Animax)
