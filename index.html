@@ -152,6 +152,19 @@ function GetSettings() {
 		toi.informationService.setObject("vip.OSDlanguage","0",toi.informationService.STORAGE_PERMANENT)
 	}
 
+	try {
+		if (!toi.informationService.getObject("vip.testing")) {} 
+	} catch(e) {
+		toi.informationService.setObject("vip.testing","0",toi.informationService.STORAGE_PERMANENT)
+	}
+
+
+	try {
+		if (!toi.informationService.getObject("vip.resolution")) {} 
+	} catch(e) {
+		toi.informationService.setObject("vip.resolution","2",toi.informationService.STORAGE_PERMANENT)
+	}
+
 
 	var sel_group;
 	for (var i=0;i<10;i++) {
@@ -176,14 +189,11 @@ function GetSettings() {
 	audio = Number(toi.informationService.getObject("vip.languagepriority"));
 	server_ip = server_ip_array[Number(toi.informationService.getObject("vip.serveraddress"))];
 	for (var i=0;i<10;i++) { if (ServerAdres[i] !== "FullURL" && ServerAdres[i] !== "MultiCast") {ServerAdres[i] = server_ip + StreamPort;} }
+
 	lang_nr = Number(toi.informationService.getObject("vip.OSDlanguage"));
 	loadjs(langfile[lang_nr]);
 
-	try {
-		if (!toi.informationService.getObject("vip.resolution")) {} 
-	} catch(e) {
-		toi.informationService.setObject("vip.resolution","2",toi.informationService.STORAGE_PERMANENT)
-	}
+	experimental = Number(toi.informationService.getObject("vip.testing"));// Use some experimental code
 
 	Set_Res = Number(toi.informationService.getObject("vip.resolution"));
 	VideoOutput();
@@ -709,6 +719,7 @@ function onKeyDown(event) {
 			}
 	}
 	break;
+   case "Info":
    case "Blue":
 //	if(isFullscreen) {
 //	RestartPortal();
@@ -1160,7 +1171,7 @@ function OSDchannr(channr) {
 	osdnr.innerHTML = "<center>" + Right(channr,3) + "</center>";
 
 //	Show logo's
-//	if (experimental == "yes" ) {
+//	if (experimental) {
 //		osdnr.innerHTML = "<img src='" + channels[currChan] + ".logo.jpg' style='width:80%; max-height:100%; position:absolute; left:10%;' >"; 
 //	}
 
@@ -2126,12 +2137,19 @@ function onKeyMenu(keyCode) {
 	       	osdepginfo.innerHTML = SearchTimer[timerID] ;
 		osdepginfo.style.opacity = 1 - osdepginfo.style.opacity;
 	}
-
-
     break;
     case "MediaRewind":
+	 if (menu == 1) {
+		if (experimental) { // mute output 0 (analog out), keep output 3 'decoder output' unmuted
+			toi.audioOutputService.setVolume(0, 0); 
+			}
+	}
     break;
     case "MediaForward":
+	 if (menu == 1) {
+		if (experimental) { toi.audioOutputService.setVolume(0, 100); }
+	}
+
     break;
     case "MediaStop":
 	if (menu == 1) {
@@ -2474,6 +2492,10 @@ if(menu == 4) { // INFO Menu
 		htmltext += "DVR ";
 		if (fullupdate !== 0) { htmltext += "\n \uE017 "; } else { htmltext += "\n \uE016 "; }
 		htmltext += "Full EPG Update ";
+
+		experimental = Number(is.getObject("vip.testing"));
+		if (experimental) { htmltext += "\n \uE017 "; } else { htmltext += "\n \uE016 "; }
+		htmltext += "Experimental";
 
 	} catch(e) {
 		alert("Error : " + e);
@@ -3738,7 +3760,7 @@ function getSchedule(schchan){
 
 	mediaList.innerHTML = "<h1><center style='font-size:" + fsRec + ";" + color_main_head + ";'>" + Lang[11] + "</center><pre>\n\n\n" + Lang[52] + "</pre></h1>";
 
-	if (experimental == "yes" ) {
+	if (experimental) {
 	mediaList.innerHTML += "<img src='" + channels[schchan] + ".jpg' style='width:100%; position:absolute; left:0%; top:-11%;'>";
 	}
 

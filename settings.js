@@ -8,7 +8,7 @@ var server_ip = server_ip_array[0]; // default server
 var StartVolume = 15; // Volume on (re)start of the portal.
 var currChan = 10; // default channel
 
-var experimental = "yes" ;// Use some experimental code
+var experimental;// Use some experimental code
 
 var lang_nr;
 OSDLang = new Array ("English", "Nederlands");
