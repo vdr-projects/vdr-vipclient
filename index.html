@@ -20,7 +20,7 @@
 //
 //
 
-var Version = "0.23.3"
+var Version = "0.23.4"
 
 window.onkeydown = onKeyDown;
 
@@ -726,6 +726,7 @@ function onKeyDown(event) {
 //	} else 
 	if(isSchedule == 0) {
 			if(!epgactive) {
+			updateOSDtime(currChan);
 			SetOsdInfo();
 				if(isFullscreen) { NowNext = 0;}
 				if (NowNext) {
