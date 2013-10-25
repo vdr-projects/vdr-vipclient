@@ -1,7 +1,7 @@
 Tested on 
 Motorola Vip : 1960, 1910, 1903, 1963.
 
-VDR 1.7.29
+VDR 1.7.29 / 2.1.1
 
 0.23	Infobox for connection Error, not only ERRR on display but also the Infobox
 	Updated EPG filter for Sat.1/Pro7, Rai (13E), TVP (19E)
@@ -12,6 +12,7 @@ VDR 1.7.29
 	hide/display schedule with same button (yellow)
 	Dynamic OSD/Menu language selection
 	Removed action 'display EPG/Info' from key 'back', use 'blue' for epg/info
+	Some info while waiting for searchtimer info
 
 
 0.22	Updated EPG filter for 42E, canal sat (tid 1088), canal+ (tid 1060), CDS (veronica, iConcerts, Animax)

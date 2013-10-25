@@ -236,6 +236,8 @@ var numObjs = event.objectNames.length;
 				if (mediaList.style.opacity == 0) {setResume();} // No mediamenu on screen so set resume.
 			}
 			mediaPlayer.close();
+			SetLed(2,2,0);// At request no more blinking on standby.
+
 		} catch(e) {
 		alert(e);
 		}
@@ -2082,8 +2084,9 @@ function onKeyMenu(keyCode) {
 	}
 	if (menu == 7) {
 		// Show more info Current SearchTimer
-		ShowSearchTimerInfo();
 		osdepginfo.style.opacity = 1 - osdepginfo.style.opacity;
+	       	osdepginfo.innerHTML = "<center><pre style='" + color_main_head + ";'>" + searchtimersSearch[timerID] + "\n\n\n\n<center>" + Lang[0] + "</center></pre>" ;
+		setTimeout("ShowSearchTimerInfo();",100);
 	}
 
     break;
@@ -3402,7 +3405,7 @@ try {
 	  xmlhttp.open("GET", server_ip + recServ + "/getResume.xml?guid=" + recGUID[currMed] + "&" + new Date().getTime(), false);
 	  xmlhttp.send();
 	  xmlDoc=xmlhttp.responseXML; 
-	  position = Number(xmlDoc.getElementsByTagName("resume")[0].childNodes[0].nodeValue);
+	  position = xmlDoc.getElementsByTagName("resume")[0].childNodes[0].nodeValue;
   } catch(e) {
     alert("Getting Resume problem: " + e);
   }
