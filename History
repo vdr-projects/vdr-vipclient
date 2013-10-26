@@ -13,6 +13,7 @@ VDR 1.7.29 / 2.1.1
 	Dynamic OSD/Menu language selection
 	Removed action 'display EPG/Info' from key 'back', use 'blue' for epg/info
 	Some info while waiting for searchtimer info
+	Updated the resume function to work with the vdr 2.1.1 (changed to decimal ',')
 
 
 0.22	Updated EPG filter for 42E, canal sat (tid 1088), canal+ (tid 1060), CDS (veronica, iConcerts, Animax)

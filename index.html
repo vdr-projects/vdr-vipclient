@@ -3402,10 +3402,12 @@ function getResume() {
 position = 0;
 try {
 	  var xmlhttp = new XMLHttpRequest();
+	  var i = 0;
 	  xmlhttp.open("GET", server_ip + recServ + "/getResume.xml?guid=" + recGUID[currMed] + "&" + new Date().getTime(), false);
 	  xmlhttp.send();
 	  xmlDoc=xmlhttp.responseXML; 
-	  position = xmlDoc.getElementsByTagName("resume")[0].childNodes[0].nodeValue;
+	  i = xmlDoc.getElementsByTagName("resume")[0].childNodes[0].nodeValue.split(",");
+	  position = Number(i[0]);
   } catch(e) {
     alert("Getting Resume problem: " + e);
   }
