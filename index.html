@@ -20,7 +20,7 @@
 //
 //
 
-var Version = "0.23.4"
+var Version = "0.23.6"
 
 window.onkeydown = onKeyDown;
 
@@ -165,6 +165,12 @@ function GetSettings() {
 		toi.informationService.setObject("vip.resolution","2",toi.informationService.STORAGE_PERMANENT)
 	}
 
+	try {
+		if (!toi.informationService.getObject("vip.testing2")) {} 
+	} catch(e) {
+		toi.informationService.setObject("vip.testing2","0",toi.informationService.STORAGE_PERMANENT)
+	}
+
 
 	var sel_group;
 	for (var i=0;i<10;i++) {
@@ -194,6 +200,7 @@ function GetSettings() {
 	loadjs(langfile[lang_nr]);
 
 	experimental = Number(toi.informationService.getObject("vip.testing"));// Use some experimental code
+	testing2 = Number(toi.informationService.getObject("vip.testing2"));// Use some experimental code
 
 	Set_Res = Number(toi.informationService.getObject("vip.resolution"));
 	VideoOutput();
@@ -380,6 +387,19 @@ function play(uri) {
 
 	if(isFullscreen) {
 	showOSD();
+	}
+
+	if(testing2) {
+		if ( 	(currChan > 10 && currChan < 26 )  || (currChan > 40 && currChan < 50 )   || (currChan > 50 && currChan < 120 ) ||
+			(currChan > 151 && currChan < 200) || (currChan > 604 && currChan < 612 ) || (currChan > 624 && currChan < 631) ||
+			(currChan > 632 && currChan < 700) || (currChan > 8004 && currChan < 8027) )
+		{
+			//Show info if set nonfree
+			switchtimer.innerHTML = "<pre><center>\n" + Lang[90] +"\n\n </center></pre>"; // Non free channel message
+			switchtimer.style.opacity = 1;
+			if (CAdelayID != -1) { clearTimeout(CAdelayID); CAdelayID = -1;}
+			CAdelayID = setTimeout("switchtimer.style.opacity = 0; ", (ShowSetTimer + ShowOsdTime) );
+		}
 	}
 
 	showDisplay((currChan.toString()), false, 100, 0 );
@@ -670,8 +690,6 @@ function onKeyDown(event) {
 	} else if(isSchedule == 0){
 		if(NowNext) {	
 			settimer(EPG[NowNext][2][currChan],EPG[NowNext][1][currChan],0,1);
-			switchtimer.style.opacity = 1;
-			setTimeout("switchtimer.style.opacity = 0; ", 2000);
 		}
 	}
         break;
@@ -1022,8 +1040,6 @@ function onKeyDown(event) {
 			if(epgactive) {
 				ServerTimer(channels[currChan],EPG[NowNext][6][currChan]);
 				settimer(EPG[NowNext][2][currChan],EPG[NowNext][1][currChan],(EPG[NowNext][3][currChan]*60),2);
-				switchtimer.style.opacity = 1;
-				setTimeout("switchtimer.style.opacity = 0; ", 2000);
 			} else {
 				ServerRecordStart();
 			}
@@ -1036,8 +1052,6 @@ function onKeyDown(event) {
 //			// make timer for recording
 //			ServerTimer(channels[currChan],EPG[NowNext][6][currChan]);
 //			settimer(EPG[NowNext][2][currChan],EPG[NowNext][1][currChan],(EPG[NowNext][3][currChan]*60),2);
-//			switchtimer.style.opacity = 1;
-//			setTimeout("switchtimer.style.opacity = 0; ", 2000);
 //		} else {
 //			ServerRecordStart();
 //		}
@@ -1246,6 +1260,9 @@ function settimer(ProgTime,ProgName,ProgDura,SwitchTimer) {
 	switchtimer.innerHTML = "<pre>" + Lang[2] + Left(ProgName,30) + "\n" + Lang[3] + channelsnames[currChan] + "\n" + Lang[4] + th + ":" + tm + "</pre>";
 	setOSDtimer();
 
+	switchtimer.style.opacity = 1;
+	setTimeout("switchtimer.style.opacity = 0; ", ShowSetTimer);
+
 }
 
 
@@ -1351,7 +1368,7 @@ function date_time_rec()
         date = new Date(Number(recStrt[currMed])*1000);
         year = date.getFullYear();
         month = date.getMonth();
-	month = addzero(month);
+	month = addzero(month + 1);
         d = date.getDate();
 	d = addzero(d);
         day = date.getDay();
@@ -1614,6 +1631,12 @@ function StreamInfo(si) {
 	if(SI[0]=="S42.0E") {
 	is.setObject("cfg.locale.ui","tur",is.STORAGE_VOLATILE);
 	} 
+
+	if(SI[0]=="S42.0E" && SI[3]=="3601") {
+	is.setObject("cfg.locale.ui","eng",is.STORAGE_VOLATILE);
+	} 
+
+
 
 	if(SI[1]=="133") {
 	//sky deutchland
@@ -2091,6 +2114,11 @@ function onKeyMenu(keyCode) {
 
     break;
     case "Red":
+    	if (menu == 0) {
+ 		window.open("http://www.google.com");
+		break;
+	}
+
     	if (menu == 2) {
 		var x = toi.schedulerService.getBookingIds("*", 0, 0);
 		if (x.length > 0) {
@@ -2863,8 +2891,6 @@ if (MPDListener == 0) {
 	if (ev.state == 6 ) { 
 		showDisplay("ERRR", false, 100, 0 ); 
 		    settimer(0,Lang[67],0,2);
-		    switchtimer.style.opacity = 1;
-		    setTimeout("switchtimer.style.opacity = 0; ", 5000);
 		}
 	
 } else {
@@ -3034,8 +3060,6 @@ if (DelisOK) {
 	}
 	if (getRecOK == 2) { //set timer
 			settimer(recStrt[currMed],recTitl[currMed],recDura[currMed],1);
-			switchtimer.style.opacity = 1;
-			setTimeout("switchtimer.style.opacity = 0; ", 2000);
 	 }
 	break;
     case "Blue":
@@ -3048,8 +3072,6 @@ if (DelisOK) {
     case "Green":
 	if (getRecOK == 2) { //set timer
 			settimer(recStrt[currMed],recTitl[currMed],recDura[currMed],3);
-			switchtimer.style.opacity = 1;
-			setTimeout("switchtimer.style.opacity = 0; ", 2000);
 	 }
 	break;
 
@@ -3082,8 +3104,6 @@ if (DelisOK) {
 	if (getRecOK == 2) { //set timer
 			settimer(recStrt[currMed],recTitl[currMed],recDura[currMed],2);
 			ServerTimer(channels[currChan],recGUID[currMed]);
-			switchtimer.style.opacity = 1;
-			setTimeout("switchtimer.style.opacity = 0; ", 2000);
 	 } 
         break;
    case KEY_0:
@@ -3884,12 +3904,8 @@ function ServerRecordStart() {
 
 		if (xmlhttp.responseXML == null) {
 		    settimer(EPG[NowNext][2][currChan],Lang[55],0,2);
-		    switchtimer.style.opacity = 1;
-		    setTimeout("switchtimer.style.opacity = 0; ", 2000);
 		} else {
 		   settimer(EPG[NowNext][2][currChan],EPG[NowNext][1][currChan],0,2);
-		   switchtimer.style.opacity = 1;
-		   setTimeout("switchtimer.style.opacity = 0; ", 2000);
 		}
 
 	  } catch(e) {
@@ -3911,8 +3927,6 @@ function ServerPause() {
 
 	//Show some info on screen
    settimer(EPG[NowNext][2][currChan],Lang[70],0,2);
-   switchtimer.style.opacity = 1;
-   setTimeout("switchtimer.style.opacity = 0; ", 7000);
 
   } catch(e) {
    alert("Sending Pause key to server problem: " + e);

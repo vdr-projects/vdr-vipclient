@@ -14,6 +14,7 @@ var lang_nr;
 OSDLang = new Array ("English", "Nederlands");
 langfile = new Array ("lang_eng.js", "lang_dut.js");
 
+var testing2;
 
 var ShowSubDir = 1 ; // 0 = no, 1 = yes (default) // show seperate maps for subdirs in menu recordings
 var showClock = 0;   // 0 = no, 1 = yes
@@ -33,6 +34,7 @@ var fullupdate = 1; // If guideview is too slow, set it to 0 (for 1910/1960), fa
 
 
 var ShowOsdTime = 5000; //Time to show OSD, in seconds * 1000
+var ShowSetTimer = 3000; //Time to show set timer popup, in seconds * 1000
 
 var serverEPGdays = 3 * (60 * 60 * 24); // the higher the longer you wait while getting the epg info
 
@@ -208,6 +210,7 @@ var timerChan = 10;
 var TimerActions;
 var switchtimerID = 0;
 var initialDelayID = 0;
+var CAdelayID = 0;
 var ProtectID = 0;
 var SleepTimer = 0;
 var SleepTimerID = -1;

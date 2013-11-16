@@ -10,7 +10,7 @@ baseChn[1] = 1000;
 protChn[1] = 0;
 
 channelsnames[1001] = "NED1 HD (S)"
-channels[1001] = "S23.5E-3-3208-7035"
+channels[1001] = "S23.5E-3-3208-21029"
 channelsnames[1002] = "NED2 HD (S)"
 channels[1002] = "S23.5E-3-3202-6080"
 channelsnames[1003] = "NED3 HD (S)"

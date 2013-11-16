@@ -110,3 +110,4 @@ Lang[80] = "Show ChannelsGroup";
 Lang[81] = "Group ";
 Lang[82] = "Group Selection";
 
+Lang[90] = "No subscription for this channel";
