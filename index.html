@@ -5,6 +5,7 @@
       <script type="text/javascript" src="channels.js" />
       <script type="text/javascript" src="channels1.js" />
       <script type="text/javascript" src="channels3.js" />
+      <script type="text/javascript" src="channels4.js" />
       <script type="text/javascript" src="channels5.js" />
       <script type="text/javascript" src="channels6.js" />
       <script type="text/javascript" src="channels8.js" />
@@ -390,6 +391,7 @@ function play(uri) {
 	}
 
 	if(testing2) {
+			if (CAdelayID != -1) { clearTimeout(CAdelayID); CAdelayID = -1; switchtimer.style.opacity = 0;}
 		if ( 	(currChan > 10 && currChan < 26 )  || (currChan > 40 && currChan < 50 )   || (currChan > 50 && currChan < 120 ) ||
 			(currChan > 151 && currChan < 200) || (currChan > 604 && currChan < 612 ) || (currChan > 624 && currChan < 631) ||
 			(currChan > 632 && currChan < 700) || (currChan > 8004 && currChan < 8027) )
@@ -397,7 +399,6 @@ function play(uri) {
 			//Show info if set nonfree
 			switchtimer.innerHTML = "<pre><center>\n" + Lang[90] +"\n\n </center></pre>"; // Non free channel message
 			switchtimer.style.opacity = 1;
-			if (CAdelayID != -1) { clearTimeout(CAdelayID); CAdelayID = -1;}
 			CAdelayID = setTimeout("switchtimer.style.opacity = 0; ", (ShowSetTimer + ShowOsdTime) );
 		}
 	}
@@ -1664,6 +1665,13 @@ function StreamInfo(si) {
 	//HD+ transponder
 	is.setObject("cfg.locale.ui","DEU",is.STORAGE_VOLATILE);
 	}
+
+
+	if(SI[0]=="S13.0E" && (SI[2]=="1600" || SI[2]=="1000" || SI[2]=="1500" || SI[2]=="1300" || SI[2]=="300" )) {
+	//NC+ (Polski)
+	is.setObject("cfg.locale.ui","pol",is.STORAGE_VOLATILE);
+	}
+
 
 	if(SI[1]=="113") {
 	//PolSat
@@ -3318,7 +3326,7 @@ if (DelisOK) {
 	}
 	break;
    case KEY_0:
-	position = 0;
+	position = 0; posMark = 0;
 	playRec((recLink[currMed] + "?mode=streamtoend&time=" + position));
 	break;
 
