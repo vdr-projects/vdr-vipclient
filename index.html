@@ -3361,20 +3361,17 @@ if (UseNewReclist && recPath == "/recordings.xml") {
 
 	  //Get channel number from recordings
 		rec_lst.sort();
-	   	for (var x=0;x<i;x++) {
-			recTitl[x] = rec_lst[x][0];
-			recLink[x] = rec_lst[x][1];
-			recDesc[x] = rec_lst[x][2];
-			recDura[x] = rec_lst[x][3];
-			recStrt[x] = rec_lst[x][4];
-			rec_New[x] = rec_lst[x][5];
-			recGUID[x] = rec_lst[x][6];
-			recChan[x] = rec_lst[x][7];
-			recProt[x] = rec_lst[x][8];
+	   	for (var i=0;i<x.length;i++) {
+			recTitl[i] = rec_lst[i][0];
+			recLink[i] = rec_lst[i][1];
+			recDesc[i] = rec_lst[i][2];
+			recDura[i] = rec_lst[i][3];
+			recStrt[i] = rec_lst[i][4];
+			rec_New[i] = rec_lst[i][5];
+			recGUID[i] = rec_lst[i][6];
+			recChan[i] = rec_lst[i][7];
+			recProt[i] = rec_lst[i][8];
 		}
-
-
-
  } else {
 
 // old recordings list function
@@ -3401,13 +3398,12 @@ if (UseNewReclist && recPath == "/recordings.xml") {
                   recProt[i] = 0; // No protection for Media Files.
                 }
          }
-}
-
 
 	// try to fix display double entries in the last directory. (Only shown for some time after deleting files, should be fixed now)
 	recTitl[i] = "fake";
 	recGroup[i] = 0;
 	//
+}
 
 //	if (recPath == "/recordings.xml" && ShowSubDir) {
 	if (ShowSubDir) {
@@ -3681,8 +3677,8 @@ function showMediaList() {
 	if (MaxMed < 0 ) { MaxMed = 0; }
 
 	for(var i=currMed; i<=currMed + MaxMed; i++) {
-		if (listMed<0) { listMed=nrMedia; }
-		if (listMed>nrMedia-1) { listMed= -1; }
+		if (listMed<0) { listMed=nrMedia; } 
+		if (listMed>nrMedia) { listMed= -1; }
 
 		do
 			{
