@@ -309,6 +309,44 @@ function decChan(step) {
     OSDchannr(currChan);
 }
 
+function VolumeUp() {
+	if (Volume < 10) {
+		var VolStep = 1;
+	} else {
+		var VolStep = VolumeStep;
+	}
+
+	Volume = Volume + VolStep;
+        if (Volume > 100) {
+            Volume = 100;
+        }
+        toi.audioOutputService.setVolume(AudioOut, Volume);
+	showVolume();
+}
+
+function VolumeDown() {
+	if (Volume > 10) {
+		var VolStep = VolumeStep;
+	} else {
+		var VolStep = 1;
+	}
+
+	Volume = Volume - VolStep;
+        if (Volume < 0) {
+            Volume = 0;
+        }
+        toi.audioOutputService.setVolume(AudioOut, Volume);
+	showVolume();
+}
+
+
+function VolumeMute() {
+	state = toi.audioOutputService.getMuteState(AudioOut);
+	toi.audioOutputService.setMuteState(AudioOut, !state);
+	mute = 1 - state;
+        osdmute.style.opacity = mute; 
+}
+
 function createPlayer() {
   try {
     mediaPlayer = toi.mediaService.createPlayerInstance();
@@ -961,26 +999,13 @@ function onKeyDown(event) {
 		}
 	break;
     case "VolumeMute":
-	state = toi.audioOutputService.getMuteState(AudioOut);
-	toi.audioOutputService.setMuteState(AudioOut, !state);
-	mute = 1 - state;
-        osdmute.style.opacity = mute; 
+	VolumeMute();
 	break;
     case "VolumeUp":
-	Volume = Volume + VolumeStep;
-        if (Volume > 100) {
-            Volume = 100;
-        }
-        toi.audioOutputService.setVolume(AudioOut, Volume);
-	showVolume();
+	VolumeUp();
 	break;
     case "VolumeDown":
-	Volume = Volume - VolumeStep;
-        if (Volume < 0) {
-            Volume = 0;
-        }
-        toi.audioOutputService.setVolume(AudioOut, Volume);
-	showVolume();
+	VolumeDown();
 	break;
 
 	case "MediaRewind":
@@ -2208,6 +2233,8 @@ function onKeyMenu(keyCode) {
 	InitMenu(menu);
     break;
     case "Teletext":
+	UseNewReclist = 1 - UseNewReclist;
+	alert(UseNewReclist);
     break;
     case "TV":
     break;
@@ -2413,24 +2440,13 @@ function onKeyMenu(keyCode) {
 		} 
 	break;
     case "VolumeMute":
-	state = toi.audioOutputService.getMuteState(AudioOut);
-	toi.audioOutputService.setMuteState(AudioOut, !state);
-	mute = 1 - state;
-        osdmute.style.opacity = mute; 
+	VolumeMute();
 	break;
     case "VolumeUp":
-	Volume = Volume + VolumeStep;
-        if (Volume > 100) {
-            Volume = 100;
-        }
-        toi.audioOutputService.setVolume(AudioOut, Volume);
+	VolumeUp();
 	break;
     case "VolumeDown":
-	Volume = Volume - VolumeStep;
-        if (Volume < 0) {
-            Volume = 0;
-        }
-        toi.audioOutputService.setVolume(AudioOut, Volume);
+	VolumeDown();
 	break;
 
 	default:
@@ -3084,26 +3100,13 @@ if (DelisOK) {
 	break;
 
     case "VolumeMute":
-	state = toi.audioOutputService.getMuteState(AudioOut);
-	toi.audioOutputService.setMuteState(AudioOut, !state);
-	mute = 1 - state;
-        osdmute.style.opacity = mute; 
+	VolumeMute();
 	break;
     case "VolumeUp":
-	Volume = Volume + VolumeStep;
-        if (Volume > 100) {
-            Volume = 100;
-        }
-        toi.audioOutputService.setVolume(AudioOut, Volume);
-	showVolume();
+	VolumeUp();
 	break;
     case "VolumeDown":
-	Volume = Volume - VolumeStep;
-        if (Volume < 0) {
-            Volume = 0;
-        }
-        toi.audioOutputService.setVolume(AudioOut, Volume);
-	showVolume();
+	VolumeDown();
 	break;
 
     case KEY_REC:
@@ -3189,26 +3192,13 @@ if (DelisOK) {
 	break;
 
     case "VolumeMute":
-	state = toi.audioOutputService.getMuteState(AudioOut);
-	toi.audioOutputService.setMuteState(AudioOut, !state);
-	mute = 1 - state;
-        osdmute.style.opacity = mute; 
+	VolumeMute();
 	break;
     case "VolumeUp":
-	Volume = Volume + VolumeStep;
-        if (Volume > 100) {
-            Volume = 100;
-        }
-        toi.audioOutputService.setVolume(AudioOut, Volume);
-	showVolume();
+	VolumeUp()
 	break;
     case "VolumeDown":
-	Volume = Volume - VolumeStep;
-        if (Volume < 0) {
-            Volume = 0;
-        }
-        toi.audioOutputService.setVolume(AudioOut, Volume);
-	showVolume();
+	VolumeDown();
 	break;
 
 
@@ -3347,29 +3337,72 @@ try {
    xmlDoc=xmlhttp.responseXML; 
    var x=xmlDoc.getElementsByTagName("item");
    nrMedia = x.length - 1;
+
+if (UseNewReclist && recPath == "/recordings.xml") {
    for (var i=0;i<x.length;i++)
 	  { 
-	  recTitl[i] = (x[i].getElementsByTagName("title")[0].childNodes[0].nodeValue);
-	  recTitl[i] = recTitl[i].split("~");
-//	  recLink[i] = (x[i].getElementsByTagName("link")[0].childNodes[0].nodeValue);
-	  recLink[i] = (x[i].getElementsByTagName("enclosure")[0].getAttribute('url'));
-	  recDesc[i] = (x[i].getElementsByTagName("description")[0].childNodes[0].nodeValue);
-	  recDura[i] = (x[i].getElementsByTagName("duration")[0].childNodes[0].nodeValue);
-	  recStrt[i] = (x[i].getElementsByTagName("start")[0].childNodes[0].nodeValue);
-	  rec_New[i] = (x[i].getElementsByTagName("isnew")[0].childNodes[0].nodeValue);
-	  recGUID[i] = (x[i].getElementsByTagName("guid")[0].childNodes[0].nodeValue);
-		if (recPath == "/recordings.xml") {
-		  //Get channel number from recordings
-		  recDummy = recGUID[i].split(".");
-		  recDummy = recDummy[(recDummy.length-2)].split("-");
-		  recChan[i] = recDummy[0] + "\uE003-\uE003" + channelsnames[(recDummy[0])];
-		  recProt[i] = protChn[Number(Left((recDummy[0] / 1000),1))];
-		} else {
-		  //Media directory
-		  recChan[i] = "Media File";
-		  recProt[i] = 0; // No protection for Media Files.
-		}
+			rec_lst[i] = new Array();
+			for (var yy=0;yy<9;yy++) { rec_lst[i][yy] = new Array(); }
+			  rec_lst[i][0] = (x[i].getElementsByTagName("title")[0].childNodes[0].nodeValue);
+			  rec_lst[i][0] = rec_lst[i][0].split("~");
+			  rec_lst[i][1] = (x[i].getElementsByTagName("enclosure")[0].getAttribute('url'));
+			  rec_lst[i][2] = (x[i].getElementsByTagName("description")[0].childNodes[0].nodeValue);
+			  rec_lst[i][3] = (x[i].getElementsByTagName("duration")[0].childNodes[0].nodeValue);
+			  rec_lst[i][4] = (x[i].getElementsByTagName("start")[0].childNodes[0].nodeValue);
+			  rec_lst[i][5] = (x[i].getElementsByTagName("isnew")[0].childNodes[0].nodeValue);
+			  rec_lst[i][6] = (x[i].getElementsByTagName("guid")[0].childNodes[0].nodeValue);
+			  //Get channel number from recordings, shows right names only if server & client use same channel order
+			  recDummy = rec_lst[i][6].split(".");
+			  recDummy = recDummy[(recDummy.length-2)].split("-");
+			  rec_lst[i][7] = recDummy[0] + "\uE003-\uE003" + channelsnames[(recDummy[0])];
+			  rec_lst[i][8] = protChn[Number(Left((recDummy[0] / 1000),1))];
+
 	 }
+
+	  //Get channel number from recordings
+		rec_lst.sort();
+	   	for (var x=0;x<i;x++) {
+			recTitl[x] = rec_lst[x][0];
+			recLink[x] = rec_lst[x][1];
+			recDesc[x] = rec_lst[x][2];
+			recDura[x] = rec_lst[x][3];
+			recStrt[x] = rec_lst[x][4];
+			rec_New[x] = rec_lst[x][5];
+			recGUID[x] = rec_lst[x][6];
+			recChan[x] = rec_lst[x][7];
+			recProt[x] = rec_lst[x][8];
+		}
+
+
+
+ } else {
+
+// old recordings list function
+	
+   for (var i=0;i<x.length;i++) { 
+          recTitl[i] = (x[i].getElementsByTagName("title")[0].childNodes[0].nodeValue);
+          recTitl[i] = recTitl[i].split("~");
+//          recLink[i] = (x[i].getElementsByTagName("link")[0].childNodes[0].nodeValue);
+          recLink[i] = (x[i].getElementsByTagName("enclosure")[0].getAttribute('url'));
+          recDesc[i] = (x[i].getElementsByTagName("description")[0].childNodes[0].nodeValue);
+          recDura[i] = (x[i].getElementsByTagName("duration")[0].childNodes[0].nodeValue);
+          recStrt[i] = (x[i].getElementsByTagName("start")[0].childNodes[0].nodeValue);
+          rec_New[i] = (x[i].getElementsByTagName("isnew")[0].childNodes[0].nodeValue);
+          recGUID[i] = (x[i].getElementsByTagName("guid")[0].childNodes[0].nodeValue);
+                if (recPath == "/recordings.xml") {
+                  //Get channel number from recordings
+                  recDummy = recGUID[i].split(".");
+                  recDummy = recDummy[(recDummy.length-2)].split("-");
+                  recChan[i] = recDummy[0] + "\uE003-\uE003" + channelsnames[(recDummy[0])];
+                  recProt[i] = protChn[Number(Left((recDummy[0] / 1000),1))];
+                } else {
+                  //Media directory
+                  recChan[i] = "Media File";
+                  recProt[i] = 0; // No protection for Media Files.
+                }
+         }
+}
+
 
 	// try to fix display double entries in the last directory. (Only shown for some time after deleting files, should be fixed now)
 	recTitl[i] = "fake";

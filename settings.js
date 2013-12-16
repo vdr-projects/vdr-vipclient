@@ -15,6 +15,7 @@ OSDLang = new Array ("English", "Nederlands");
 langfile = new Array ("lang_eng.js", "lang_dut.js");
 
 var testing2;
+var UseNewReclist = 1 ; //use new recordingslist function
 
 var ShowSubDir = 1 ; // 0 = no, 1 = yes (default) // show seperate maps for subdirs in menu recordings
 var showClock = 0;   // 0 = no, 1 = yes
@@ -250,6 +251,7 @@ var xx = 0;
 var isRecording = 0; // set by recording subroutine
 var subsmode = 0;  // "cfg.media.subtitling.modepriority","Teletext,DVB"
 
+var rec_lst = new Array(); // Full recording list, used for sorting
 var recTitl = new Array(); // title of recording
 var recLink = new Array(); // link to get recording
 var recDesc = new Array(); // description of the recording

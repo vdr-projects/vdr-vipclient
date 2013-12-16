@@ -16,6 +16,8 @@ VDR 1.7.29 / 2.1.1
 	Updated the resume function to work with the vdr 2.1.1 (changed to decimal ',')
 	Added group 4, some Polish channels (NC+ sorting order)
 	During play '0' jumps to 0:00:00 and now resets posmark index also to 0
+	Sort the Recordingslist so no double maps are shown
+	Volume steps are 1, if volume < 10
 
 
 0.22	Updated EPG filter for 42E, canal sat (tid 1088), canal+ (tid 1060), CDS (veronica, iConcerts, Animax)
