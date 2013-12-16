@@ -3337,6 +3337,8 @@ try {
    xmlDoc=xmlhttp.responseXML; 
    var x=xmlDoc.getElementsByTagName("item");
    nrMedia = x.length - 1;
+   recTitl.length = 0;
+   rec_lst.length = 0;
 
 if (UseNewReclist && recPath == "/recordings.xml") {
    for (var i=0;i<x.length;i++)
@@ -3375,7 +3377,8 @@ if (UseNewReclist && recPath == "/recordings.xml") {
  } else {
 
 // old recordings list function
-	
+// also used for media listing
+
    for (var i=0;i<x.length;i++) { 
           recTitl[i] = (x[i].getElementsByTagName("title")[0].childNodes[0].nodeValue);
           recTitl[i] = recTitl[i].split("~");
@@ -3398,14 +3401,10 @@ if (UseNewReclist && recPath == "/recordings.xml") {
                   recProt[i] = 0; // No protection for Media Files.
                 }
          }
-
 	// try to fix display double entries in the last directory. (Only shown for some time after deleting files, should be fixed now)
-	recTitl[i] = "fake";
-	recGroup[i] = 0;
-	//
+	recProt[i] = 1;
 }
 
-//	if (recPath == "/recordings.xml" && ShowSubDir) {
 	if (ShowSubDir) {
 		MakeRecList2();
 	} else {
