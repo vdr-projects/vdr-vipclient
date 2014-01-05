@@ -34,6 +34,9 @@ function onLoad() {
 		addPipVideoplane();
 		createPip();
 	}
+	if(PipSwitchGuide){
+		createPip();
+	}
 
 	embedTeletextPlugin();
 	toi.audioOutputService.setVolume(AudioOut, StartVolume);
@@ -394,9 +397,8 @@ try {
 	} else {
 	uri = ServerAdres[ChanGroup] + uri;
 	}
-
 	pipPlayer.open(uri);
-	pipPlayer.play(1000);
+	setTimeout("pipPlayer.play(1000);", 500);
   } catch (e) {
     alert("Failed opening PIP stream: " + e);
     return;
@@ -466,8 +468,6 @@ function preview(urip) {
 	} else if (PipSwitchGuide && fullupdate) {
 		pipplay(urip);
 	}
-
-
 
 	if (isSchedule) { schedule.style.opacity = 0; isSchedule = 0;}
 	if (epgactive) { osdepginfo.style.opacity = 0; osdepginfonext.style.opacity = 0; epgactive = 0;}
@@ -610,11 +610,10 @@ function FullScreen() {
 	videoplane.style.height = "100%";
 	videoplane.style.left = "0px";
 	videoplane.style.top = "0px";
-	if(PipSwitchGuide && pipPlayer){
+	if(PipSwitchGuide){
 		if (pipPlayer.getState() != pipPlayer.STATE_IDLE) {
 			pipPlayer.close();
 		 }
-		pipPlayer.releaseInstance();
 	}
 }
 
@@ -929,10 +928,6 @@ function onKeyDown(event) {
    case KEY_FAV:
    case "Scroll":
 		if(isFullscreen) {
-			if(PipSwitchGuide){
-//				addPipVideoplane();
-				createPip();
-			}
 			NowNext = 0;
 			videoplane.style.width = (320*Xfactor[Set_Res])+"px";
 			videoplane.style.height = (240*Yfactor[Set_Res])+"px";
