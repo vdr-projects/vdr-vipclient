@@ -330,4 +330,4 @@ channels[3606] = "S42.0E-42-502-16";
 
 
 
-maxChan[3] = 3607; // set to max channel else you see 'undefined' in guide view
+maxChan[3] = 3606; // set to max channel else you see 'undefined' in guide view

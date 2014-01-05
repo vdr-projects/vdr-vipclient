@@ -20,6 +20,7 @@ var UseNewReclist = 1 ; //use new recordingslist function
 var ShowSubDir = 1 ; // 0 = no, 1 = yes (default) // show seperate maps for subdirs in menu recordings
 var showClock = 0;   // 0 = no, 1 = yes
 var SwitchGuide = 0; // 0 = no, 1 = yes
+var PipSwitchGuide = 1; // 0 = no, 1 = yes
 var TimeShift = 0;   // 0 = no, 1 = yes timeshift
 var ShowSubs = 1;    // 0 = no, 1 = yes (default)
 var KillStream = 1;  // 1 = Close stream on Standby
@@ -207,6 +208,7 @@ var osdtimeout = 0;
 var osdVolumetimeout = 0;
 var epgactive = 0;
 var preChan = 0;
+var preGrp = 0;
 var timerChan = 10;
 var TimerActions;
 var switchtimerID = 0;
