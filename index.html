@@ -2439,13 +2439,7 @@ function onKeyMenu(keyCode) {
 
 	break;
 	case KEY_8:
-		// PIP testing
-		if (menu == 0 && pipPlayer) {
-		isSetupMenu = 0;
-		mainmenu.style.opacity = 0;
-		pipplay(channels[604]);
-		}
-		if (menu == MainMenu) {
+	if (menu == MainMenu) {
 			mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";" + color_main_head + ";'>" + Lang[8] + "</center></h1><pre style='" + color_main_font + ";font-size:" + fsMenu + ";'>\n\n\n<center>" + Lang[0] + "</center></pre>";
 			timerID = 0;
 			menu = 7;
@@ -2459,10 +2453,10 @@ function onKeyMenu(keyCode) {
 		}
 		InitMenu(menu);
 	}
-		if (menu == 8) {
+	if (menu == 8) {
 		SetGroup(8);
 		InitMenu(menu);
-		}
+	}
 
 
 	break;
