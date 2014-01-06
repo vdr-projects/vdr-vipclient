@@ -19,6 +19,7 @@ VDR 1.7.29 / 2.1.1
 	Sort the Recordingslist so no double maps are shown
 	Volume steps are 1, if volume < 5
 	in EPG/ Guide view you can switch groups with << and >> (Live Update only if 19x3 with pip enabled image)
+	SmartwebTV getmarks added (no more restfulapi getmarks)
 
 
 0.22	Updated EPG filter for 42E, canal sat (tid 1088), canal+ (tid 1060), CDS (veronica, iConcerts, Animax)

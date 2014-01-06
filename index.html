@@ -3469,25 +3469,28 @@ if (UseNewReclist && recPath == "/recordings.xml") {
   }
 }
 
+
 function GetMarks() {
 try {
    posMark = 0;
    xmlhttp=new XMLHttpRequest();
-   xmlhttp.open("GET",(server_ip + RestFulAPI + "/recordings/" + currMed + ".xml?marks=true&" + new Date().getTime()),false);
+   xmlhttp.open("GET",(server_ip + recServ + "/getMarks.xml?guid=" + recGUID[currMed] + "&" + new Date().getTime()),false);
    xmlhttp.send();
    xmlDoc=xmlhttp.responseXML;
    recMark = [];
    var x=xmlDoc.getElementsByTagName("mark");
 	   for (var i=0;i<x.length;i++)
 		{
-		var y = x[i].childNodes[0].nodeValue.split(":");
-		recMark[i] = Number(y[0]*3600) + Number(y[1]*60) + Number(y[2]);
-//		alert(recMark[i]);
+		var y = x[i].childNodes[0].nodeValue.split(",");
+		alert(y);
+		recMark[i] = Number(y[0]);
+		alert(recMark[i]);
 		}
   } catch(e) {
     alert("Getting Marks problem: " + e);
   }
 }
+
 
 function setResume() {
 try {
