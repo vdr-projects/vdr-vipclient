@@ -2,7 +2,7 @@
 // Default settings
 // 
 
-var Version = "0.23"
+var Version = "0.24.1"
 
 server_ip_array = new Array("http://192.168.1.15","http://192.168.3.15","http://192.168.3.100","http://192.168.178.19");
 
@@ -17,6 +17,7 @@ OSDLang = new Array ("English", "Nederlands");
 langfile = new Array ("lang_eng.js", "lang_dut.js");
 
 var testing2;
+var testing3;
 var UseNewReclist = 1 ; //use new recordingslist function
 
 var ShowSubDir = 1 ; // 0 = no, 1 = yes (default) // show seperate maps for subdirs in menu recordings
@@ -49,6 +50,7 @@ var recServ = ":" + "8000";
 var RestFulAPI = ":" + "8002";
 var MPDAddress = ":" + "8888";
 var StreamPort = ":" + "3000" + "/";
+//var StreamPort = ":" + "8000" + "/live/";
 
 var channeldigits = 2; // 0 - Max 9, 1 max 99, 2 max 999 or 3 max 9999 channels directly selectable by numbers
 

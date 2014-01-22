@@ -171,8 +171,15 @@ function GetSettings() {
 		if (!toi.informationService.getObject("vip.testing2")) {} 
 	} catch(e) {
 		toi.informationService.setObject("vip.testing2","0",toi.informationService.STORAGE_PERMANENT)
+		//show info if channel is on hardcoded list of non free
 	}
 
+	try {
+		if (!toi.informationService.getObject("vip.testing3")) {} 
+	} catch(e) {
+		toi.informationService.setObject("vip.testing3","0",toi.informationService.STORAGE_PERMANENT)
+		//0 = Marks from restfulapi (like old versions), 1 = Marks from smartwebTV
+	}
 
 	var sel_group;
 	for (var i=0;i<10;i++) {
@@ -2598,6 +2605,12 @@ if(menu == 4) { // INFO Menu
 		experimental = Number(is.getObject("vip.testing"));
 		if (experimental) { htmltext += "\n \uE017 "; } else { htmltext += "\n \uE016 "; }
 		htmltext += "Experimental";
+		if (Number(is.getObject("vip.testing2"))) { htmltext += "\n \uE017 "; } else { htmltext += "\n \uE016 "; }
+		htmltext += "Experimental 2";
+		if (Number(is.getObject("vip.testing3"))) { htmltext += "\n \uE017 "; } else { htmltext += "\n \uE016 "; }
+		htmltext += "Experimental 3";
+
+
 
 	} catch(e) {
 		alert("Error : " + e);
@@ -3420,6 +3433,7 @@ if (UseNewReclist && recPath == "/recordings.xml") {
 			recChan[i] = rec_lst[i][7];
 			recProt[i] = rec_lst[i][8];
 		}
+	recProt[i] = 1;
  } else {
 
 // old recordings list function
@@ -3469,7 +3483,9 @@ if (UseNewReclist && recPath == "/recordings.xml") {
 
 
 function GetMarks() {
-try {
+
+if (testing3==1) {
+ try {
    posMark = 0;
    xmlhttp=new XMLHttpRequest();
    xmlhttp.open("GET",(server_ip + recServ + "/getMarks.xml?guid=" + recGUID[currMed] + "&" + new Date().getTime()),false);
@@ -3485,6 +3501,24 @@ try {
   } catch(e) {
     alert("Getting Marks problem: " + e);
   }
+ } else {
+  try {
+   posMark = 0;
+   xmlhttp=new XMLHttpRequest();
+   xmlhttp.open("GET",(server_ip + RestFulAPI + "/recordings/" + currMed + ".xml?marks=true&" + new Date().getTime()),false);
+   xmlhttp.send();
+   xmlDoc=xmlhttp.responseXML;
+   recMark = [];
+   var x=xmlDoc.getElementsByTagName("mark");
+	   for (var i=0;i<x.length;i++)
+		{
+		var y = x[i].childNodes[0].nodeValue.split(":");
+		recMark[i] = Number(y[0]*3600) + Number(y[1]*60) + Number(y[2]);
+		}
+  } catch(e) {
+    alert("Getting Marks problem: " + e);
+  }
+ }
 }
 
 
