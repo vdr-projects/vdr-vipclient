@@ -2,6 +2,10 @@ Tested on
 Motorola Vip : 1960, 1910, 1903, 1963.
 
 VDR 1.7.29 / 2.1.1
+0.24	vip.testing3 used for selecting getmarks from 0 = restfulapi, 1 = smartwebTV (not all users have the newest smartwebTV)
+	Channels update.
+
+
 
 0.23	Infobox for connection Error, not only ERRR on display but also the Infobox
 	Updated EPG filter for Sat.1/Pro7, Rai (13E), TVP (19E) Polish (13E)
