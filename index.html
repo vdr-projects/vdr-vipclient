@@ -2712,8 +2712,10 @@ function LoadTimers() {
 
 
 function LoadTimersServer() {
-//Get timers from SmartTVweb
 try {
+
+ if (testing4==1) {
+   //Get timers from SmartTVweb
    xmlhttp=new XMLHttpRequest();
    xmlhttp.open("GET",(server_ip + recServ + "/timers.xml?" + new Date().getTime()),false);
    xmlhttp.send();
@@ -2750,7 +2752,40 @@ try {
 	  timers[i] = timers[i] + timersDays[i] + "\uE003" + timersStrt[i] + "\uE003" + timersStop[i] + "\uE003" + Left(timersName[i],8) + "\uE003" + Left(timersFile[i],15) + "\n" ;
 	  timerOK = 1;
 	  }
+ } else {
+   xmlhttp=new XMLHttpRequest();
+   xmlhttp.open("GET",(RestFulAPI + "/timers.xml"),false);  // ?" + new Date().getTime()),false);
+   xmlhttp.send();
+   xmlDoc=xmlhttp.responseXML; 
+   var x=xmlDoc.getElementsByTagName("timer");
+   maxTimers = x.length;
+   for (var i=0;i<x.length;i++)
+	  { 
+		var fill = "\uE003\uE003\uE003\uE003\uE003\uE003\uE003\uE003\uE003\uE003";
+	  timersID[i] = x[i].getElementsByTagName("param")[0].childNodes[0].nodeValue;
+	  timersFlag[i] = x[i].getElementsByTagName("param")[1].childNodes[0].nodeValue;
+	  timersStrt[i] = Right("00" + x[i].getElementsByTagName("param")[2].childNodes[0].nodeValue,4);
+	  timersStop[i] = Right("00" + x[i].getElementsByTagName("param")[3].childNodes[0].nodeValue,4);
+	  timersDays[i] = x[i].getElementsByTagName("param")[9].childNodes[0].nodeValue;
+	  if (timersDays[i] == "-------" ) { 
+		timersDays[i] = x[i].getElementsByTagName("param")[10].childNodes[0].nodeValue;
+	  } else { 
+		timersDays[i] = timersDays[i] + "\uE003\uE003\uE003";
+	  }
+	  timersName[i] = x[i].getElementsByTagName("param")[15].childNodes[0].nodeValue + fill;
+	  if (timersFlag[i] == "1") { 
+		timer[i] = "\uE003\uE00C\uE003";
+	  } else if (timersFlag[i] == "9") { 
+		timer[i] = "\uE003\uE00B\uE003";
+	  } else { 
+		timer[i] = "\uE003\uE003\uE003";
+	  }
+	  timersFile[i] = x[i].getElementsByTagName("param")[14].childNodes[0].nodeValue + fill + fill;
+	  timer[i] = timer[i] + timersDays[i] + "\uE003" + timersStrt[i] + "\uE003" + timersStop[i] + "\uE003" + Left(timersName[i],8) + "\uE003" + Left(timersFile[i],15) + "\n" ;
+	  timerOK = 1;
+	  }
 
+ }
   } catch(e) {
     timerOK = 0;
     alert("Get Timers problem: " + e);
@@ -2759,24 +2794,27 @@ try {
 }
 
 function DeleteTimers() {
-try {
+if (testing4==1) {
+ try {
 
 	xmlhttp=new XMLHttpRequest();
-//
-// SmartTVWeb
-//	xmlhttp.open("GET",(server_ip + recServ + "/deleteTimer?guid=" + timersChan[timerID] + "&dy=" + timersDay[timerID] 
-//			+ "&st=" + timersStrt[timerID] + "&sp=" + timersStop[timerID] + "&" + new Date().getTime()),false);
+ //
+ // SmartTVWeb
+ //	xmlhttp.open("GET",(server_ip + recServ + "/deleteTimer?guid=" + timersChan[timerID] + "&dy=" + timersDay[timerID] 
+ //			+ "&st=" + timersStrt[timerID] + "&sp=" + timersStop[timerID] + "&" + new Date().getTime()),false);
 	xmlhttp.open("GET",(server_ip + recServ + "/deleteTimer?index=" + timersID[timerID] + "&" + new Date().getTime()),false);
 	xmlhttp.send();
 
   } catch(e) {
     alert("Deleting Timers problem: " + e);
   }
+ }
 }
 
 function activate_timers(){
+if (testing4==1) {
 	// (De)activate timers.
-try {
+ try {
 
 	xmlhttp=new XMLHttpRequest();
 	if (timersFlag[timerID] == "0") { 
@@ -2796,7 +2834,7 @@ try {
   } catch(e) {
     alert("(De)Activate Timers problem: " + e);
   }
-
+ }
 }
 
 function ShowTimerInfo() {
@@ -3391,18 +3429,20 @@ function getRecList() {
 	MaxInGroup = 14;
 	subgroup = 0;
 try {
-   xmlhttp=new XMLHttpRequest();
-   xmlhttp.open("GET",(server_ip + recServ + recPath + "?" + new Date().getTime()),false);
-   xmlhttp.send();
-   xmlDoc=xmlhttp.responseXML; 
-   var x=xmlDoc.getElementsByTagName("item");
-   nrMedia = x.length - 1;
-   recTitl.length = 0;
-   rec_lst.length = 0;
+ if (testing5==1) {
+	 // get recordings from smartTVWeb
+	  xmlhttp=new XMLHttpRequest();
+	   xmlhttp.open("GET",(server_ip + recServ + recPath + "?" + new Date().getTime()),false);
+	   xmlhttp.send();
+	   xmlDoc=xmlhttp.responseXML; 
+	   var x=xmlDoc.getElementsByTagName("item");
+	   nrMedia = x.length - 1;
+	   recTitl.length = 0;
+	   rec_lst.length = 0;
 
-if (UseNewReclist && recPath == "/recordings.xml") {
-   for (var i=0;i<x.length;i++)
-	  { 
+	 if (UseNewReclist && recPath == "/recordings.xml") {
+	   for (var i=0;i<x.length;i++)
+		  { 
 			rec_lst[i] = new Array();
 			for (var yy=0;yy<9;yy++) { rec_lst[i][yy] = new Array(); }
 			  rec_lst[i][0] = (x[i].getElementsByTagName("title")[0].childNodes[0].nodeValue);
@@ -3434,38 +3474,67 @@ if (UseNewReclist && recPath == "/recordings.xml") {
 			recChan[i] = rec_lst[i][7];
 			recProt[i] = rec_lst[i][8];
 		}
-	recProt[i] = 1;
- } else {
+		recProt[i] = 1;
+	 } else {
 
-// old recordings list function
-// also used for media listing
+	 // old recordings list function
+	 // also used for media listing
 
-   for (var i=0;i<x.length;i++) { 
-          recTitl[i] = (x[i].getElementsByTagName("title")[0].childNodes[0].nodeValue);
-          recTitl[i] = recTitl[i].split("~");
-//          recLink[i] = (x[i].getElementsByTagName("link")[0].childNodes[0].nodeValue);
-          recLink[i] = (x[i].getElementsByTagName("enclosure")[0].getAttribute('url'));
-          recDesc[i] = (x[i].getElementsByTagName("description")[0].childNodes[0].nodeValue);
-          recDura[i] = (x[i].getElementsByTagName("duration")[0].childNodes[0].nodeValue);
-          recStrt[i] = (x[i].getElementsByTagName("start")[0].childNodes[0].nodeValue);
-          rec_New[i] = (x[i].getElementsByTagName("isnew")[0].childNodes[0].nodeValue);
-          recGUID[i] = (x[i].getElementsByTagName("guid")[0].childNodes[0].nodeValue);
-                if (recPath == "/recordings.xml") {
-                  //Get channel number from recordings
-                  recDummy = recGUID[i].split(".");
-                  recDummy = recDummy[(recDummy.length-2)].split("-");
-                  recChan[i] = recDummy[0] + "\uE003-\uE003" + channelsnames[(recDummy[0])];
-                  recProt[i] = protChn[Number(Left((recDummy[0] / 1000),1))];
-                } else {
-                  //Media directory
-                  recChan[i] = "Media File";
-                  recProt[i] = 0; // No protection for Media Files.
-                }
-         }
+	   for (var i=0;i<x.length;i++) { 
+	          recTitl[i] = (x[i].getElementsByTagName("title")[0].childNodes[0].nodeValue);
+	          recTitl[i] = recTitl[i].split("~");
+	 //          recLink[i] = (x[i].getElementsByTagName("link")[0].childNodes[0].nodeValue);
+	          recLink[i] = (x[i].getElementsByTagName("enclosure")[0].getAttribute('url'));
+	          recDesc[i] = (x[i].getElementsByTagName("description")[0].childNodes[0].nodeValue);
+	          recDura[i] = (x[i].getElementsByTagName("duration")[0].childNodes[0].nodeValue);
+	          recStrt[i] = (x[i].getElementsByTagName("start")[0].childNodes[0].nodeValue);
+	          rec_New[i] = (x[i].getElementsByTagName("isnew")[0].childNodes[0].nodeValue);
+	          recGUID[i] = (x[i].getElementsByTagName("guid")[0].childNodes[0].nodeValue);
+	                if (recPath == "/recordings.xml") {
+	                  //Get channel number from recordings
+	                  recDummy = recGUID[i].split(".");
+	                  recDummy = recDummy[(recDummy.length-2)].split("-");
+	                  recChan[i] = recDummy[0] + "\uE003-\uE003" + channelsnames[(recDummy[0])];
+	                  recProt[i] = protChn[Number(Left((recDummy[0] / 1000),1))];
+	                } else {
+	                  //Media directory
+	                  recChan[i] = "Media File";
+	                  recProt[i] = 0; // No protection for Media Files.
+	                }
+	         }
 	// try to fix display double entries in the last directory. (Only shown for some time after deleting files, should be fixed now)
+	recProt[i] = 1;
+   }
+} else if (testing5==2) {
+//get recordings from streamdev
+//no media directory or delete support
+  xmlhttp=new XMLHttpRequest();
+   xmlhttp.open("GET",(server_ip + StreamPort + "recordings.rss?" + new Date().getTime()),false);
+   xmlhttp.send();
+   xmlDoc=xmlhttp.responseXML; 
+   var x=xmlDoc.getElementsByTagName("item");
+   nrMedia = x.length - 1;
+   recTitl.length = 0;
+
+   for (var i=0;i<x.length;i++)
+	  { 
+			  recTitl[i] = (x[i].getElementsByTagName("title")[0].childNodes[0].nodeValue);
+			  recTitl[i] = recTitl[i].split("~");
+			  recTitl[i] = (x[i].getElementsByTagName("enclosure")[0].getAttribute('url'));
+			  recDesc[i] = "";
+			  recDura[i] = "";
+			  recStrt[i] = "";
+			  rec_New[i] = "";
+			  recGUID[i] = (x[i].getElementsByTagName("link")[0].childNodes[0].nodeValue);
+			  recChan[i] = 0;
+			  recProt[i] = 0;
+			  alert(i);
+
+	 }
 	recProt[i] = 1;
 }
 
+//end of testing5
 	if (ShowSubDir) {
 		MakeRecList2();
 	} else {

@@ -2,9 +2,9 @@ Tested on
 Motorola Vip : 1960, 1910, 1903, 1963.
 
 VDR 1.7.29 / 2.1.1
-0.24	vip.testing3 used for selecting getmarks from 0 = restfulapi, 1 = smartwebTV (not all users have the newest smartwebTV)
+0.24	vip.testing3 used for selecting getmarks from 0 = restfulapi, 1 = SmartTVWeb (not all users have the newest SmartTVWeb)
 	Channels update.
-
+	Selectable gettimer source. (de)activate/del/add timers only with SmartTVWeb
 
 
 0.23	Infobox for connection Error, not only ERRR on display but also the Infobox
@@ -23,7 +23,7 @@ VDR 1.7.29 / 2.1.1
 	Sort the Recordingslist so no double maps are shown
 	Volume steps are 1, if volume < 5
 	in EPG/ Guide view you can switch groups with << and >> (Live Update only if 19x3 with pip enabled image)
-	SmartwebTV getmarks added (no more restfulapi getmarks)
+	SmartTVWeb getmarks added (no more restfulapi getmarks)
 
 
 0.22	Updated EPG filter for 42E, canal sat (tid 1088), canal+ (tid 1060), CDS (veronica, iConcerts, Animax)
@@ -33,7 +33,7 @@ VDR 1.7.29 / 2.1.1
 	Fix: 'epg now' (it wasn't always the right info on some UK channels.)
 	Added some channels for 42E to group 3
 	Updated channels.conf
-	SmartwebTV timer handling added (No more restfulapi needed for timers)
+	SmartTVWeb timer handling added (No more restfulapi needed for timers)
 	Info about audio/video in Infobox when playing Recording
 	Date/Time info during play
 	Update dutch tv/radio channels on 19E

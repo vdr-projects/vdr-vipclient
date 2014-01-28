@@ -2,7 +2,7 @@
 // Default settings
 // 
 
-var Version = "0.24.1"
+var Version = "0.24.2"
 
 server_ip_array = new Array("http://192.168.1.15","http://192.168.3.15","http://192.168.3.100","http://192.168.178.19");
 
@@ -17,7 +17,10 @@ OSDLang = new Array ("English", "Nederlands");
 langfile = new Array ("lang_eng.js", "lang_dut.js");
 
 var testing2;
-var testing3;
+var testing3; // getmarks 1 = smarttvweb, 0 = restfulapi
+var testing4 = 1; // gettimersserver 1 = smarttvweb, 0 = restfulapi
+var testing5 = 1; // getrecordings 1 = smarttvweb, 2 = streamdev (not working yet)
+
 var UseNewReclist = 1 ; //use new recordingslist function
 
 var ShowSubDir = 1 ; // 0 = no, 1 = yes (default) // show seperate maps for subdirs in menu recordings
