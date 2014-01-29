@@ -6,7 +6,7 @@ minChan[4] = 4001;
 defChan[4] = 4001;
 baseChn[4] = 4000;
 protChn[4] = 0;
-maxChan[4] = 4050; // set to max channel else you see 'undefined' in guide view
+maxChan[4] = 4055; // set to max channel else you see 'undefined' in guide view
 
 channelsnames[4001] = "TVN HD (S)";
 channels[4001] = "S13.0E-318-1600-15821";
@@ -52,4 +52,13 @@ channelsnames[4049] = "Cinemax 2 HD (S)";
 channels[4049] = "S13.0E-113-7800-3110";
 channelsnames[4050] = "HBO HD (S)";
 channels[4050] = "S13.0E-113-7800-3105";
-
+channelsnames[4051] = "HBO2 HD (S)";
+channels[4051] = "S13.0E-318-11600-3593";
+channelsnames[4052] = "HBO COMEDY HD (S)";
+channels[4052] = "S13.0E-318-11600-3594";
+channelsnames[4053] = "ALE KINO+ HD (S)";
+channels[4053] = "S13.0E-318-1100-14239";
+channelsnames[4054] = "FOX HD (S)";
+channels[4054] = "S13.0E-113-7800-3111";
+channelsnames[4055] = "FoxLife HD (S)";
+channels[4055] = "S13.0E-113-7800-3103";
