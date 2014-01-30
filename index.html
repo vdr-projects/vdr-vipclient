@@ -1757,6 +1757,11 @@ function StreamInfo(si) {
 	is.setObject("cfg.locale.ui","pol",is.STORAGE_VOLATILE);
 	}
 
+	if(SI[0]=="S13.0E" && (SI[2]=="11200" || SI[2]=="400" || SI[2]=="12000" || SI[2]=="11400" )) {
+	//NC+ (Polski)
+	is.setObject("cfg.locale.ui","pol",is.STORAGE_VOLATILE);
+	}
+
 
 	if(SI[1]=="113") {
 	//PolSat
