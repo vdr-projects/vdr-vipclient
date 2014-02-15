@@ -6,7 +6,7 @@ minChan[4] = 4001;
 defChan[4] = 4001;
 baseChn[4] = 4000;
 protChn[4] = 0;
-maxChan[4] = 4060; // set to max channel else you see 'undefined' in guide view
+maxChan[4] = 4272; // set to max channel else you see 'undefined' in guide view
 
 channelsnames[4001] = "TVN HD (S)";
 channels[4001] = "S13.0E-318-1600-15821";
@@ -104,4 +104,29 @@ channelsnames[4059] = "Romance TV (S)";
 channels[4059] = "S13.0E-318-1300-15038";
 channelsnames[4060] = "Sundance HD (S)";
 channels[4060] = "S13.0E-318-12000-15901";
+
+channelsnames[4165] = "Filmbox HD (S)";
+channels[4165] = "S13.0E-318-400-13025";
+channelsnames[4166] = "Filmbox Extra (S)";
+channels[4166] = "S13.0E-318-11400-15712";
+channelsnames[4167] = "Filmbox Family (S)";
+channels[4167] = "S13.0E-318-11400-15714";
+channelsnames[4168] = "Filmbox Action (S)";
+channels[4168] = "S13.0E-318-11400-15717";
+channelsnames[4169] = "Filmbox SD (S)";
+channels[4169] = "S13.0E-318-11400-15713";
+
+channelsnames[4210] = "TVN (S)";
+channels[4210] = "S13.0E-318-1000-4311";
+channelsnames[4211] = "TVP 1 (S)";
+channels[4211] = "S13.0E-318-11900-4807";
+channelsnames[4212] = "TVP 2 (S)";
+channels[4212] = "S13.0E-318-11900-4808";
+channelsnames[4213] = "TV Puls (S)";
+channels[4213] = "S13.0E-318-1500-5142";
+channelsnames[4272] = "FoxLife (S)";
+channels[4272] = "S13.0E-113-7400-7375";
+
+
+
 
