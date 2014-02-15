@@ -1746,19 +1746,29 @@ function StreamInfo(si) {
 	is.setObject("cfg.locale.ui","DEU",is.STORAGE_VOLATILE);
 	}
 
-	if(SI[0]=="S13.0E" && (SI[2]=="1600" || SI[2]=="1000" || SI[2]=="1500" || SI[2]=="1300" || SI[2]=="300" || SI[2]=="11600" || SI[2]=="1100" )) {
-	//NC+ (Polski)
+	if(SI[0]=="S13.0E" && (SI[2]=="1600" || SI[2]=="1000" || SI[2]=="1500" || SI[2]=="1300" || SI[2]=="300" || SI[2]=="1100" )) {
+	//NC+ (Polish)
 	is.setObject("cfg.locale.ui","pol",is.STORAGE_VOLATILE);
 	}
 
-	if(SI[0]=="S13.0E" && (SI[2]=="11200" || SI[2]=="400" || SI[2]=="12000" || SI[2]=="11400" )) {
-	//NC+ (Polski)
+	if(SI[0]=="S13.0E" && (SI[2]=="11200" || SI[2]=="400" || SI[2]=="12000" || SI[2]=="11400" || SI[2]=="11900" || SI[2]=="11600" )) {
+	//NC+ (Polish)
 	is.setObject("cfg.locale.ui","pol",is.STORAGE_VOLATILE);
+	}
+
+	if((SI[0]=="S13.0E" && SI[2]=="1400") ) {
+	//NC+ (Polish)
+		is.setObject("cfg.locale.ui","pol",is.STORAGE_VOLATILE);
 	}
 
 	if(SI[1]=="113") {
 	//PolSat
 	is.setObject("cfg.locale.ui","pol",is.STORAGE_VOLATILE);
+	}
+
+	if((SI[0]=="S19.2E" && SI[2]=="1059") ) {
+		//TVP transponder
+		is.setObject("cfg.locale.ui","pol",is.STORAGE_VOLATILE);
 	}
 
 	if(SI[1]=="64511") {
@@ -1863,15 +1873,6 @@ function StreamInfo(si) {
 	if((SI[0]=="S13.0E" && SI[3]=="17201") || (SI[0]=="S13.0E" && SI[3]=="17202") || (SI[0]=="S13.0E" && SI[3]=="901") || (SI[0]=="S13.0E" && SI[3]=="907") || (SI[0]=="S13.0E" && SI[3]=="911") ) {
 	//Swiss GER channels
 		is.setObject("cfg.locale.ui","ger",is.STORAGE_VOLATILE);
-	}
-
-	if((SI[0]=="S13.0E" && SI[2]=="1400") ) {
-		is.setObject("cfg.locale.ui","pol",is.STORAGE_VOLATILE);
-	}
-
-	if((SI[0]=="S19.2E" && SI[2]=="1059") ) {
-		//TVP transponder
-		is.setObject("cfg.locale.ui","pol",is.STORAGE_VOLATILE);
 	}
 
 	if((SI[0]=="S19.2E" && SI[2]=="1111" && SI[3]=="7290") ) {
