@@ -1791,11 +1791,6 @@ function StreamInfo(si) {
 	is.setObject("cfg.locale.ui","eng",is.STORAGE_VOLATILE);
 	}
 
-	if(SI[0]=="S19.2E" && SI[2]=="1037" && SI[3]=="5253" ) {
-	//Animax
-	is.setObject("cfg.locale.ui","eng",is.STORAGE_VOLATILE);
-	}
-
 	if(SI[1]=="53" && (SI[3]=="2045") ) {
 	//Canal Digitaal/ TV Vlaanderen 
 	is.setObject("cfg.locale.ui","fra",is.STORAGE_VOLATILE);
@@ -2883,12 +2878,14 @@ try {
 			SearchTimer[i] = SearchTimer[i] + "\uE003\uE016\uE003" + Lang[47] + "\uE003" + "\n";
 		} else {
 			//bit is used for dayofweek.
-			var dowx = Math.abs(x[i].getElementsByTagName("dayofweek")[0].childNodes[0].nodeValue);
+			var dowx = x[i].getElementsByTagName("dayofweek")[0].childNodes[0].nodeValue;
 			var dow = "";
+			if (dowx > 0) { var y = 1;} else { var y = 0;}
+			dowx = Math.abs(dowx);
 			for (var dowi=0; dowi<7; dowi++)
 			{
 				var mask = 1 << dowi;
-				if ((dowx & mask) != 0) { dow = dow + days[dowi] + "\uE003";}
+				if ((dowx & mask) != 0) { dow = dow + days[(dowi+y)] + "\uE003";}
 			}
 			SearchTimer[i] = SearchTimer[i] + "\uE003\uE017\uE003" + Lang[47] + "\uE003:\uE003" + dow + "\n";
 		}
@@ -3797,21 +3794,24 @@ function showMediaList() {
 	if (MaxMed < 0 ) { MaxMed = 0; }
 
 	for(var i=currMed; i<=currMed + MaxMed; i++) {
-		if (listMed<0) { listMed=nrMedia; } 
-		if (listMed>nrMedia) { listMed= -1; }
+		if (listMed>=nrMedia) { listMed= -1; }
+		if (listMed<-1) { listMed=nrMedia; } 
+//		if (listMed>nrMedia) { listMed= -1; }
 
 		do
 			{
 				listMed = listMed + 1;
 			}
-		while (!recList[listMed] && (listMed<nrMedia));
+		while (!recList[listMed] && (listMed<=nrMedia));
 
+		alert(listMed);
 
 		if ( listMed == currMed) { 
 			liststyle = " style='background:" + color_bg + ";-webkit-border-radius:25px;";
 		}  else {
 			liststyle = " style='";
 		}
+		
 
 		if (recList[listMed]) {
 		//Solves empty string at the end.
