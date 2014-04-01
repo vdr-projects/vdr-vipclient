@@ -17,9 +17,9 @@ OSDLang = new Array ("English", "Nederlands");
 langfile = new Array ("lang_eng.js", "lang_dut.js");
 
 var testing2;
-var testing3; // getmarks 1 = smarttvweb, 0 = restfulapi
-var testing4 = 1; // gettimersserver 1 = smarttvweb, 0 = restfulapi
-var testing5 = 1; // getrecordings 1 = smarttvweb, 2 = streamdev (not working yet)
+var get_marks; // getmarks 1 = smarttvweb, 0 = restfulapi
+var get_timer = 1; // gettimersserver 1 = smarttvweb, 0 = restfulapi
+var get_recordings = 1; // getrecordings 1 = smarttvweb, 2 = streamdev (not working yet)
 
 var UseNewReclist = 1 ; //use new recordingslist function
 
