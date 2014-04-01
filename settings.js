@@ -2,7 +2,7 @@
 // Default settings
 // 
 
-var Version = "0.24.4"
+var Version = "0.24.5"
 
 server_ip_array = new Array("http://192.168.1.15","http://192.168.3.15","http://192.168.3.100","http://192.168.178.19");
 
@@ -155,6 +155,12 @@ var KEY_HELP2 = "U+f0001";	// comhem
 var KEY_OPNAMES = "U+0046";	// old kpn (vip1710/1760)
 var KEY_HELP = "Info";		// old kpn (vip1710/1760)
 var KEY_DIENSTEN = "Portal";	// old kpn (vip1710/1760)
+var KEY_A = "U+0041";	// |> old kpn (vip1710/1760)
+var KEY_B = "U+0042";	// hh old kpn (vip1710/1760)
+var KEY_C = "U+0043";	// @  old kpn (vip1710/1760)
+var KEY_D = "U+0044";	// >@ old kpn (vip1710/1760)
+
+
 
 var eitCache = null;
 var events = null;
