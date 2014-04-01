@@ -3247,6 +3247,11 @@ if (DelisOK) {
 		osdepginfo.style.opacity = 1 - osdepginfo.style.opacity;
 	}
 	break;
+    case "Red":
+	GetMarks();
+	ShowMediaOSD();
+	break;
+
    case "Menu":
 	osdepginfo.style.opacity = 0;
 	osdepginfonext.style.opacity = 0;
@@ -3795,7 +3800,7 @@ function showMediaList() {
 
 	for(var i=currMed; i<=currMed + MaxMed; i++) {
 		if (listMed>=nrMedia) { listMed= -1; }
-		if (listMed<-1) { listMed=nrMedia; } 
+		if (listMed<-1) { listMed=nrMedia - 1; } 
 //		if (listMed>nrMedia) { listMed= -1; }
 
 		do
@@ -3804,14 +3809,15 @@ function showMediaList() {
 			}
 		while (!recList[listMed] && (listMed<=nrMedia));
 
-		alert(listMed);
-
 		if ( listMed == currMed) { 
 			liststyle = " style='background:" + color_bg + ";-webkit-border-radius:25px;";
 		}  else {
 			liststyle = " style='";
 		}
 		
+		alert(recList[listMed]);
+		alert(listMed + " : " + nrMedia);
+		if (listMed > nrMedia) { recList[listMed] = ""; }
 
 		if (recList[listMed]) {
 		//Solves empty string at the end.

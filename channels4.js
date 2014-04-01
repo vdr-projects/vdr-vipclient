@@ -105,6 +105,9 @@ channels[4059] = "S13.0E-318-1300-15038";
 channelsnames[4060] = "Sundance HD (S)";
 channels[4060] = "S13.0E-318-12000-15901";
 
+channelsnames[4145] = "4Fun.tv (S)";
+channels[4145] = "S13.0E-318-11000-4404";
+
 channelsnames[4165] = "Filmbox HD (S)";
 channels[4165] = "S13.0E-318-400-13025";
 channelsnames[4166] = "Filmbox Extra (S)";
