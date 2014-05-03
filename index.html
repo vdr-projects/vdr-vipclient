@@ -3,14 +3,6 @@
       <script type="text/javascript" src="settings.js" />
       <script type="text/javascript" src="lang_eng.js" />
       <script type="text/javascript" src="channels.js" />
-      <script type="text/javascript" src="channels1.js" />
-      <script type="text/javascript" src="channels2.js" />
-      <script type="text/javascript" src="channels3.js" />
-      <script type="text/javascript" src="channels4.js" />
-      <script type="text/javascript" src="channels5.js" />
-      <script type="text/javascript" src="channels6.js" />
-      <script type="text/javascript" src="channels8.js" />
-      <script type="text/javascript" src="channels9.js" />
     </head>
 <script language="Javascript">
 
@@ -1746,15 +1738,15 @@ function StreamInfo(si) {
 	is.setObject("cfg.locale.ui","DEU",is.STORAGE_VOLATILE);
 	}
 
-	if(SI[2]=="1057") {
-	//RTL HD transponder
-	is.setObject("cfg.locale.ui","GER",is.STORAGE_VOLATILE);
-	}
+//	if(SI[2]=="1057") {
+//	//RTL HD transponder
+//	is.setObject("cfg.locale.ui","GER",is.STORAGE_VOLATILE);
+//	}
 
-	if(SI[2]=="1057" && SI[3]=="61204") {
-	//Sport1 HD (daytime only?)
-	is.setObject("cfg.locale.ui","DEU",is.STORAGE_VOLATILE);
-	}
+//	if(SI[2]=="1057" && SI[3]=="61204") {
+//	//Sport1 HD (daytime only?)
+//	is.setObject("cfg.locale.ui","DEU",is.STORAGE_VOLATILE);
+//	}
 
 	if(SI[2]=="1055" || SI[2]=="1053" || SI[2]=="1041" || SI[2]=="1017" || SI[2]=="1109") {
 	//HD+ transponder
