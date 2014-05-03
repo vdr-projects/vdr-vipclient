@@ -8,6 +8,9 @@ VDR 1.7.29 / 2.1.1
 	Update EPG Filter
 	EPGList/ Recordinglist bug fixed (hopefully)
 	New key from old KPN remote added for swap prev / current channel
+	Add script to generate channels.js (svdrpsend.pl needed)
+	Erased channelsX.js
+
 
 
 0.23	Infobox for connection Error, not only ERRR on display but also the Infobox
