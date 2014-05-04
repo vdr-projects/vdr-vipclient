@@ -1,4 +1,9 @@
-#! /bin/bash          
+#! /bin/bash
+#
+# Script by rekordc@gmail.com
+# 0.33 04/05/2014
+#
+
 svdrpsend.pl lstc > channels.list
 
 while IFS=: read Name Frequency Parameters Source SRate VPID APID TPID CA SID NID TID RID
@@ -14,15 +19,31 @@ do
    len="${#channr}"
    let "len += 5"
    name=${Name:len}
-    if (($channr <= 9999)) && (( $channr > 0)); then	
-	echo -e "channelsnames[$channr]='$name';\n\
-channels[$channr]='$Source-$NID-$TID-$SID';"
+    ####
+    ####    if you want to select Source and not run full channels.conf on VIP
+    ##    if [ "$Source" == "T" ] || [ "$Source" == "S19.2E" ] || [ "$Source" == "S23.5E" ]  || [ "$Source" == "S13.0E" ] || [ "$Source" == "S28.2E" ]; then
+    ##    if [ "$Source" == "S19.2E" ] || [ "$Source" == "S23.5E" ]; then
+    ##    if [ "$Source" == "S19.2E" ]; then
+    ####
+    
+     if (($channr <= 9999)) && (( $channr > 0)); then	
+	    OIFS=$IFS;
+	    IFS=";";
+	    nameArray=($name);
+	    IFS=$OIFS;
+
+	echo -e "channelsnames[$channr]=\"$nameArray\";\n\
+channels[$channr]=\"$Source-$NID-$TID-$SID\";"
 	if [ "$groupnr" == "$oldnr" ]; 
 	 then max_grp[$groupnr]=$channr
 	 else min_grp[$groupnr]=$channr
 	fi
 	oldnr=$groupnr
-    fi
+     fi
+
+    ####
+##    fi    
+    ####
   fi
 done < channels.list
 
@@ -39,8 +60,8 @@ do
 done
 
 echo "
-defChan[0] = 10;   protChn[0] = 0;
-defChan[1] = 1001; protChn[1] = 0;
+defChan[0] = 604;  protChn[0] = 0;
+defChan[1] = 1010; protChn[1] = 0;
 defChan[2] = 2000; protChn[2] = 0;
 defChan[3] = 3000; protChn[3] = 0;
 defChan[4] = 4001; protChn[4] = 0;

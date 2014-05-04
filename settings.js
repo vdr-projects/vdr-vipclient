@@ -2,13 +2,13 @@
 // Default settings
 // 
 
-var Version = "0.24.5"
+var Version = "0.24.6"
 
 server_ip_array = new Array("http://192.168.1.15","http://192.168.3.15","http://192.168.3.100","http://192.168.178.19","http://192.168.1.21");
 
 var server_ip = server_ip_array[0]; // default server
 var StartVolume = 15; // Volume on (re)start of the portal.
-var currChan = 10; // default channel
+var currChan = 604; // default channel
 
 var experimental;// Use some experimental code
 
