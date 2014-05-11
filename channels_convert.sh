@@ -60,8 +60,8 @@ do
 done
 
 echo "
-defChan[0] = 604;  protChn[0] = 0;
-defChan[1] = 1010; protChn[1] = 0;
+defChan[0] = 10  ;  protChn[0] = 0;
+defChan[1] = 1001; protChn[1] = 0;
 defChan[2] = 2000; protChn[2] = 0;
 defChan[3] = 3000; protChn[3] = 0;
 defChan[4] = 4001; protChn[4] = 0;

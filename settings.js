@@ -2,19 +2,21 @@
 // Default settings
 // 
 
-var Version = "0.24.6"
+var Version = "0.24.8";
 
 server_ip_array = new Array("http://192.168.1.15","http://192.168.3.15","http://192.168.3.100","http://192.168.178.19","http://192.168.1.21");
 
 var server_ip = server_ip_array[0]; // default server
 var StartVolume = 15; // Volume on (re)start of the portal.
-var currChan = 604; // default channel
+var currChan = 10; // default channel
 
 var experimental;// Use some experimental code
 
 var lang_nr;
 OSDLang = new Array ("English", "Nederlands");
 langfile = new Array ("lang_eng.js", "lang_dut.js");
+
+var subs_prio = "dut,eng"; //Subtitle prio
 
 var testing2;
 var get_marks; // getmarks 1 = smarttvweb, 0 = restfulapi
@@ -101,7 +103,9 @@ var audio = 0;
 var audio_dyn = 0;
 
 lang_prio = new Array("dut,eng,und","ger,deu,eng","eng,und","fre,fra,eng");
+
 var lang_prio_dyn = new Array(); //Used for dynamic audio track selection
+var subs_prio_dyn = new Array(); //Used for dynamic audio track selection
 
 var ChanGroup = Number(String((currChan / 1000)).substring(0,1)); // default group
 var minChan = new Array();var minchan = new Array(); var maxChan = new Array(); var defChan = new Array(); var baseChn = new Array(); var protChn = new Array(); var ServerAdres = new Array(); // Define settings for Channels.

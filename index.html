@@ -207,8 +207,13 @@ function GetSettings() {
 	Set_Res = Number(toi.informationService.getObject("vip.resolution"));
 	VideoOutput();
 
+
+	is = toi.informationService;
+	is.setObject("cfg.media.subtitling.languagepriority",subs_prio,is.STORAGE_VOLATILE);
+	// set default subtitle language to 
+
+
 	//if needed types can be set here. Default of the box is normal.
-	//is = toi.informationService;
 	//is.setObject("cfg.media.subtitling.typepriority","hearing_impaired",is.STORAGE_PERMANENT);
 	//is.setObject("cfg.media.subtitling.typepriority","normal",is.STORAGE_PERMANENT);
 	//is.setObject("cfg.media.audio.typepriority","normal",is.STORAGE_PERMANENT);
@@ -487,9 +492,12 @@ function updateStreamInfo(currStream) {
 var streamInfo = mediaPlayer.getStreamInfo();
 var cList = streamInfo.availableComponents;
 var x;
+var xs = 0;
+var subs = "";
 xx = 0;
 AvInfo[currStream] = "";
 lang_prio_dyn.length = 0;
+subs_prio_dyn.length = 0;
 Radioicon = "\uE00E";
 
 for(x=0; x<cList.length;x++) {
@@ -526,11 +534,33 @@ for(x=0; x<cList.length;x++) {
 	if(cList[x].type == 1) {
 	Radioicon = "\uE00F";
 	AvInfo[currStream] = AvInfo[currStream] + " Video " + mediaPlayer.getVideoStreamInfo(cList[x]).encoding + " size : " + mediaPlayer.getVideoStreamInfo(cList[x]).resolutionX + " x " + mediaPlayer.getVideoStreamInfo(cList[x]).resolutionY;
+	if (mediaPlayer.getVideoStreamInfo(cList[x]).aspectRatio == "0") { AvInfo[currStream] = AvInfo[currStream] + " (?:?)"; }
 	if (mediaPlayer.getVideoStreamInfo(cList[x]).aspectRatio == "1") { AvInfo[currStream] = AvInfo[currStream] + " (4:3)"; }
 	if (mediaPlayer.getVideoStreamInfo(cList[x]).aspectRatio == "2") { AvInfo[currStream] = AvInfo[currStream] + " (16:9)"; }
 	}
 
+	if(cList[x].type == 2) {
+		if (xs == 0) { subs = " SUBS : " } else { subs = subs + " , ";}
+		subs_prio_dyn[xs] = mediaPlayer.getSubtitleStreamInfo(cList[x]).language;
+		subs = subs + subs_prio_dyn[xs];
+		xs = xs + 1;
 	}
+
+	if(cList[x].type == 3) {
+	alert("COMPONENT_SUBTITLE_CAPTION");
+	//This is an ARIB specific type of subtitles
+	}
+	if(cList[x].type == 4) {
+	alert("COMPONENT_SUBTITLE_SUPERIMPOSE");
+	//This is an ARIB specific type of subtitles and used mainly for displaying alert messages on screen.
+	}
+	if(cList[x].type == 5) {
+		AvInfo[currStream] = AvInfo[currStream] + " TXT";
+	}
+
+
+	}
+	AvInfo[currStream] = AvInfo[currStream] + subs;
 }
 
 
@@ -1828,11 +1858,6 @@ function StreamInfo(si) {
 	is.setObject("cfg.locale.ui","eng",is.STORAGE_VOLATILE);
 	}
 
-	if(SI[1]=="3" && ( SI[2]=="3206" || SI[2]=="3226" ) ) {
-	// Satellite BG
-	is.setObject("cfg.locale.ui","bul",is.STORAGE_VOLATILE);
-	}
-
 	if(SI[1]=="3" && ( SI[2]=="3217") ) {
 	// 23E - Deluxe HD
 	is.setObject("cfg.locale.ui","DEU",is.STORAGE_VOLATILE);
@@ -1842,7 +1867,7 @@ function StreamInfo(si) {
 	is.setObject("cfg.locale.ui","eng",is.STORAGE_VOLATILE);
 	}
 
-	if(SI[1]=="3" && ( SI[2]=="3205" || SI[2]=="3209" || SI[2]=="3210" || SI[2]=="3221" || SI[2]=="3219" )) {
+	if(SI[1]=="3" && ( SI[2]=="3205" || SI[2]=="3209" || SI[2]=="3210" || SI[2]=="3221" || SI[2]=="3219" || SI[2]=="3226")) {
 	//Canal Digitaal/ TV Vlaanderen use CZE channels on 23East
 	// Strangly set filter to cze but epg is in Dutch. (But not for JimJam)
 	is.setObject("cfg.locale.ui","cze",is.STORAGE_VOLATILE);
@@ -1853,8 +1878,8 @@ function StreamInfo(si) {
 	is.setObject("cfg.locale.ui","dut",is.STORAGE_VOLATILE);
 	}
 
-	if(SI[1]=="3" && SI[2]=="3211" && ( SI[3]=="20823" || SI[3]=="20824") ) {
-	//iConcerts
+	if(SI[1]=="3" && SI[2]=="3211" && ( SI[3]=="20863" || SI[3]=="20865") ) {
+	//MGM & Film+ CZ
 	is.setObject("cfg.locale.ui","cze",is.STORAGE_VOLATILE);
 	}
 
@@ -3822,8 +3847,8 @@ function showMediaList() {
 			liststyle = " style='";
 		}
 		
-		alert(recList[listMed]);
-		alert(listMed + " : " + nrMedia);
+//		alert(recList[listMed]);
+//		alert(listMed + " : " + nrMedia);
 		if (listMed > nrMedia) { recList[listMed] = ""; }
 
 		if (recList[listMed]) {
