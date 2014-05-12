@@ -2209,7 +2209,7 @@ function onKeyMenu(keyCode) {
 		if (subs_dyn < (subs_prio_dyn.length -1)) { subs_dyn = subs_dyn + 1} else { subs_dyn = 0 }
 		is = toi.informationService;
 		if (subs_prio_dyn.length > 0) {
-			is.setObject("cfg.media.subtitling.languagepriority",subs_prio_dyn[subs_dyn],is.STORAGE_PERMANENT);
+			is.setObject("cfg.media.subtitling.languagepriority", (subs_prio_dyn[subs_dyn] + "," + subs_prio),is.STORAGE_PERMANENT);
 		} else {
 			is.setObject("cfg.media.subtitling.languagepriority",subs_prio,is.STORAGE_PERMANENT);
 		}
