@@ -101,11 +101,13 @@ Xfactor[2] = 1920 / 720; Yfactor[2] = 1080 / 576;
 
 var audio = 0;
 var audio_dyn = 0;
+var subs_dyn = 0;
 
 lang_prio = new Array("dut,eng,und","ger,deu,eng","eng,und","fre,fra,eng");
 
 var lang_prio_dyn = new Array(); //Used for dynamic audio track selection
-var subs_prio_dyn = new Array(); //Used for dynamic audio track selection
+var subs_prio_dyn = new Array(); //Used for dynamic subs track selection
+
 
 var ChanGroup = Number(String((currChan / 1000)).substring(0,1)); // default group
 var minChan = new Array();var minchan = new Array(); var maxChan = new Array(); var defChan = new Array(); var baseChn = new Array(); var protChn = new Array(); var ServerAdres = new Array(); // Define settings for Channels.

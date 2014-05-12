@@ -11,6 +11,7 @@ VDR 1.7.29 / 2.1.1
 	Add script to generate channels.js (svdrpsend.pl needed)
 	Erased channelsX.js
 	Subs prio can be set eq TV5 sends multiple subs. default "DUT, ENG"
+	Subtitle language can dynamic be chosen from settings menu (<menu> <1> <red>) if there is no subtitle present it resets to default.
 
 
 

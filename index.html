@@ -209,7 +209,7 @@ function GetSettings() {
 
 
 	is = toi.informationService;
-	is.setObject("cfg.media.subtitling.languagepriority",subs_prio,is.STORAGE_VOLATILE);
+	is.setObject("cfg.media.subtitling.languagepriority",subs_prio,is.STORAGE_PERMANENT);
 	// set default subtitle language to 
 
 
@@ -555,6 +555,7 @@ for(x=0; x<cList.length;x++) {
 	//This is an ARIB specific type of subtitles and used mainly for displaying alert messages on screen.
 	}
 	if(cList[x].type == 5) {
+		alert("TeletextStreamInfo : " + mediaPlayer.getTeletextStreamInfo(cList[x]).language)
 		AvInfo[currStream] = AvInfo[currStream] + " TXT";
 	}
 
@@ -2204,8 +2205,15 @@ function onKeyMenu(keyCode) {
 
     break;
     case "Red":
-    	if (menu == 0) {
- 		window.open("http://www.google.com");
+    	if (menu == 1) {
+		if (subs_dyn < (subs_prio_dyn.length -1)) { subs_dyn = subs_dyn + 1} else { subs_dyn = 0 }
+		is = toi.informationService;
+		if (subs_prio_dyn.length > 0) {
+			is.setObject("cfg.media.subtitling.languagepriority",subs_prio_dyn[subs_dyn],is.STORAGE_PERMANENT);
+		} else {
+			is.setObject("cfg.media.subtitling.languagepriority",subs_prio,is.STORAGE_PERMANENT);
+		}
+		InitMenu(menu);
 		break;
 	}
 
@@ -2534,7 +2542,12 @@ if(menu == 6) { // Main Menu when watching recording
 if(menu == 1) { // settings menu
 	var htmltext = "<h1><center style='font-size:" + fsMenuMain + ";" + color_main_head + ";'>" + Lang[10] + "</center></h1><pre style='" + color_main_font + ";font-size:" + fsMenu + ";'>   1 - ";
 	if (ShowSubs) { htmltext += "\uE017"; } else { htmltext += "\uE016"; }
-	htmltext += Lang[20] + "\n   2 - \uE003" + Lang[22] + (toi.informationService.getObject("cfg.media.subtitling.modepriority")) + "\n   3 - \uE003" + Lang[24] + (toi.informationService.getObject("cfg.media.audio.languagepriority")) + "\n   4 - " + Lang[82] + "\n   5 - VDR : " + server_ip + "\n   6 - ";
+	htmltext += Lang[20] + " <font style='color:red;'>\u25CF<font style='" + color_main_font + ";'> ";
+	if (subs_prio_dyn.length > 0) { htmltext += "(" + (subs_dyn + 1 ) + "/" + subs_prio_dyn.length + ") "; }
+	htmltext += (toi.informationService.getObject("cfg.media.subtitling.languagepriority"));
+	htmltext += "\n   2 - \uE003" + Lang[22] + (toi.informationService.getObject("cfg.media.subtitling.modepriority"));
+	htmltext += "\n   3 - \uE003" + Lang[24] + (toi.informationService.getObject("cfg.media.audio.languagepriority")); 
+	htmltext += "\n   4 - " + Lang[82] + "\n   5 - VDR : " + server_ip + "\n   6 - ";
 	if (showClock) { htmltext += "\uE017"; } else { htmltext += "\uE016"; }
 	htmltext += Lang[25] + "\n   7 - ";
 	if (ShowProtectedChannels) { htmltext += "\uE017"; } else { htmltext += "\uE016"; }
@@ -3011,7 +3024,7 @@ function MPD(ev) {
 if (MPDListener == 0) {
 	if (ev.state == 6 ) { 
 		showDisplay("ERRR", false, 100, 0 ); 
-		    settimer(0,Lang[67],0,2);
+		settimer(0,Lang[67],0,2);
 		}
 	
 } else {
