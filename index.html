@@ -523,7 +523,7 @@ for(x=0; x<cList.length;x++) {
 	// AUDIO_CHANNEL_MODE_DUAL_MONO_STEREO = 3
 	// AUDIO_CHANNEL_MODE_DUAL_MONO_MIXED = 4
 
-	if (lang_prio_dyn[xx] !=="NAR") { 
+	if (lang_prio_dyn[xx] !== "NAR") { 
 		xx = xx + 1; 
 	} else { 
 		lang_prio_dyn.length = xx;
@@ -555,7 +555,7 @@ for(x=0; x<cList.length;x++) {
 	//This is an ARIB specific type of subtitles and used mainly for displaying alert messages on screen.
 	}
 	if(cList[x].type == 5) {
-		alert("TeletextStreamInfo : " + mediaPlayer.getTeletextStreamInfo(cList[x]).language)
+//		alert("TeletextStreamInfo : " + mediaPlayer.getTeletextStreamInfo(cList[x]).language)
 		AvInfo[currStream] = AvInfo[currStream] + " TXT";
 	}
 
@@ -2542,9 +2542,8 @@ if(menu == 6) { // Main Menu when watching recording
 if(menu == 1) { // settings menu
 	var htmltext = "<h1><center style='font-size:" + fsMenuMain + ";" + color_main_head + ";'>" + Lang[10] + "</center></h1><pre style='" + color_main_font + ";font-size:" + fsMenu + ";'>   1 - ";
 	if (ShowSubs) { htmltext += "\uE017"; } else { htmltext += "\uE016"; }
-	htmltext += Lang[20] + " <font style='color:red;'>\u25CF<font style='" + color_main_font + ";'> ";
-	if (subs_prio_dyn.length > 0) { htmltext += "(" + (subs_dyn + 1 ) + "/" + subs_prio_dyn.length + ") "; }
-	htmltext += (toi.informationService.getObject("cfg.media.subtitling.languagepriority"));
+	htmltext += Lang[20] + ": " + (toi.informationService.getObject("cfg.media.subtitling.languagepriority"));
+	if (subs_prio_dyn.length > 0) { htmltext += " (" + (subs_dyn + 1 ) + "/" + subs_prio_dyn.length + ") "; }
 	htmltext += "\n   2 - \uE003" + Lang[22] + (toi.informationService.getObject("cfg.media.subtitling.modepriority"));
 	htmltext += "\n   3 - \uE003" + Lang[24] + (toi.informationService.getObject("cfg.media.audio.languagepriority")); 
 	htmltext += "\n   4 - " + Lang[82] + "\n   5 - VDR : " + server_ip + "\n   6 - ";
@@ -2557,8 +2556,10 @@ if(menu == 1) { // settings menu
 
 	if (SleepTimer) { htmltext += SleepTimer + Lang[30]; } else { htmltext += Lang[31]; }
 
-	htmltext += "\n   <font style='color:green;'>\u25CF<font style='" + color_main_font + ";'> - VideoMode : ";
-	htmltext += VideoOutputModes_txt[VideoOutputModes[Set_Res]] + "\n";
+	htmltext += "\n\n   <font style='color:red;'>\u25CF<font style='" + color_main_font + ";'> -" + Lang[20];
+	htmltext += "<font style='color:green;'>\u25CF<font style='" + color_main_font + ";'> - " + VideoOutputModes_txt[VideoOutputModes[Set_Res]] + " ";  
+	htmltext += "<font style='color:yellow;'>\u25CF<font style='" + color_main_font + ";'> -" + Lang[19];
+	htmltext += "<font style='color:blue;'>\u25CF<font style='" + color_main_font + ";'> -" + Lang[19] +"</pre>";
 //	htmltext += "\n   0 -" + Lang[9] +"</pre>";
 	mainmenu.innerHTML = htmltext;
 }
