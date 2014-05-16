@@ -2,7 +2,7 @@
 // Default settings
 // 
 
-var Version = "0.24.9";
+var Version = "0.24.10";
 
 server_ip_array = new Array("http://192.168.1.15","http://192.168.3.15","http://192.168.3.100","http://192.168.178.19","http://192.168.1.21");
 
@@ -327,4 +327,13 @@ var used_space = 0;
 var perc_space = 0;
 
 var isPause = 0; //used by pause routine.
+
+var Fav_group = 10; // Favorite Group 10
+var Fav_base = Fav_group * 1000;
+var Fav_max_channel;
+baseChn[Fav_group] = Fav_base;
+defChan[Fav_group] = Fav_base + 1;
+minChan[Fav_group] = Fav_base + 1;
+//
+
 
