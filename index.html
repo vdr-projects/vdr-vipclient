@@ -1082,14 +1082,16 @@ function onKeyDown(event) {
 	}
         break;
    case KEY_D:// >@ key on old long kpn 1710/1760 remote
+	if (protChn[ChanGroup] !== 1 ) {
 	Fav_max_channel  = Fav_max_channel + 1;
 	maxChan[Fav_group] = Fav_base + Fav_max_channel;
 	channelsnames[(Fav_base + Fav_max_channel)] = channelsnames[currChan];
 	channels[(Fav_base + Fav_max_channel)] = channels[currChan];
 		toi.informationService.setObject(("vip.channelsnames." + Fav_max_channel),channelsnames[currChan],is.STORAGE_PERMANENT)
 		toi.informationService.setObject(("vip.channels." + Fav_max_channel),channels[currChan],is.STORAGE_PERMANENT)
-		toi.informationService.setObject("vip.fav_max_channel",Fav_max_channel,toi.informationService.STORAGE_PERMANENT)
+		toi.informationService.setObject("vip.fav_max_channel",Fav_max_channel.toString(),toi.informationService.STORAGE_PERMANENT)
 	settimer(0,channels[currChan],Fav_max_channel ,2);
+	}
 	break;
 
    case "Teletext":
