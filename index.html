@@ -2320,7 +2320,11 @@ function onKeyMenu(keyCode) {
 	if (menu == MainMenu) {
 		menu = 4; // INFO menu
 		InitMenu(menu);
+	} else 	if (menu == 1) {
+		menu = 9; // INFO2 menu
+		InitMenu(menu);
 	}
+
     break;
     case "Blue":
 		if (menu == 0) {
@@ -2625,7 +2629,7 @@ if(menu == 1) { // settings menu
 
 	htmltext += "\n\n   <font style='color:red;'>\u25CF<font style='" + color_main_font + ";'> -" + Lang[20];
 	htmltext += "<font style='color:green;'>\u25CF<font style='" + color_main_font + ";'> - " + VideoOutputModes_txt[VideoOutputModes[Set_Res]] + " ";  
-	htmltext += "<font style='color:yellow;'>\u25CF<font style='" + color_main_font + ";'> -" + Lang[19];
+	htmltext += "<font style='color:yellow;'>\u25CF<font style='" + color_main_font + ";'> -" + Lang[35];
 	htmltext += "<font style='color:blue;'>\u25CF<font style='" + color_main_font + ";'> -" + Lang[19] +"</pre>";
 //	htmltext += "\n   0 -" + Lang[9] +"</pre>";
 	mainmenu.innerHTML = htmltext;
@@ -2670,7 +2674,6 @@ if(menu == 4) { // INFO Menu
 		htmltext += "\n   Product name: " + is.getObject("config.productdisplayname");
 		htmltext += "\n   Build date : " + is.getObject("config.build.date");
 		htmltext += "\n\n   IP address : " + is.getObject("config.ipaddress");
-//		htmltext += "\n   VDR address : " + server_ip + "\n";
 
 		var x = is.getObject("cfg.ip.eth0.mode");
 		if (x == "DHCP") { htmltext += "\n \uE017 "; } else { htmltext += "\n \uE016 "; }
@@ -2678,18 +2681,9 @@ if(menu == 4) { // INFO Menu
 		var x = is.getObject("var.capabilities.dvr");
 		if (x !== "FALSE") { htmltext += "\n \uE017 "; } else { htmltext += "\n \uE016 "; }
 		htmltext += "DVR ";
-		if (fullupdate !== 0) { htmltext += "\n \uE017 "; } else { htmltext += "\n \uE016 "; }
-		htmltext += "Full EPG Update ";
-
-		experimental = Number(is.getObject("vip.testing"));
-		if (experimental) { htmltext += "\n \uE017 "; } else { htmltext += "\n \uE016 "; }
-		htmltext += "Experimental";
-		if (Number(is.getObject("vip.testing2"))) { htmltext += "\n \uE017 "; } else { htmltext += "\n \uE016 "; }
-		htmltext += "Experimental 2";
-		if (Number(is.getObject("vip.getmarks"))) { htmltext += "\n \uE017 "; } else { htmltext += "\n \uE016 "; }
-		htmltext += "getmarks 1 = smarttvweb, 0 = restfulapi";
-
-
+		htmltext += "\n\n   VDR address : " + server_ip;
+		htmltext += "\n   Version : " + Version;
+//		htmltext += "\n   VDR address : " + server_ip + "\n";
 
 	} catch(e) {
 		alert("Error : " + e);
@@ -2747,6 +2741,29 @@ if(menu == 8) { // ChannelGroups enable/disable
 	mainmenu.innerHTML = htmltext;
 	}
 
+if(menu == 9) { // INFO2 Menu
+	var htmltext = "<h1><center style='font-size:" + fsMenuMain + ";" + color_main_head + ";'>" + Lang[35] + "</center></h1><pre style='" + color_main_font + ";font-size:" + fsMenu + ";'>";
+	try {
+		is = toi.informationService;
+	
+		if (fullupdate !== 0) { htmltext += "\n \uE017 "; } else { htmltext += "\n \uE016 "; }
+		htmltext += "Full EPG Update ";
+
+		experimental = Number(is.getObject("vip.testing"));
+		if (experimental) { htmltext += "\n \uE017 "; } else { htmltext += "\n \uE016 "; }
+		htmltext += "Experimental";
+		if (Number(is.getObject("vip.testing2"))) { htmltext += "\n \uE017 "; } else { htmltext += "\n \uE016 "; }
+		htmltext += "Experimental 2";
+		htmltext += "\n getmarks from";
+		if (Number(is.getObject("vip.getmarks"))) { htmltext += " smarttvweb "; } else { htmltext += " restfulapi "; }
+
+	} catch(e) {
+		alert("Error : " + e);
+	}
+	htmltext += "\n\n   0 -" + Lang[9] + "</pre>";
+	mainmenu.innerHTML = htmltext;
+
+}
 
 } // end of initmenu
 

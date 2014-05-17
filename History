@@ -15,6 +15,7 @@ VDR 1.7.29 / 2.1.1
 	Added Group 10 (channels >10000) for favorite
 	key @ switch to favorite list
 	key >@ add to favorite list
+	split the info menu into box info (menu yellow) & info about settings (menu 1 - yellow)
 
 
 
