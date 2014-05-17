@@ -316,7 +316,7 @@ function onUnload() {
 }
 
 function incChan(step) {
-    currChan = currChan + step;
+    currChan += step;
     if (currChan > maxChan[ChanGroup]) {
         currChan = minChan[ChanGroup];
     }
@@ -325,7 +325,7 @@ function incChan(step) {
 }
 
 function decChan(step) {
-    currChan = currChan - step;
+    currChan -= step;
     if (currChan < minChan[ChanGroup] ) {
         currChan = maxChan[ChanGroup] ;
     }
@@ -340,7 +340,7 @@ function VolumeUp() {
 		var VolStep = VolumeStep;
 	}
 
-	Volume = Volume + VolStep;
+	Volume += VolStep;
         if (Volume > 100) {
             Volume = 100;
         }
@@ -355,7 +355,7 @@ function VolumeDown() {
 		var VolStep = 1;
 	}
 
-	Volume = Volume - VolStep;
+	Volume -= VolStep;
         if (Volume < 0) {
             Volume = 0;
         }
@@ -542,7 +542,7 @@ for(x=0; x<cList.length;x++) {
 	// AUDIO_CHANNEL_MODE_DUAL_MONO_MIXED = 4
 
 	if (lang_prio_dyn[xx] !== "NAR") { 
-		xx = xx + 1; 
+		xx += 1; 
 	} else { 
 		lang_prio_dyn.length = xx;
 	}
@@ -558,10 +558,10 @@ for(x=0; x<cList.length;x++) {
 	}
 
 	if(cList[x].type == 2) {
-		if (xs == 0) { subs = " SUBS : " } else { subs = subs + " , ";}
+		if (xs == 0) { subs = " SUBS : " } else { subs += " , ";}
 		subs_prio_dyn[xs] = mediaPlayer.getSubtitleStreamInfo(cList[x]).language;
 		subs = subs + subs_prio_dyn[xs];
-		xs = xs + 1;
+		xs += 1;
 	}
 
 	if(cList[x].type == 3) {
@@ -574,12 +574,12 @@ for(x=0; x<cList.length;x++) {
 	}
 	if(cList[x].type == 5) {
 //		alert("TeletextStreamInfo : " + mediaPlayer.getTeletextStreamInfo(cList[x]).language)
-		AvInfo[currStream] = AvInfo[currStream] + " TXT";
+		AvInfo[currStream] += " TXT";
 	}
 
 
 	}
-	AvInfo[currStream] = AvInfo[currStream] + subs;
+	AvInfo[currStream] += subs;
 }
 
 
@@ -727,7 +727,7 @@ function onKeyDown(event) {
 	do
 		{
 		do
-			ChanGroup = ChanGroup - 1;
+			ChanGroup -= 1;
 		while (protChn[ChanGroup] == 1 && ShowProtectedChannels == 1) 
 		if (ChanGroup < 0) {
 			ChanGroup = 9;
@@ -758,7 +758,7 @@ function onKeyDown(event) {
 	do
 		{
 		do
-			ChanGroup = ChanGroup + 1;
+			ChanGroup += 1;
 		while (protChn[ChanGroup] == 1 && ShowProtectedChannels == 1)
 		if (ChanGroup > 9) {
 			ChanGroup = 0;
@@ -801,7 +801,7 @@ function onKeyDown(event) {
    case "Green":
 	if(isFullscreen) {
 		if(!epgactive) {
-			if (audio_dyn < (lang_prio_dyn.length -1)) { audio_dyn = audio_dyn + 1} else { audio_dyn = 0 }
+			if (audio_dyn < (lang_prio_dyn.length -1)) { audio_dyn += 1} else { audio_dyn = 0 }
 			if (lang_prio_dyn.length > 1) {
 				is = toi.informationService;
 				is.setObject("cfg.media.audio.languagepriority",lang_prio_dyn[audio_dyn] + "," + lang_prio[audio],is.STORAGE_PERMANENT);
@@ -1072,25 +1072,17 @@ function onKeyDown(event) {
 		}
 	break;
    case KEY_C:// @ key on old long kpn 1710/1760 remote
-	if(isFullscreen && Fav_max_channel !== 0) {
-		count = 0; Change = 0;
-		prevChan = "";
-		defChan[ChanGroup] = currChan;
-		ChanGroup = Fav_group;
-		currChan = defChan[ChanGroup];
-		play(channels[currChan]);
+	if(isFullscreen && Fav_max_channel !== 0 && ChanGroup !== Fav_group) {
+		GotoFav();
+	} else if(isFullscreen && ChanGroup == Fav_group) {
+		//We're in favorite channels mode ;)
+		//Show a list of them
+		ShowFavList();
 	}
         break;
    case KEY_D:// >@ key on old long kpn 1710/1760 remote
-	if (protChn[ChanGroup] !== 1 ) {
-	Fav_max_channel  = Fav_max_channel + 1;
-	maxChan[Fav_group] = Fav_base + Fav_max_channel;
-	channelsnames[(Fav_base + Fav_max_channel)] = channelsnames[currChan];
-	channels[(Fav_base + Fav_max_channel)] = channels[currChan];
-		toi.informationService.setObject(("vip.channelsnames." + Fav_max_channel),channelsnames[currChan],is.STORAGE_PERMANENT)
-		toi.informationService.setObject(("vip.channels." + Fav_max_channel),channels[currChan],is.STORAGE_PERMANENT)
-		toi.informationService.setObject("vip.fav_max_channel",Fav_max_channel.toString(),toi.informationService.STORAGE_PERMANENT)
-	settimer(0,channels[currChan],Fav_max_channel ,2);
+	if (protChn[ChanGroup] !== 1 && ChanGroup !== Fav_group) {
+		AddtoFav();
 	}
 	break;
 
@@ -1119,7 +1111,7 @@ function onKeyDown(event) {
 		defChan[ChanGroup] = currChan;
 		do {
 			do
-				ChanGroup = ChanGroup - 1;
+				ChanGroup -= 1;
 			while (protChn[ChanGroup] == 1 && ShowProtectedChannels == 1) 
 			if (ChanGroup < 0) {
 				ChanGroup = 9;
@@ -1138,7 +1130,7 @@ function onKeyDown(event) {
 	defChan[ChanGroup] = currChan;
 	do{
 		do
-			ChanGroup = ChanGroup + 1;
+			ChanGroup += 1;
 		while (protChn[ChanGroup] == 1 && ShowProtectedChannels == 1)
 		if (ChanGroup > 9) {
 			ChanGroup = 0;
@@ -1244,10 +1236,41 @@ function onKeyDown(event) {
   }
 }
 
+
+function GotoFav() {
+		count = 0; Change = 0;
+		prevChan = "";
+		defChan[ChanGroup] = currChan;
+		ChanGroup = Fav_group;
+		currChan = defChan[ChanGroup];
+		play(channels[currChan]);
+}
+
+
+function AddtoFav() {
+	Fav_max_channel  += 1;
+	maxChan[Fav_group] = Fav_base + Fav_max_channel;
+	channelsnames[(Fav_base + Fav_max_channel)] = channelsnames[currChan];
+	channels[(Fav_base + Fav_max_channel)] = channels[currChan];
+		toi.informationService.setObject(("vip.channelsnames." + Fav_max_channel),channelsnames[currChan],is.STORAGE_PERMANENT)
+		toi.informationService.setObject(("vip.channels." + Fav_max_channel),channels[currChan],is.STORAGE_PERMANENT)
+		toi.informationService.setObject("vip.fav_max_channel",Fav_max_channel.toString(),toi.informationService.STORAGE_PERMANENT)
+	settimer(0,channels[currChan],Fav_max_channel ,2);
+}
+
+function ShowFavList() {
+//Showlist, move item up/down, remove item
+// item1 = item, item2 = item - 1, item3 = item + 1
+// up item - 1 = item1, item = item2 && item > 1 (first item can't be moved up)
+// down item + 1 = item, item = item3, if item+1 >last item --> fav_max +1
+//
+}
+
+
 function Makedigit() {
 	prevChan = currChan;
 	Change = (Change*10) + digit;
-	count = count + 1;
+	count += 1;
 	osdnr.style.opacity = isFullscreen; 
         OSDchannr(Change);
 	if(isFullscreen) {
@@ -1838,9 +1861,9 @@ function StreamInfo(si) {
 	is.setObject("cfg.locale.ui","pol",is.STORAGE_VOLATILE);
 	}
 
-	if((SI[0]=="S13.0E" && SI[2]=="1400") ) {
+	if(SI[0]=="S13.0E" && (SI[2]=="11000" || SI[2]=="1400")) {
 	//NC+ (Polish)
-		is.setObject("cfg.locale.ui","pol",is.STORAGE_VOLATILE);
+	is.setObject("cfg.locale.ui","pol",is.STORAGE_VOLATILE);
 	}
 
 	if(SI[1]=="113") {
@@ -2031,7 +2054,7 @@ function showChannelList() {
 	for(var i=currChan-5; i<=currChan+5; i++) {
 		do
 			{
-				listChan = listChan + 1;
+				listChan += 1;
 				if (listChan<minChan[ChanGroup]) {
 					listChan=maxChan[ChanGroup];
 					}
@@ -2203,22 +2226,22 @@ function onKeyMenu(keyCode) {
     break;
     case "Up":
 	if (menu == 2) {
-	    timerID = timerID - 1;
+	    timerID -= 1;
 			var x = toi.schedulerService.getBookingIds("*", 0, 0);
 		    if (timerID < x[0]) { timerID = x[0]; }
 	} else 	if (menu == 5 || menu == 7) {
-	    timerID = timerID - 1;
+	    timerID -= 1;
 		    if (timerID < 0) { timerID = 0; }
 	}
 		InitMenu(menu);
     break;
     case "Down":
 	if (menu == 2) {
-	    timerID = timerID + 1;
+	    timerID += 1;
 		var x = toi.schedulerService.getBookingIds("*", 0, 0);
 		    if (timerID > x[x.length-1] ) { timerID = x[x.length-1]; }
 	} else 	if (menu == 5 || menu == 7) {
-	    timerID = timerID + 1;
+	    timerID += 1;
 		    if (timerID > (maxTimers - 1) ) { timerID = maxTimers - 1; }
 	}
 		InitMenu(menu);
@@ -2250,7 +2273,7 @@ function onKeyMenu(keyCode) {
     break;
     case "Red":
     	if (menu == 1) {
-		if (subs_dyn < (subs_prio_dyn.length -1)) { subs_dyn = subs_dyn + 1} else { subs_dyn = 0 }
+		if (subs_dyn < (subs_prio_dyn.length -1)) { subs_dyn += 1} else { subs_dyn = 0 }
 		is = toi.informationService;
 		if (subs_prio_dyn.length > 0) {
 			is.setObject("cfg.media.subtitling.languagepriority", (subs_prio_dyn[subs_dyn] + "," + subs_prio),is.STORAGE_PERMANENT);
@@ -2328,7 +2351,7 @@ function onKeyMenu(keyCode) {
     case "MediaStop":
 	if (menu == 1) {
 		//set sleep timer.
-		SleepTimer = SleepTimer + 15;
+		SleepTimer += 15;
 		if (SleepTimerID != -1) {
 		  clearTimeout(SleepTimerID);
 		  SleepTimerID = -1;
@@ -2362,7 +2385,7 @@ function onKeyMenu(keyCode) {
 	case KEY_2:
 		if (menu == MainMenu) {
 			LoadTimers();
-				if (timer.length !== 0) { do { timerID = timerID + 1; } while (!timer[timerID] && (timerID < timer.length)) }
+				if (timer.length !== 0) { do { timerID += 1; } while (!timer[timerID] && (timerID < timer.length)) }
 			menu = 2;
 		}
 
@@ -2389,7 +2412,7 @@ function onKeyMenu(keyCode) {
 			mainmenu.style.opacity = 0;
 			setTimeout("getSchedule(currChan);LoadMediaSettings();",100);
 	} else	if (menu == 1) {
-			if (audio < (lang_prio.length -1)) { audio = audio + 1} else { audio = 0 }
+			if (audio < (lang_prio.length -1)) { audio += 1} else { audio = 0 }
 			is = toi.informationService;
 				is.setObject("vip.languagepriority",audio.toString(),is.STORAGE_PERMANENT);
 				is.setObject("cfg.media.audio.languagepriority",lang_prio[audio],is.STORAGE_PERMANENT);
@@ -2428,7 +2451,7 @@ function onKeyMenu(keyCode) {
 	if (menu == 1) {
 		var x = toi.informationService.getObject("vip.serveraddress");
 		x = Number(x);
-		if (x < (server_ip_array.length -1)) { x = x + 1} else { x = 0 }
+		if (x < (server_ip_array.length -1)) { x += 1} else { x = 0 }
 		toi.informationService.setObject("vip.serveraddress",x.toString(),toi.informationService.STORAGE_PERMANENT);
 
 		server_ip = server_ip_array[x];
@@ -2520,7 +2543,7 @@ function onKeyMenu(keyCode) {
 			menu = 3;
 			playMPD(server_ip + MPDAddress);
 		} else if (menu == 1) {
-			if (lang_nr < (OSDLang.length -1)) { lang_nr = lang_nr + 1} else { lang_nr = 0 }
+			if (lang_nr < (OSDLang.length -1)) { lang_nr += 1} else { lang_nr = 0 }
 			is = toi.informationService;
 			is.setObject("vip.OSDlanguage",lang_nr.toString(),is.STORAGE_PERMANENT);
 			loadjs(langfile[lang_nr]);
@@ -2615,18 +2638,18 @@ if(menu == 2) { // Timers menu
 	var y = toi.schedulerService.getBookingIds("*", 0, 0);
 	if (y.length !== 0) {
 	for (var i=0;i<10;i++) {
-		if (timer.length !== 0) { do { x = x + 1; } while (!timer[x] && (x < timer.length)) }
+		if (timer.length !== 0) { do { x += 1; } while (!timer[x] && (x < timer.length)) }
 
 			if (i == 0) {
-			booking = booking + "<font style='background:" + color_bg + ";-webkit-border-radius:25px;" + color_main_font + ";font-size:" + fsMenu + ";'>";
+			booking += "<font style='background:" + color_bg + ";-webkit-border-radius:25px;" + color_main_font + ";font-size:" + fsMenu + ";'>";
 			} else if (i == 1) {
-			booking = booking + "</font>";
+			booking += "</font>";
 			} 
 
 		if (timer.length > x) {
-			booking = booking + timer[x];
+			booking += timer[x];
 		} else {
-			booking = booking +"\n";
+			booking += "\n";
 		}
 	}
 	}
@@ -2682,9 +2705,9 @@ if(menu == 5) { // Timers from Server
 	booking = "<font style='background:" + color_bg + ";-webkit-border-radius:25px;" + color_main_font + ";font-size:" + fsMenu + ";'>";
 	var x = timerID - 1;
 	for (var i=0;i<10;i++) {
-		if (maxTimers !== 0) { do { x = x + 1; } while (!timers[x] && (x < maxTimers)) }
-		if (maxTimers > x) { booking = booking + timers[x]; } else { booking = booking +"\n"; }
-		if (i == 0) { booking = booking + "</font>"; } 
+		if (maxTimers !== 0) { do { x += 1; } while (!timers[x] && (x < maxTimers)) }
+		if (maxTimers > x) { booking += timers[x]; } else { booking += "\n"; }
+		if (i == 0) { booking += "</font>"; } 
 	}
 	mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";" + color_main_head + ";'>" + Lang[7] + "</center></h1><pre style='" + color_main_font + ";font-size:" + fsMenu + ";'>\n" + booking + "\n   <font style='color:red;'>\u25CF<font style='" + color_main_font + ";'> -" + Lang[48] + "<font style='color:green;'>\u25CF<font style='" + color_main_font + ";'> -" + Lang[49] + "<font style='color:yellow;'>\u25CF<font style='" + color_main_font + ";'> -" + Lang[19] + "   <font style='color:blue;'>\u25CF<font style='" + color_main_font + ";'> -" + Lang[28] + "</pre>";
 
@@ -2698,9 +2721,9 @@ if(menu == 7) { // SearchTimers from Server
 	booking = "<font style='background:" + color_bg + ";-webkit-border-radius:25px;" + color_main_font + ";font-size:" + fsMenu + ";'>";
 	var x = timerID - 1;
 	for (var i=0;i<10;i++) {
-		if (maxTimers !== 0) { do { x = x + 1; } while (!searchtimers[x] && (x < maxTimers)) }
-		if (maxTimers > x) { booking = booking + searchtimers[x]; } else { booking = booking +"\n"; }
-		if (i == 0) { booking = booking + "</font>"; } 
+		if (maxTimers !== 0) { do { x += 1; } while (!searchtimers[x] && (x < maxTimers)) }
+		if (maxTimers > x) { booking += searchtimers[x]; } else { booking += "\n"; }
+		if (i == 0) { booking += "</font>"; } 
 	}
 	mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";" + color_main_head + ";'>" + Lang[8] + "</center></h1><pre style='" + color_main_font + ";font-size:" + fsMenu + ";'>\n" + booking + "\n   <font style='color:red;'>\u25CF<font style='" + color_main_font + ";'> -" + Lang[19] + "<font style='color:green;'>\u25CF<font style='" + color_main_font + ";'> -" + Lang[19] + "<font style='color:yellow;'>\u25CF<font style='" + color_main_font + ";'> -" + Lang[19] + "   <font style='color:blue;'>\u25CF<font style='" + color_main_font + ";'> -" + Lang[28] + "</pre>";
 
@@ -2711,16 +2734,16 @@ if(menu == 8) { // ChannelGroups enable/disable
 	var htmltext = "<h1><center style='font-size:" + fsMenuMain + ";" + color_main_head + ";'>" + Lang[80] + "</center></h1><pre style='" + color_main_font + ";font-size:" + fsMenu + ";'>\n";
 	for (var i=0;i<10;i++) {
 		if (maxChan[i]) { 
-			htmltext = htmltext + "<font style='" + color_main_font + ";'>"; 
+			htmltext += "<font style='" + color_main_font + ";'>"; 
 		} else { 
-			htmltext = htmltext + "<font style='" + color_notset + ";'>"; 
+			htmltext += "<font style='" + color_notset + ";'>"; 
 		}
 
-		htmltext = htmltext + "\uE003" + i + "\uE003-\uE003";
-		if (toi.informationService.getObject(("vip.group." + i)) == "1") { htmltext = htmltext + "\uE017"; } else { htmltext = htmltext + "\uE016"; }
-		htmltext = htmltext + "\uE003" + Lang[81] + i + "\n";
+		htmltext += "\uE003" + i + "\uE003-\uE003";
+		if (toi.informationService.getObject(("vip.group." + i)) == "1") { htmltext += "\uE017"; } else { htmltext += "\uE016"; }
+		htmltext += "\uE003" + Lang[81] + i + "\n";
 	}
-	htmltext = htmltext + "</pre>";
+	htmltext += "</pre>";
 	mainmenu.innerHTML = htmltext;
 	}
 
@@ -2740,8 +2763,8 @@ function LoadTimers() {
 			for (var i=0;i<x.length;i++) { 
 				var y = toi.schedulerService.getBooking(x[i]);
 				booking = "   ID " + x[i];
-				booking = booking + " " + y.category;
-				booking = booking + " " + toi.schedulerService.getParameter(x[i], "Channel");
+				booking += " " + y.category;
+				booking += " " + toi.schedulerService.getParameter(x[i], "Channel");
 				tijd = y.start;
 				date = new Date(tijd*1000); 
 				tijd = date.toUTCString();
@@ -2754,10 +2777,10 @@ function LoadTimers() {
 				th=addzero(th);
 				tm=addzero(tm);
 
-				booking = booking + " Start " + Left(days[day],3) + " " + d + " " + Left(months[month],3) + " " + th + ":" + tm + "  ";
+				booking += " Start " + Left(days[day],3) + " " + d + " " + Left(months[month],3) + " " + th + ":" + tm + "  ";
 
 					if (y.category !== "SwitchOnly") {
-						booking = booking + " " + (y.duration/60).toFixed(0) + " min";
+						booking += " " + (y.duration/60).toFixed(0) + " min";
 					}
 
 				timer[(x[i])] = booking + "\n" ;
@@ -2804,7 +2827,7 @@ try {
 	  }
 	  timersFile[i] = x[i].getElementsByTagName("file")[0].childNodes[0].nodeValue + fill + fill;
 
-	  timers[i] = timers[i] + timersDays[i] + "\uE003" + timersStrt[i] + "\uE003" + timersStop[i] + "\uE003" + Left(timersName[i],8) + "\uE003" + Left(timersFile[i],15) + "\n" ;
+	  timers[i] += timersDays[i] + "\uE003" + timersStrt[i] + "\uE003" + timersStop[i] + "\uE003" + Left(timersName[i],8) + "\uE003" + Left(timersFile[i],15) + "\n" ;
 	  timerOK = 1;
 	  }
  } else {
@@ -2825,7 +2848,7 @@ try {
 	  if (timersDays[i] == "-------" ) { 
 		timersDays[i] = x[i].getElementsByTagName("param")[10].childNodes[0].nodeValue;
 	  } else { 
-		timersDays[i] = timersDays[i] + "\uE003\uE003\uE003";
+		timersDays[i] += "\uE003\uE003\uE003";
 	  }
 	  timersName[i] = x[i].getElementsByTagName("param")[15].childNodes[0].nodeValue + fill;
 	  if (timersFlag[i] == "1") { 
@@ -2836,7 +2859,7 @@ try {
 		timer[i] = "\uE003\uE003\uE003";
 	  }
 	  timersFile[i] = x[i].getElementsByTagName("param")[14].childNodes[0].nodeValue + fill + fill;
-	  timer[i] = timer[i] + timersDays[i] + "\uE003" + timersStrt[i] + "\uE003" + timersStop[i] + "\uE003" + Left(timersName[i],8) + "\uE003" + Left(timersFile[i],15) + "\n" ;
+	  timer[i] += timersDays[i] + "\uE003" + timersStrt[i] + "\uE003" + timersStop[i] + "\uE003" + Left(timersName[i],8) + "\uE003" + Left(timersFile[i],15) + "\n" ;
 	  timerOK = 1;
 	  }
 
@@ -2952,20 +2975,20 @@ try {
 		// Extended INFO
 		SearchTimer[i] = "<center><pre style='" + color_main_head + ";'>" + x[i].getElementsByTagName("search")[0].childNodes[0].nodeValue + "\n </pre></center><pre>";
 		if ((x[i].getElementsByTagName("use_as_searchtimer")[0].childNodes[0].nodeValue) == 0) {
-			SearchTimer[i]  = SearchTimer[i]  + "\uE003\uE016\uE003" + Lang[40] + "\n";
+			SearchTimer[i]  += "\uE003\uE016\uE003" + Lang[40] + "\n";
 		} else {
-			SearchTimer[i]  = SearchTimer[i]  + "\uE003\uE017\uE003" + Lang[40] + "\n";
+			SearchTimer[i]  += "\uE003\uE017\uE003" + Lang[40] + "\n";
 		}
 		SearchTimer[i] = SearchTimer[i] + "\uE003\uE003\uE003Mode :\uE003" + (searchmode[x[i].getElementsByTagName("mode")[0].childNodes[0].nodeValue]) + "\n";
 		if ((x[i].getElementsByTagName("use_time")[0].childNodes[0].nodeValue) == 1) {
-			SearchTimer[i]  = SearchTimer[i]  + "\uE003\uE017\uE003" + Lang[41] + "\uE003" + 
+			SearchTimer[i]  += "\uE003\uE017\uE003" + Lang[41] + "\uE003" + 
 					x[i].getElementsByTagName("start_time")[0].childNodes[0].nodeValue + 
 					"\uE003-\uE003" + x[i].getElementsByTagName("stop_time")[0].childNodes[0].nodeValue  + "\n";
 		} else {
-			SearchTimer[i]  = SearchTimer[i] + "\uE003\uE016\uE003" + Lang[41] + "\uE003" + "\n";
+			SearchTimer[i]  += "\uE003\uE016\uE003" + Lang[41] + "\uE003" + "\n";
 		}
 		if ((x[i].getElementsByTagName("use_dayofweek")[0].childNodes[0].nodeValue) == 0) {
-			SearchTimer[i] = SearchTimer[i] + "\uE003\uE016\uE003" + Lang[47] + "\uE003" + "\n";
+			SearchTimer[i] += "\uE003\uE016\uE003" + Lang[47] + "\uE003" + "\n";
 		} else {
 			//bit is used for dayofweek.
 			var dowx = x[i].getElementsByTagName("dayofweek")[0].childNodes[0].nodeValue;
@@ -2975,25 +2998,25 @@ try {
 			for (var dowi=0; dowi<7; dowi++)
 			{
 				var mask = 1 << dowi;
-				if ((dowx & mask) != 0) { dow = dow + days[(dowi+y)] + "\uE003";}
+				if ((dowx & mask) != 0) { dow += days[(dowi+y)] + "\uE003";}
 			}
-			SearchTimer[i] = SearchTimer[i] + "\uE003\uE017\uE003" + Lang[47] + "\uE003:\uE003" + dow + "\n";
+			SearchTimer[i] += "\uE003\uE017\uE003" + Lang[47] + "\uE003:\uE003" + dow + "\n";
 		}
 
 
 		if ((x[i].getElementsByTagName("use_channel")[0].childNodes[0].nodeValue) == 0) {
-			SearchTimer[i] = SearchTimer[i] + "\uE003\uE016\uE003" + Lang[42] + "\uE003" + "\n";
+			SearchTimer[i] += "\uE003\uE016\uE003" + Lang[42] + "\uE003" + "\n";
 		} else {
-			SearchTimer[i] = SearchTimer[i] + "\uE003\uE017\uE003" + Lang[42] + "\uE003:\uE003" + 
+			SearchTimer[i] += "\uE003\uE017\uE003" + Lang[42] + "\uE003:\uE003" + 
 					searchchan[(x[i].getElementsByTagName("use_channel")[0].childNodes[0].nodeValue)] + "\uE003" + 
 					x[i].getElementsByTagName("channels")[0].childNodes[0].nodeValue + "\n";
 		}
 
-		SearchTimer[i]  = SearchTimer[i] + "\n</pre>";
+		SearchTimer[i]  += "\n</pre>";
 		// End of Extended INFO
 
 
-	  searchtimers[i] = searchtimers[i] + searchtimersSearch[i]  + "\uE003\uE003\n" ;
+	  searchtimers[i] += searchtimersSearch[i]  + "\uE003\uE003\n" ;
 	  timerOK = 1;
 	  }
   } catch(e) {
@@ -3022,15 +3045,15 @@ function ShowSearchTimerInfo() {
 		  { 
 			info2 = x[i].getElementsByTagName("param")[16].childNodes[0].nodeValue; // Timer exists
 			if (info2 == "true") {
-				info1 = info1 + "\uE003\uE00C\uE003";
+				info1 += "\uE003\uE00C\uE003";
 			} else {
-				info1 = info1 + "\uE003\uE003\uE003";
+				info1 += "\uE003\uE003\uE003";
 			}
 			info2 = x[i].getElementsByTagName("param")[17].childNodes[0].nodeValue; // Timer active
 			if (info2 == "true") {
-				info1 = info1 + "\uE017\uE003";
+				info1 += "\uE017\uE003";
 			} else {
-				info1 = info1 + "\uE016\uE003";
+				info1 += "\uE016\uE003";
 			}
 
 			info2 = x[i].getElementsByTagName("param")[6].childNodes[0].nodeValue; // Time
@@ -3043,11 +3066,11 @@ function ShowSearchTimerInfo() {
 				h=addzero(h);
 				m=addzero(m);
 			info2 = Left(days[day],3) + "\uE003" + d + "\uE003" + Left(months[month],3) + "\uE003" + h + ':' + m;
-			info1 = info1 + info2;
+			info1 += info2;
 			info2 = "\uE003\uE003" + x[i].getElementsByTagName("param")[7].childNodes[0].nodeValue/60 + "\uE003"; // Duration
-			info1 = info1 + "\uE003" + Right(info2,3) + Lang[56] + "\uE003" + x[i].getElementsByTagName("param")[5].childNodes[0].nodeValue + "\uE003"; // Channel
-			info1 = info1 + "\uE003" + Left(x[i].getElementsByTagName("param")[1].childNodes[0].nodeValue,25) + "\uE003"; // Programm Title
-			info1 = info1 + "\n";
+			info1 += "\uE003" + Right(info2,3) + Lang[56] + "\uE003" + x[i].getElementsByTagName("param")[5].childNodes[0].nodeValue + "\uE003"; // Channel
+			info1 += "\uE003" + Left(x[i].getElementsByTagName("param")[1].childNodes[0].nodeValue,25) + "\uE003"; // Programm Title
+			info1 += "\n";
 			
 		}
 
@@ -3307,7 +3330,7 @@ if (DelisOK) {
 		      showDisplay("PLAY", false, 100, 0 );
 		      mediaPlayer.play(1000);
 		} else {		
-		      position = position + (mediaPlayer.getPosition()/1000);
+		      position += (mediaPlayer.getPosition()/1000);
 		      playRec((recLink[currMed] + "?mode=streamtoend&time=" + position));
 		}
 	}
@@ -3318,7 +3341,7 @@ if (DelisOK) {
 	ShowMediaOSD();
         break;
    case "Green":
-	if (audio_dyn < (lang_prio_dyn.length -1)) { audio_dyn = audio_dyn + 1} else { audio_dyn = 0 }
+	if (audio_dyn < (lang_prio_dyn.length -1)) { audio_dyn += 1} else { audio_dyn = 0 }
 	if (lang_prio_dyn.length > 1) {
 		is = toi.informationService;
 		is.setObject("cfg.media.audio.languagepriority",lang_prio_dyn[audio_dyn] + "," + lang_prio[audio],is.STORAGE_PERMANENT);
@@ -3407,23 +3430,23 @@ if (DelisOK) {
 		      showDisplay("PLAY", false, 100, 0 );
 		      mediaPlayer.play(1000);
 		} else {		
-			position = position + (mediaPlayer.getPosition()/1000);
+			position += (mediaPlayer.getPosition()/1000);
 			playRec((recLink[currMed] + "?mode=streamtoend&time=" + position));
 		}
     	    }
 	break;
     case KEY_1:
-	position = position + (mediaPlayer.getPosition()/1000) - 30;
+	position += (mediaPlayer.getPosition()/1000) - 30;
 	if (position <= 0) { position = 0;} 
 			playRec((recLink[currMed] + "?mode=streamtoend&time=" + position));
 	break;
     case KEY_4:
-	position = position + (mediaPlayer.getPosition()/1000) - 60;
+	position += (mediaPlayer.getPosition()/1000) - 60;
 	if (position <= 0) { position = 0;} 
 			playRec((recLink[currMed] + "?mode=streamtoend&time=" + position));
 	break;
     case KEY_7:
-	position = position + (mediaPlayer.getPosition()/1000) - 240;
+	position += (mediaPlayer.getPosition()/1000) - 240;
 	if (position <= 0) { position = 0;} 
 			playRec((recLink[currMed] + "?mode=streamtoend&time=" + position));
 	break;
@@ -3436,14 +3459,14 @@ if (DelisOK) {
 	break;
     case KEY_2:
 	if (posMark>0) {	
-		posMark = posMark - 1;
+		posMark -= 1;
 		position = recMark[posMark]; 
 		playRec(recLink[currMed] + "?mode=streamtoend&time=" + position); 
 	}
 	break;
     case KEY_8:
 	if (recMark[posMark+1]) {	
-		posMark = posMark + 1;
+		posMark += 1;
 		position = recMark[posMark]; 
 		playRec(recLink[currMed] + "?mode=streamtoend&time=" + position); 
 	}
@@ -3452,7 +3475,7 @@ if (DelisOK) {
 
 
     case KEY_3:
-	position = position + (mediaPlayer.getPosition()/1000) + 30;
+	position += (mediaPlayer.getPosition()/1000) + 30;
 	if (position >= recDura[currMed]) {
 	 	    BackToTV();
 	} else {
@@ -3460,7 +3483,7 @@ if (DelisOK) {
 	}
 	break;
     case KEY_6:
-	position = position + (mediaPlayer.getPosition()/1000) + 60;
+	position += (mediaPlayer.getPosition()/1000) + 60;
 	if (position >= recDura[currMed]) {
 	 	    BackToTV();
 	} else {
@@ -3468,7 +3491,7 @@ if (DelisOK) {
 	}
 	break;
     case KEY_9:
-	position = position + (mediaPlayer.getPosition()/1000) + 240;
+	position += (mediaPlayer.getPosition()/1000) + 240;
 	if (position >= recDura[currMed]) {
 	 	    BackToTV();
 	} else {
@@ -3656,7 +3679,7 @@ if (get_marks==1) {
 
 function setResume() {
 try {
-	position = position + (mediaPlayer.getPosition()/1000)
+	position += (mediaPlayer.getPosition()/1000)
         var xmlhttp = new XMLHttpRequest();
         xmlhttp.open("POST", server_ip + recServ + "/setResume.xml?guid=" + recGUID[currMed] + "&resume=" + position, false);
         xmlhttp.send();
@@ -3792,7 +3815,7 @@ function MakeRecList2() {
 					if (recTitl[i][0] != x) {
 						
 						recList[i] = "\uE002\uE003" + recTitl[i][0];
-						xx = xx + 1;
+						xx += 1;
 					} else {
 						recList[i] = "" ; 
 					}
@@ -3821,7 +3844,7 @@ function MakeRecList3(GroupID) {
 			var tmp = "";
 			   for (var ii=1;ii<recTitl[i].length;ii++)
 				{
-				tmp = tmp + "\uE003" + recTitl[i][ii];
+				tmp += "\uE003" + recTitl[i][ii];
 				}
 			AddInfo(i);
 			if (rec_New[i] == "true" ) { 
@@ -3875,7 +3898,7 @@ function showMediaList() {
 		}
 		if (!subgroup) { 
 			for(var i=0; i<=nrMedia; i++) {
-				if (recList[i]) { MaxMed = MaxMed + 1;}
+				if (recList[i]) { MaxMed += 1;}
 			}
 		}
 
@@ -3895,7 +3918,7 @@ function showMediaList() {
 
 		do
 			{
-				listMed = listMed + 1;
+				listMed += 1;
 			}
 		while (!recList[listMed] && (listMed<=nrMedia));
 
@@ -3911,7 +3934,7 @@ function showMediaList() {
 
 		if (recList[listMed]) {
 		//Solves empty string at the end.
-		htmlstring = htmlstring + "<td" + liststyle + "font-size:" + fsReclist + ";'>\uE003" + Left(recList[listMed],60) + "\uE003\uE003</td></tr>";
+		htmlstring += "<td" + liststyle + "font-size:" + fsReclist + ";'>\uE003" + Left(recList[listMed],60) + "\uE003\uE003</td></tr>";
 		}
 	}
 	mediaList.innerHTML = htmlstring + "</table>";
@@ -4011,7 +4034,7 @@ function getSchedule(schchan){
 		// Double info or scrollbar twice on the screen if nrMedia < 14
 		while ((i > 0) && (events.infoSequence[i].eventId == events.infoSequence[(i-1)].eventId) && (nrMedia > 14)) {
 			recList[i] = "";
-			i = i + 1;
+			i += 1;
 		}
 
 		recTitl[i] = events.infoSequence[i].name;
@@ -4054,14 +4077,14 @@ function getSchedule(schchan){
 
 
 function incMed(step) {
-    currMed = currMed + step;
+    currMed += step;
     if (currMed > nrMedia ) {
         currMed = 0;
     }
 }
 
 function decMed(step) {
-    currMed = currMed - step;
+    currMed -= step;
     if (currMed < 0) {
         currMed = nrMedia;
     }
@@ -4285,7 +4308,7 @@ function ShowMediaOSD() {
 	var pos2 = (pos / Number(recDura[currMed])) * 100;
 	if (pos2 < 1) { pos2 = 1;} 
 	if (pos2 >100) {pos2 = 100;} // in case of viewing while still recording.
-	if (pos>recMark[posMark] && recMark.length-1>posMark) { posMark = posMark + 1;}
+	if (pos>recMark[posMark] && recMark.length-1>posMark) { posMark += 1;}
 	pos2 = ((pos2 * 140) / 100).toFixed(0);  // make it 40% bigger
 	var pos5 = "\uE007" + new Array(pos2 - 1).join("\uE008") + new Array(140 - pos2).join("\uE009") + "\uE00A"
 	var pos4 = "";
@@ -4295,12 +4318,12 @@ function ShowMediaOSD() {
 	  for (var i=0; i<recMark.length; i++) {
 		var pos3 = recMark[i] / Number(recDura[currMed]) * 100;
 		pos3 = ((pos3 * 140) / 100).toFixed(0); // make it 40% bigger
-		pos4 = pos4 + fontc + Left(pos6,pos3 - x);
+		pos4 += fontc + Left(pos6,pos3 - x);
 		if (fontc == "</font>" + color_progress2) { fontc = "</font>" + color_progress1; } else { fontc = "</font>" + color_progress2;}
 		x = pos3;
 		pos6 = Right(pos5,140 - pos3);
 		}
-	pos4 = pos4 + "</font>" + color_progress1 + pos6 + "</font>";
+	pos4 += "</font>" + color_progress1 + pos6 + "</font>";
 	var x = (Number(recDura[currMed])/60).toFixed(0);
 	if (pos/60 > x) { x = (pos/60).toFixed(0);}
 	date_time();
