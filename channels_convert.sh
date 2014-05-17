@@ -65,9 +65,15 @@ defChan[1] = 1001; protChn[1] = 0;
 defChan[2] = 2000; protChn[2] = 0;
 defChan[3] = 3000; protChn[3] = 0;
 defChan[4] = 4145; protChn[4] = 0;
+defChan[5] = 5000; protChn[5] = 0;
 defChan[6] = 6001; protChn[6] = 1;
+defChan[7] = 7000; protChn[7] = 0;
 defChan[8] = 8001; protChn[8] = 0;
 defChan[9] = 9051; protChn[9] = 0;"
+
+timestamp=$(date +"%D %T")
+
+echo "Chan_Ver = \"$timestamp\" ;"
 
 
     

@@ -336,5 +336,5 @@ baseChn[Fav_group] = Fav_base;
 defChan[Fav_group] = Fav_base + 1;
 minChan[Fav_group] = Fav_base + 1;
 //
-
+var Chan_Ver = "Not used yet";
 

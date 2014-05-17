@@ -2676,14 +2676,14 @@ if(menu == 4) { // INFO Menu
 		htmltext += "\n\n   IP address : " + is.getObject("config.ipaddress");
 
 		var x = is.getObject("cfg.ip.eth0.mode");
-		if (x == "DHCP") { htmltext += "\n \uE017 "; } else { htmltext += "\n \uE016 "; }
+		if (x == "DHCP") { htmltext += "\n \uE003\uE017 "; } else { htmltext += "\n \uE003\uE016 "; }
 		htmltext += "DHCP";
 		var x = is.getObject("var.capabilities.dvr");
-		if (x !== "FALSE") { htmltext += "\n \uE017 "; } else { htmltext += "\n \uE016 "; }
-		htmltext += "DVR ";
-		htmltext += "\n\n   VDR address : " + server_ip;
-		htmltext += "\n   Version : " + Version;
-//		htmltext += "\n   VDR address : " + server_ip + "\n";
+		if (x !== "FALSE") { htmltext += "\n \uE003\uE017 "; } else { htmltext += "\n \uE003\uE016 "; }
+		htmltext += "DVR \n";
+		htmltext += "\n   VDR address : " + server_ip;
+		htmltext += "\n   Vip Client\uE003\uE003\uE003: " + Version;
+		htmltext += "\n   Channel list\uE003: " + Chan_Ver;
 
 	} catch(e) {
 		alert("Error : " + e);
