@@ -109,5 +109,8 @@ Lang[70] = "Pause";
 Lang[80] = "Show ChannelsGroup";
 Lang[81] = "Group ";
 Lang[82] = "Group Selection";
+Lang[83] = "Favorite List";
+Lang[84] = " Move UP ";
+Lang[85] = " Move Down ";
 
 Lang[90] = "No subscription for this channel";

@@ -110,6 +110,9 @@ Lang[70] = "Pause";
 Lang[80] = "Toon KanaalGroep";
 Lang[81] = "Groep ";
 Lang[82] = "Groep Selektie";
+Lang[83] = "Favorieten Lijst";
+Lang[84] = " schuif op ";
+Lang[85] = " schuif neer ";
 
 Lang[90] = "Deze zender zit niet in je pakket";
 

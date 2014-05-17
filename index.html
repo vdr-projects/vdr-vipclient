@@ -1076,8 +1076,7 @@ function onKeyDown(event) {
 		GotoFav();
 	} else if(isFullscreen && ChanGroup == Fav_group) {
 		//We're in favorite channels mode ;)
-		//Show a list of them
-		ShowFavList();
+		//Show a list of them -> menu edit favorites
 	}
         break;
    case KEY_D:// >@ key on old long kpn 1710/1760 remote
@@ -1257,15 +1256,6 @@ function AddtoFav() {
 		toi.informationService.setObject("vip.fav_max_channel",Fav_max_channel.toString(),toi.informationService.STORAGE_PERMANENT)
 	settimer(0,channels[currChan],Fav_max_channel ,2);
 }
-
-function ShowFavList() {
-//Showlist, move item up/down, remove item
-// item1 = item, item2 = item - 1, item3 = item + 1
-// up item - 1 = item1, item = item2 && item > 1 (first item can't be moved up)
-// down item + 1 = item, item = item3, if item+1 >last item --> fav_max +1
-//
-}
-
 
 function Makedigit() {
 	prevChan = currChan;
@@ -2229,7 +2219,7 @@ function onKeyMenu(keyCode) {
 	    timerID -= 1;
 			var x = toi.schedulerService.getBookingIds("*", 0, 0);
 		    if (timerID < x[0]) { timerID = x[0]; }
-	} else 	if (menu == 5 || menu == 7) {
+	} else 	if (menu == 5 || menu == 7 || menu == 10) {
 	    timerID -= 1;
 		    if (timerID < 0) { timerID = 0; }
 	}
@@ -2240,7 +2230,7 @@ function onKeyMenu(keyCode) {
 	    timerID += 1;
 		var x = toi.schedulerService.getBookingIds("*", 0, 0);
 		    if (timerID > x[x.length-1] ) { timerID = x[x.length-1]; }
-	} else 	if (menu == 5 || menu == 7) {
+	} else 	if (menu == 5 || menu == 7 || menu == 10) {
 	    timerID += 1;
 		    if (timerID > (maxTimers - 1) ) { timerID = maxTimers - 1; }
 	}
@@ -2300,6 +2290,9 @@ function onKeyMenu(keyCode) {
 		mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";" + color_main_head + ";'>" + Lang[7] + "</center></h1><pre style='" + color_main_font + ";font-size:" + fsMenu + ";'>\n\n\n<center>" + Lang[0] + "</center></pre>";
 		DeleteTimers();
 		setTimeout("LoadTimersServer();InitMenu(menu);",100);
+	} else 	if (menu == 10) {
+		channels[(timerID + Fav_base + 1)]="";channelsnames[(timerID + Fav_base + 1)]="";
+		setTimeout("InitMenu(menu);",100);
 	}
     break;
     case "Green":
@@ -2314,6 +2307,21 @@ function onKeyMenu(keyCode) {
 	} else 	if (menu == 5) {
 		activate_timers(timerID);
 		InitMenu(menu);
+	} else 	if (menu == 10) {
+		//move up
+		if (timerID !== 0) {
+			x = timerID + Fav_base + 1;
+			x1 = channels[x];
+			y1 = channelsnames[x];
+			x2 = channels[(x - 1)];
+			y2 = channelsnames[(x - 1)];
+			channels[x] = x2;
+			channelsnames[x] = y2;
+			channels[(x - 1)] = x1;
+			channelsnames[(x - 1)] = y1;
+			timerID -= 1;
+			setTimeout("InitMenu(menu);",100);
+		}
 	} 
     break;
     case "Yellow":
@@ -2323,8 +2331,22 @@ function onKeyMenu(keyCode) {
 	} else 	if (menu == 1) {
 		menu = 9; // INFO2 menu
 		InitMenu(menu);
+	} else 	if (menu == 10) {
+		//move down
+		if (timerID !== (maxTimers - 1)) {
+			x = timerID + Fav_base + 1;
+			x1 = channels[x];
+			y1 = channelsnames[x];
+			x2 = channels[(x + 1)];
+			y2 = channelsnames[(x + 1)];
+			channels[x] = x2;
+			channelsnames[x] = y2;
+			channels[(x + 1)] = x1;
+			channelsnames[(x + 1)] = y1;
+			timerID += 1;
+			setTimeout("InitMenu(menu);",100);
+		}
 	}
-
     break;
     case "Blue":
 		if (menu == 0) {
@@ -2559,15 +2581,19 @@ function onKeyMenu(keyCode) {
 		InitMenu(menu);
 	break;
 	case KEY_0:
-		if (menu !== MainMenu) {
+		if (menu !== MainMenu && menu !== 8 ) {
 			if (menu == 3 ) { isFullscreen = 0; play(channels[currChan]); isFullscreen = 1; MPDListener = 0;}
 			menu = MainMenu;	
 			InitMenu(menu);
-		}
-		if (menu == 8) {
+		} else if (menu == 8) {
 			SetGroup(0);
 			InitMenu(menu);
-		} 
+		} else if (menu == 0) {
+			timerID = 0; maxTimers = Fav_max_channel;
+			menu = 10;
+			InitMenu(menu);
+		}
+
 	break;
     case "VolumeMute":
 	VolumeMute();
@@ -2596,6 +2622,8 @@ function InitMenu(menu) {
 // 6 = Main Menu (when watching recording)
 // 7 = SearchTimers from Server
 // 8 = ChannelGroups enable/disable
+// 9 = INFO2 menu
+// 10 = Favorite Edit menu
 
 osdepginfo.style.opacity = 0;
 
@@ -2763,6 +2791,28 @@ if(menu == 9) { // INFO2 Menu
 	htmltext += "\n\n   0 -" + Lang[9] + "</pre>";
 	mainmenu.innerHTML = htmltext;
 
+}
+
+if(menu == 10) { // Favorite edit Menu
+	var htmltext = "<h1><center style='font-size:" + fsMenuMain + ";" + color_main_head + ";'>" + Lang[83]
+	htmltext += "</center></h1><pre style='" + color_main_font + ";font-size:" + fsMenu + ";'>\n"
+	htmltext += "<font style='background:" + color_bg + ";-webkit-border-radius:25px;" + color_main_font + ";font-size:" + fsMenu + ";'>";
+	var x = timerID;
+	for (var i=0;i<10;i++) {
+//		alert ((x + Fav_base));
+//		alert (channelsnames[(x + Fav_base)]);
+
+		if (maxTimers !== 0) { do { x += 1; } while (!channelsnames[(x + Fav_base)] && (x < maxTimers)) }
+		if (maxTimers >= x) { htmltext += " \u0003\u0003\u0003 " + channelsnames[(x + Fav_base)] + " \u0003\u0003\u0003 \n"; } else { htmltext += "\n"; }
+		if (i == 0) { htmltext += "</font>"; } 
+	}
+	htmltext += "\n   <font style='color:red;'>\u25CF<font style='" + color_main_font + ";'> -" + Lang[48]; 
+	htmltext += "<font style='color:green;'>\u25CF<font style='" + color_main_font + ";'> -"
+	if (timerID == 0) { htmltext += Lang[19] } else { htmltext += Lang[84] } //no move up
+	htmltext += "<font style='color:yellow;'>\u25CF<font style='" + color_main_font + ";'> -"
+	if (timerID == (maxTimers - 1)) { htmltext += Lang[19] } else { htmltext += Lang[85] } //no move down
+	htmltext += "<font style='color:blue;'>\u25CF<font style='" + color_main_font + ";'> -" + Lang[19] + "</pre>";
+	mainmenu.innerHTML = htmltext;
 }
 
 } // end of initmenu

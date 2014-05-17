@@ -13,10 +13,10 @@ VDR 1.7.29 / 2.1.1
 	Subs prio can be set eq TV5 sends multiple subs. default "DUT, ENG"
 	Subtitle language can dynamic be chosen from settings menu (<menu> <1> <red>) if there is no subtitle present it resets to default.
 	Added Group 10 (channels >10000) for favorite
-	key @ switch to favorite list
-	key >@ add to favorite list
+	New key from old KPN remote added key @ switch to favorite list
+	New key from old KPN remote added key >@ add to favorite list
 	split the info menu into box info (menu yellow) & info about settings (menu 1 - yellow)
-
+	Updated channels script, now adds timestamp to list which is shown in info menu.
 
 
 0.23	Infobox for connection Error, not only ERRR on display but also the Infobox

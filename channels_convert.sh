@@ -1,7 +1,7 @@
 #! /bin/bash
 #
 # Script by rekordc@gmail.com
-# 0.33 04/05/2014
+# 0.34 17/05/2014
 #
 
 svdrpsend.pl lstc > channels.list
