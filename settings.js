@@ -10,16 +10,12 @@ var server_ip = server_ip_array[0]; // default server
 var StartVolume = 15; // Volume on (re)start of the portal.
 var currChan = 10; // default channel
 
-var experimental;// Use some experimental code
-
-var lang_nr;
 OSDLang = new Array ("English", "Nederlands");
 langfile = new Array ("lang_eng.js", "lang_dut.js");
+lang_prio = new Array("dut,eng,und","ger,deu,eng","eng,und","fre,fra,eng");
 
 var subs_prio = "dut,eng"; //Subtitle prio
 
-var testing2;
-var get_marks; // getmarks 1 = smarttvweb, 0 = restfulapi
 var get_timer = 1; // gettimersserver 1 = smarttvweb, 0 = restfulapi
 var get_recordings = 1; // getrecordings 1 = smarttvweb, 2 = streamdev (not working yet)
 
@@ -59,9 +55,16 @@ var StreamPort = ":" + "3000" + "/";
 
 var channeldigits = 2; // 0 - Max 9, 1 max 99, 2 max 999 or 3 max 9999 channels directly selectable by numbers
 
+var Fav_group = 10; // Favorite Group 10
+
 //
 // No need to change anything from here on.
 //
+
+var experimental;// Use some experimental code
+var lang_nr;
+var testing2;
+var get_marks; // getmarks 1 = smarttvweb, 0 = restfulapi
 
 VideoOutputModes = new Array(4,5,7); // Modes for the portal.
 VideoOutputModes_txt = new Array("NO_VIDEO_MODE","480I60","576I50","480P60","576P50","720P50","720P60","1080I50","1080I60","1080P23976","1080P24",
@@ -103,7 +106,6 @@ var audio = 0;
 var audio_dyn = 0;
 var subs_dyn = 0;
 
-lang_prio = new Array("dut,eng,und","ger,deu,eng","eng,und","fre,fra,eng");
 
 var lang_prio_dyn = new Array(); //Used for dynamic audio track selection
 var subs_prio_dyn = new Array(); //Used for dynamic subs track selection
@@ -328,7 +330,6 @@ var perc_space = 0;
 
 var isPause = 0; //used by pause routine.
 
-var Fav_group = 10; // Favorite Group 10
 var Fav_base = Fav_group * 1000;
 var Fav_max_channel;
 baseChn[Fav_group] = Fav_base;
