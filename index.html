@@ -18,6 +18,7 @@ window.onkeydown = onKeyDown;
 
 function onLoad() {
 
+	is = toi.informationService;
 	GetSettings();
 	createPlayer();
 
@@ -41,12 +42,12 @@ function onLoad() {
 	mediaPlayer.addEventListener(mediaPlayer.ON_DATA_AVAILABLE,onDataAvailableEvent);
 	mediaPlayer.addEventListener(mediaPlayer.ON_STATE_CHANGED, MPD); 
 
-	if (toi.informationService.getObject("var.capabilities.dvr") == "FALSE") { 
+	if (is.getObject("var.capabilities.dvr") == "FALSE") { 
 		mediaRecorder = 0;
 		// No harddisk, no recorder functions possible
 	}
 
-	if (toi.informationService.getObject("config.architecture.target") !== "vip1903" && fullupdate !== 2) { 
+	if (is.getObject("config.architecture.target") !== "vip1903" && fullupdate !== 2) { 
 		fullupdate = 0;
 		// No 19x3 so better turn fullupdate EPG off
 	}
@@ -56,8 +57,8 @@ function onLoad() {
 		mediaRecorder.addEventListener(mediaRecorder.ON_STATE_CHANGED, onRecorderStateChanged);
 	}
 
-	    toi.informationService.addEventListener(toi.informationService.ON_OBJECTS_CHANGED, onEvent);
-	    toi.informationService.subscribeObject(onEvent, "var.io.state", true);
+	    is.addEventListener(is.ON_OBJECTS_CHANGED, onEvent);
+	    is.subscribeObject(onEvent, "var.io.state", true);
 
 	    toi.schedulerService.addEventListener(toi.schedulerService.ON_SCHEDULED_START, onScheduledStart);
 	    toi.schedulerService.addEventListener(toi.schedulerService.ON_SCHEDULED_STOP, onScheduledStop);
@@ -129,7 +130,6 @@ function SetupFonts() {
 
 function GetSettings() {
 	//test for settings, create if not excists.
-	is = toi.informationService;
 	try {
 		if (!is.getObject("vip.serveraddress")) {} 
 	} catch(e) {
@@ -215,14 +215,7 @@ function GetSettings() {
 
 	Set_Res = Number(is.getObject("vip.resolution"));
 	VideoOutput();
-
-	Fav_max_channel = Number(is.getObject("vip.fav_max_channel"));
-	maxChan[Fav_group] = Fav_base + Fav_max_channel;
-		for (var i=1; i<=Fav_max_channel; i++) {
-		channelsnames[(i+Fav_base)] = is.getObject(("vip.channelsnames." + i));
-		channels[(i+Fav_base)] = is.getObject(("vip.channels." + i));
-		}
-
+	Read_Fav();
 
 	is.setObject("cfg.media.subtitling.languagepriority",subs_prio,is.STORAGE_PERMANENT);
 	// set default subtitle language to 
@@ -262,7 +255,7 @@ function loadjs(filename){
 function onEvent(event) {
 var numObjs = event.objectNames.length;
   for (var i=0; i<numObjs; i++) {
-	if(event.objectNames[i] == "var.io.state" && toi.informationService.getObject(event.objectNames[i]) == "standby" && KillStream == 1){
+	if(event.objectNames[i] == "var.io.state" && is.getObject(event.objectNames[i]) == "standby" && KillStream == 1){
 		try {
 			if (isMediaMenu) { 
 				if (mediaList.style.opacity == 0) {setResume();} // No mediamenu on screen so set resume.
@@ -273,7 +266,7 @@ var numObjs = event.objectNames.length;
 		} catch(e) {
 		alert(e);
 		}
-	} else if(event.objectNames[i] == "var.io.state" && toi.informationService.getObject(event.objectNames[i]) == "normal" && KillStream == 1){
+	} else if(event.objectNames[i] == "var.io.state" && is.getObject(event.objectNames[i]) == "normal" && KillStream == 1){
 		play(channels[currChan]);
 		if(isMediaMenu) {
 			if (mediaList.style.opacity == 0) {
@@ -304,7 +297,7 @@ function onUnload() {
 		pipPlayer.releaseInstance();
 	}
 
-	toi.informationService.removeEventListener(toi.informationService.ON_OBJECTS_CHANGED, onEvent);
+	is.removeEventListener(is.ON_OBJECTS_CHANGED, onEvent);
 	eitCache.removeEventListener(eitCache.ON_CACHE_UPDATED, onCacheUpdated);
 	mediaPlayer.removeEventListener(mediaPlayer.ON_DATA_AVAILABLE,onDataAvailableEvent);
 	mediaPlayer.removeEventListener(mediaPlayer.ON_STATE_CHANGED, MPD); 
@@ -803,7 +796,6 @@ function onKeyDown(event) {
 		if(!epgactive) {
 			if (audio_dyn < (lang_prio_dyn.length -1)) { audio_dyn += 1} else { audio_dyn = 0 }
 			if (lang_prio_dyn.length > 1) {
-				is = toi.informationService;
 				is.setObject("cfg.media.audio.languagepriority",lang_prio_dyn[audio_dyn] + "," + lang_prio[audio],is.STORAGE_PERMANENT);
 				osdlang.style.opacity = 1;
 				osdlang.innerHTML = "<img src='unmute.png'> " + lang_prio_dyn[audio_dyn] + " ";
@@ -1073,7 +1065,7 @@ function onKeyDown(event) {
 	break;
    case KEY_C:// @ key on old long kpn 1710/1760 remote
 	if(isFullscreen && Fav_max_channel !== 0 && ChanGroup !== Fav_group) {
-		GotoFav();
+		GotoFav(defChan[Fav_group]);
 	} else if(isFullscreen && ChanGroup == Fav_group) {
 		//We're in favorite channels mode ;)
 		//Show a list of them -> menu edit favorites
@@ -1236,12 +1228,12 @@ function onKeyDown(event) {
 }
 
 
-function GotoFav() {
+function GotoFav(ChanID) {
 		count = 0; Change = 0;
 		prevChan = "";
 		defChan[ChanGroup] = currChan;
 		ChanGroup = Fav_group;
-		currChan = defChan[ChanGroup];
+		currChan = ChanID;
 		play(channels[currChan]);
 }
 
@@ -1251,11 +1243,22 @@ function AddtoFav() {
 	maxChan[Fav_group] = Fav_base + Fav_max_channel;
 	channelsnames[(Fav_base + Fav_max_channel)] = channelsnames[currChan];
 	channels[(Fav_base + Fav_max_channel)] = channels[currChan];
-		toi.informationService.setObject(("vip.channelsnames." + Fav_max_channel),channelsnames[currChan],is.STORAGE_PERMANENT)
-		toi.informationService.setObject(("vip.channels." + Fav_max_channel),channels[currChan],is.STORAGE_PERMANENT)
-		toi.informationService.setObject("vip.fav_max_channel",Fav_max_channel.toString(),toi.informationService.STORAGE_PERMANENT)
+		is.setObject(("vip.channelsnames." + Fav_max_channel),channelsnames[currChan],is.STORAGE_PERMANENT)
+		is.setObject(("vip.channels." + Fav_max_channel),channels[currChan],is.STORAGE_PERMANENT)
+		is.setObject("vip.fav_max_channel",Fav_max_channel.toString(),is.STORAGE_PERMANENT)
 	settimer(0,channels[currChan],Fav_max_channel ,2);
 }
+
+
+function Read_Fav() {
+	Fav_max_channel = Number(is.getObject("vip.fav_max_channel"));
+	maxChan[Fav_group] = Fav_base + Fav_max_channel;
+		for (var i=1; i<=Fav_max_channel; i++) {
+		channelsnames[(i+Fav_base)] = is.getObject(("vip.channelsnames." + i));
+		channels[(i+Fav_base)] = is.getObject(("vip.channels." + i));
+		}
+}
+
 
 function Makedigit() {
 	prevChan = currChan;
@@ -1778,7 +1781,6 @@ function StreamInfo(si) {
 	// streaminfo
 	// SI[x] 0-sat,1-NID,2-TID,3-SID
  	SI=channels[si].split("-");
-	is = toi.informationService;
 
 	//default setting : English
 	is.setObject("cfg.locale.ui","eng",is.STORAGE_VOLATILE);
@@ -2232,7 +2234,7 @@ function onKeyMenu(keyCode) {
 		    if (timerID > x[x.length-1] ) { timerID = x[x.length-1]; }
 	} else 	if (menu == 5 || menu == 7 || menu == 10) {
 	    timerID += 1;
-		    if (timerID > (maxTimers - 1) ) { timerID = maxTimers - 1; }
+			if (timerID > (maxTimers - 1) && maxTimers !== 0) { timerID = maxTimers - 1; }
 	}
 		InitMenu(menu);
     break;
@@ -2247,6 +2249,12 @@ function onKeyMenu(keyCode) {
 		currMed = -1;
 		playRec(x);
 		//UnloadMediaSettings();
+	}
+	if (menu == 10) { 
+		GotoFav((timerID + Fav_base));
+		isSetupMenu = 0;
+		mainmenu.style.opacity = 0;
+		osdepginfo.style.opacity = 0;
 	}
 	if (menu == 5) {
 		// Show EPG info Timer
@@ -2264,7 +2272,6 @@ function onKeyMenu(keyCode) {
     case "Red":
     	if (menu == 1) {
 		if (subs_dyn < (subs_prio_dyn.length -1)) { subs_dyn += 1} else { subs_dyn = 0 }
-		is = toi.informationService;
 		if (subs_prio_dyn.length > 0) {
 			is.setObject("cfg.media.subtitling.languagepriority", (subs_prio_dyn[subs_dyn] + "," + subs_prio),is.STORAGE_PERMANENT);
 		} else {
@@ -2272,9 +2279,7 @@ function onKeyMenu(keyCode) {
 		}
 		InitMenu(menu);
 		break;
-	}
-
-    	if (menu == 2) {
+	} else if (menu == 2) {
 		var x = toi.schedulerService.getBookingIds("*", 0, 0);
 		if (x.length > 0) {
 			alert(timerID); //Show timerID for debug, some times it won't delete.
@@ -2291,7 +2296,16 @@ function onKeyMenu(keyCode) {
 		DeleteTimers();
 		setTimeout("LoadTimersServer();InitMenu(menu);",100);
 	} else 	if (menu == 10) {
-		channels[(timerID + Fav_base + 1)]="";channelsnames[(timerID + Fav_base + 1)]="";
+		channels[(timerID + Fav_base + 1)]="";
+		channelsnames[(timerID + Fav_base + 1)]="";
+		is.setObject(("vip.channelsnames." + (timerID + 1)),"",is.STORAGE_PERMANENT)
+		is.setObject(("vip.channels." + (timerID + 1)),"",is.STORAGE_PERMANENT)
+		if (Fav_max_channel == (timerID + 1)) { 
+			Fav_max_channel = timerID;
+			maxTimers = Fav_max_channel;
+			is.setObject("vip.fav_max_channel",Fav_max_channel.toString(),is.STORAGE_PERMANENT)
+			timerID -= 1; if (timerID < 0) {timerID = 0;}
+		}
 		setTimeout("InitMenu(menu);",100);
 	}
     break;
@@ -2300,7 +2314,7 @@ function onKeyMenu(keyCode) {
 		Set_Res = Set_Res + 1;
 		if (Set_Res > (VideoOutputModes.length-1)) { Set_Res = 0;}
 		// save the info
-		toi.informationService.setObject("vip.resolution",Set_Res.toString(),toi.informationService.STORAGE_PERMANENT)
+		is.setObject("vip.resolution",Set_Res.toString(),is.STORAGE_PERMANENT)
 
 		VideoOutput();
 		InitMenu(menu);
@@ -2315,10 +2329,14 @@ function onKeyMenu(keyCode) {
 			y1 = channelsnames[x];
 			x2 = channels[(x - 1)];
 			y2 = channelsnames[(x - 1)];
-			channels[x] = x2;
+			is.setObject(("vip.channelsnames." + (timerID + 1)),y2,is.STORAGE_PERMANENT)
+			is.setObject(("vip.channels." + (timerID + 1)),x2,is.STORAGE_PERMANENT)
+			is.setObject(("vip.channelsnames." + timerID),y1,is.STORAGE_PERMANENT)
+			is.setObject(("vip.channels." + timerID),x1,is.STORAGE_PERMANENT)
 			channelsnames[x] = y2;
-			channels[(x - 1)] = x1;
+			channels[x] = x2;
 			channelsnames[(x - 1)] = y1;
+			channels[(x - 1)] = x1;
 			timerID -= 1;
 			setTimeout("InitMenu(menu);",100);
 		}
@@ -2339,10 +2357,14 @@ function onKeyMenu(keyCode) {
 			y1 = channelsnames[x];
 			x2 = channels[(x + 1)];
 			y2 = channelsnames[(x + 1)];
-			channels[x] = x2;
+			is.setObject(("vip.channelsnames." + (timerID + 1)),y2,is.STORAGE_PERMANENT)
+			is.setObject(("vip.channels." + (timerID + 1)),x2,is.STORAGE_PERMANENT)
+			is.setObject(("vip.channelsnames." + (timerID + 2)),y1,is.STORAGE_PERMANENT)
+			is.setObject(("vip.channels." + (timerID + 2)),x1,is.STORAGE_PERMANENT)
 			channelsnames[x] = y2;
-			channels[(x + 1)] = x1;
+			channels[x] = x2;
 			channelsnames[(x + 1)] = y1;
+			channels[(x + 1)] = x1;
 			timerID += 1;
 			setTimeout("InitMenu(menu);",100);
 		}
@@ -2416,7 +2438,6 @@ function onKeyMenu(keyCode) {
 		}
 
 		if (menu == 1) {
-			is = toi.informationService;
 			if(subsmode == 0 ) {	
 				is.setObject("cfg.media.subtitling.modepriority","Teletext,DVB",is.STORAGE_PERMANENT);
 				subsmode = 1;
@@ -2439,7 +2460,6 @@ function onKeyMenu(keyCode) {
 			setTimeout("getSchedule(currChan);LoadMediaSettings();",100);
 	} else	if (menu == 1) {
 			if (audio < (lang_prio.length -1)) { audio += 1} else { audio = 0 }
-			is = toi.informationService;
 				is.setObject("vip.languagepriority",audio.toString(),is.STORAGE_PERMANENT);
 				is.setObject("cfg.media.audio.languagepriority",lang_prio[audio],is.STORAGE_PERMANENT);
 		InitMenu(menu);
@@ -2475,10 +2495,10 @@ function onKeyMenu(keyCode) {
 		}
 
 	if (menu == 1) {
-		var x = toi.informationService.getObject("vip.serveraddress");
+		var x = is.getObject("vip.serveraddress");
 		x = Number(x);
 		if (x < (server_ip_array.length -1)) { x += 1} else { x = 0 }
-		toi.informationService.setObject("vip.serveraddress",x.toString(),toi.informationService.STORAGE_PERMANENT);
+		is.setObject("vip.serveraddress",x.toString(),is.STORAGE_PERMANENT);
 
 		server_ip = server_ip_array[x];
 		for (var i=0;i<10;i++) {
@@ -2570,7 +2590,6 @@ function onKeyMenu(keyCode) {
 			playMPD(server_ip + MPDAddress);
 		} else if (menu == 1) {
 			if (lang_nr < (OSDLang.length -1)) { lang_nr += 1} else { lang_nr = 0 }
-			is = toi.informationService;
 			is.setObject("vip.OSDlanguage",lang_nr.toString(),is.STORAGE_PERMANENT);
 			loadjs(langfile[lang_nr]);
 			setTimeout("InitMenu(menu);",100);
@@ -2641,10 +2660,10 @@ if(menu == 6) { // Main Menu when watching recording
 if(menu == 1) { // settings menu
 	var htmltext = "<h1><center style='font-size:" + fsMenuMain + ";" + color_main_head + ";'>" + Lang[10] + "</center></h1><pre style='" + color_main_font + ";font-size:" + fsMenu + ";'>   1 - ";
 	if (ShowSubs) { htmltext += "\uE017"; } else { htmltext += "\uE016"; }
-	htmltext += Lang[20] + ": " + (toi.informationService.getObject("cfg.media.subtitling.languagepriority"));
+	htmltext += Lang[20] + ": " + (is.getObject("cfg.media.subtitling.languagepriority"));
 	if (subs_prio_dyn.length > 0) { htmltext += " (" + (subs_dyn + 1 ) + "/" + subs_prio_dyn.length + ") "; }
-	htmltext += "\n   2 - \uE003" + Lang[22] + (toi.informationService.getObject("cfg.media.subtitling.modepriority"));
-	htmltext += "\n   3 - \uE003" + Lang[24] + (toi.informationService.getObject("cfg.media.audio.languagepriority")); 
+	htmltext += "\n   2 - \uE003" + Lang[22] + (is.getObject("cfg.media.subtitling.modepriority"));
+	htmltext += "\n   3 - \uE003" + Lang[24] + (is.getObject("cfg.media.audio.languagepriority")); 
 	htmltext += "\n   4 - " + Lang[82] + "\n   5 - VDR : " + server_ip + "\n   6 - ";
 	if (showClock) { htmltext += "\uE017"; } else { htmltext += "\uE016"; }
 	htmltext += Lang[25] + "\n   7 - ";
@@ -2697,8 +2716,6 @@ if(menu == 3) { // MPD Menu
 if(menu == 4) { // INFO Menu
 	var htmltext = "<h1><center style='font-size:" + fsMenuMain + ";" + color_main_head + ";'>" + Lang[35] + "</center></h1><pre style='" + color_main_font + ";font-size:" + fsMenu + ";'>";
 	try {
-		is = toi.informationService;
-	
 		htmltext += "\n   Product name: " + is.getObject("config.productdisplayname");
 		htmltext += "\n   Build date : " + is.getObject("config.build.date");
 		htmltext += "\n\n   IP address : " + is.getObject("config.ipaddress");
@@ -2762,7 +2779,7 @@ if(menu == 8) { // ChannelGroups enable/disable
 		}
 
 		htmltext += "\uE003" + i + "\uE003-\uE003";
-		if (toi.informationService.getObject(("vip.group." + i)) == "1") { htmltext += "\uE017"; } else { htmltext += "\uE016"; }
+		if (is.getObject(("vip.group." + i)) == "1") { htmltext += "\uE017"; } else { htmltext += "\uE016"; }
 		htmltext += "\uE003" + Lang[81] + i + "\n";
 	}
 	htmltext += "</pre>";
@@ -2772,8 +2789,6 @@ if(menu == 8) { // ChannelGroups enable/disable
 if(menu == 9) { // INFO2 Menu
 	var htmltext = "<h1><center style='font-size:" + fsMenuMain + ";" + color_main_head + ";'>" + Lang[35] + "</center></h1><pre style='" + color_main_font + ";font-size:" + fsMenu + ";'>";
 	try {
-		is = toi.informationService;
-	
 		if (fullupdate !== 0) { htmltext += "\n \uE017 "; } else { htmltext += "\n \uE016 "; }
 		htmltext += "Full EPG Update ";
 
@@ -2799,18 +2814,16 @@ if(menu == 10) { // Favorite edit Menu
 	htmltext += "<font style='background:" + color_bg + ";-webkit-border-radius:25px;" + color_main_font + ";font-size:" + fsMenu + ";'>";
 	var x = timerID;
 	for (var i=0;i<10;i++) {
-//		alert ((x + Fav_base));
-//		alert (channelsnames[(x + Fav_base)]);
-
-		if (maxTimers !== 0) { do { x += 1; } while (!channelsnames[(x + Fav_base)] && (x < maxTimers)) }
-		if (maxTimers >= x) { htmltext += " \u0003\u0003\u0003 " + channelsnames[(x + Fav_base)] + " \u0003\u0003\u0003 \n"; } else { htmltext += "\n"; }
+//		if (maxTimers !== 0) { do { x += 1; } while (!channelsnames[(x + Fav_base)] && (x < maxTimers)) }
+		if (maxTimers !== 0) { x += 1;}
+		if (maxTimers >= x && x !== 0) { htmltext += " \u0003\u0003 " + x + " \u0003\u0003 " + channelsnames[(x + Fav_base)] + " \u0003\u0003\u0003 \n"; } else { htmltext += "\n"; }
 		if (i == 0) { htmltext += "</font>"; } 
 	}
 	htmltext += "\n   <font style='color:red;'>\u25CF<font style='" + color_main_font + ";'> -" + Lang[48]; 
 	htmltext += "<font style='color:green;'>\u25CF<font style='" + color_main_font + ";'> -"
 	if (timerID == 0) { htmltext += Lang[19] } else { htmltext += Lang[84] } //no move up
 	htmltext += "<font style='color:yellow;'>\u25CF<font style='" + color_main_font + ";'> -"
-	if (timerID == (maxTimers - 1)) { htmltext += Lang[19] } else { htmltext += Lang[85] } //no move down
+	if (timerID == (maxTimers - 1) || x == 0) { htmltext += Lang[19] } else { htmltext += Lang[85] } //no move down
 	htmltext += "<font style='color:blue;'>\u25CF<font style='" + color_main_font + ";'> -" + Lang[19] + "</pre>";
 	mainmenu.innerHTML = htmltext;
 }
@@ -2818,7 +2831,6 @@ if(menu == 10) { // Favorite edit Menu
 } // end of initmenu
 
 function SetGroup(isgroup) {
-	is = toi.informationService;
 	is.setObject("vip.group." + isgroup,(1 - is.getObject("vip.group." + isgroup)).toString(),is.STORAGE_PERMANENT);
 	if (is.getObject("vip.group." + isgroup) == "0") { minChan[isgroup] = "";} else {minChan[isgroup] = minchan[isgroup];}
 }
@@ -3410,7 +3422,6 @@ if (DelisOK) {
    case "Green":
 	if (audio_dyn < (lang_prio_dyn.length -1)) { audio_dyn += 1} else { audio_dyn = 0 }
 	if (lang_prio_dyn.length > 1) {
-		is = toi.informationService;
 		is.setObject("cfg.media.audio.languagepriority",lang_prio_dyn[audio_dyn] + "," + lang_prio[audio],is.STORAGE_PERMANENT);
 		osdlang.style.opacity = 1;
 		osdlang.innerHTML = "<img src='unmute.png'> " + lang_prio_dyn[audio_dyn] + " ";
