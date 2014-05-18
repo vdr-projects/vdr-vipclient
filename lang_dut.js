@@ -113,6 +113,8 @@ Lang[82] = "Groep Selektie";
 Lang[83] = "Favorieten Lijst";
 Lang[84] = " schuif op ";
 Lang[85] = " schuif neer ";
+Lang[86] = " Toevoegen ";
+Lang[87] = " Wissen ";
 
 Lang[90] = "Deze zender zit niet in je pakket";
 

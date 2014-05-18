@@ -2,7 +2,7 @@
 // Default settings
 // 
 
-var Version = "0.24.14";
+var Version = "0.24.16";
 
 server_ip_array = new Array("http://192.168.1.15","http://192.168.3.15","http://192.168.3.100","http://192.168.178.19","http://192.168.1.21");
 
@@ -337,4 +337,4 @@ defChan[Fav_group] = Fav_base + 1;
 minChan[Fav_group] = Fav_base + 1;
 //
 var Chan_Ver = "Not set";
-
+var Fav_key1; 

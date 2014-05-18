@@ -239,7 +239,7 @@ function GetSettings() {
 			}
 		}
 	}
-	for (var i = minChan[Fav_group];  i < (maxChan[Fav_group]+1); i++) { 
+	for (var i = minChan[Fav_group];  i < (maxChan[Fav_group]+10); i++) { 
 		EPG[0][4][i] = "";EPG[1][4][i] = "";EPG[0][5][i] = "";EPG[1][5][i] = "";EPG[0][7][i] = "";EPG[1][7][i] = "";AvInfo[i] = "";
 	}
 }
@@ -1065,11 +1065,28 @@ function onKeyDown(event) {
 	break;
    case KEY_C:// @ key on old long kpn 1710/1760 remote
 	if(isFullscreen && Fav_max_channel !== 0 && ChanGroup !== Fav_group) {
-		GotoFav(defChan[Fav_group]);
+	timerID = (defChan[Fav_group] - Fav_base - 1); if (timerID < 0) { timerID = 0;}
+	maxTimers = Fav_max_channel;
+	GotoFav(defChan[Fav_group]);
 	} else if(isFullscreen && ChanGroup == Fav_group) {
-		//We're in favorite channels mode ;)
-		//Show a list of them -> menu edit favorites
+	timerID = (currChan - Fav_base - 1);
 	}
+	if(isFullscreen && Fav_max_channel !== 0) {
+		if(count) {
+			count = 0;
+			osdnr.style.opacity = 0;
+			showDisplay(Right(currChan.toString(),4), false, 100, 0 );
+			Change = 0;
+		}
+		osdepginfo.style.opacity = 0;
+		osdepginfonext.style.opacity = 0;
+		isSetupMenu = 1;
+		mainmenu.style.opacity = 0.8;
+		menu = 10;
+		InitMenu(menu);
+	}
+
+
         break;
    case KEY_D:// >@ key on old long kpn 1710/1760 remote
 	if (protChn[ChanGroup] !== 1 && ChanGroup !== Fav_group) {
@@ -1230,7 +1247,7 @@ function onKeyDown(event) {
 
 function GotoFav(ChanID) {
 		count = 0; Change = 0;
-		prevChan = "";
+		prevChan = ""; Fav_key1 = "";
 		defChan[ChanGroup] = currChan;
 		ChanGroup = Fav_group;
 		currChan = ChanID;
@@ -2197,14 +2214,16 @@ function onKeyMenu(keyCode) {
     case "BrowserBack":
 	if ((menu == 5 || menu == 7) && osdepginfo.style.opacity == 1) {
 		osdepginfo.style.opacity = 0;
-		break;
-		}
-	if (menu !== MainMenu) {
+	} else if (menu == 10 || menu == MainMenu) {
+		isSetupMenu = 0;
+		mainmenu.style.opacity = 0;
+		osdepginfo.style.opacity = 0;
+	} else if (menu !== MainMenu) {
 		if (menu == 3 ) { isFullscreen = 0; play(channels[currChan]); isFullscreen = 1;MPDListener = 0;}
 		menu = MainMenu;
 		InitMenu(menu);
-		break;
-		}
+	}
+	break;
     case "Menu":
 	if (menu == 3 ) { play(channels[currChan]);MPDListener = 0;}
 	isSetupMenu = 0;
@@ -2251,7 +2270,7 @@ function onKeyMenu(keyCode) {
 		//UnloadMediaSettings();
 	}
 	if (menu == 10) { 
-		GotoFav((timerID + Fav_base));
+		GotoFav((timerID + Fav_base + 1));
 		isSetupMenu = 0;
 		mainmenu.style.opacity = 0;
 		osdepginfo.style.opacity = 0;
@@ -2381,6 +2400,10 @@ function onKeyMenu(keyCode) {
 		// Show info SearchTimers
 	       	osdepginfo.innerHTML = SearchTimer[timerID] ;
 		osdepginfo.style.opacity = 1 - osdepginfo.style.opacity;
+	} else if (menu == 10) {
+		if (protChn[ChanGroup] !== 1 && ChanGroup !== Fav_group) {
+			AddtoFav();
+		}
 	}
     break;
     case "MediaRewind":
@@ -2609,7 +2632,7 @@ function onKeyMenu(keyCode) {
 			InitMenu(menu);
 		} else if (menu == 0) {
 			timerID = 0; maxTimers = Fav_max_channel;
-			menu = 10;
+			menu = 10; if (ChanGroup !== Fav_group) { Fav_key1 = Lang[86]; }
 			InitMenu(menu);
 		}
 
@@ -2623,6 +2646,19 @@ function onKeyMenu(keyCode) {
     case "VolumeDown":
 	VolumeDown();
 	break;
+    case KEY_A:// |> key on old long kpn 1710/1760 remote
+        break;
+    case KEY_B:// hh key on old long kpn 1710/1760 remote
+        break;
+    case KEY_C:// @ key on old long kpn 1710/1760 remote
+	if (menu == 10 ) {
+		isSetupMenu = 0;
+		mainmenu.style.opacity = 0;
+		osdepginfo.style.opacity = 0;
+	}
+        break;
+    case KEY_D:// >@ key on old long kpn 1710/1760 remote
+        break;
 
 	default:
         break;
@@ -2648,7 +2684,7 @@ osdepginfo.style.opacity = 0;
 
 if(menu == 0) { // Main Menu
 	MainMenu = 0;
-	mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";" + color_main_head + ";'>" + Lang[9] + "\n ( " + Version + " )</center></h1><pre style='" + color_main_font + ";font-size:" + fsMenu + ";'>   1 -" + Lang[10] + "\n   2 -" + Lang[7] + "\n   3 -" + Lang[11] + "\n   4 -" + Lang[12] + "\n   5 -" + Lang[13] + "\n   6 -" + Lang[14] + "\n   7 -" + Lang[15] + "\n   8 -" + Lang[16] + "\n   9 -" + Lang[17] + "\n\n\n   <font style='color:red;'>\u25CF<font style='" + color_main_font + ";'> -" + Lang[19] + "<font style='color:green;'>\u25CF<font style='" + color_main_font + ";'> -" + Lang[19] + "<font style='color:yellow;'>\u25CF<font style='" + color_main_font + ";'> -" + Lang[35] + "   <font style='color:blue;'>\u25CF<font style='" + color_main_font + ";'> -" + Lang[18] + "</pre>";
+	mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";" + color_main_head + ";'>" + Lang[9] + "\n ( " + Version + " )</center></h1><pre style='" + color_main_font + ";font-size:" + fsMenu + ";'>   1 -" + Lang[10] + "\n   2 -" + Lang[7] + "\n   3 -" + Lang[11] + "\n   4 -" + Lang[12] + "\n   5 -" + Lang[13] + "\n   6 -" + Lang[14] + "\n   7 -" + Lang[15] + "\n   8 -" + Lang[16] + "\n   9 -" + Lang[17] + "\n   0 - " + Lang[83] + "\n\n   <font style='color:red;'>\u25CF<font style='" + color_main_font + ";'> -" + Lang[19] + "<font style='color:green;'>\u25CF<font style='" + color_main_font + ";'> -" + Lang[19] + "<font style='color:yellow;'>\u25CF<font style='" + color_main_font + ";'> -" + Lang[35] + "   <font style='color:blue;'>\u25CF<font style='" + color_main_font + ";'> -" + Lang[18] + "</pre>";
 }
 
 if(menu == 6) { // Main Menu when watching recording
@@ -2683,7 +2719,6 @@ if(menu == 1) { // settings menu
 }
 
 if(menu == 2) { // Timers menu
-//	booking = "<center>" + Lang[32] + "</center>";
 	booking = "";
 	var x = timerID - 1;
 	var y = toi.schedulerService.getBookingIds("*", 0, 0);
@@ -2814,17 +2849,16 @@ if(menu == 10) { // Favorite edit Menu
 	htmltext += "<font style='background:" + color_bg + ";-webkit-border-radius:25px;" + color_main_font + ";font-size:" + fsMenu + ";'>";
 	var x = timerID;
 	for (var i=0;i<10;i++) {
-//		if (maxTimers !== 0) { do { x += 1; } while (!channelsnames[(x + Fav_base)] && (x < maxTimers)) }
 		if (maxTimers !== 0) { x += 1;}
 		if (maxTimers >= x && x !== 0) { htmltext += " \u0003\u0003 " + x + " \u0003\u0003 " + channelsnames[(x + Fav_base)] + " \u0003\u0003\u0003 \n"; } else { htmltext += "\n"; }
 		if (i == 0) { htmltext += "</font>"; } 
 	}
-	htmltext += "\n   <font style='color:red;'>\u25CF<font style='" + color_main_font + ";'> -" + Lang[48]; 
+	htmltext += "\n   <font style='color:red;'>\u25CF<font style='" + color_main_font + ";'> -" + Lang[87]; 
 	htmltext += "<font style='color:green;'>\u25CF<font style='" + color_main_font + ";'> -"
 	if (timerID == 0) { htmltext += Lang[19] } else { htmltext += Lang[84] } //no move up
 	htmltext += "<font style='color:yellow;'>\u25CF<font style='" + color_main_font + ";'> -"
 	if (timerID == (maxTimers - 1) || x == 0) { htmltext += Lang[19] } else { htmltext += Lang[85] } //no move down
-	htmltext += "<font style='color:blue;'>\u25CF<font style='" + color_main_font + ";'> -" + Lang[19] + "</pre>";
+	htmltext += "<font style='color:blue;'>\u25CF<font style='" + color_main_font + ";'> -" + Fav_key1 + "</pre>";
 	mainmenu.innerHTML = htmltext;
 }
 
