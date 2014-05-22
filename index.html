@@ -190,6 +190,12 @@ function GetSettings() {
 		is.setObject("vip.fav_max_channel","0",is.STORAGE_PERMANENT)
 	}
 
+	try {
+		if (!is.getObject("vip.showsubs")) {} 
+	} catch(e) {
+		is.setObject("vip.showsubs","1",is.STORAGE_PERMANENT)
+	}
+
 
 	var sel_group;
 	for (var i=0;i<10;i++) {
@@ -221,7 +227,8 @@ function GetSettings() {
 
 	experimental = Number(is.getObject("vip.testing"));// Use some experimental code
 	testing2 = Number(is.getObject("vip.testing2"));// Use some experimental code
-	get_marks = Number(is.getObject("vip.getmarks"));// Use some experimental code
+	get_marks = Number(is.getObject("vip.getmarks"));
+	ShowSubs = Number(is.getObject("vip.showsubs"));
 
 	Set_Res = Number(is.getObject("vip.resolution"));
 	VideoOutput();
@@ -2464,6 +2471,7 @@ function onKeyMenu(keyCode) {
 		} else if (menu == 1) {
 		 ShowSubs = 1 - ShowSubs;
 		 videoplane.subtitles = Boolean(ShowSubs); // Enable subtitles or Disable subtitles
+		 is.setObject("vip.showsubs",ShowSubs.toString(),is.STORAGE_PERMANENT);
 		} else	if (menu == 8) {
 			SetGroup(1);
 		}
@@ -2625,7 +2633,7 @@ function onKeyMenu(keyCode) {
 
 	break;
 	case KEY_9:
-		if (menu == 0 || menu == 3) {
+		if ((menu == 0 || menu == 3) && ShowMPD) {
 			menu = 3;
 			playMPD(server_ip + MPDAddress);
 		} else if (menu == 1) {
@@ -2701,7 +2709,10 @@ osdepginfo.style.opacity = 0;
 
 if(menu == 0) { // Main Menu
 	MainMenu = 0;
-	mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";" + color_main_head + ";'>" + Lang[9] + "\n ( " + Version + " )</center></h1><pre style='" + color_main_font + ";font-size:" + fsMenu + ";'>   1 -" + Lang[10] + "\n   2 -" + Lang[7] + "\n   3 -" + Lang[11] + "\n   4 -" + Lang[12] + "\n   5 -" + Lang[13] + "\n   6 -" + Lang[14] + "\n   7 -" + Lang[15] + "\n   8 -" + Lang[16] + "\n   9 -" + Lang[17] + "\n   0 - " + Lang[83] + "\n\n   <font style='color:red;'>\u25CF<font style='" + color_main_font + ";'> -" + Lang[19] + "<font style='color:green;'>\u25CF<font style='" + color_main_font + ";'> -" + Lang[19] + "<font style='color:yellow;'>\u25CF<font style='" + color_main_font + ";'> -" + Lang[35] + "   <font style='color:blue;'>\u25CF<font style='" + color_main_font + ";'> -" + Lang[18] + "</pre>";
+	var htmltext = "<h1><center style='font-size:" + fsMenuMain + ";" + color_main_head + ";'>" + Lang[9] + "\n ( " + Version + " )</center></h1><pre style='" + color_main_font + ";font-size:" + fsMenu + ";'>   1 -" + Lang[10] + "\n   2 -" + Lang[7] + "\n   3 -" + Lang[11] + "\n   4 -" + Lang[12] + "\n   5 -" + Lang[13] + "\n   6 -" + Lang[14] + "\n   7 -" + Lang[15] + "\n   8 -" + Lang[16];
+	if (ShowMPD) { htmltext += "\n   9 -" + Lang[17]; } else { htmltext += "\n   9 -" + Lang[19]; }
+	htmltext += "\n   0 - " + Lang[83] + "\n\n   <font style='color:red;'>\u25CF<font style='" + color_main_font + ";'> -" + Lang[19] + "<font style='color:green;'>\u25CF<font style='" + color_main_font + ";'> -" + Lang[19] + "<font style='color:yellow;'>\u25CF<font style='" + color_main_font + ";'> -" + Lang[35] + "   <font style='color:blue;'>\u25CF<font style='" + color_main_font + ";'> -" + Lang[18] + "</pre>";
+	mainmenu.innerHTML = htmltext;
 }
 
 if(menu == 6) { // Main Menu when watching recording

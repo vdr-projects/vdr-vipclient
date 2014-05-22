@@ -21,6 +21,7 @@ VDR 1.7.29+
 	split the info menu into box info (menu yellow) & info about settings (menu 1 - yellow)
 	Updated channels script, now adds timestamp to list which is shown in info menu.
 	EPG Mode can be set (Now/Next only or Full EPG from stream)
+	Client for MPD (http://www.musicpd.org/) turned off by default (settings.js) 
 
 
 0.23	Infobox for connection Error, not only ERRR on display but also the Infobox

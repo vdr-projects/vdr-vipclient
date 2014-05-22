@@ -2,7 +2,7 @@
 // Default settings
 // 
 
-var Version = "0.24.16";
+var Version = "0.24.17";
 
 server_ip_array = new Array("http://192.168.1.15","http://192.168.3.15","http://192.168.3.100","http://192.168.178.19","http://192.168.1.21");
 
@@ -24,9 +24,8 @@ var UseNewReclist = 1 ; //use new recordingslist function
 var ShowSubDir = 1 ; // 0 = no, 1 = yes (default) // show seperate maps for subdirs in menu recordings
 var showClock = 0;   // 0 = no, 1 = yes
 var SwitchGuide = 0; // 0 = no, 1 = yes
-var PipSwitchGuide = 1; // 0 = no, 1 = yes // use second/pip player for getting epg update in guide view
+var PipSwitchGuide = 1; // 0 = no, 1 = yes // use second/pip player for getting epg update in guide view // !!Unstable!! box might restart
 var TimeShift = 0;   // 0 = no, 1 = yes timeshift
-var ShowSubs = 1;    // 0 = no, 1 = yes (default)
 var KillStream = 1;  // 1 = Close stream on Standby
 var ShowProtectedChannels = 1; // 0 = yes show, 1 = don't show protected channels (default)
 var ProtectTimeOut = 60 * (60 * 1000); //time out in minutes (0 = no timeout)
@@ -34,6 +33,7 @@ var ShowSource = 1; // show source in OSD
 var pipPlayer = 0; // 0 = no, 1 = yes Pip
 var mediaRecorder = 1; // 0 = no, 1 = yes local recording.
 var PauseOnServer = 0; // 0 = no pause on server, 1 = pause live TV on server
+var ShowMPD = 0; // 0 = don't use MPD, 1 = make use of MPD (http://www.musicpd.org/)
 
 var fullupdate = 1; // If guideview is too slow, set it to 0 (for 1910/1960), faster boxes can use 1
 // to force the use on boxes other then 19x3 use 2!!
@@ -69,6 +69,7 @@ var experimental;// Use some experimental code
 var lang_nr;
 var testing2;
 var get_marks; // getmarks 1 = smarttvweb, 0 = restfulapi
+var ShowSubs; //Flash stored
 
 VideoOutputModes = new Array(4,5,7); // Modes for the portal.
 VideoOutputModes_txt = new Array("NO_VIDEO_MODE","480I60","576I50","480P60","576P50","720P50","720P60","1080I50","1080I60","1080P23976","1080P24",
