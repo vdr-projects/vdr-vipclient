@@ -19,8 +19,15 @@ window.onkeydown = onKeyDown;
 function onLoad() {
 
 	is = toi.informationService;
+	ss = toi.schedulerService;
+	aos = toi.audioOutputService;
+	vos = toi.videoOutputService;
+	fps = toi.frontPanelService;
+	ams = toi.assetManagerService;
+
 	GetSettings();
 	createPlayer();
+	createEitCache();
 
 	if(pipPlayer){
 		addPipVideoplane();
@@ -31,13 +38,16 @@ function onLoad() {
 	}
 
 	embedTeletextPlugin();
-	toi.audioOutputService.setVolume(AudioOut, StartVolume);
-	toi.audioOutputService.setMuteState(AudioOut, false);
+	aos.setVolume(AudioOut, StartVolume);
+	aos.setMuteState(AudioOut, false);
 	showDisplay(Right(currChan.toString(),4), false, 100, 0 );
 	play(channels[currChan]);
-	eitCache = toi.dvbEitService.createInstance();
-	eitCache.setFilterMode(eitCache.FILTER_MODE_PF_AND_SCHEDULE);
-//	eitCache.setFilterMode(eitCache.FILTER_MODE_PF_ONLY);
+
+	if (EPGMode) {
+		eitCache.setFilterMode(eitCache.FILTER_MODE_PF_AND_SCHEDULE);
+	} else {
+		eitCache.setFilterMode(eitCache.FILTER_MODE_PF_ONLY);
+	}
 	eitCache.addEventListener(eitCache.ON_CACHE_UPDATED, onCacheUpdated);
 	mediaPlayer.addEventListener(mediaPlayer.ON_DATA_AVAILABLE,onDataAvailableEvent);
 	mediaPlayer.addEventListener(mediaPlayer.ON_STATE_CHANGED, MPD); 
@@ -60,10 +70,10 @@ function onLoad() {
 	    is.addEventListener(is.ON_OBJECTS_CHANGED, onEvent);
 	    is.subscribeObject(onEvent, "var.io.state", true);
 
-	    toi.schedulerService.addEventListener(toi.schedulerService.ON_SCHEDULED_START, onScheduledStart);
-	    toi.schedulerService.addEventListener(toi.schedulerService.ON_SCHEDULED_STOP, onScheduledStop);
-	    toi.schedulerService.setCategorySubscription(onScheduledStart, "*");
-	    toi.schedulerService.setCategorySubscription(onScheduledStop, "*");
+	    ss.addEventListener(ss.ON_SCHEDULED_START, onScheduledStart);
+	    ss.addEventListener(ss.ON_SCHEDULED_STOP, onScheduledStop);
+	    ss.setCategorySubscription(onScheduledStart, "*");
+	    ss.setCategorySubscription(onScheduledStop, "*");
 
 	setOSDscale();
 	SetupFonts();
@@ -337,7 +347,7 @@ function VolumeUp() {
         if (Volume > 100) {
             Volume = 100;
         }
-        toi.audioOutputService.setVolume(AudioOut, Volume);
+        aos.setVolume(AudioOut, Volume);
 	showVolume();
 }
 
@@ -352,16 +362,24 @@ function VolumeDown() {
         if (Volume < 0) {
             Volume = 0;
         }
-        toi.audioOutputService.setVolume(AudioOut, Volume);
+        aos.setVolume(AudioOut, Volume);
 	showVolume();
 }
 
 
 function VolumeMute() {
-	state = toi.audioOutputService.getMuteState(AudioOut);
-	toi.audioOutputService.setMuteState(AudioOut, !state);
+	state = aos.getMuteState(AudioOut);
+	aos.setMuteState(AudioOut, !state);
 	mute = 1 - state;
         osdmute.style.opacity = mute; 
+}
+
+function createEitCache() {
+  try {
+	eitCache = toi.dvbEitService.createInstance();
+  } catch(e) {
+    alert("Failed getting eitCache: " + e);
+  }
 }
 
 function createPlayer() {
@@ -578,7 +596,7 @@ for(x=0; x<cList.length;x++) {
 
 function VideoOutput() {
 
-videoConfig = toi.videoOutputService.getVideoConfiguration();
+videoConfig = vos.getVideoConfiguration();
 
  var session = null;
   try {
@@ -587,7 +605,7 @@ videoConfig = toi.videoOutputService.getVideoConfiguration();
     var desiredMode = VideoOutputModes[Set_Res];
 
     // create the session
-    session = toi.videoOutputService.createVideoConfigurationSession();
+    session = vos.createVideoConfigurationSession();
     session.setDefaultVideoMode(videoConfig.getVideoOutputs()[currentOutput], desiredMode);
     session.apply();
     session.releaseInstance();
@@ -1324,12 +1342,11 @@ function CheckChannel(CheckThis) {
 
 function showDisplay(showtxt,colonState,intensity,currentMode) {
 	if(!showClock){
-	toi.frontPanelService.setSegmentDisplayState(toi.statics.ToiFrontPanelServiceSegmentDisplayState.create(showtxt,colonState,intensity,currentMode));
+	fps.setSegmentDisplayState(toi.statics.ToiFrontPanelServiceSegmentDisplayState.create(showtxt,colonState,intensity,currentMode));
 	}
 }
 
 function SetLed(NumLed,color,blinkfreq){
-	var fps = toi.frontPanelService;
 	var state = toi.statics.ToiFrontPanelServiceLedState.create(color, blinkfreq);
 	fps.setLedState(NumLed, state);
 }
@@ -1426,17 +1443,17 @@ function settimer(ProgTime,ProgName,ProgDura,SwitchTimer) {
 // 1 - switchonly, 2 - record on server (display info only), 3 - record local
 	if(SwitchTimer == 1) {	
 		  try {
-		    switchtimerID = toi.schedulerService.schedule("SwitchOnly","notification", ProgTime , 0);
-		    toi.schedulerService.setParameter(switchtimerID, "Channel", currChan.toString() );
+		    switchtimerID = ss.schedule("SwitchOnly","notification", ProgTime , 0);
+		    ss.setParameter(switchtimerID, "Channel", currChan.toString() );
 		  }
 		  catch (e) {
 		    alert(e);
 		  }
 	} else if(SwitchTimer == 3) {	
 		  try {
-		    var x = toi.schedulerService.schedule("RecLocal","record_hd_from_ip", ProgTime , ProgDura);
-		    toi.schedulerService.setParameter(x, "Channel", currChan.toString() );
-		    toi.schedulerService.setParameter(x, "Title", ProgName );
+		    var x = ss.schedule("RecLocal","record_hd_from_ip", ProgTime , ProgDura);
+		    ss.setParameter(x, "Channel", currChan.toString() );
+		    ss.setParameter(x, "Title", ProgName );
 		  }
 		  catch (e) {
 		    alert(e);
@@ -1472,9 +1489,9 @@ function setOSDtimer() {
 		// Only for type "SwitchOnly"
 		var today = new Date;
 		today = today / 1000;
-		var x = toi.schedulerService.getBookingIds("SwitchOnly", today, 0)
+		var x = ss.getBookingIds("SwitchOnly", today, 0)
 		if (x.length !== 0) {
-		tijd = toi.schedulerService.getNextStartTime("SwitchOnly");
+		tijd = ss.getNextStartTime("SwitchOnly");
 		date = new Date(tijd*1000); 
 		tijd = date.toUTCString();
 		tijd = new Date(tijd);
@@ -2238,7 +2255,7 @@ function onKeyMenu(keyCode) {
     case "Up":
 	if (menu == 2) {
 	    timerID -= 1;
-			var x = toi.schedulerService.getBookingIds("*", 0, 0);
+			var x = ss.getBookingIds("*", 0, 0);
 		    if (timerID < x[0]) { timerID = x[0]; }
 	} else 	if (menu == 5 || menu == 7 || menu == 10) {
 	    timerID -= 1;
@@ -2249,7 +2266,7 @@ function onKeyMenu(keyCode) {
     case "Down":
 	if (menu == 2) {
 	    timerID += 1;
-		var x = toi.schedulerService.getBookingIds("*", 0, 0);
+		var x = ss.getBookingIds("*", 0, 0);
 		    if (timerID > x[x.length-1] ) { timerID = x[x.length-1]; }
 	} else 	if (menu == 5 || menu == 7 || menu == 10) {
 	    timerID += 1;
@@ -2259,7 +2276,7 @@ function onKeyMenu(keyCode) {
     break;
     case "Accept":
     	if (menu == 2 && isMediaMenu !== 1) {
-		var x = toi.schedulerService.getParameter(timerID, "assetURI");
+		var x = ss.getParameter(timerID, "assetURI");
 		getRecOK = 0;
 		LoadMediaSettings();
 		isSetupMenu = 0;
@@ -2299,10 +2316,10 @@ function onKeyMenu(keyCode) {
 		InitMenu(menu);
 		break;
 	} else if (menu == 2) {
-		var x = toi.schedulerService.getBookingIds("*", 0, 0);
+		var x = ss.getBookingIds("*", 0, 0);
 		if (x.length > 0) {
 			alert(timerID); //Show timerID for debug, some times it won't delete.
-			toi.schedulerService.remove(timerID);
+			ss.remove(timerID);
 			timer[timerID] = "";
 			LoadTimers();
 			if (timer.length !== 0) { do { timerID = timerID + 1; } while (!timer[timerID] && (timerID < timer.length)) }
@@ -2409,13 +2426,13 @@ function onKeyMenu(keyCode) {
     case "MediaRewind":
 	 if (menu == 1) {
 		if (experimental) { // mute output 0 (analog out), keep output 3 'decoder output' unmuted
-			toi.audioOutputService.setVolume(0, 0); 
+			aos.setVolume(0, 0); 
 			}
 	}
     break;
     case "MediaForward":
 	 if (menu == 1) {
-		if (experimental) { toi.audioOutputService.setVolume(0, 100); }
+		if (experimental) { aos.setVolume(0, 100); }
 	}
 
     break;
@@ -2721,7 +2738,7 @@ if(menu == 1) { // settings menu
 if(menu == 2) { // Timers menu
 	booking = "";
 	var x = timerID - 1;
-	var y = toi.schedulerService.getBookingIds("*", 0, 0);
+	var y = ss.getBookingIds("*", 0, 0);
 	if (y.length !== 0) {
 	for (var i=0;i<10;i++) {
 		if (timer.length !== 0) { do { x += 1; } while (!timer[x] && (x < timer.length)) }
@@ -2834,7 +2851,8 @@ if(menu == 9) { // INFO2 Menu
 		htmltext += "Experimental 2";
 		htmltext += "\n getmarks from";
 		if (Number(is.getObject("vip.getmarks"))) { htmltext += " smarttvweb "; } else { htmltext += " restfulapi "; }
-
+		htmltext += "\n EPGMode : "
+		if (EPGMode) { htmltext += "Full EPG"; } else { htmltext += "Now/Next Only"; }
 	} catch(e) {
 		alert("Error : " + e);
 	}
@@ -2872,12 +2890,12 @@ function SetGroup(isgroup) {
 function LoadTimers() {
 		timer.length = 0;
 		var booking = "";
-		var x = toi.schedulerService.getBookingIds("*", 0, 0);
+		var x = ss.getBookingIds("*", 0, 0);
 			for (var i=0;i<x.length;i++) { 
-				var y = toi.schedulerService.getBooking(x[i]);
+				var y = ss.getBooking(x[i]);
 				booking = "   ID " + x[i];
 				booking += " " + y.category;
-				booking += " " + toi.schedulerService.getParameter(x[i], "Channel");
+				booking += " " + ss.getParameter(x[i], "Channel");
 				tijd = y.start;
 				date = new Date(tijd*1000); 
 				tijd = date.toUTCString();
@@ -4237,7 +4255,7 @@ function pauseRec(uri) {
 
 function createNewAsset() {
 	try {
-		assetId = toi.assetManagerService.createAsset(toi.assetManagerService.ASSET_PVR);
+		assetId = ams.createAsset(ams.ASSET_PVR);
 		alert("Created " + assetId);
 	} catch(e) {
 		alert("Couldn't create asset: " + e);
@@ -4488,7 +4506,7 @@ function onScheduledStart(event) {
 	}
 
 	prevChan = currChan;
-	currChan = Number(toi.schedulerService.getParameter(event.booking.id, "Channel"));
+	currChan = Number(ss.getParameter(event.booking.id, "Channel"));
 	ChanGroup = Number(Left((currChan / 1000),1));
 
 	// check if Group isn't protected
@@ -4505,7 +4523,7 @@ function onScheduledStart(event) {
 	  try {
 	    createNewAsset();
 
-		var recChannr = Number(toi.schedulerService.getParameter(event.booking.id, "Channel"));
+		var recChannr = Number(ss.getParameter(event.booking.id, "Channel"));
 		var recGroup = Number(Left((recChannr / 1000),1));
 		var recChan = 0;
 		if (ServerAdres[recGroup] == "MultiCast" ) {
@@ -4517,12 +4535,12 @@ function onScheduledStart(event) {
 
 	    mediaRecorder.open(recChan, assetId);
 
-	    var propList = new Array(toi.assetManagerService.PROPERTY_SYSTEM_PLAYBACKURI);
-	    var properties = toi.assetManagerService.getProperties(assetId, propList);
+	    var propList = new Array(ams.PROPERTY_SYSTEM_PLAYBACKURI);
+	    var properties = ams.getProperties(assetId, propList);
 	    var assetURI = properties[0].value;
 
 	    // save the assetId in the booking
-	    toi.schedulerService.setParameter(event.booking.id, "assetURI", assetURI);
+	    ss.setParameter(event.booking.id, "assetURI", assetURI);
 
 	    mediaRecorder.record();
 	    alert("Recording to " + assetURI);
@@ -4537,7 +4555,7 @@ function onScheduledStart(event) {
 function onScheduledStop(event) {
     var timertype = event.booking.category;
 	if ( timertype == "SwitchOnly") {
-	    toi.schedulerService.remove(event.booking.id);
+	    ss.remove(event.booking.id);
 	    setOSDtimer();
 	} else {
 	  try {

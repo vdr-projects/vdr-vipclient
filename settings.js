@@ -57,6 +57,10 @@ var channeldigits = 2; // 0 - Max 9, 1 max 99, 2 max 999 or 3 max 9999 channels 
 
 var Fav_group = 10; // Favorite Group 10
 
+var EPGMode = 1; // 1 = FILTER_MODE_PF_AND_SCHEDULE 0 = FILTER_MODE_PF_ONLY
+
+
+
 //
 // No need to change anything from here on.
 //
