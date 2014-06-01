@@ -466,8 +466,15 @@ function play(uri) {
 	} else {
 	uri = ServerAdres[ChanGroup] + uri;
 	}
+
 	mediaPlayer.open(uri);
-	mediaPlayer.play(1000);
+
+	if (initialDelayPlayID != -1) {
+	  clearTimeout(initialDelayPlayID);
+	  initialDelayPlayID = -1;
+	}
+
+	initialDelayPlayID = setTimeout("mediaPlayer.play(1000);GetEPG(currChan);",500);
 	SetLed(1,1,0);
 
 	if(TimeShift){
@@ -492,7 +499,7 @@ function play(uri) {
 	}
 
 	showDisplay(Right(currChan.toString(),4), false, 100, 0 );
-        GetEPG(currChan);
+        
   } catch (e) {
     alert("Failed opening stream: " + e);
     alert("error: " + mediaPlayer.getTimeshiftError().source);
@@ -3447,6 +3454,15 @@ if (DelisOK) {
 	showMediaList();
 	}
 	break;
+   case KEY_1:
+	if (getRecOK == 1 && (recGroup[currMed] == 0 || subgroup == 1)) { 
+	// Only do reccmds if it isn't a subdir marker
+	reccmds(1);
+	// my reccmds.conf has on position 1 a move script so I add move file icon to medialist entry
+	recList[currMed] = "\uE005" + recList[currMed].substring(1);
+	showMediaList();
+	}
+	break;
 
 	default:
         break;
@@ -3862,6 +3878,18 @@ try {
   }
 
 }
+
+function reccmds(option) {
+try {
+        var xmlhttp = new XMLHttpRequest();
+        xmlhttp.open("POST", server_ip + recServ + "/execreccmd?cmd=" + option + "&guid=" + recGUID[currMed], false);
+        xmlhttp.send();
+  } catch(e) {
+    alert("Execute reccmds problem: " + e);
+  }
+
+}
+
 
 
 function getVDRstatus() {

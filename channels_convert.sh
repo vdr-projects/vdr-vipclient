@@ -1,10 +1,10 @@
 #! /bin/bash
 #
 # Script by rekordc@gmail.com
-# 0.34 17/05/2014
+# 0.35 02/06/2014
 #
 
-svdrpsend.pl lstc > channels.list
+svdrpsend.pl lstc -p 6419 > channels.list
 
 while IFS=: read Name Frequency Parameters Source SRate VPID APID TPID CA SID NID TID RID
 do 

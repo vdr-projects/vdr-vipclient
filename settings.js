@@ -2,7 +2,7 @@
 // Default settings
 // 
 
-var Version = "0.24.18";
+var Version = "0.24.19";
 
 server_ip_array = new Array("http://192.168.1.15","http://192.168.3.15","http://192.168.3.100","http://192.168.178.19","http://192.168.1.21");
 
@@ -243,6 +243,7 @@ var CAdelayID = 0;
 var ProtectID = 0;
 var SleepTimer = 0;
 var SleepTimerID = -1;
+var initialDelayPlayID = -1;
 
 var instanttimer = new Array();
 var inst_timer = 0;
