@@ -2301,8 +2301,9 @@ function onKeyMenu(keyCode) {
 	}
 	if (menu == 5) {
 		// Show EPG info Timer
-		ShowTimerInfo();
 		osdepginfo.style.opacity = 1 - osdepginfo.style.opacity;
+		osdepginfo.innerHTML = "<center><pre style='" + color_timerinfo + ";'>\n\n\n" + Lang[0] + "\n\n\n </pre></center>" ;
+		setTimeout("ShowTimerInfo();",100);
 	}
 	if (menu == 7) {
 		// Show more info Current SearchTimer
@@ -2418,8 +2419,9 @@ function onKeyMenu(keyCode) {
 		RestartPortal();
 	} else 	if (menu == 5) {
 		// Show EPG info Timer
-		ShowTimerInfo();
 		osdepginfo.style.opacity = 1 - osdepginfo.style.opacity;
+		osdepginfo.innerHTML = "<center><pre style='" + color_timerinfo + ";'>\n\n\n" + Lang[0] + "\n\n\n </pre></center>" ;
+		setTimeout("ShowTimerInfo();",100);
 	} else 	if (menu == 7) {
 		// Show info SearchTimers
 	       	osdepginfo.innerHTML = SearchTimer[timerID] ;
@@ -3058,10 +3060,10 @@ if (get_timer==1) {
 }
 
 function ShowTimerInfo() {
+ if (osdepginfo.style.opacity == 1) {
   //Like Show EPG Info
   //setup some dummy vars
   var info1 = ""; var info2 = ""; var info3 = ""; var info4="";
-
   if (timersEvnt[timerID] > 0) {
 
 	try {
@@ -3089,6 +3091,7 @@ function ShowTimerInfo() {
   }
        	osdepginfo.innerHTML = "<center><pre style='" + color_timerinfo + ";'>" + Left(info1,60) + "\n " + timersDays[timerID] + " " + 
 	timersStrt[timerID] + " - " + timersStop[timerID] + "\n" + info2 + "\n </pre><p>" + info3 + Left(info4,750) + "</p></center>" ;
+ }
 }
 
 function LoadSearchTimersServer() {
