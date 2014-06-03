@@ -3456,13 +3456,60 @@ if (DelisOK) {
 	break;
    case KEY_1:
 	if (getRecOK == 1 && (recGroup[currMed] == 0 || subgroup == 1)) { 
-	// Only do reccmds if it isn't a subdir marker
-	reccmds(1);
-	// my reccmds.conf has on position 1 a move script so I add move file icon to medialist entry
-	recList[currMed] = "\uE005" + recList[currMed].substring(1);
-	showMediaList();
+		// Only do reccmds if it isn't a subdir marker
+		reccmds(1);
 	}
 	break;
+   case KEY_2:
+	if (getRecOK == 1 && (recGroup[currMed] == 0 || subgroup == 1)) { 
+		// Only do reccmds if it isn't a subdir marker
+		reccmds(2);
+	}
+	break;
+   case KEY_3:
+	if (getRecOK == 1 && (recGroup[currMed] == 0 || subgroup == 1)) { 
+		// Only do reccmds if it isn't a subdir marker
+		reccmds(3);
+	}
+	break;
+   case KEY_4:
+	if (getRecOK == 1 && (recGroup[currMed] == 0 || subgroup == 1)) { 
+		// Only do reccmds if it isn't a subdir marker
+		reccmds(4);
+	}
+	break;
+   case KEY_5:
+	if (getRecOK == 1 && (recGroup[currMed] == 0 || subgroup == 1)) { 
+		// Only do reccmds if it isn't a subdir marker
+		reccmds(5);
+	}
+	break;
+   case KEY_6:
+	if (getRecOK == 1 && (recGroup[currMed] == 0 || subgroup == 1)) { 
+		// Only do reccmds if it isn't a subdir marker
+		reccmds(6);
+	}
+	break;
+   case KEY_7:
+	if (getRecOK == 1 && (recGroup[currMed] == 0 || subgroup == 1)) { 
+		// Only do reccmds if it isn't a subdir marker
+		reccmds(7);
+	}
+	break;
+   case KEY_8:
+	if (getRecOK == 1 && (recGroup[currMed] == 0 || subgroup == 1)) { 
+		// Only do reccmds if it isn't a subdir marker
+		reccmds(8);
+	}
+	break;
+   case KEY_9:
+	if (getRecOK == 1 && (recGroup[currMed] == 0 || subgroup == 1)) { 
+		// Only do reccmds if it isn't a subdir marker
+		reccmds(9);
+	}
+	break;
+
+
 
 	default:
         break;
@@ -3881,9 +3928,14 @@ try {
 
 function reccmds(option) {
 try {
-        var xmlhttp = new XMLHttpRequest();
-        xmlhttp.open("POST", server_ip + recServ + "/execreccmd?cmd=" + option + "&guid=" + recGUID[currMed], false);
-        xmlhttp.send();
+	option = Number(option);
+	if (RecCmds[option] > -1 ) {
+	        var xmlhttp = new XMLHttpRequest();
+	        xmlhttp.open("POST", server_ip + recServ + "/execreccmd?cmd=" + RecCmds[option] + "&guid=" + recGUID[currMed], false);
+	        xmlhttp.send();
+		recList[currMed] = RecCmdsIcon[option] + recList[currMed].substring(1);
+		showMediaList();
+	}
   } catch(e) {
     alert("Execute reccmds problem: " + e);
   }

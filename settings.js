@@ -59,6 +59,8 @@ var Fav_group = 10; // Favorite Group 10
 
 var EPGMode = 1; // 1 = FILTER_MODE_PF_AND_SCHEDULE 0 = FILTER_MODE_PF_ONLY
 
+var RecCmds = new Array(-1,1,-1,-1,-1,-1,-1,-1,-1,-1);
+var RecCmdsIcon = new Array("","\uE005","","","","","","","","");
 
 
 //
