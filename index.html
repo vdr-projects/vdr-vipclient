@@ -473,28 +473,11 @@ function play(uri) {
 	}
 
 	URL = uri;
-	initialDelayPlayID = setTimeout("mediaPlayer.open(URL);mediaPlayer.play(1000);GetEPG(currChan);",initialDelayPlay);
+	initialDelayPlayID = setTimeout("mediaPlayer.open(URL);mediaPlayer.play(1000);GetEPG(currChan);ExtraStuff();",initialDelayPlay);
 	SetLed(1,1,0);
-
-	if(TimeShift){
-	    initialDelayID = setTimeout("startTimeshiftBuffering();", 5000);
-	}
 
 	if(isFullscreen) {
 	showOSD();
-	}
-
-	if(testing2) {
-			if (CAdelayID != -1) { clearTimeout(CAdelayID); CAdelayID = -1; switchtimer.style.opacity = 0;}
-		if ( 	(currChan > 10 && currChan < 26 )  || (currChan > 40 && currChan < 50 )   || (currChan > 50 && currChan < 120 ) ||
-			(currChan > 151 && currChan < 200) || (currChan > 604 && currChan < 612 ) || (currChan > 624 && currChan < 631) ||
-			(currChan > 632 && currChan < 700) || (currChan > 8004 && currChan < 8027) )
-		{
-			//Show info if set nonfree
-			switchtimer.innerHTML = "<pre><center>\n" + Lang[90] +"\n\n </center></pre>"; // Non free channel message
-			switchtimer.style.opacity = 1;
-			CAdelayID = setTimeout("switchtimer.style.opacity = 0; ",ShowSetTimer);
-		}
 	}
 
 	showDisplay(Right(currChan.toString(),4), false, 100, 0 );
@@ -663,6 +646,25 @@ if (zero<10)
   }
 
 return zero;
+}
+
+function ExtraStuff(){
+	if(TimeShift){
+	    initialDelayID = setTimeout("startTimeshiftBuffering();", 5000);
+	}
+	if(testing2) {
+			if (CAdelayID != -1) { clearTimeout(CAdelayID); CAdelayID = -1; switchtimer.style.opacity = 0;}
+		if ( 	(currChan > 10 && currChan < 26 )  || (currChan > 40 && currChan < 50 )   || (currChan > 50 && currChan < 120 ) ||
+			(currChan > 151 && currChan < 200) || (currChan > 604 && currChan < 612 ) || (currChan > 624 && currChan < 631) ||
+			(currChan > 632 && currChan < 700) || (currChan > 8004 && currChan < 8027) )
+		{
+			//Show info if set nonfree
+			switchtimer.innerHTML = "<pre><center>\n" + Lang[90] +"\n\n </center></pre>"; // Non free channel message
+			switchtimer.style.opacity = 1;
+			CAdelayID = setTimeout("switchtimer.style.opacity = 0; ",ShowSetTimer);
+		}
+	}
+
 }
 
 function startTimeshiftBuffering() {
