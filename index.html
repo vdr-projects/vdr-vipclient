@@ -467,14 +467,13 @@ function play(uri) {
 	uri = ServerAdres[ChanGroup] + uri;
 	}
 
-	mediaPlayer.open(uri);
-
 	if (initialDelayPlayID != -1) {
 	  clearTimeout(initialDelayPlayID);
 	  initialDelayPlayID = -1;
 	}
 
-	initialDelayPlayID = setTimeout("mediaPlayer.play(1000);GetEPG(currChan);",500);
+	URL = uri;
+	initialDelayPlayID = setTimeout("mediaPlayer.open(URL);mediaPlayer.play(1000);GetEPG(currChan);",initialDelayPlay);
 	SetLed(1,1,0);
 
 	if(TimeShift){
@@ -494,7 +493,7 @@ function play(uri) {
 			//Show info if set nonfree
 			switchtimer.innerHTML = "<pre><center>\n" + Lang[90] +"\n\n </center></pre>"; // Non free channel message
 			switchtimer.style.opacity = 1;
-			CAdelayID = setTimeout("switchtimer.style.opacity = 0; ", (ShowSetTimer + ShowOsdTime) );
+			CAdelayID = setTimeout("switchtimer.style.opacity = 0; ",ShowSetTimer);
 		}
 	}
 
@@ -856,6 +855,7 @@ function onKeyDown(event) {
 			epgactive = 0;
 		}
 		mediaList.style.opacity = 0.9;
+		set_yellow_key = 1;
 		setTimeout("getSchedule(currChan);LoadMediaSettings();",100);
 	} else {
 		GetSchedule(currChan,15);
@@ -3307,6 +3307,7 @@ function UnloadMediaSettings() {
 	isMediaMenu = 0;
 	isFullscreen = 1;
 	isPause = 0;
+	set_yellow_key = 0;
 	if (mediaPlayer.getState() != mediaPlayer.STATE_PLAYING ) {
         play(channels[currChan]);
 	}
@@ -3336,12 +3337,15 @@ if (DelisOK) {
 		break;
 	}
 	if (osdepginfo.style.opacity == 1) { osdepginfo.style.opacity = 0; break; }
-    case "Yellow":
-	//hide/display schedule with same button
     case "TV":
 	UnloadMediaSettings();
         break;
-    break;
+    case "Yellow":
+	if (set_yellow_key) { 
+		//hide/display schedule with same button
+		UnloadMediaSettings();
+	}
+	break;
     case "Right":
 	if (getRecOK !== 0) {
            for (var i=0;i<10;i++) {
