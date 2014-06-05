@@ -348,5 +348,5 @@ var Chan_Ver = "Not set";
 var Fav_key1; 
 var set_yellow_key = 0;
 var URL;
-var initialDelayPlay = 300; // wait 300 ms before zap to next channel;
-
+var initialDelayPlay = 0; 
+var PlayDelayID;

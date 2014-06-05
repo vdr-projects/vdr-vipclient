@@ -447,40 +447,27 @@ try {
 
 function play(uri) {
   try {
-	if (initialDelayID != -1) {
-	  clearTimeout(initialDelayID);
-	  initialDelayID = -1;
-	}
-    if (mediaPlayer.getState() != mediaPlayer.STATE_IDLE) {
-      mediaPlayer.close();
-    }
+    if (initialDelayID != -1) { clearTimeout(initialDelayID); initialDelayID = -1; }
+    if (PlayDelayID != -1) { clearTimeout(PlayDelayID); PlayDelayID = -1; }
+    if (initialDelayPlayID != -1) { clearTimeout(initialDelayPlayID); initialDelayPlayID = -1; }
 
-	if (isSchedule) { schedule.style.opacity = 0; isSchedule = 0;}
-	if (epgactive) { osdepginfo.style.opacity = 0; osdepginfonext.style.opacity = 0; epgactive = 0;}
+    if (mediaPlayer.getState() != mediaPlayer.STATE_IDLE) { mediaPlayer.close(); }
+    if (isSchedule) { schedule.style.opacity = 0; isSchedule = 0;}
+    if (epgactive) { osdepginfo.style.opacity = 0; osdepginfonext.style.opacity = 0; epgactive = 0;}
 
-	if (ServerAdres[ChanGroup] == "MultiCast" ) {
- 	SI=channels[currChan].split("-");
-	uri = SI[4];
-	} else if (ServerAdres[ChanGroup] == "FullURL" ) {
-	// uri = ready!
-	} else {
-	uri = ServerAdres[ChanGroup] + uri;
-	}
+    if (ServerAdres[ChanGroup] == "MultiCast" ) { SI=channels[currChan].split("-"); uri = SI[4];
+    } else if (ServerAdres[ChanGroup] == "FullURL" ) {	// uri = ready!
+    } else { uri = ServerAdres[ChanGroup] + uri; }
 
-	if (initialDelayPlayID != -1) {
-	  clearTimeout(initialDelayPlayID);
-	  initialDelayPlayID = -1;
-	}
+    URL = uri;
+    initialDelayPlayID = setTimeout("mediaPlayer.open(URL);mediaPlayer.play(1000);GetEPG(currChan);ExtraStuff();",initialDelayPlay);
+    initialDelayPlay = 300; // wait 300 ms before zap to next channel
+    PlayDelayID = setTimeout("initialDelayPlay = 0;",1500);
+    SetLed(1,1,0);
 
-	URL = uri;
-	initialDelayPlayID = setTimeout("mediaPlayer.open(URL);mediaPlayer.play(1000);GetEPG(currChan);ExtraStuff();",initialDelayPlay);
-	SetLed(1,1,0);
+    if(isFullscreen) { showOSD(); }
 
-	if(isFullscreen) {
-	showOSD();
-	}
-
-	showDisplay(Right(currChan.toString(),4), false, 100, 0 );
+    showDisplay(Right(currChan.toString(),4), false, 100, 0 );
         
   } catch (e) {
     alert("Failed opening stream: " + e);
