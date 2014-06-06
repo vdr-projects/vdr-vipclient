@@ -461,8 +461,8 @@ function play(uri) {
 
     URL = uri;
     initialDelayPlayID = setTimeout("mediaPlayer.open(URL);mediaPlayer.play(1000);GetEPG(currChan);ExtraStuff();",initialDelayPlay);
-    initialDelayPlay = 300; // wait 300 ms before zap to next channel
-    PlayDelayID = setTimeout("initialDelayPlay = 0;",1500);
+    initialDelayPlay = 500; // wait 500 ms before zap to next channel
+    PlayDelayID = setTimeout("initialDelayPlay = 0;",5000);
     SetLed(1,1,0);
 
     if(isFullscreen) { showOSD(); }
@@ -3924,7 +3924,7 @@ try {
 	option = Number(option);
 	if (RecCmds[option] > -1 ) {
 	        var xmlhttp = new XMLHttpRequest();
-	        xmlhttp.open("POST", server_ip + recServ + "/execreccmd?cmd=" + RecCmds[option] + "&guid=" + recGUID[currMed], false);
+	        xmlhttp.open("POST", server_ip + recServ + "/execreccmd?cmd=" + RecCmds[option] + "&guid=\"" + recGUID[currMed] + "\"", false);
 	        xmlhttp.send();
 		recList[currMed] = RecCmdsIcon[option] + recList[currMed].substring(1);
 		showMediaList();

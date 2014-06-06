@@ -22,7 +22,7 @@ VDR 1.7.29+
 	Updated channels script, now adds timestamp to list which is shown in info menu.
 	EPG Mode can be set (Now/Next only or Full EPG from stream)
 	Client for MPD (http://www.musicpd.org/) turned off by default (settings.js) 
-	Some times after fast zapping you get an connection error. Next play after zap within 1,5 s has 300 ms delay.
+	Some times after fast zapping you get an connection error. Next play after zap within 5 s has 500 ms delay.
 	support for reccmds.conf (max 9 options can be used) and must be enabled in smarttvweb plugin
 		in recordings menu key_1 selects reccmds.conf option 1 (In my case move to other HDD script)
 
