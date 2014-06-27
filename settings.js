@@ -350,3 +350,5 @@ var set_yellow_key = 0;
 var URL;
 var initialDelayPlay = 0; 
 var PlayDelayID;
+var PIPDelayID;
+
