@@ -2,9 +2,9 @@
 // Default settings
 // 
 
-var Version = "0.24.21";
+var Version = "0.24.22";
 
-server_ip_array = new Array("http://192.168.1.15","http://192.168.3.15","http://192.168.3.100","http://192.168.178.19","http://192.168.1.21");
+server_ip_array = new Array("http://192.168.1.15","http://192.168.3.15","http://easyvdr","http://192.168.3.100","http://192.168.178.19","http://192.168.1.21","http://192.168.2.100","http://192.168.178.52");
 
 var server_ip = server_ip_array[0]; // default server
 var StartVolume = 15; // Volume on (re)start of the portal.
@@ -24,7 +24,7 @@ var UseNewReclist = 1 ; //use new recordingslist function
 var ShowSubDir = 1 ; // 0 = no, 1 = yes (default) // show seperate maps for subdirs in menu recordings
 var showClock = 0;   // 0 = no, 1 = yes
 var SwitchGuide = 0; // 0 = no, 1 = yes
-var PipSwitchGuide = 1; // 0 = no, 1 = yes // use second/pip player for getting epg update in guide view // !!Unstable!! box might restart
+var PipSwitchGuide = 0; // 0 = no, 1 = yes // use second/pip player for getting epg update in guide view // !!Unstable!! box might restart
 var TimeShift = 0;   // 0 = no, 1 = yes timeshift
 var KillStream = 1;  // 1 = Close stream on Standby
 var ShowProtectedChannels = 1; // 0 = yes show, 1 = don't show protected channels (default)
@@ -351,4 +351,4 @@ var URL;
 var initialDelayPlay = 0; 
 var PlayDelayID;
 var PIPDelayID;
-
+var ErrorAgain = 0;

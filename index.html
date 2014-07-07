@@ -3235,10 +3235,20 @@ function MPD(ev) {
 //     alert("Media player error :" + mediaPlayer.getError().details);
 if (MPDListener == 0) {
 	if (ev.state == 6 ) { 
-		alert("Media player state changed: state=" + ev.state + ", reason=" + ev.reason + ", code=" + ev.code);
-		showDisplay("ERRR", false, 100, 0 ); 
-		settimer(0,Lang[67],0,2);
+		if (ev.reason == "CommandClose" && ErrorAgain == 0) {
+			setTimeout("mediaPlayer.open(URL);mediaPlayer.play(1000);GetEPG(currChan);ExtraStuff();",500);
+			ErrorAgain = 1;
+		} else {
+			ErrorAgain = 0;
+			alert("Media player state changed: state=" + ev.state + ", reason=" + ev.reason + ", code=" + ev.code);
+			showDisplay("ERRR", false, 100, 0 ); 
+			if (experimental) {
+				settimer(0,ev.reason,0,2);
+			} else {
+				settimer(0,Lang[67],0,2);
+			}
 		}
+	}
 	
 } else {
 	if ( ev.state == 6 && ev.reason == "HostUnreachable" ) {
@@ -4400,35 +4410,46 @@ function ServerRecordStart() {
 	   xmlhttp.send();
 
 		if (xmlhttp.responseXML == null) {
-		    settimer(EPG[NowNext][2][currChan],Lang[55],0,2);
+		    //settimer(EPG[NowNext][2][currChan],Lang[55],0,2);
+		    //Timer not set, try direct recording
+		    ServerRecord();
+		    settimer(0,Lang[57],0,2);
 		} else {
 		   settimer(EPG[NowNext][2][currChan],EPG[NowNext][1][currChan],0,2);
 		}
 
 	  } catch(e) {
 	    alert("Sending Timers to server problem: " + e);
+	    settimer(0,Lang[55],0,2);
 	  }
 
 }
 
-function ServerPause() {
-//Instant pause on server
+
+function ServerRecord() {
+//Instant record on server
 
   try {
-   xmlhttp=new XMLHttpRequest();
+	xmlhttp=new XMLHttpRequest();
 	//switch server to current channel
-   xmlhttp.open("POST",(server_ip + RestFulAPI + "/remote/switch/" + channels[currChan]),true);
-   xmlhttp.send();
-	//start pause
-   setTimeout("xmlhttp.open('POST',(server_ip + RestFulAPI + '/remote/Record'),false);xmlhttp.send();",5000);
-
-	//Show some info on screen
-   settimer(EPG[NowNext][2][currChan],Lang[70],0,2);
-
+	xmlhttp.open("POST",(server_ip + RestFulAPI + "/remote/switch/" + channels[currChan]),true);
+	xmlhttp.send();
+	//start recording
+	setTimeout("xmlhttp.open('POST',(server_ip + RestFulAPI + '/remote/Record'),false);xmlhttp.send();",5000);
   } catch(e) {
-   alert("Sending Pause key to server problem: " + e);
+   alert("Sending key to server problem: " + e);
+   settimer(0,Lang[55],0,2);
   }
 
+//end of function
+}
+
+
+
+function ServerPause() {
+//Instant pause on server
+	ServerRecord();
+	settimer(EPG[NowNext][2][currChan],Lang[70],0,2);
 	setTimeout("getPauseFile();",6000);
 //end of function
 }

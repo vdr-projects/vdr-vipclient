@@ -95,6 +95,7 @@ Lang[53] = " ERROR getting EPG !!! ";
 Lang[54] = " Minutes ";
 Lang[55] = "ERROR starting recording";
 Lang[56] = "Min.";
+Lang[57] = "Recording started";
 
 Lang[60] = " MPD Connection ";
 Lang[61] = " Retry ";
@@ -114,5 +115,6 @@ Lang[84] = " Move UP ";
 Lang[85] = " Move Down ";
 Lang[86] = " ADD ";
 Lang[87] = " Delete ";
+
 
 Lang[90] = "No subscription for this channel";
