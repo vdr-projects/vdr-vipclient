@@ -261,7 +261,7 @@ function GetSettings() {
 	}
 	//Check if there is a SmartTV VDR server plugin
 	getVDRstatus(1);
-	if (smartTVplugin) {
+	if (smartTVplugin == 0) {
 		// No smartTVplugin.
 		get_timer = 0;
 		get_recordings = 0;
