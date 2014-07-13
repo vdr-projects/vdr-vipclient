@@ -2716,11 +2716,29 @@ osdepginfo.style.opacity = 0;
 if(menu == 0) { // Main Menu
 	MainMenu = 0;
 	var htmltext = "<h1><center style='font-size:" + fsMenuMain + ";" + color_main_head + ";'>" + Lang[9] + "\n ( " + Version + " )</center></h1><pre style='" + color_main_font + ";font-size:" + fsMenu + ";'>   1 -" + Lang[10] + "\n   2 -" + Lang[7] + "\n   3 -" + Lang[11];
-	if (smartTVplugin) { htmltext += "\n   4 -" + Lang[12]; } else { htmltext += "\n   4 -" + Lang[19]; }
-	htmltext += "\n   5 -" + Lang[13] + "\n   6 -" + Lang[14]; 
-	if (smartTVplugin) { htmltext += "\n   7 -" + Lang[15]; } else { htmltext += "\n   7 -" + Lang[19]; }
+	if (smartTVplugin) { 
+		htmltext += "\n   4 -" + Lang[12]; 
+	} else { 
+		htmltext += "<font style='" + color_notset +";'>" + "\n   4 -" + Lang[12] + "<font style='" + color_main_font +";'>" ;
+	}
+//	if (smartTVplugin) { 
+		htmltext += "\n   5 -" + Lang[13]; 
+//	} else { 
+//		htmltext += "<font style='" + color_notset +";'>" + "\n   5 -" + Lang[13] + "<font style='" + color_main_font +";'>" ; 
+//	}
+	htmltext += "\n   6 -" + Lang[14]; 
+	if (smartTVplugin) { 
+		htmltext += "\n   7 -" + Lang[15]; 
+	} else { 
+		htmltext += "<font style='" + color_notset +";'>" + "\n   7 -" + Lang[15] + "<font style='" + color_main_font +";'>" ; 
+	}
 	htmltext += "\n   8 -" + Lang[16];
-	if (ShowMPD) { htmltext += "\n   9 -" + Lang[17]; } else { htmltext += "\n   9 -" + Lang[19]; }
+	if (ShowMPD) { 
+		htmltext += "\n   9 -" + Lang[17]; 
+	} else { 
+		htmltext += "<font style='" + color_notset +";'>" + "\n   9 -" + Lang[17] + "<font style='" + color_main_font +";'>" ; 
+	}
+
 	htmltext += "\n   0 - " + Lang[83] + "\n\n   <font style='color:red;'>\u25CF<font style='" + color_main_font + ";'> -" + Lang[19] + "<font style='color:green;'>\u25CF<font style='" + color_main_font + ";'> -" + Lang[19] + "<font style='color:yellow;'>\u25CF<font style='" + color_main_font + ";'> -" + Lang[35] + "   <font style='color:blue;'>\u25CF<font style='" + color_main_font + ";'> -" + Lang[18] + "</pre>";
 	mainmenu.innerHTML = htmltext;
 }
@@ -2992,9 +3010,9 @@ try {
 	  timers[i] += timersDays[i] + "\uE003" + timersStrt[i] + "\uE003" + timersStop[i] + "\uE003" + Left(timersName[i],8) + "\uE003" + Left(timersFile[i],15) + "\n" ;
 	  timerOK = 1;
 	  }
- } else {
+ } else if (get_timer == 0) {
    xmlhttp=new XMLHttpRequest();
-   xmlhttp.open("GET",(RestFulAPI + "/timers.xml"),false);  // ?" + new Date().getTime()),false);
+   xmlhttp.open("GET",(server_ip + RestFulAPI + "/timers.xml"),false);  // ?" + new Date().getTime()),false);
    xmlhttp.send();
    xmlDoc=xmlhttp.responseXML; 
    var x=xmlDoc.getElementsByTagName("timer");
@@ -3023,13 +3041,14 @@ try {
 	  timersFile[i] = x[i].getElementsByTagName("param")[14].childNodes[0].nodeValue + fill + fill;
 	  timer[i] += timersDays[i] + "\uE003" + timersStrt[i] + "\uE003" + timersStop[i] + "\uE003" + Left(timersName[i],8) + "\uE003" + Left(timersFile[i],15) + "\n" ;
 	  timerOK = 1;
+	  alert (timer[i]);
 	  }
 
  }
   } catch(e) {
     timerOK = 0;
     alert("Get Timers problem: " + e);
-    mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";" + color_main_head + ";'>" + Lang[7] + "</center></h1><pre style='" + color_main_font + ";font-size:" + fsMenu + ";'><center>\n  " + Lang[36] + ": \n " + server_ip + recServ + "</center></pre>";
+    mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";" + color_main_head + ";'>" + Lang[7] + "</center></h1><pre style='" + color_main_font + ";font-size:" + fsMenu + ";'><center>\n  " + Lang[36] + ": \n " + server_ip + "</center></pre>";
   }
 }
 
@@ -4079,6 +4098,9 @@ try {
 	  free_space = x[0].getElementsByTagName("free")[0].childNodes[0].nodeValue;
 	  used_space = x[0].getElementsByTagName("used")[0].childNodes[0].nodeValue;
 	  perc_space = x[0].getElementsByTagName("percent")[0].childNodes[0].nodeValue;
+    if (CheckStatus) {
+	smartTVplugin = 1;
+    }
   } catch(e) {
     alert("Get VDR Status problem: " + e);
     if (CheckStatus) {

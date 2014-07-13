@@ -18,7 +18,6 @@ var subs_prio = "dut,eng"; //Subtitle prio
 
 var get_timer = 1; // gettimersserver 1 = smarttvweb, 0 = restfulapi
 var get_recordings = 1; // getrecordings 0 = restfulapi(only showing no play), 1 = smarttvweb, 2 = streamdev (not working yet)
-var smartTVplugin = 0; // Turn on or off the use of smartTVplugin
 
 var UseNewReclist = 1 ; //use new recordingslist function
 
@@ -353,3 +352,4 @@ var initialDelayPlay = 0;
 var PlayDelayID;
 var PIPDelayID;
 var ErrorAgain = 0;
+var smartTVplugin; // Turn on or off the use of smartTVplugin
