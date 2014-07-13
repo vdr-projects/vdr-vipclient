@@ -2887,6 +2887,15 @@ if(menu == 9) { // INFO2 Menu
 		htmltext += "Experimental";
 		if (Number(is.getObject("vip.testing2"))) { htmltext += "\n \uE017 "; } else { htmltext += "\n \uE016 "; }
 		htmltext += "Experimental 2";
+		if (smartTVplugin) { htmltext += "\n\n \uE017 "; } else { htmltext += "\n \uE016 "; }
+		htmltext += "Has smartTVplugin"
+		htmltext += "\n gettimers from";
+		if (get_timer == 1) { 
+			htmltext += " smarttvweb "; 
+		} else { 
+			htmltext += " restfulapi "; 
+		}
+
 		htmltext += "\n getmarks from";
 		if (Number(is.getObject("vip.getmarks"))) { htmltext += " smarttvweb "; } else { htmltext += " restfulapi "; }
 		htmltext += "\n getrecordings from";
@@ -2897,8 +2906,6 @@ if(menu == 9) { // INFO2 Menu
 		} else {
 			htmltext += " streamdev "; 
 		}
-		if (smartTVplugin) { htmltext += "\n \uE017 "; } else { htmltext += "\n \uE016 "; }
-		htmltext += "Has smartTVplugin"
 		htmltext += "\n EPGMode : "
 		if (EPGMode) { htmltext += "Full EPG"; } else { htmltext += "Now/Next Only"; }
 	} catch(e) {
@@ -3020,16 +3027,22 @@ try {
 	  { 
 		var fill = "\uE003\uE003\uE003\uE003\uE003\uE003\uE003\uE003\uE003\uE003";
 	  timersID[i] = x[i].getElementsByTagName("param")[0].childNodes[0].nodeValue;
+	alert("ID : " + timersID[i]);
 	  timersFlag[i] = x[i].getElementsByTagName("param")[1].childNodes[0].nodeValue;
+	alert("FLag : " + timersFlag[i]);
 	  timersStrt[i] = Right("00" + x[i].getElementsByTagName("param")[2].childNodes[0].nodeValue,4);
 	  timersStop[i] = Right("00" + x[i].getElementsByTagName("param")[3].childNodes[0].nodeValue,4);
+	alert("Start : " + timersStrt[i]);
+	alert("Stop : " + timersStop[i]);
 	  timersDays[i] = x[i].getElementsByTagName("param")[9].childNodes[0].nodeValue;
 	  if (timersDays[i] == "-------" ) { 
 		timersDays[i] = x[i].getElementsByTagName("param")[10].childNodes[0].nodeValue;
 	  } else { 
 		timersDays[i] += "\uE003\uE003\uE003";
 	  }
+	alert ("Day : "+timersDays[i]);
 	  timersName[i] = x[i].getElementsByTagName("param")[15].childNodes[0].nodeValue + fill;
+	alert ("Name :" + timersName[i]);
 	  if (timersFlag[i] == "1") { 
 		timer[i] = "\uE003\uE00C\uE003";
 	  } else if (timersFlag[i] == "9") { 
@@ -3038,9 +3051,9 @@ try {
 		timer[i] = "\uE003\uE003\uE003";
 	  }
 	  timersFile[i] = x[i].getElementsByTagName("param")[14].childNodes[0].nodeValue + fill + fill;
+	alert("File : " + timersFile[i]);
 	  timer[i] += timersDays[i] + "\uE003" + timersStrt[i] + "\uE003" + timersStop[i] + "\uE003" + Left(timersName[i],8) + "\uE003" + Left(timersFile[i],15) + "\n" ;
 	  timerOK = 1;
-	  alert (timer[i]);
 	  }
 
  }
