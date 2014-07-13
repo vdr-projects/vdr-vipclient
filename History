@@ -3,7 +3,7 @@ Motorola Vip : 1960, 1910, 1903, 1963.
 
 VDR 1.7.29+
 
-0.25	:
+0.25	Get recordings from Streamdev, Restfapi or SmartTVweb but still only play works with SmartTVweb plugin
 
 
 0.24	vip.getmarks used for selecting getmarks 0 = restfulapi, 1 = SmartTVWeb (not all users have the newest SmartTVWeb)

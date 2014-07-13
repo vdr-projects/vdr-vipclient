@@ -259,6 +259,13 @@ function GetSettings() {
 	for (var i = minChan[Fav_group];  i < (maxChan[Fav_group]+10); i++) { 
 		EPG[0][4][i] = "";EPG[1][4][i] = "";EPG[0][5][i] = "";EPG[1][5][i] = "";EPG[0][7][i] = "";EPG[1][7][i] = "";AvInfo[i] = "";
 	}
+	//Check if there is a SmartTV VDR server plugin
+	getVDRstatus(1);
+	if (smartTVplugin) {
+		// No smartTVplugin.
+		get_timer = 0;
+		get_recordings = 0;
+	}
 }
 
 function loadjs(filename){
@@ -2517,7 +2524,7 @@ function onKeyMenu(keyCode) {
 
 	break;
 	case KEY_4:
-		if (menu == 0) {
+		if (menu == 0 && smartTVplugin) {
 			isSetupMenu = 0;
 			mediaList.style.opacity = 0.9;
 			mainmenu.style.opacity = 0;
@@ -2584,7 +2591,7 @@ function onKeyMenu(keyCode) {
 
 	break;
 	case KEY_7:
-		if (menu == 0) {
+		if (menu == 0 && smartTVplugin) {
 			isSetupMenu = 0;
 			mediaList.style.opacity = 0.9;
 			mainmenu.style.opacity = 0;
@@ -2708,7 +2715,11 @@ osdepginfo.style.opacity = 0;
 
 if(menu == 0) { // Main Menu
 	MainMenu = 0;
-	var htmltext = "<h1><center style='font-size:" + fsMenuMain + ";" + color_main_head + ";'>" + Lang[9] + "\n ( " + Version + " )</center></h1><pre style='" + color_main_font + ";font-size:" + fsMenu + ";'>   1 -" + Lang[10] + "\n   2 -" + Lang[7] + "\n   3 -" + Lang[11] + "\n   4 -" + Lang[12] + "\n   5 -" + Lang[13] + "\n   6 -" + Lang[14] + "\n   7 -" + Lang[15] + "\n   8 -" + Lang[16];
+	var htmltext = "<h1><center style='font-size:" + fsMenuMain + ";" + color_main_head + ";'>" + Lang[9] + "\n ( " + Version + " )</center></h1><pre style='" + color_main_font + ";font-size:" + fsMenu + ";'>   1 -" + Lang[10] + "\n   2 -" + Lang[7] + "\n   3 -" + Lang[11];
+	if (smartTVplugin) { htmltext += "\n   4 -" + Lang[12]; } else { htmltext += "\n   4 -" + Lang[19]; }
+	htmltext += "\n   5 -" + Lang[13] + "\n   6 -" + Lang[14]; 
+	if (smartTVplugin) { htmltext += "\n   7 -" + Lang[15]; } else { htmltext += "\n   7 -" + Lang[19]; }
+	htmltext += "\n   8 -" + Lang[16];
 	if (ShowMPD) { htmltext += "\n   9 -" + Lang[17]; } else { htmltext += "\n   9 -" + Lang[19]; }
 	htmltext += "\n   0 - " + Lang[83] + "\n\n   <font style='color:red;'>\u25CF<font style='" + color_main_font + ";'> -" + Lang[19] + "<font style='color:green;'>\u25CF<font style='" + color_main_font + ";'> -" + Lang[19] + "<font style='color:yellow;'>\u25CF<font style='" + color_main_font + ";'> -" + Lang[35] + "   <font style='color:blue;'>\u25CF<font style='" + color_main_font + ";'> -" + Lang[18] + "</pre>";
 	mainmenu.innerHTML = htmltext;
@@ -2869,6 +2880,8 @@ if(menu == 9) { // INFO2 Menu
 		} else {
 			htmltext += " streamdev "; 
 		}
+		if (smartTVplugin) { htmltext += "\n \uE017 "; } else { htmltext += "\n \uE016 "; }
+		htmltext += "Has smartTVplugin"
 		htmltext += "\n EPGMode : "
 		if (EPGMode) { htmltext += "Full EPG"; } else { htmltext += "Now/Next Only"; }
 	} catch(e) {
@@ -4055,7 +4068,7 @@ try {
 
 
 
-function getVDRstatus() {
+function getVDRstatus(CheckStatus) {
 try {
    xmlhttp=new XMLHttpRequest();
    xmlhttp.open("GET",(server_ip + recServ + "/vdrstatus.xml?" + new Date().getTime()),false);
@@ -4068,6 +4081,9 @@ try {
 	  perc_space = x[0].getElementsByTagName("percent")[0].childNodes[0].nodeValue;
   } catch(e) {
     alert("Get VDR Status problem: " + e);
+    if (CheckStatus) {
+	smartTVplugin = 0;
+    }
   }
 }
 
