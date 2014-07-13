@@ -2338,7 +2338,7 @@ function onKeyMenu(keyCode) {
 			setOSDtimer();
 			InitMenu(menu);
 		}
-	} else 	if (menu == 5) {
+	} else 	if (menu == 5 && smartTVplugin) {
 		osdepginfo.style.opacity = 0;
 		mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";" + color_main_head + ";'>" + Lang[7] + "</center></h1><pre style='" + color_main_font + ";font-size:" + fsMenu + ";'>\n\n\n<center>" + Lang[0] + "</center></pre>";
 		DeleteTimers();
@@ -2366,7 +2366,7 @@ function onKeyMenu(keyCode) {
 
 		VideoOutput();
 		InitMenu(menu);
-	} else 	if (menu == 5) {
+	} else 	if (menu == 5 && smartTVplugin) {
 		activate_timers(timerID);
 		InitMenu(menu);
 	} else 	if (menu == 10) {
@@ -2721,11 +2721,7 @@ if(menu == 0) { // Main Menu
 	} else { 
 		htmltext += "<font style='" + color_notset +";'>" + "\n   4 -" + Lang[12] + "<font style='" + color_main_font +";'>" ;
 	}
-//	if (smartTVplugin) { 
-		htmltext += "\n   5 -" + Lang[13]; 
-//	} else { 
-//		htmltext += "<font style='" + color_notset +";'>" + "\n   5 -" + Lang[13] + "<font style='" + color_main_font +";'>" ; 
-//	}
+	htmltext += "\n   5 -" + Lang[13]; 
 	htmltext += "\n   6 -" + Lang[14]; 
 	if (smartTVplugin) { 
 		htmltext += "\n   7 -" + Lang[15]; 
@@ -2839,7 +2835,10 @@ if(menu == 5) { // Timers from Server
 		if (maxTimers > x) { booking += timers[x]; } else { booking += "\n"; }
 		if (i == 0) { booking += "</font>"; } 
 	}
+	if (get_timer) {
 	mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";" + color_main_head + ";'>" + Lang[7] + "</center></h1><pre style='" + color_main_font + ";font-size:" + fsMenu + ";'>\n" + booking + "\n   <font style='color:red;'>\u25CF<font style='" + color_main_font + ";'> -" + Lang[48] + "<font style='color:green;'>\u25CF<font style='" + color_main_font + ";'> -" + Lang[49] + "<font style='color:yellow;'>\u25CF<font style='" + color_main_font + ";'> -" + Lang[19] + "   <font style='color:blue;'>\u25CF<font style='" + color_main_font + ";'> -" + Lang[28] + "</pre>";
+	} else {
+	mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";" + color_main_head + ";'>" + Lang[7] + "</center></h1><pre style='" + color_main_font + ";font-size:" + fsMenu + ";'>\n" + booking + "\n   <font style='color:red;'>\u25CF<font style='" + color_main_font + ";'> -" + Lang[19] + "<font style='color:green;'>\u25CF<font style='" + color_main_font + ";'> -" + Lang[19] + "<font style='color:yellow;'>\u25CF<font style='" + color_main_font + ";'> -" + Lang[19] + "   <font style='color:blue;'>\u25CF<font style='" + color_main_font + ";'> -" + Lang[28] + "</pre>";
 
 	}
 }
