@@ -179,12 +179,6 @@ function GetSettings() {
 	}
 
 	try {
-		if (!is.getObject("vip.getmarks")) {} 
-	} catch(e) {
-		is.setObject("vip.getmarks","0",is.STORAGE_PERMANENT)
-	}
-
-	try {
 		if (!is.getObject("vip.fav_max_channel")) {} 
 	} catch(e) {
 		is.setObject("vip.fav_max_channel","0",is.STORAGE_PERMANENT)
@@ -227,7 +221,6 @@ function GetSettings() {
 
 	experimental = Number(is.getObject("vip.testing"));// Use some experimental code
 	testing2 = Number(is.getObject("vip.testing2"));// Use some experimental code
-	get_marks = Number(is.getObject("vip.getmarks"));
 	ShowSubs = Number(is.getObject("vip.showsubs"));
 
 	Set_Res = Number(is.getObject("vip.resolution"));
@@ -2915,7 +2908,7 @@ if(menu == 9) { // INFO2 Menu
 		}
 
 		htmltext += "\n getmarks from";
-		if (Number(is.getObject("vip.getmarks"))) { htmltext += " smarttvweb "; } else { htmltext += " restfulapi "; }
+		if (get_marks == 1) { htmltext += " smarttvweb "; } else { htmltext += " restfulapi "; }
 		htmltext += "\n getrecordings from";
 		if (get_recordings == 1) { 
 			htmltext += " smarttvweb "; 

@@ -10,14 +10,15 @@ var server_ip = server_ip_array[0]; // default server
 var StartVolume = 15; // Volume on (re)start of the portal.
 var currChan = 10; // default channel
 
-OSDLang = new Array ("English", "Nederlands");
-langfile = new Array ("lang_eng.js", "lang_dut.js");
+OSDLang = new Array ("English", "Nederlands", "Deutsch");
+langfile = new Array ("lang_eng.js", "lang_dut.js","lang_ger.js");
 lang_prio = new Array("dut,eng,und","ger,deu,eng","eng,und","fre,fra,eng");
 
 var subs_prio = "dut,eng"; //Subtitle prio
 
 var get_timer = 1; // gettimersserver 1 = smarttvweb, 0 = restfulapi
 var get_recordings = 1; // getrecordings 0 = restfulapi(only showing no play), 1 = smarttvweb, 2 = streamdev (not working yet)
+var get_marks = 1; // getmarks 1 = smarttvweb, 0 = restfulapi
 
 var UseNewReclist = 1 ; //use new recordingslist function
 
@@ -70,7 +71,6 @@ var RecCmdsIcon = new Array("","\uE005","","","","","","","","");
 var experimental;// Use some experimental code
 var lang_nr;
 var testing2;
-var get_marks; // getmarks 1 = smarttvweb, 0 = restfulapi
 var ShowSubs; //Flash stored
 
 VideoOutputModes = new Array(4,5,7); // Modes for the portal.
