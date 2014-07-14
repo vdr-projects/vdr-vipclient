@@ -2,7 +2,7 @@
 // Default settings
 // 
 
-var Version = "0.25.6";
+var Version = "0.25.7";
 
 server_ip_array = new Array("http://192.168.1.15","http://192.168.3.15","http://easyvdr","http://192.168.3.100","http://192.168.178.19","http://192.168.1.21","http://192.168.2.100","http://192.168.178.52");
 
@@ -17,7 +17,7 @@ lang_prio = new Array("dut,eng,und","ger,deu,eng","eng,und","fre,fra,eng");
 var subs_prio = "dut,eng"; //Subtitle prio
 
 var get_timer = 1; // gettimersserver 1 = smarttvweb, 0 = restfulapi
-var get_recordings = 1; // getrecordings 0 = restfulapi(only showing no play), 1 = smarttvweb, 2 = streamdev (not working yet)
+var get_recordings = 1; // getrecordings 0 = restfulapi(only showing no play), 1 = smarttvweb, 2 = streamdev
 var get_marks = 1; // getmarks 1 = smarttvweb, 0 = restfulapi
 
 var UseNewReclist = 1 ; //use new recordingslist function
@@ -331,9 +331,8 @@ var timerID = 0;
 var nrMedia = 0;
 var MPDListener = 0;
 
-//vdr status from VDR on SmartTV
+//vdr status
 var free_space = 0;
-var used_space = 0;
 var perc_space = 0;
 
 var isPause = 0; //used by pause routine.

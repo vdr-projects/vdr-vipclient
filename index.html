@@ -1,4 +1,4 @@
-<html>
+>
     <head>
       <script type="text/javascript" src="settings.js" />
       <script type="text/javascript" src="lang_eng.js" />
@@ -252,15 +252,29 @@ function GetSettings() {
 	for (var i = minChan[Fav_group];  i < (maxChan[Fav_group]+10); i++) { 
 		EPG[0][4][i] = "";EPG[1][4][i] = "";EPG[0][5][i] = "";EPG[1][5][i] = "";EPG[0][7][i] = "";EPG[1][7][i] = "";AvInfo[i] = "";
 	}
-	//Check if there is a SmartTV VDR server plugin
-	getVDRstatus(1);
-	if (smartTVplugin == 0 && Restfulapiplugin) {
+	//Check if there is a SmartTV or Restfulapi VDR server plugin
+	CheckPlugins();
+// override check for testing :
+//	smartTVplugin = 0 ;
+//	Restfulapiplugin = 1;
+	if (smartTVplugin && Restfulapiplugin == 0) {
+		// smartTVplugin YES
+		// Restfulapiplugin NO
+		get_timer = 1;
+		if (get_recordings == 0 ) {get_recordings = 1;}
+		get_marks = 1;
+	} else if (smartTVplugin == 0 && Restfulapiplugin) {
 		// smartTVplugin NO
 		// Restfulapiplugin YES
 		get_timer = 0;
-		get_recordings = 0;
+		if (get_recordings == 1 ) {get_recordings = 0;}
 		get_marks = 0;
+	} else if (smartTVplugin == 0 && Restfulapiplugin == 0) {
+		// smartTVplugin NO
+		// Restfulapiplugin NO
+		get_recordings = 2; //from streamdev
 	}
+
 }
 
 function loadjs(filename){
@@ -289,7 +303,12 @@ var numObjs = event.objectNames.length;
 		play(channels[currChan]);
 		if(isMediaMenu) {
 			if (mediaList.style.opacity == 0) {
-				setTimeout("GetMarks(); getResume(); playRec(recLink[currMed]+ '?mode=streamtoend&time=' + position);",100);
+			if (get_recordings == 1) {
+			setTimeout("GetMarks(); getResume(); playRec(recLink[currMed]+ '?mode=streamtoend&time=' + position);",100);
+			} else if (get_recordings == 2) {
+			setTimeout("playRec(recLink[currMed]+ '?pos=time.' + position);",100);
+			}
+
 			} else {
 				showDisplay("STOP", false, 100, 0 );
 				showMediaList();
@@ -2521,7 +2540,7 @@ function onKeyMenu(keyCode) {
 
 	break;
 	case KEY_4:
-		if (menu == 0 && smartTVplugin) {
+		if (menu == 0) {
 			isSetupMenu = 0;
 			mediaList.style.opacity = 0.9;
 			mainmenu.style.opacity = 0;
@@ -2713,15 +2732,11 @@ osdepginfo.style.opacity = 0;
 if(menu == 0) { // Main Menu
 	MainMenu = 0;
 	var htmltext = "<h1><center style='font-size:" + fsMenuMain + ";" + color_main_head + ";'>" + Lang[9] + "\n ( " + Version + " )</center></h1><pre style='" + color_main_font + ";font-size:" + fsMenu + ";'>   1 -" + Lang[10] + "\n   2 -" + Lang[7] + "\n   3 -" + Lang[11];
-	if (smartTVplugin) { 
-		htmltext += "\n   4 -" + Lang[12]; 
-	} else { 
-		htmltext += "<font style='" + color_notset +";'>" + "\n   4 -" + Lang[12] + "<font style='" + color_main_font +";'>" ;
-	}
-	if (smartTVplugin || Restfulapiplugin) { 
+	htmltext += "\n   4 -" + Lang[12]; 
+	if (Restfulapiplugin) { 
 		htmltext += "\n   5 -" + Lang[13]; 
-	} else {
-		htmltext += "<font style='" + color_notset +";'>" + "\n   5 -" + Lang[13] + "<font style='" + color_main_font +";'>" ;  
+	} else { 
+		htmltext += "<font style='" + color_notset +";'>" + "\n   5 -" + Lang[13] + "<font style='" + color_main_font +";'>" ;
 	}
 	if (Restfulapiplugin) { 
 		htmltext += "\n   6 -" + Lang[14]; 
@@ -3468,7 +3483,13 @@ if (DelisOK) {
 		} else {
 			recList[currMed] = "\u0003" + recList[currMed].substring(1);
 			mediaList.style.opacity = 0;
+			if (get_recordings == 1) {
 			setTimeout("GetMarks(); getResume(); playRec(recLink[currMed]+ '?mode=streamtoend&time=' + position);",100);
+			} else if (get_recordings == 2) {
+//			setTimeout("playRec(recLink[currMed]+ '?pos=resume');",100)
+			position = 0;
+			setTimeout("playRec(recLink[currMed]);",100)
+			}
 		}
 	}
         break;
@@ -3604,7 +3625,11 @@ if (DelisOK) {
 		      mediaPlayer.play(1000);
 		} else {		
 		      position += (mediaPlayer.getPosition()/1000);
-		      playRec((recLink[currMed] + "?mode=streamtoend&time=" + position));
+			if (get_recordings == 1) {
+			      playRec((recLink[currMed] + "?mode=streamtoend&time=" + position));
+			} else if (get_recordings == 2) {
+			      playRec((recLink[currMed] + "?pos=time." + position));
+			}
 		}
 	}
 	break;
@@ -3703,41 +3728,57 @@ if (DelisOK) {
 		      mediaPlayer.play(1000);
 		} else {		
 			position += (mediaPlayer.getPosition()/1000);
-			playRec((recLink[currMed] + "?mode=streamtoend&time=" + position));
+			if (get_recordings == 1) {
+				playRec((recLink[currMed] + "?mode=streamtoend&time=" + position));
+			} else if (get_recordings == 2) {
+				playRec((recLink[currMed] + "?pos=time." + position));
+			}
 		}
     	    }
 	break;
     case KEY_1:
 	position += (mediaPlayer.getPosition()/1000) - 30;
 	if (position <= 0) { position = 0;} 
-			playRec((recLink[currMed] + "?mode=streamtoend&time=" + position));
+			if (get_recordings == 1) {
+			      playRec((recLink[currMed] + "?mode=streamtoend&time=" + position));
+			} else if (get_recordings == 2) {
+			      playRec((recLink[currMed] + "?pos=time." + position));
+			}
 	break;
     case KEY_4:
 	position += (mediaPlayer.getPosition()/1000) - 60;
 	if (position <= 0) { position = 0;} 
-			playRec((recLink[currMed] + "?mode=streamtoend&time=" + position));
+			if (get_recordings == 1) {
+			      playRec((recLink[currMed] + "?mode=streamtoend&time=" + position));
+			} else if (get_recordings == 2) {
+			      playRec((recLink[currMed] + "?pos=time." + position));
+			}
 	break;
     case KEY_7:
 	position += (mediaPlayer.getPosition()/1000) - 240;
 	if (position <= 0) { position = 0;} 
-			playRec((recLink[currMed] + "?mode=streamtoend&time=" + position));
+			if (get_recordings == 1) {
+			      playRec((recLink[currMed] + "?mode=streamtoend&time=" + position));
+			} else if (get_recordings == 2) {
+			      playRec((recLink[currMed] + "?pos=time." + position));
+			}
 	break;
 
     case KEY_5:
-	if (recMark.length>posMark) {	
+	if (recMark.length>posMark && get_recordings == 1) {	
 		position = recMark[posMark]; 
 		playRec(recLink[currMed] + "?mode=streamtoend&time=" + position); 
 	}
 	break;
     case KEY_2:
-	if (posMark>0) {	
+	if (posMark>0 && get_recordings == 1) {	
 		posMark -= 1;
 		position = recMark[posMark]; 
 		playRec(recLink[currMed] + "?mode=streamtoend&time=" + position); 
 	}
 	break;
     case KEY_8:
-	if (recMark[posMark+1]) {	
+	if (recMark[posMark+1] && get_recordings == 1) {	
 		posMark += 1;
 		position = recMark[posMark]; 
 		playRec(recLink[currMed] + "?mode=streamtoend&time=" + position); 
@@ -3748,31 +3789,47 @@ if (DelisOK) {
 
     case KEY_3:
 	position += (mediaPlayer.getPosition()/1000) + 30;
-	if (position >= recDura[currMed]) {
-	 	    BackToTV();
-	} else {
+	if (get_recordings == 1) {
+		if (position >= recDura[currMed]) {
+		 	BackToTV();
+		} else {
 			playRec((recLink[currMed] + "?mode=streamtoend&time=" + position));
+		}
+	} else if (get_recordings == 2) {
+		playRec((recLink[currMed] + "?pos=time." + position));
 	}
 	break;
     case KEY_6:
 	position += (mediaPlayer.getPosition()/1000) + 60;
-	if (position >= recDura[currMed]) {
-	 	    BackToTV();
-	} else {
+	if (get_recordings == 1) {
+		if (position >= recDura[currMed]) {
+		 	BackToTV();
+		} else {
 			playRec((recLink[currMed] + "?mode=streamtoend&time=" + position));
+		}
+	} else if (get_recordings == 2) {
+		playRec((recLink[currMed] + "?pos=time." + position));
 	}
 	break;
     case KEY_9:
 	position += (mediaPlayer.getPosition()/1000) + 240;
-	if (position >= recDura[currMed]) {
-	 	    BackToTV();
-	} else {
+	if (get_recordings == 1) {
+		if (position >= recDura[currMed]) {
+		 	BackToTV();
+		} else {
 			playRec((recLink[currMed] + "?mode=streamtoend&time=" + position));
+		}
+	} else if (get_recordings == 2) {
+		playRec((recLink[currMed] + "?pos=time." + position));
 	}
 	break;
    case KEY_0:
 	position = 0; posMark = 0;
-	playRec((recLink[currMed] + "?mode=streamtoend&time=" + position));
+			if (get_recordings == 1) {
+			      playRec((recLink[currMed] + "?mode=streamtoend&time=" + position));
+			} else if (get_recordings == 2) {
+			      playRec((recLink[currMed] + "?pos=time." + position));
+			}
 	break;
 
 	default:
@@ -3862,7 +3919,7 @@ try {
 	// try to fix display double entries in the last directory. (Only shown for some time after deleting files, should be fixed now)
 	recProt[i] = 1;
    }
-} else if (get_recordings==2) {
+} else if (get_recordings == 2) {
 //get recordings from streamdev
 //no media directory or delete support
   xmlhttp=new XMLHttpRequest();
@@ -3877,7 +3934,7 @@ try {
 	  { 
 			  rec_lst[i] = new Array();
 			  for (var yy=0;yy<9;yy++) { rec_lst[i][yy] = new Array(); }
-			  rec_lst[i][0] = (x[i].getElementsByTagName("title")[0].childNodes[0].nodeValue);
+			  rec_lst[i][0] = x[i].getElementsByTagName("title")[0].childNodes[0].nodeValue;
 			  rec_lst[i][0] = rec_lst[i][0].split("~");
 			  rec_lst[i][0][0] = Right(rec_lst[i][0][0], (rec_lst[i][0][0].length - 18));
 				if (Left(rec_lst[i][0][0],1) == " ") {
@@ -3887,12 +3944,14 @@ try {
 					rec_lst[i][0][0] = Right(rec_lst[i][0][0], (rec_lst[i][0][0].length - 1));
 				}
 
-			  rec_lst[i][1] = (x[i].getElementsByTagName("enclosure")[0].getAttribute('url'));
+			  rec_lst[i][1] = x[i].getElementsByTagName("enclosure")[0].getAttribute('url');
 			  rec_lst[i][2] = "";
 			  rec_lst[i][3] = "";
-			  rec_lst[i][4] = "";
+			  rec_lst[i][4] = x[i].getElementsByTagName("title")[0].childNodes[0].nodeValue;
+			  rec_lst[i][4] = rec_lst[i][4].split(" ");
+			  rec_lst[i][4] = rec_lst[i][4][1] + " " + rec_lst[i][4][2];
 			  rec_lst[i][5] = "";
-			  rec_lst[i][6] = (x[i].getElementsByTagName("link")[0].childNodes[0].nodeValue);
+			  rec_lst[i][6] = x[i].getElementsByTagName("link")[0].childNodes[0].nodeValue;
 			  rec_lst[i][7] = 0;
 			  rec_lst[i][8] = 0;
 	 }
@@ -4105,7 +4164,34 @@ try {
 
 
 
-function getVDRstatus(CheckStatus) {
+function CheckPlugins() {
+try {
+   xmlhttp=new XMLHttpRequest();
+   xmlhttp.open("GET",(server_ip + recServ + "/vdrstatus.xml?" + new Date().getTime()),false);
+   xmlhttp.send();
+   xmlDoc=xmlhttp.responseXML; 
+	smartTVplugin = 1;
+  } catch(e) {
+    alert("NO smartTVplugin: " + e);
+	smartTVplugin = 0;
+  }
+
+//Check for Restfulapi
+
+try {
+   xmlhttp=new XMLHttpRequest();
+   xmlhttp.open("GET",(server_ip + RestFulAPI + "/info.xml?" + new Date().getTime()),false);
+   xmlhttp.send();
+   xmlDoc=xmlhttp.responseXML; 
+    Restfulapiplugin = 1;
+  } catch(e) {
+    alert("NO Restfulapiplugin: " + e);
+    Restfulapiplugin = 0;
+  }
+}
+
+function getVDRstatus() {
+if (smartTVplugin == 1) {
 try {
    xmlhttp=new XMLHttpRequest();
    xmlhttp.open("GET",(server_ip + recServ + "/vdrstatus.xml?" + new Date().getTime()),false);
@@ -4114,33 +4200,26 @@ try {
 //   var x=xmlDoc.getElementsByTagName("vdrstatus");
    var x=xmlDoc.getElementsByTagName("diskspace");
 	  free_space = x[0].getElementsByTagName("free")[0].childNodes[0].nodeValue;
-	  used_space = x[0].getElementsByTagName("used")[0].childNodes[0].nodeValue;
 	  perc_space = x[0].getElementsByTagName("percent")[0].childNodes[0].nodeValue;
-    if (CheckStatus) {
-	smartTVplugin = 1;
-    }
   } catch(e) {
     alert("Get VDR Status problem: " + e);
-    if (CheckStatus) {
-	smartTVplugin = 0;
-    }
   }
-
-//Check for Restfulapi
-
-if (CheckStatus) {
+}
+if (smartTVplugin == 0 && Restfulapiplugin == 1) {
 try {
    xmlhttp=new XMLHttpRequest();
    xmlhttp.open("GET",(server_ip + RestFulAPI + "/info.xml?" + new Date().getTime()),false);
    xmlhttp.send();
    xmlDoc=xmlhttp.responseXML; 
-    Restfulapiplugin = 1;
+   var x=xmlDoc.getElementsByTagName("diskusage");
+	  free_space = x[0].getElementsByTagName("free_mb")[0].childNodes[0].nodeValue;
+	  perc_space = x[0].getElementsByTagName("used_percent")[0].childNodes[0].nodeValue;
   } catch(e) {
     alert("Get VDR Status problem: " + e);
-    Restfulapiplugin = 0;
   }
  }
 }
+
 
 function DelRec() {
 if (get_recordings == 1) {
@@ -4200,7 +4279,12 @@ function MakeRecList() {
 				} else { 
 					recList[i] = "\uE003" + recTitl[i];
 				}
-	AddInfo(i);
+	if (get_recordings == 2 ) {
+		result = recStrt[i];
+	} else{ 
+		AddInfo(i);
+	}
+
 	if (rec_New[i] == "true" ) 
 		{ 
 		recList[i] = "\uE010" + result + "\uE003" + recList[i]; 
@@ -4230,7 +4314,12 @@ function MakeRecList2() {
 					recGroup[i] = xx;
 				} else { 
 					recGroup[i] = 0;
-						AddInfo(i);
+						if (get_recordings == 2 ) {
+							result = recStrt[i];
+						} else{ 
+							AddInfo(i);
+							result += "\uE003" + (recDura[i]/60).toFixed(0);
+						}
 						if (rec_New[i] == "true" ) { 
 							recList[i] = "\uE010" + result + "\uE003" + recTitl[i]; 
 						} else { 
@@ -4254,7 +4343,12 @@ function MakeRecList3(GroupID) {
 				{
 				tmp += "\uE003" + recTitl[i][ii];
 				}
-			AddInfo(i);
+			if (get_recordings == 2 ) {
+				result = recStrt[i];
+			} else{ 
+				AddInfo(i);
+				result += "\uE003" + (recDura[i]/60).toFixed(0);
+			}
 			if (rec_New[i] == "true" ) { 
 				recList[i] = "\uE010" + result + tmp; // recTitl[i]; 
 			} else { 
@@ -4722,7 +4816,8 @@ function onRecorderStateChanged(event) {
 }
 
 function ShowMediaOSD() {
-// Display Name/ length 
+if (get_recordings == 1) {
+	// Display Name/ length 
 	var pos = position + (mediaPlayer.getPosition()/1000);
 	var pos2 = (pos / Number(recDura[currMed])) * 100;
 	if (pos2 < 1) { pos2 = 1;} 
@@ -4749,6 +4844,12 @@ function ShowMediaOSD() {
 	osdtime.innerHTML = result;
 	date_time_rec();
 	osdmedia.innerHTML = "<pre style='" + color_media_osd + ";font-size:" + fsMedia +";'> \n  " + (pos/60).toFixed(0) + " / " + x + "  " + Left(recTitl[currMed],40) + "\n  " + pos4 + "\n " + result + " </pre>";
+} else if ( get_recordings == 2) {
+	var pos = position + (mediaPlayer.getPosition()/1000);
+	date_time();
+	osdtime.innerHTML = result;
+	osdmedia.innerHTML = "<pre style='" + color_media_osd + ";font-size:" + fsMedia +";'> \n  " + (pos/60).toFixed(0) + " \n " + Left(recTitl[currMed],40) + "\n  \n " + recStrt[currMed] + " </pre>";
+}
 }
 
 function ShowInfo() {
