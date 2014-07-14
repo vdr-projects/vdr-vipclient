@@ -261,10 +261,12 @@ function GetSettings() {
 	}
 	//Check if there is a SmartTV VDR server plugin
 	getVDRstatus(1);
-	if (smartTVplugin == 0) {
-		// No smartTVplugin.
+	if (smartTVplugin == 0 && Restfulapiplugin) {
+		// smartTVplugin NO
+		// Restfulapiplugin YES
 		get_timer = 0;
 		get_recordings = 0;
+		get_marks = 0;
 	}
 }
 
@@ -1251,6 +1253,7 @@ function onKeyDown(event) {
 	break;
 	case KEY_OPNAMES:
 	case KEY_FILM:
+	if (smartTVplugin) {
 	// jump to recordings menu.
 		if(isFullscreen) {
 			if(count) {
@@ -1267,6 +1270,7 @@ function onKeyDown(event) {
 		setTimeout("getRecList();LoadMediaSettings();",100);
 		}
 		break;
+	}
 	default:
         break;
     }
@@ -2541,7 +2545,7 @@ function onKeyMenu(keyCode) {
 
 	break;
 	case KEY_5:
-		if (menu == MainMenu) {
+		if (menu == MainMenu && (Restfulapiplugin || smartTVplugin)) {
 			mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";" + color_main_head + ";'>" + Lang[7] + "</center></h1><pre style='" + color_main_font + ";font-size:" + fsMenu + ";'>\n\n\n<center>" + Lang[0] + "</center></pre>";
 			timerID = 0;
 			menu = 5;
@@ -2567,7 +2571,7 @@ function onKeyMenu(keyCode) {
 		}
 	break;
 	case KEY_6:
-	if (menu == 0) {
+	if (menu == 0 && Restfulapiplugin) {
 			isSetupMenu = 0;
 			mediaList.style.opacity = 0.9;
 			mainmenu.style.opacity = 0;
@@ -2617,7 +2621,7 @@ function onKeyMenu(keyCode) {
 
 	break;
 	case KEY_8:
-	if (menu == MainMenu) {
+	if (menu == MainMenu && Restfulapiplugin) {
 			mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";" + color_main_head + ";'>" + Lang[8] + "</center></h1><pre style='" + color_main_font + ";font-size:" + fsMenu + ";'>\n\n\n<center>" + Lang[0] + "</center></pre>";
 			timerID = 0;
 			menu = 7;
@@ -2721,14 +2725,26 @@ if(menu == 0) { // Main Menu
 	} else { 
 		htmltext += "<font style='" + color_notset +";'>" + "\n   4 -" + Lang[12] + "<font style='" + color_main_font +";'>" ;
 	}
-	htmltext += "\n   5 -" + Lang[13]; 
-	htmltext += "\n   6 -" + Lang[14]; 
+	if (smartTVplugin || Restfulapiplugin) { 
+		htmltext += "\n   5 -" + Lang[13]; 
+	} else {
+		htmltext += "<font style='" + color_notset +";'>" + "\n   5 -" + Lang[13] + "<font style='" + color_main_font +";'>" ;  
+	}
+	if (Restfulapiplugin) { 
+		htmltext += "\n   6 -" + Lang[14]; 
+	} else {
+		htmltext += "<font style='" + color_notset +";'>" + "\n   6 -" + Lang[14] + "<font style='" + color_main_font +";'>" ;  
+	}
 	if (smartTVplugin) { 
 		htmltext += "\n   7 -" + Lang[15]; 
 	} else { 
 		htmltext += "<font style='" + color_notset +";'>" + "\n   7 -" + Lang[15] + "<font style='" + color_main_font +";'>" ; 
 	}
-	htmltext += "\n   8 -" + Lang[16];
+	if (Restfulapiplugin) { 
+		htmltext += "\n   8 -" + Lang[16];
+	} else {
+		htmltext += "<font style='" + color_notset +";'>" + "\n   8 -" + Lang[16] + "<font style='" + color_main_font +";'>" ;  
+	}
 	if (ShowMPD) { 
 		htmltext += "\n   9 -" + Lang[17]; 
 	} else { 
@@ -2887,7 +2903,9 @@ if(menu == 9) { // INFO2 Menu
 		htmltext += "Experimental";
 		if (Number(is.getObject("vip.testing2"))) { htmltext += "\n \uE017 "; } else { htmltext += "\n \uE016 "; }
 		htmltext += "Experimental 2 (Info box 'not in package')";
-		if (smartTVplugin) { htmltext += "\n\n \uE017 "; } else { htmltext += "\n \uE016 "; }
+		if (Restfulapiplugin) { htmltext += "\n \uE017 "; } else { htmltext += "\n \uE016 "; }
+		htmltext += "Has Restfulapiplugin"
+		if (smartTVplugin) { htmltext += "\n \uE017 "; } else { htmltext += "\n \uE016 "; }
 		htmltext += "Has smartTVplugin"
 		htmltext += "\n gettimers from";
 		if (get_timer == 1) { 
@@ -4114,6 +4132,21 @@ try {
 	smartTVplugin = 0;
     }
   }
+
+//Check for Restfulapi
+
+if (CheckStatus) {
+try {
+   xmlhttp=new XMLHttpRequest();
+   xmlhttp.open("GET",(server_ip + RestFulAPI + "/info.xml?" + new Date().getTime()),false);
+   xmlhttp.send();
+   xmlDoc=xmlhttp.responseXML; 
+    Restfulapiplugin = 1;
+  } catch(e) {
+    alert("Get VDR Status problem: " + e);
+    Restfulapiplugin = 0;
+  }
+ }
 }
 
 function DelRec() {

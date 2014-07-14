@@ -2,7 +2,7 @@
 // Default settings
 // 
 
-var Version = "0.25.5";
+var Version = "0.25.6";
 
 server_ip_array = new Array("http://192.168.1.15","http://192.168.3.15","http://easyvdr","http://192.168.3.100","http://192.168.178.19","http://192.168.1.21","http://192.168.2.100","http://192.168.178.52");
 
@@ -353,3 +353,4 @@ var PlayDelayID;
 var PIPDelayID;
 var ErrorAgain = 0;
 var smartTVplugin; // Turn on or off the use of smartTVplugin
+var Restfulapiplugin; // Turn on or off the use of Restfulapiplugin
