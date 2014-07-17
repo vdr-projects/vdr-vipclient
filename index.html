@@ -274,7 +274,6 @@ function GetSettings() {
 		// Restfulapiplugin NO
 		get_recordings = 2; //from streamdev
 	}
-
 }
 
 function loadjs(filename){
@@ -3486,9 +3485,9 @@ if (DelisOK) {
 			if (get_recordings == 1) {
 			setTimeout("GetMarks(); getResume(); playRec(recLink[currMed]+ '?mode=streamtoend&time=' + position);",100);
 			} else if (get_recordings == 2) {
-//			setTimeout("playRec(recLink[currMed]+ '?pos=resume');",100)
-			position = 0;
-			setTimeout("playRec(recLink[currMed]);",100)
+			setTimeout("playRec(recLink[currMed]+ '?pos=resume');position = (mediaPlayer.getPosition()/1000);",100)
+//			position = 0;
+//			setTimeout("playRec(recLink[currMed]);",100)
 			}
 		}
 	}
@@ -3922,7 +3921,7 @@ try {
 } else if (get_recordings == 2) {
 //get recordings from streamdev
 //no media directory or delete support
-  xmlhttp=new XMLHttpRequest();
+   xmlhttp=new XMLHttpRequest();
    xmlhttp.open("GET",(server_ip + StreamPort + "recordings.rss?" + new Date().getTime()),false);
    xmlhttp.send();
    xmlDoc=xmlhttp.responseXML; 
@@ -3934,23 +3933,15 @@ try {
 	  { 
 			  rec_lst[i] = new Array();
 			  for (var yy=0;yy<9;yy++) { rec_lst[i][yy] = new Array(); }
-			  rec_lst[i][0] = x[i].getElementsByTagName("title")[0].childNodes[0].nodeValue;
-			  rec_lst[i][0] = rec_lst[i][0].split("~");
-			  rec_lst[i][0][0] = Right(rec_lst[i][0][0], (rec_lst[i][0][0].length - 18));
-				if (Left(rec_lst[i][0][0],1) == " ") {
-					rec_lst[i][0][0] = Right(rec_lst[i][0][0], (rec_lst[i][0][0].length - 1));
-				}
-				if (Left(rec_lst[i][0][0],1) == " ") {
-					rec_lst[i][0][0] = Right(rec_lst[i][0][0], (rec_lst[i][0][0].length - 1));
-				}
-
+			  rec_lst[i][0] = x[i].getElementsByTagName("title")[0].childNodes[0].nodeValue.split("  ");
+			  rec_lst[i][0] = rec_lst[i][0][1].split("~");
 			  rec_lst[i][1] = x[i].getElementsByTagName("enclosure")[0].getAttribute('url');
-			  rec_lst[i][2] = "";
-			  rec_lst[i][3] = "";
+			  rec_lst[i][2] = Lang[37];
+			  rec_lst[i][3] = Lang[37];
 			  rec_lst[i][4] = x[i].getElementsByTagName("title")[0].childNodes[0].nodeValue;
 			  rec_lst[i][4] = rec_lst[i][4].split(" ");
 			  rec_lst[i][4] = rec_lst[i][4][1] + " " + rec_lst[i][4][2];
-			  rec_lst[i][5] = "";
+			  rec_lst[i][5] = Lang[37];
 			  rec_lst[i][6] = x[i].getElementsByTagName("link")[0].childNodes[0].nodeValue;
 			  rec_lst[i][7] = 0;
 			  rec_lst[i][8] = 0;
@@ -4854,6 +4845,15 @@ if (get_recordings == 1) {
 
 function ShowInfo() {
 //Like Show EPG Info
+  if ( mediaList.style.opacity == 0 ) { updateStreamInfo(currMed);} else { AvInfo[currMed] = "";}
+  if (get_recordings == 2) {
+	result = recStrt[currMed]
+       	osdepginfo.innerHTML = "<center><pre style='" + color_epg_head + ";'>" + Left(recTitl[currMed],60) 
+				+ "\n </pre><p style='" + color_epg_avinfo + ";'>" + AvInfo[currMed] 
+				+ "</p><pre style='" + color_epg_title + ";'> " + result + "\n " 
+				+ "???" + Lang[54]
+				+ "</pre><p style='" + color_epg_info + ";'> Sorry STREAMDEV-plugin : " + Lang[37] + "</p></center>";
+  } else {
         date = new Date(Number(recStrt[currMed])*1000);
         year = date.getFullYear();
         month = date.getMonth();
@@ -4864,7 +4864,6 @@ function ShowInfo() {
 	h = addzero(h);
 	m = addzero(m);
         result = '' + days[day] + ' ' + d + ' ' + months[month] + ' ' + year + ' ' + h + ':' + m;
-	if ( mediaList.style.opacity == 0 ) { updateStreamInfo(currMed);} else { AvInfo[currMed] = "";}
 
 	if (year!==1970) { 	
        		osdepginfo.innerHTML = "<center><pre style='" + color_epg_head + ";'>" + Left(recTitl[currMed],60) 
@@ -4877,6 +4876,7 @@ function ShowInfo() {
 	       	osdepginfo.innerHTML = "<center><pre style='" + color_epg_head + ";'>" + Left(recTitl[currMed],60) 
 					+ "\n </pre><p style='" + color_epg_avinfo + ";'>" + AvInfo[currMed] + " " + "\n \n </p></center>";
 	}
+  }
 }
 
 function onScheduledStart(event) {
