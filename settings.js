@@ -17,8 +17,8 @@ lang_prio = new Array("dut,eng,und","ger,deu,eng","eng,und","fre,fra,eng");
 var subs_prio = "dut,eng"; //Subtitle prio
 
 var get_timer = 1; // gettimersserver 1 = smarttvweb, 0 = restfulapi
-var get_recordings = 2; // getrecordings 0 = restfulapi(only showing no play), 1 = smarttvweb, 2 = streamdev
-var get_marks = 1; // getmarks 1 = smarttvweb, 0 = restfulapi
+var get_recordings = 1; // getrecordings 0 = restfulapi(only showing no play), 1 = smarttvweb, 2 = streamdev
+var get_marks = 1;// getmarks 1 = smarttvweb, 0 = restfulapi
 
 var UseNewReclist = 1 ; //use new recordingslist function
 

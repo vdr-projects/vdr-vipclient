@@ -11,7 +11,9 @@
 //
 // Martin Voerman Rekordc@gmail.com
 //
-//
+// "THE BEER-WARE LICENSE"
+// If we meet some day, and you think
+// this stuff is worth it, you can buy me a beer in return
 //
 
 window.onkeydown = onKeyDown;
@@ -3485,9 +3487,9 @@ if (DelisOK) {
 			if (get_recordings == 1) {
 			setTimeout("GetMarks(); getResume(); playRec(recLink[currMed]+ '?mode=streamtoend&time=' + position);",100);
 			} else if (get_recordings == 2) {
-			setTimeout("playRec(recLink[currMed]+ '?pos=resume');position = (mediaPlayer.getPosition()/1000);",100)
-//			position = 0;
-//			setTimeout("playRec(recLink[currMed]);",100)
+//			setTimeout("playRec(recLink[currMed]+ '?pos=resume');position = (mediaPlayer.getPosition()/1000);",100)
+			position = 0;
+			setTimeout("playRec(recLink[currMed]);",100)
 			}
 		}
 	}
@@ -4213,7 +4215,6 @@ try {
 
 
 function DelRec() {
-if (get_recordings == 1) {
 	if (osdepginfo.style.opacity == 1) {osdepginfo.style.opacity = 0;}
 try {
 	//popup for confirm
@@ -4224,18 +4225,31 @@ try {
     alert("Delete Recordings problem: " + e);
   }
 }
-}
 
 function DelRec2() {
-try {
-   xmlhttp=new XMLHttpRequest();
-   xmlhttp.open("POST",(server_ip + recServ + "/deleteRecording.xml?id=" + recGUID[currMed] ),false);
-   xmlhttp.send();
-   recList[currMed] = "";
-   recGroup[currMed] = -1;
-   recProt[currMed] = 0;
-  } catch(e) {
-    alert("Delete Recordings problem: " + e);
+  if (get_recordings == 1) {
+	try {
+	   xmlhttp=new XMLHttpRequest();
+	   xmlhttp.open("POST",(server_ip + recServ + "/deleteRecording.xml?id=" + recGUID[currMed] ),false);
+	   xmlhttp.send();
+	   recList[currMed] = "";
+	   recGroup[currMed] = -1;
+	   recProt[currMed] = 0;
+	  } catch(e) {
+	    alert("Delete Recordings problem: " + e);
+	  }
+  } else if (get_recordings == 0) {
+//	try {
+//	   xmlhttp=new XMLHttpRequest();
+//	   xmlhttp.open("DELETE",(server_ip + RestFulAPI + "/recordings/" + recGUID[currMed] ),true);
+//	   xmlhttp.send();
+//	   recList[currMed] = "";
+//	   recGroup[currMed] = -1;
+//	   recProt[currMed] = 0;
+//	  } catch(e) {
+//	    alert("Delete Recordings problem: " + e);
+//	  }
+//
   }
 }
 
