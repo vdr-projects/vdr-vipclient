@@ -3,10 +3,13 @@ Motorola Vip : 1960, 1910, 1903, 1963.
 
 VDR 1.7.29+
 
-0.25	Get recordings from Streamdev, Restfapi or SmartTVweb.
+0.25	Get recordings from Streamdev, Restfulapi or SmartTVweb.
 	Check if SmartTVweb is on the server if not turn SmartTVweb options off
+	Check if Restfulapi is on the server if not turn Restfulapi options off
 	Streamdev can also do Rewind, pause, Fastforward.
 	Added German translation (Google Translate) so it must be corrected.
+	Fixed in GuideView the functionkey information. (After pressing Yellow, Back it wasn't right)
+	Duration of recording is show in Recordings list.
 
 
 0.24	vip.getmarks used for selecting getmarks 0 = restfulapi, 1 = SmartTVWeb (not all users have the newest SmartTVWeb)

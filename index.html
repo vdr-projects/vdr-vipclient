@@ -919,6 +919,9 @@ function onKeyDown(event) {
 		if(isSchedule) {
 			isSchedule = 0;
 			schedule.style.opacity = 0;
+			colorkeys.innerHTML = "<font color=red> " +  NN[3 + (1 - NowNext)] + " </font><font color=green> " 
+				+ NN[1 - NowNext] + " </font><font color=yellow> " + NN[2] + " </font><font color=blue> " 
+				+ NN[5] + " </font>";
 			break;
 		}
 
@@ -4323,7 +4326,7 @@ function MakeRecList2() {
 							result = recStrt[i];
 						} else{ 
 							AddInfo(i);
-							result += "\uE003" + (recDura[i]/60).toFixed(0);
+							if (recChan[i] !== "Media File") {result += "\uE003" + (recDura[i]/60).toFixed(0);}
 						}
 						if (rec_New[i] == "true" ) { 
 							recList[i] = "\uE010" + result + "\uE003" + recTitl[i]; 
@@ -4352,7 +4355,7 @@ function MakeRecList3(GroupID) {
 				result = recStrt[i];
 			} else{ 
 				AddInfo(i);
-				result += "\uE003" + (recDura[i]/60).toFixed(0);
+				if (recChan[i] !== "Media File") {result += "\uE003" + (recDura[i]/60).toFixed(0);}
 			}
 			if (rec_New[i] == "true" ) { 
 				recList[i] = "\uE010" + result + tmp; // recTitl[i]; 
