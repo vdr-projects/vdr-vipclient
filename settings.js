@@ -20,7 +20,7 @@ var get_timer = 1; // gettimersserver 1 = smarttvweb, 0 = restfulapi
 var get_recordings = 1; // getrecordings 0 = restfulapi(only showing no play), 1 = smarttvweb, 2 = streamdev
 var get_marks = 1;// getmarks 1 = smarttvweb, 0 = restfulapi
 
-var test_subgroup = 1 ;// testing of sub-sub group in recordings listing.
+var subgroup_old = 1 ;// 0 = use old routine for sub group in recordings listing.
 
 var SortByDate = 1; //Sort recordings by date
 var UseNewReclist = 1 ; //use new recordingslist function
@@ -303,6 +303,7 @@ var recSubGroup = new Array(); // used for subgroups
 var subgroup= 0 ; // Used for subdirs in recording view
 var subsubgroup = 0;// Used for subdirs in recording view
 var MaxInGroup=14; // Used for subdirs in recording view
+var Group_Header = new Array(); // Header for submenu.
 
 var posMark = 0;
 var recMap = 0;
