@@ -301,6 +301,7 @@ var recGroup= new Array(); // group index
 var recProt = new Array(); // protect recording based on channelgroup
 var recSubGroup = new Array(); // used for subgroups
 var subgroup= 0 ; // Used for subdirs in recording view
+var subsubgroup = 0;// Used for subdirs in recording view
 var MaxInGroup=14; // Used for subdirs in recording view
 
 var posMark = 0;
