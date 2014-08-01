@@ -2486,8 +2486,6 @@ function onKeyMenu(keyCode) {
 	InitMenu(menu);
     break;
     case "Teletext":
-	UseNewReclist = 1 - UseNewReclist;
-	alert(UseNewReclist);
     break;
     case "TV":
     break;
@@ -3873,7 +3871,7 @@ try {
 	   recTitl.length = 0;
 	   rec_lst.length = 0;
 
-	 if (UseNewReclist && recPath == "/recordings.xml") {
+	 if (recPath == "/recordings.xml") {
 	   for (var i=0;i<x.length;i++)
 		  { 
 			rec_lst[i] = new Array();
@@ -3923,17 +3921,9 @@ try {
 	          recStrt[i] = (x[i].getElementsByTagName("start")[0].childNodes[0].nodeValue);
 	          rec_New[i] = (x[i].getElementsByTagName("isnew")[0].childNodes[0].nodeValue);
 	          recGUID[i] = (x[i].getElementsByTagName("guid")[0].childNodes[0].nodeValue);
-	                if (recPath == "/recordings.xml") {
-	                  //Get channel number from recordings
-	                  recDummy = recGUID[i].split(".");
-	                  recDummy = recDummy[(recDummy.length-2)].split("-");
-	                  recChan[i] = recDummy[0] + "\uE003-\uE003" + channelsnames[(recDummy[0])];
-	                  recProt[i] = protChn[Number(Left((recDummy[0] / 1000),1))];
-	                } else {
-	                  //Media directory
-	                  recChan[i] = "Media File";
-	                  recProt[i] = 0; // No protection for Media Files.
-	                }
+                  //Media directory
+                  recChan[i] = "Media File";
+                  recProt[i] = 0; // No protection for Media Files.
 	         }
 	// try to fix display double entries in the last directory. (Only shown for some time after deleting files, should be fixed now)
 	recProt[i] = 1;
@@ -3993,7 +3983,6 @@ try {
 	   recTitl.length = 0;
 	   rec_lst.length = 0;
 
-	 if (UseNewReclist) {
 	   for (var i=0;i<x.length;i++)
 		  { 
 			rec_lst[i] = new Array();
@@ -4028,30 +4017,7 @@ try {
 			recProt[i] = rec_lst[i][8];
 		}
 		recProt[i] = 1;
-	 } else {
-
-	 // old recordings list function
-	 // also used for media listing
-
-	   for (var i=0;i<x.length;i++) { 
-	          recTitl[i] = (x[i].getElementsByTagName("param")[1].childNodes[0].nodeValue);
-	          recTitl[i] = recTitl[i].split("~");
-	          recLink[i] = (x[i].getElementsByTagName("param")[2].childNodes[0].nodeValue);
-	          recDesc[i] = (x[i].getElementsByTagName("param")[13].childNodes[0].nodeValue);
-	          recDura[i] = (x[i].getElementsByTagName("param")[8].childNodes[0].nodeValue);
-	          recStrt[i] = (x[i].getElementsByTagName("param")[14].childNodes[0].nodeValue);
-	          rec_New[i] = (x[i].getElementsByTagName("param")[4].childNodes[0].nodeValue);
-	          recGUID[i] = (x[i].getElementsByTagName("param")[0].childNodes[0].nodeValue);
-	                  //Get channel number from recordings
-	                  recDummy = recLink[i].split(".");
-	                  recDummy = recDummy[(recDummy.length-2)].split("-");
-	                  recChan[i] = recDummy[0] + "\uE003-\uE003" + channelsnames[(recDummy[0])];
-	                  recProt[i] = protChn[Number(Left((recDummy[0] / 1000),1))];
-	         }
 	// try to fix display double entries in the last directory. (Only shown for some time after deleting files, should be fixed now)
-	recProt[i] = 1;
-   }
-
 }
 
 
@@ -4414,7 +4380,6 @@ function MakeRecList_sublevel(GroupID) {
 						recList[i] = "" ; 
 					}
 					recSubGroup[i] = xx;
-						alert(recSubGroup[i] + "  " + recList[i]);
 				} else { 
 					recSubGroup[i] = 0;
 					var tmp = "";

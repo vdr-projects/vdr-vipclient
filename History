@@ -12,7 +12,7 @@ VDR 1.7.29+
 	Duration of recording is show in Recordings list.
 	In recordings listing there is an other sublevel for directories, (use subgroup_old = 0 for old version)
 	In recordings listing, first sub directory is shown in Header
-
+	Removed some old, not in use, code for recordings listings
 
 0.24	vip.getmarks used for selecting getmarks 0 = restfulapi, 1 = SmartTVWeb (not all users have the newest SmartTVWeb)
 	Channels update.

@@ -2,7 +2,7 @@
 // Default settings
 // 
 
-var Version = "0.25.11";
+var Version = "0.25.12";
 
 server_ip_array = new Array("http://192.168.1.15","http://192.168.3.15","http://easyvdr","http://192.168.3.100","http://192.168.178.19","http://192.168.1.21","http://192.168.2.100","http://192.168.178.52");
 
@@ -23,7 +23,6 @@ var get_marks = 1;// getmarks 1 = smarttvweb, 0 = restfulapi
 var subgroup_old = 1 ;// 0 = use old routine for sub group in recordings listing.
 
 var SortByDate = 1; //Sort recordings by date
-var UseNewReclist = 1 ; //use new recordingslist function
 
 var ShowSubDir = 1 ; // 0 = no, 1 = yes (default) // show seperate maps for subdirs in menu recordings
 var showClock = 0;   // 0 = no, 1 = yes
