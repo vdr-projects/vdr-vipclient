@@ -2,7 +2,7 @@
 // Default settings
 // 
 
-var Version = "0.25.10";
+var Version = "0.25.11";
 
 server_ip_array = new Array("http://192.168.1.15","http://192.168.3.15","http://easyvdr","http://192.168.3.100","http://192.168.178.19","http://192.168.1.21","http://192.168.2.100","http://192.168.178.52");
 
@@ -20,6 +20,9 @@ var get_timer = 1; // gettimersserver 1 = smarttvweb, 0 = restfulapi
 var get_recordings = 1; // getrecordings 0 = restfulapi(only showing no play), 1 = smarttvweb, 2 = streamdev
 var get_marks = 1;// getmarks 1 = smarttvweb, 0 = restfulapi
 
+var test_subgroup = 1 ;// testing of sub-sub group in recordings listing.
+
+var SortByDate = 1; //Sort recordings by date
 var UseNewReclist = 1 ; //use new recordingslist function
 
 var ShowSubDir = 1 ; // 0 = no, 1 = yes (default) // show seperate maps for subdirs in menu recordings
@@ -296,6 +299,7 @@ var recChan = new Array(); // Channel ID
 var recDummy= new Array(); //
 var recGroup= new Array(); // group index
 var recProt = new Array(); // protect recording based on channelgroup
+var recSubGroup = new Array(); // used for subgroups
 var subgroup= 0 ; // Used for subdirs in recording view
 var MaxInGroup=14; // Used for subdirs in recording view
 

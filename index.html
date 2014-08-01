@@ -1,4 +1,4 @@
->
+<html>
     <head>
       <script type="text/javascript" src="settings.js" />
       <script type="text/javascript" src="lang_eng.js" />
@@ -3482,7 +3482,14 @@ if (DelisOK) {
 	}
 	if (getRecOK == 1) {
 		if (recGroup[currMed] !== 0 && subgroup == 0 && ShowSubDir) {
+			if (test_subgroup) {
+			setTimeout("MakeRecList_sublevel(recGroup[currMed]); showMediaList();",100)
+			} else {
 			setTimeout("MakeRecList3(recGroup[currMed]); showMediaList();",100)
+			}
+			subgroup = 1;
+		} else if (recGroup[currMed] !== 0 && subgroup == 1 && ShowSubDir && test_subgroup) {
+			setTimeout("MakeRecList_sublevel2(recGroup[currMed],recSubGroup[currMed]); showMediaList();",100)
 			subgroup = 1;
 		} else {
 			recList[currMed] = "\u0003" + recList[currMed].substring(1);
@@ -4039,6 +4046,7 @@ try {
 
 }
 
+
 //end of get_recordings
 	if (ShowSubDir) {
 		MakeRecList2();
@@ -4049,6 +4057,7 @@ try {
 	getRecOK = 0;
 	mediaList.innerHTML = "<h1><center style='font-size:" + fsRec + ";" + color_main_head + ";'>" + Lang[38] + "</center><pre>\n\n\n" + Lang[37] + "</pre></h1>";
 	}
+
   } catch(e) {
     alert("Get Recordings problem: " + e);
 	getRecOK = 0;
@@ -4342,6 +4351,7 @@ function MakeRecList2() {
 }
 
 function MakeRecList3(GroupID) {
+
    MaxInGroup = -1;
    for (var i=0;i<recTitl.length;i++)
 	{
@@ -4371,6 +4381,97 @@ function MakeRecList3(GroupID) {
 		}
 	}
 }
+
+//
+//
+// sub-sublevel testing
+//
+//
+
+function MakeRecList_sublevel(GroupID) {
+//new style with sub maps on sub maps
+   var x = "";
+   var xx = 0;
+   recList.length = 0;
+   MaxInGroup = -1;
+   for (var i=0;i<recTitl.length;i++)
+	{
+	if (recGroup[i] == GroupID) {
+	 if (recTitl[i][2]) { 
+					if (recTitl[i][1] != x) {
+						
+						recList[i] = "\uE002\uE003" + recTitl[i][1];
+						xx += 1;
+					} else {
+						recList[i] = "" ; 
+					}
+					recSubGroup[i] = xx;
+						alert(recSubGroup[i] + "  " + recList[i]);
+				} else { 
+					recSubGroup[i] = 0;
+					var tmp = "";
+					for (var ii=1;ii<recTitl[i].length;ii++)
+						{
+							tmp += "\uE003" + recTitl[i][ii];
+						}
+					if (get_recordings == 2 ) {
+						result = recStrt[i];
+					} else{ 
+						AddInfo(i);
+						if (recChan[i] !== "Media File") {result += "\uE003" + (recDura[i]/60).toFixed(0);}
+					}
+					if (rec_New[i] == "true" ) { 
+						recList[i] = "\uE010" + result + tmp; // recTitl[i]; 
+					} else { 
+						recList[i] = "\uE003" + result + tmp; //recTitl[i]; 
+					}
+			MaxInGroup = MaxInGroup + 1;
+				}
+		if ((recProt[i] == 1) && (ShowProtectedChannels == 1)) { recList[i] = "";}
+	x = recTitl[i][1];
+	}
+	}
+//MakeRecList_sublevel2(GroupID,0);
+}
+
+
+function MakeRecList_sublevel2(GroupID,SubGroupID) {
+
+   MaxInGroup = -1;
+   for (var i=0;i<recTitl.length;i++)
+	{
+		if (recGroup[i] == GroupID && recSubGroup[i] == SubGroupID) {
+			var tmp = "";
+			   for (var ii=(SubGroupID+1);ii<recTitl[i].length;ii++)
+				{
+				tmp += "\uE003" + recTitl[i][ii];
+				}
+			if (get_recordings == 2 ) {
+				result = recStrt[i];
+			} else{ 
+				AddInfo(i);
+				if (recChan[i] !== "Media File") {result += "\uE003" + (recDura[i]/60).toFixed(0);}
+			}
+			if (rec_New[i] == "true" ) { 
+				recList[i] = "\uE010" + result + tmp; // recTitl[i]; 
+			} else { 
+				recList[i] = "\uE003" + result + tmp; //recTitl[i]; 
+			}
+
+			MaxInGroup = MaxInGroup + 1;
+			if ((recProt[i] == 1) && (ShowProtectedChannels == 1)) { recList[i] = "";}
+
+		} else {
+			recList[i] = "" ; 
+		}
+	}
+}
+
+//
+//
+// End of sub-sublevel testing
+//
+//
 
 function AddInfo(info) {
 //Add Date to item
