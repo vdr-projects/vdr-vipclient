@@ -3410,7 +3410,6 @@ if (DelisOK) {
   switch(keyCode) {
     case "BrowserBack":
 	if (subgroup && osdepginfo.style.opacity == 0) { 	
-		mediaList.innerHTML = "<h1><center style='font-size:" + fsRec + ";" + color_main_head + ";'>" + Lang[0] + "</center></h1>";
 		subgroup = 0;
 		subsubgroup = 0;
 		if (ShowSubDir) {
@@ -3550,62 +3549,62 @@ if (DelisOK) {
 	 } 
         break;
    case KEY_0:
-	if (getRecOK == 1 && (recGroup[currMed] == 0 || subgroup == 1)) { 
+	if (getRecOK == 1 && (recGroup[currMed] == 0 || recSubGroup[currMed] == 0 || subsubgroup == 1)) { 
 	// Only rewind file if it isn't a subdir marker
 	setResumeNull();
 	showMediaList();
 	}
 	break;
    case KEY_1:
-	if (getRecOK == 1 && (recGroup[currMed] == 0 || subgroup == 1)) { 
+	if (getRecOK == 1 && (recGroup[currMed] == 0 || recSubGroup[currMed] == 0 || subsubgroup == 1)) { 
 		// Only do reccmds if it isn't a subdir marker
 		reccmds(1);
 	}
 	break;
    case KEY_2:
-	if (getRecOK == 1 && (recGroup[currMed] == 0 || subgroup == 1)) { 
+	if (getRecOK == 1 && (recGroup[currMed] == 0 || recSubGroup[currMed] == 0 || subsubgroup == 1)) { 
 		// Only do reccmds if it isn't a subdir marker
 		reccmds(2);
 	}
 	break;
    case KEY_3:
-	if (getRecOK == 1 && (recGroup[currMed] == 0 || subgroup == 1)) { 
+	if (getRecOK == 1 && (recGroup[currMed] == 0 || recSubGroup[currMed] == 0 || subsubgroup == 1)) { 
 		// Only do reccmds if it isn't a subdir marker
 		reccmds(3);
 	}
 	break;
    case KEY_4:
-	if (getRecOK == 1 && (recGroup[currMed] == 0 || subgroup == 1)) { 
+	if (getRecOK == 1 && (recGroup[currMed] == 0 || recSubGroup[currMed] == 0 || subsubgroup == 1)) { 
 		// Only do reccmds if it isn't a subdir marker
 		reccmds(4);
 	}
 	break;
    case KEY_5:
-	if (getRecOK == 1 && (recGroup[currMed] == 0 || subgroup == 1)) { 
+	if (getRecOK == 1 && (recGroup[currMed] == 0 || recSubGroup[currMed] == 0 || subsubgroup == 1)) { 
 		// Only do reccmds if it isn't a subdir marker
 		reccmds(5);
 	}
 	break;
    case KEY_6:
-	if (getRecOK == 1 && (recGroup[currMed] == 0 || subgroup == 1)) { 
+	if (getRecOK == 1 && (recGroup[currMed] == 0 || recSubGroup[currMed] == 0 || subsubgroup == 1)) { 
 		// Only do reccmds if it isn't a subdir marker
 		reccmds(6);
 	}
 	break;
    case KEY_7:
-	if (getRecOK == 1 && (recGroup[currMed] == 0 || subgroup == 1)) { 
+	if (getRecOK == 1 && (recGroup[currMed] == 0 || recSubGroup[currMed] == 0 || subsubgroup == 1)) { 
 		// Only do reccmds if it isn't a subdir marker
 		reccmds(7);
 	}
 	break;
    case KEY_8:
-	if (getRecOK == 1 && (recGroup[currMed] == 0 || subgroup == 1)) { 
+	if (getRecOK == 1 && (recGroup[currMed] == 0 || recSubGroup[currMed] == 0 || subsubgroup == 1)) { 
 		// Only do reccmds if it isn't a subdir marker
 		reccmds(8);
 	}
 	break;
    case KEY_9:
-	if (getRecOK == 1 && (recGroup[currMed] == 0 || subgroup == 1)) { 
+	if (getRecOK == 1 && (recGroup[currMed] == 0 || recSubGroup[currMed] == 0 || subsubgroup == 1)) { 
 		// Only do reccmds if it isn't a subdir marker
 		reccmds(9);
 	}
