@@ -84,7 +84,7 @@ function onLoad() {
 	showOSD();
 	videoplane.subtitles = Boolean(ShowSubs);
 	colorkeys.innerHTML = "<font color=red> " +  NN[4] + " </font><font color=green > " + NN[1] + " </font><font color=yellow> " + NN[2] + " </font><font color=blue> " + NN[5] + " </font>";
-	mediaList.innerHTML = "<h1><center style='font-size:" + fsRec + ";" + color_main_head + ";'>" + Lang[0] + "</center></h1>";
+	medialist.innerHTML = "<h1><center style='font-size:" + fsRec + ";" + color_main_head + ";'>" + Lang[0] + "</center></h1>";
 }
 
 function SetupFonts() {
@@ -115,10 +115,10 @@ function SetupFonts() {
 	osdmain.style.background = i;
 	schedule.style.background = i;
 	mainmenu.style.background = i;
-	mediaList.style.background = i;
+	medialist.style.background = i;
 	osdepginfo.style.background = i;
 	osdepginfonext.style.background = i;
-	channelList.style.background = "#bbb";
+	channellist.style.background = "#bbb";
 	osdnr.style.color = "black";
 	osdlang.style.color = "white";
 	color_bg = "#fc5";
@@ -292,7 +292,7 @@ var numObjs = event.objectNames.length;
 	if(event.objectNames[i] == "var.io.state" && is.getObject(event.objectNames[i]) == "standby" && KillStream == 1){
 		try {
 			if (isMediaMenu) { 
-				if (mediaList.style.opacity == 0) {setResume();} // No mediamenu on screen so set resume.
+				if (medialist.style.opacity == 0) {setResume();} // No mediamenu on screen so set resume.
 			}
 			mediaPlayer.close();
 			SetLed(2,2,0);// At request no more blinking on standby.
@@ -312,7 +312,7 @@ var numObjs = event.objectNames.length;
 
 			} else {
 				showDisplay("STOP", false, 100, 0 );
-				showMediaList();
+				showmedialist();
 			}
 		}
 	}
@@ -866,7 +866,7 @@ function onKeyDown(event) {
 			osdepginfonext.style.opacity = 0;
 			epgactive = 0;
 		}
-		mediaList.style.opacity = 0.9;
+		medialist.style.opacity = 0.9;
 		set_yellow_key = 1;
 		setTimeout("getSchedule(currChan);LoadMediaSettings();",100);
 	} else {
@@ -1022,7 +1022,7 @@ function onKeyDown(event) {
 			videoplane.style.top = (300*Yfactor[Set_Res])+"px";
 			isFullscreen = 0;
 			ClearScreen();
-			channelList.style.opacity = 1;
+			channellist.style.opacity = 1;
 			colorkeys.innerHTML = "<font color=red> " +  NN[3 + (1 - NowNext)] + " </font><font color=green> " + NN[1 - NowNext] + " </font><font color=yellow> " + NN[2] + " </font><font color=blue> " + NN[5] + " </font>";
 			colorkeys.style.opacity = 1;
 			showChannelList();
@@ -1280,7 +1280,7 @@ function onKeyDown(event) {
 			}
 		osdepginfo.style.opacity = 0;
 		osdepginfonext.style.opacity = 0;
-		mediaList.style.opacity = 0.9;
+		medialist.style.opacity = 0.9;
 		mainmenu.style.opacity = 0;
 		recPath = "/recordings.xml";
 		setTimeout("getRecList();LoadMediaSettings();",100);
@@ -1427,13 +1427,11 @@ function onCacheUpdated() {
 }
 
 function OSDchannr(channr) {
-	osdnr.innerHTML = "<center>" + Right(channr,3) + "</center>";
-
 //	Show logo's
-//	if (experimental) {
-//		osdnr.innerHTML = "<img src='" + channels[currChan] + ".logo.jpg' style='width:80%; max-height:100%; position:absolute; left:10%;' >"; 
-//	}
-
+	if (experimental) {
+//	osdnr.innerHTML = "<img src='" + channels[currChan] + ".logo.jpg' style='width:80%; max-height:100%; position:absolute; left:10%;' >";
+	}
+	osdnr.innerHTML = "<center>" + Right(channr,3) + "</center>";
 }
 
 function OSDhtml(){
@@ -2133,7 +2131,7 @@ function showChannelList() {
 		htmlstring = htmlstring + "<td style='" + liststyle + "font-size:" + fsList + ";'>\uE003\uE003" + listChan + "\uE003</td><td style='" + liststyle + "font-size:" + fsList + ";'>" + Left(channelsnames[listChan],15) + "\uE003</td><td style='" + liststyle + "font-size:" + fsList + ";'>"  + Left(EpgInfo[NowNext],64) + "</td></tr>";
 	}
 	htmlstring = htmlstring + "</table>";
-	channelList.innerHTML = htmlstring;
+	channellist.innerHTML = htmlstring;
         chanlistepg.innerHTML = "<center><p style='" + color_chan_epg + ";font-size:" + fsEpg + ";'>" + EPG[NowNext][1][currChan] + "</p><p style='" + color_chan_epg + ";font-size:" + fsList + ";'>" + Left(EPG[NowNext][4][currChan],250) + "</p></center>" ;
 
 }
@@ -2164,11 +2162,11 @@ function setVisible(isVisible) {
     document.body.appendChild(teletext);
     teletext.style.width = "50%";
     teletext.style.visibility = "visible";
-    channelList.style.visibility = "hidden";
+    channellist.style.visibility = "hidden";
     colorkeys.style.visibility = "hidden";
   } else {
     teletext.style.visibility = "hidden";
-    channelList.style.visibility = "visible";
+    channellist.style.visibility = "visible";
     colorkeys.style.visibility = "visible";
   }
 }
@@ -2311,7 +2309,7 @@ function onKeyMenu(keyCode) {
 		getRecOK = 0;
 		LoadMediaSettings();
 		isSetupMenu = 0;
-		mediaList.style.opacity = 0;
+		medialist.style.opacity = 0;
 		mainmenu.style.opacity = 0;
 		currMed = -1;
 		playRec(x);
@@ -2527,7 +2525,7 @@ function onKeyMenu(keyCode) {
 	case KEY_3:
 	if (menu == 0) {
 			isSetupMenu = 0;
-			mediaList.style.opacity = 0.9;
+			medialist.style.opacity = 0.9;
 			mainmenu.style.opacity = 0;
 			setTimeout("getSchedule(currChan);LoadMediaSettings();",100);
 	} else	if (menu == 1) {
@@ -2544,7 +2542,7 @@ function onKeyMenu(keyCode) {
 	case KEY_4:
 		if (menu == 0) {
 			isSetupMenu = 0;
-			mediaList.style.opacity = 0.9;
+			medialist.style.opacity = 0.9;
 			mainmenu.style.opacity = 0;
 			recPath = "/recordings.xml";
 			setTimeout("getRecList();LoadMediaSettings();",100);
@@ -2587,7 +2585,7 @@ function onKeyMenu(keyCode) {
 	case KEY_6:
 	if (menu == 0 && Restfulapiplugin) {
 			isSetupMenu = 0;
-			mediaList.style.opacity = 0.9;
+			medialist.style.opacity = 0.9;
 			mainmenu.style.opacity = 0;
 			setTimeout("getServerSchedule();LoadMediaSettings();",100);
 			}
@@ -2611,7 +2609,7 @@ function onKeyMenu(keyCode) {
 	case KEY_7:
 		if (menu == 0 && smartTVplugin) {
 			isSetupMenu = 0;
-			mediaList.style.opacity = 0.9;
+			medialist.style.opacity = 0.9;
 			mainmenu.style.opacity = 0;
 			recPath = "/media.xml";
 			setTimeout("getRecList();LoadMediaSettings();",100);
@@ -3377,11 +3375,11 @@ function LoadMediaSettings() {
 function UnloadMediaSettings() {
 	mediaPlayer.removeEventListener(mediaPlayer.ON_POSITION_CHANGED, ShowMediaOSD);
 	mediaPlayer.removeEventListener(mediaPlayer.ON_STATE_CHANGED, onStateChanged);
-	mediaList.style.opacity = 0;
+	medialist.style.opacity = 0;
 	osdmedia.style.opacity = 0;
 	osdtime.style.opacity = 0;
 	osdepginfo.style.opacity = 0;
-	mediaList.innerHTML = "<h1><center style='font-size:" + fsRec + ";" + color_main_head + ";'>" + Lang[0] + "</center></h1>";
+	medialist.innerHTML = "<h1><center style='font-size:" + fsRec + ";" + color_main_head + ";'>" + Lang[0] + "</center></h1>";
 	showDisplay(Right(currChan.toString(),4), false, 100, 0 );
 	isMediaMenu = 0;
 	isFullscreen = 1;
@@ -3398,7 +3396,7 @@ function onKeyMedia(keyCode) {
 if (DelisOK) {
 	switch(keyCode) {
 	case "Accept":
-	  mediaList.innerHTML = "<h1><center style='font-size:" + fsRec + ";" + color_main_head + ";'>" + Lang[0] + "</center></h1>";
+	  medialist.innerHTML = "<h1><center style='font-size:" + fsRec + ";" + color_main_head + ";'>" + Lang[0] + "</center></h1>";
 	  switchtimer.style.opacity = 0;
 	  setTimeout("DelRec2(); getRecList(); showMediaList();",100)
 	default:
@@ -3406,7 +3404,7 @@ if (DelisOK) {
 	  DelisOK = 0;
 	break;
   	} // end of switch
-} else if (mediaList.style.opacity != 0) { 
+} else if (medialist.style.opacity != 0) { 
   switch(keyCode) {
     case "BrowserBack":
 	if (subgroup && osdepginfo.style.opacity == 0) { 	
@@ -3497,7 +3495,7 @@ if (DelisOK) {
 			subsubgroup = 1;
 		} else {
 			recList[currMed] = "\u0003" + recList[currMed].substring(1);
-			mediaList.style.opacity = 0;
+			medialist.style.opacity = 0;
 			if (get_recordings == 1) {
 			setTimeout("GetMarks(); getResume(); playRec(recLink[currMed]+ '?mode=streamtoend&time=' + position);",100);
 			} else if (get_recordings == 2) {
@@ -3728,7 +3726,7 @@ if (DelisOK) {
 		//	isRecording = 0;
 		//	}
 
-		    mediaList.style.opacity = 0.9;
+		    medialist.style.opacity = 0.9;
 		    showDisplay("STOP", false, 100, 0 );
 		    showMediaList();
 	    }
@@ -4028,13 +4026,13 @@ try {
 	}
 	if (i!==0) { getRecOK = 1; } else {
 	getRecOK = 0;
-	mediaList.innerHTML = "<h1><center style='font-size:" + fsRec + ";" + color_main_head + ";'>" + Lang[38] + "</center><pre>\n\n\n" + Lang[37] + "</pre></h1>";
+	medialist.innerHTML = "<h1><center style='font-size:" + fsRec + ";" + color_main_head + ";'>" + Lang[38] + "</center><pre>\n\n\n" + Lang[37] + "</pre></h1>";
 	}
 
   } catch(e) {
     alert("Get Recordings problem: " + e);
 	getRecOK = 0;
-	mediaList.innerHTML = "<h1><center style='font-size:" + fsRec + ";" + color_main_head + ";'>" + Lang[38] + "</center><pre>\n\n\n" + Lang[39] + "</pre></h1>";
+	medialist.innerHTML = "<h1><center style='font-size:" + fsRec + ";" + color_main_head + ";'>" + Lang[38] + "</center><pre>\n\n\n" + Lang[39] + "</pre></h1>";
   }
 }
 
@@ -4521,7 +4519,7 @@ function showMediaList() {
 		htmlstring += "<td" + liststyle + "font-size:" + fsReclist + ";'>\uE003" + Left(recList[listMed],60) + "\uE003\uE003</td></tr>";
 		}
 	}
-	mediaList.innerHTML = htmlstring + "</table>";
+	medialist.innerHTML = htmlstring + "</table>";
 	//ShowInfo();
 }
 
@@ -4590,7 +4588,7 @@ try {
   } catch(e) {
     alert("Get EPG problem: " + e);
 	getRecOK = 0;
-	mediaList.innerHTML = "<h1><center style='font-size:" + fsRec + ";" + color_main_head + ";'>" + Lang[50] + "</center><pre>\n\n\n" + Lang[51] + "</pre></h1>";
+	medialist.innerHTML = "<h1><center style='font-size:" + fsRec + ";" + color_main_head + ";'>" + Lang[50] + "</center><pre>\n\n\n" + Lang[51] + "</pre></h1>";
   }
 }
 
@@ -4644,16 +4642,16 @@ function getSchedule(schchan){
 	} else {
 	getRecOK = 0;
 
-	mediaList.innerHTML = "<h1><center style='font-size:" + fsRec + ";" + color_main_head + ";'>" + Lang[11] + "</center><pre>\n\n\n" + Lang[52] + "</pre></h1>";
+	medialist.innerHTML = "<h1><center style='font-size:" + fsRec + ";" + color_main_head + ";'>" + Lang[11] + "</center><pre>\n\n\n" + Lang[52] + "</pre></h1>";
 
 	if (experimental) {
-	mediaList.innerHTML += "<img src='" + channels[schchan] + ".jpg' style='width:100%; position:absolute; left:0%; top:-11%;'>";
+	medialist.innerHTML += "<img src='" + channels[schchan] + ".jpg' style='width:100%; position:absolute; left:0%; top:-11%;'>";
 	}
 
 	}
   } catch(e) {
 	getRecOK = 0;
-	mediaList.innerHTML = "<h1><center style='font-size:" + fsRec + ";" + color_main_head + ";'>" + Lang[11] + "</center><pre>\n\n\n" + Lang[53] + "</pre></h1>";
+	medialist.innerHTML = "<h1><center style='font-size:" + fsRec + ";" + color_main_head + ";'>" + Lang[11] + "</center><pre>\n\n\n" + Lang[53] + "</pre></h1>";
   }
 
 }
@@ -4864,7 +4862,7 @@ function BackToTV() {
 	    if (isPause == 1) { 
 		UnloadMediaSettings(); 
 	    } else {
-	    	mediaList.style.opacity = 0.9;
+	    	medialist.style.opacity = 0.9;
 	    	showDisplay("STOP", false, 100, 0 );
 	    	showMediaList();
 		AvInfo.length = 0;
@@ -4936,7 +4934,7 @@ if (get_recordings == 1) {
 
 function ShowInfo() {
 //Like Show EPG Info
-  if ( mediaList.style.opacity == 0 ) { updateStreamInfo(currMed);} else { AvInfo[currMed] = "";}
+  if ( medialist.style.opacity == 0 ) { updateStreamInfo(currMed);} else { AvInfo[currMed] = "";}
   if (get_recordings == 2) {
 	result = recStrt[currMed]
        	osdepginfo.innerHTML = "<center><pre style='" + color_epg_head + ";'>" + Left(recTitl[currMed],60) 
@@ -4982,7 +4980,7 @@ function onScheduledStart(event) {
 
 	//Switch from recordings
 	if (isMediaMenu) { 
-		if (mediaList.style.opacity == 0) {setResume();} // No mediamenu on screen so set resume.
+		if (medialist.style.opacity == 0) {setResume();} // No mediamenu on screen so set resume.
 		UnloadMediaSettings();
 	}
 
@@ -5065,7 +5063,7 @@ function ClearScreen() {
 <body onload="onLoad()" onunload="onUnload()">
     	<embed type="application/x-motorola-toi" hidden="true">
 
-	<div id="channelList" style="width:100%; height:48%; position:absolute; left:7%; top:4%;;z-index:400;"></div>
+	<div id="channellist" style="width:100%; height:48%; position:absolute; left:7%; top:4%;;z-index:400;"></div>
 	<div id="colorkeys" style="width:100%; position:absolute; left:10%; top:84%;z-index:401;"></div>
 	<div id="chanlistepg" style="width:42%; position:absolute; left:7%; top:50%;z-index:402;"></div>
 
@@ -5090,7 +5088,7 @@ function ClearScreen() {
 	<div id="osdlang" style="width:7%; position:absolute; left:76%; top:9%;z-index:515;opacity:0;"></div>
 
 	<div id="mainmenu"  style="width:80%; position:absolute; left:10%; top:10%; bottom:10%;z-index:520;opacity:0;-webkit-border-radius:50px;"></div>
-	<div id="mediaList" style="width:80%; position:absolute; left:10%; top:10%; bottom:10%;z-index:520;opacity:0;-webkit-border-radius:50px;"></div>
+	<div id="medialist" style="width:80%; position:absolute; left:10%; top:10%; bottom:10%;z-index:520;opacity:0;-webkit-border-radius:50px;"></div>
 
 	<div id="switchtimer" style="width:45%; position:absolute; left:21%; top:26%;z-index:530;opacity:0;-webkit-border-radius:25px;"></div>
 	<div id="osdepginfo" style="width:80%; position:absolute; left:10%; top:10%;z-index:525;opacity:0;-webkit-border-radius:50px;"></div>
