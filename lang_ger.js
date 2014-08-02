@@ -15,7 +15,7 @@ months = new Array("Januar", "Februar", "Marz", "April", "Mai", "Juni", "Juli", 
 days = new Array("Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag");
 
 searchmode = new Array('Ausdruck', 'alle Worter', 'zumindest ein Wort','genau ubereinstimmen', 'regex', 'Fuzzy');
-searchchan = new Array('Kein', 'Pause', 'Kanalgruppe', 'nur FTA');
+searchchan = new Array('Kein', 'Intervall', 'Kanalgruppe', 'nur FTA');
 
 // EPG Content
 CLang[0] = "Movie / Drama";
