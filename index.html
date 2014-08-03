@@ -4411,10 +4411,15 @@ function MakeRecList_sublevel2(GroupID,SubGroupID) {
    for (var i=0;i<recTitl.length;i++)
 	{
 		if (recGroup[i] == GroupID && recSubGroup[i] == SubGroupID) {
-			var tmp = "";
+			var tmp = ""; var xx = "\uE003";
 			   for (var ii=(SubGroupID+1);ii<recTitl[i].length;ii++)
 				{
-				tmp += "\uE003" + recTitl[i][ii];
+					if (recTitl[i][(ii+1)]) {
+						tmp += "\uE003\uE002" + recTitl[i][ii];
+						xx = "/";
+					} else {
+						tmp += xx + recTitl[i][ii];
+					}
 				}
 			if (get_recordings == 2 ) {
 				result = recStrt[i];
