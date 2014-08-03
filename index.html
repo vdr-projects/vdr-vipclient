@@ -4368,7 +4368,7 @@ function MakeRecList_sublevel(GroupID) {
 	{
 	if (recGroup[i] == GroupID) {
 	 Group_Header[GroupID] = recTitl[i][0];
-	 if (recTitl[i][2]) { 
+		 if (recTitl[i][2]) { 
 					if (recTitl[i][1] != x) {
 						
 						recList[i] = "\uE002\uE003" + recTitl[i][1];
@@ -4377,7 +4377,7 @@ function MakeRecList_sublevel(GroupID) {
 						recList[i] = "" ; 
 					}
 					recSubGroup[i] = xx;
-				} else { 
+		} else { 
 					recSubGroup[i] = 0;
 					var tmp = "";
 					for (var ii=1;ii<recTitl[i].length;ii++)
@@ -4395,10 +4395,11 @@ function MakeRecList_sublevel(GroupID) {
 					} else { 
 						recList[i] = "\uE003" + result + tmp; //recTitl[i]; 
 					}
-			MaxInGroup = MaxInGroup + 1;
-				}
+		}
 		if ((recProt[i] == 1) && (ShowProtectedChannels == 1)) { recList[i] = "";}
-	x = recTitl[i][1];
+		if (recList[i] != "") { MaxInGroup = MaxInGroup + 1; }
+		alert (MaxInGroup);
+		x = recTitl[i][1];
 	}
 	}
 //MakeRecList_sublevel2(GroupID,0);
