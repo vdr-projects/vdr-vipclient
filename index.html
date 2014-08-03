@@ -146,6 +146,7 @@ function GetSettings() {
 		if (!is.getObject("vip.serveraddress")) {} 
 	} catch(e) {
 		is.setObject("vip.serveraddress","0",is.STORAGE_PERMANENT)
+		firstrun = 1;
 	}
 
 	try {
@@ -254,8 +255,10 @@ function GetSettings() {
 	for (var i = minChan[Fav_group];  i < (maxChan[Fav_group]+10); i++) { 
 		EPG[0][4][i] = "";EPG[1][4][i] = "";EPG[0][5][i] = "";EPG[1][5][i] = "";EPG[0][7][i] = "";EPG[1][7][i] = "";AvInfo[i] = "";
 	}
-	//Check if there is a SmartTV or Restfulapi VDR server plugin
+	//Check if there is a SmartTV or Restfulapi VDR server plugin but not on first run.
+	if (!firstrun) {
 	CheckPlugins();
+	}
 // override check for testing :
 //	smartTVplugin = 0 ;
 //	Restfulapiplugin = 1;
@@ -4398,7 +4401,6 @@ function MakeRecList_sublevel(GroupID) {
 		}
 		if ((recProt[i] == 1) && (ShowProtectedChannels == 1)) { recList[i] = "";}
 		if (recList[i] != "") { MaxInGroup = MaxInGroup + 1; }
-		alert (MaxInGroup);
 		x = recTitl[i][1];
 	}
 	}
