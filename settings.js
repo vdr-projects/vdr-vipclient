@@ -65,6 +65,9 @@ var EPGMode = 1; // 1 = FILTER_MODE_PF_AND_SCHEDULE 0 = FILTER_MODE_PF_ONLY
 var RecCmds = new Array(-1,1,-1,-1,-1,-1,-1,-1,-1,-1);
 var RecCmdsIcon = new Array("","\uE005","","","","","","","","");
 
+var preRecTime = 300 ;// for local recordings time before recording in seconds
+var afterRecTime = 600 ; // for local recordings time after recording in seconds
+
 
 //
 // No need to change anything from here on.
@@ -360,3 +363,4 @@ var smartTVplugin; // Turn on or off the use of smartTVplugin
 var Restfulapiplugin; // Turn on or off the use of Restfulapiplugin
 var firstrun = 0;// First time run or settings are cleaned.
 var localRecording = 0;
+

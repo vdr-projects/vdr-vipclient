@@ -536,7 +536,6 @@ var subs = "";
 if (currMed!= -1) {
 	if (streamInfo.playTime != -1) {
 		recDura[currMed] = streamInfo.playTime;
-		alert(streamInfo.playTime);
 	}
 }
 xx = 0;
@@ -1488,12 +1487,19 @@ function settimer(ProgTime,ProgName,ProgDura,SwitchTimer) {
 		  catch (e) {
 		    alert(e);
 		  }
-	} else if(SwitchTimer == 3) {	
+	} else if(SwitchTimer == 3) {
+		ProgTime -= preRecTime;
+		ProgDura += (afterRecTime + preRecTime);
+		var y = (new Date().getTime()/1000).toFixed(0); 
+		if(ProgTime < y) { 
+			ProgDura = ProgDura - (y - ProgTime);
+			ProgTime = y; 
+			}	
 		  try {
 		    var x = ss.schedule("RecLocal","record_hd_from_ip", ProgTime , ProgDura);
 		    ss.setParameter(x, "Channel", currChan.toString() );
 		    ss.setParameter(x, "Title", ProgName );
-		    ss.setParameter(x, "Info", EPG[0][5][currChan]);
+		    ss.setParameter(x, "Info", EPG[0][4][currChan]);
 		  }
 		  catch (e) {
 		    alert(e);
@@ -2370,19 +2376,31 @@ function onKeyMenu(keyCode) {
 	} else if (menu == 2) {
 		var x = ss.getBookingIds("*", 0, 0);
 		if (x.length > 0) {
+
 			try {
-				var y = om.createOperation("Remove Asset");
-				ss.removeAsset(y.(ss.getParameter(x[timerID], "assetId")));
-				om.releaseOperation(y);
-			} catch(e) {
-			alert("Error remove asset" + e);
+				if (ss.getParameter(x[timerID-1], "active") == "True") {
+					mediaRecorder.close();
+				}
+			} catch (e) {
+				alert(e);
 			}
-			alert(x[timerID]);
-			alert(ss.getParameter(x[timerID], "assetId"));
-//			ss.remove(x[timerID]);
+
+			try {
+				//var y = toi.OperationManager.createOperation("Test");
+				alert(ss.getParameter(x[timerID-1], "assetId"));
+				//ss.removeAsset(ss.getParameter(x[timerID-1], "assetId"));
+				//om.releaseOperation(y);
+			} catch(e) {
+				alert("Error remove asset" + e);
+			}
+
+			//Remove timer from schedule DB
+			//Recording is still in Asset DB!!
+			ss.remove(x[timerID-1]);
 			timer[timerID] = "";
+			timerID -= 1; if (timerID < 1) { timerID = 1;}
 			LoadTimers();
-			if (timer.length !== 0) { do { timerID = timerID + 1; } while (!timer[timerID] && (timerID < timer.length)) }
+			//if (timer.length !== 0) { do { timerID = timerID + 1; } while (!timer[timerID] && (timerID < timer.length)) }
 			setOSDtimer();
 			InitMenu(menu);
 		}
@@ -2533,7 +2551,8 @@ function onKeyMenu(keyCode) {
 	case KEY_2:
 		if (menu == MainMenu) {
 			LoadTimers();
-				if (timer.length !== 0) { do { timerID += 1; } while (!timer[timerID] && (timerID < timer.length)) }
+			timerID = 1;
+				//if (timer.length !== 0) { do { timerID += 1; } while (!timer[timerID] && (timerID < timer.length)) }
 			menu = 2;
 		}
 
@@ -5096,6 +5115,7 @@ function onScheduledStart(event) {
 	    // save the assetId in the booking
 	    ss.setParameter(event.booking.id, "assetURI", assetURI);
 	    ss.setParameter(event.booking.id, "assetId", assetId);
+	    ss.setParameter(event.booking.id, "active", "True");
 
 	    mediaRecorder.record();
 //	    alert("Recording to " + assetURI);
@@ -5114,6 +5134,8 @@ function onScheduledStop(event) {
 	    setOSDtimer();
 	} else {
 	  try {
+	    ss.unsetParameter(event.booking.id, "active");
+	    ss.setParameter(event.booking.id, "active", "False");
 	    mediaRecorder.close();
 	  }
 	  catch (e) {
