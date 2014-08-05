@@ -4409,13 +4409,12 @@ function MakeRecList_sublevel(GroupID) {
 
 
 function MakeRecList_sublevel2(GroupID,SubGroupID) {
-
    MaxInGroup = -1;
    for (var i=0;i<recTitl.length;i++)
 	{
 		if (recGroup[i] == GroupID && recSubGroup[i] == SubGroupID) {
 			var tmp = ""; var xx = "\uE003";
-			   for (var ii=(SubGroupID+1);ii<recTitl[i].length;ii++)
+			   for (var ii=2;ii<recTitl[i].length;ii++)
 				{
 					if (recTitl[i][(ii+1)]) {
 						tmp += "\uE003\uE002" + recTitl[i][ii];
