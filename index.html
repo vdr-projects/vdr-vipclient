@@ -26,6 +26,7 @@ function onLoad() {
 	vos = toi.videoOutputService;
 	fps = toi.frontPanelService;
 	ams = toi.assetManagerService;
+	om = toi.OperationManager;
 
 	GetSettings();
 	createPlayer();
@@ -1492,6 +1493,7 @@ function settimer(ProgTime,ProgName,ProgDura,SwitchTimer) {
 		    var x = ss.schedule("RecLocal","record_hd_from_ip", ProgTime , ProgDura);
 		    ss.setParameter(x, "Channel", currChan.toString() );
 		    ss.setParameter(x, "Title", ProgName );
+		    ss.setParameter(x, "Info", EPG[0][5][currChan]);
 		  }
 		  catch (e) {
 		    alert(e);
@@ -2317,11 +2319,12 @@ function onKeyMenu(keyCode) {
 		var x = ss.getBookingIds("*", 0, 0);
 		try {
 			recLink[0] = ss.getParameter(x[timerID-1], "assetURI");
+			recGUID[0] = ss.getParameter(x[timerID-1], "assetId");
 			recChan[0] = ss.getParameter(x[timerID-1], "Channel");
 			recTitl[0] = ss.getParameter(x[timerID-1], "Title");
-			recDura[0] = ss.getBooking(x[timerID-1]).duration;
+			recDura[0] = ss.getBooking(x[timerID-1]).duration;// Is updated if real length is different
 			recStrt[0] = ss.getBooking(x[timerID-1]).start;
-			recDesc[0] = Lang[37];
+			recDesc[0] = ss.getParameter(x[timerID-1], "Info");
 			localRecording = 1;
 			currMed = 0;
 			getRecOK = 0;
@@ -2367,8 +2370,16 @@ function onKeyMenu(keyCode) {
 	} else if (menu == 2) {
 		var x = ss.getBookingIds("*", 0, 0);
 		if (x.length > 0) {
-			alert(timerID); //Show timerID for debug, some times it won't delete.
-			ss.remove(timerID);
+			try {
+				var y = om.createOperation("Remove Asset");
+				ss.removeAsset(y.(ss.getParameter(x[timerID], "assetId")));
+				om.releaseOperation(y);
+			} catch(e) {
+			alert("Error remove asset" + e);
+			}
+			alert(x[timerID]);
+			alert(ss.getParameter(x[timerID], "assetId"));
+//			ss.remove(x[timerID]);
 			timer[timerID] = "";
 			LoadTimers();
 			if (timer.length !== 0) { do { timerID = timerID + 1; } while (!timer[timerID] && (timerID < timer.length)) }
@@ -5084,9 +5095,10 @@ function onScheduledStart(event) {
 
 	    // save the assetId in the booking
 	    ss.setParameter(event.booking.id, "assetURI", assetURI);
+	    ss.setParameter(event.booking.id, "assetId", assetId);
 
 	    mediaRecorder.record();
-	    alert("Recording to " + assetURI);
+//	    alert("Recording to " + assetURI);
 	  }
 	  catch (e) {
 	    alert(e);
