@@ -359,3 +359,4 @@ var ErrorAgain = 0;
 var smartTVplugin; // Turn on or off the use of smartTVplugin
 var Restfulapiplugin; // Turn on or off the use of Restfulapiplugin
 var firstrun = 0;// First time run or settings are cleaned.
+var localRecording = 0;

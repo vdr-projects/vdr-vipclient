@@ -532,6 +532,11 @@ var cList = streamInfo.availableComponents;
 var x;
 var xs = 0;
 var subs = "";
+if (currMed!= -1) {
+	if (streamInfo.playTime != -1) {
+		recDura[currMed] = streamInfo.playTime;
+		alert(streamInfo.playTime);
+	}
 xx = 0;
 AvInfo[currStream] = "";
 lang_prio_dyn.length = 0;
@@ -2308,15 +2313,25 @@ function onKeyMenu(keyCode) {
     break;
     case "Accept":
     	if (menu == 2 && isMediaMenu !== 1) {
-		var x = ss.getParameter(timerID, "assetURI");
-		getRecOK = 0;
-		LoadMediaSettings();
-		isSetupMenu = 0;
-		medialist.style.opacity = 0;
-		mainmenu.style.opacity = 0;
-		currMed = -1;
-		playRec(x);
-		//UnloadMediaSettings();
+		var x = ss.getBookingIds("*", 0, 0);
+		try {
+			recLink[0] = ss.getParameter(x[timerID-1], "assetURI");
+			recChan[0] = ss.getParameter(x[timerID-1], "Channel");
+			recTitl[0] = ss.getParameter(x[timerID-1], "Title");
+			recDura[0] = ss.getBooking(x[timerID-1]).duration;
+			recStrt[0] = ss.getBooking(x[timerID-1]).start;
+			recDesc[0] = Lang[37];
+			localRecording = 1;
+			currMed = 0;
+			getRecOK = 0;
+			LoadMediaSettings();
+			isSetupMenu = 0;
+			medialist.style.opacity = 0;
+			mainmenu.style.opacity = 0;
+			playRec(recLink[0]);
+			} catch(e) {
+
+			}
 	}
 	if (menu == 10) { 
 		GotoFav((timerID + Fav_base + 1));
@@ -2799,7 +2814,7 @@ if(menu == 1) { // settings menu
 
 if(menu == 2) { // Timers menu
 	booking = "";
-	var x = timerID - 1;
+	var x = timerID - 2;
 	var y = ss.getBookingIds("*", 0, 0);
 	if (y.length !== 0) {
 	for (var i=0;i<10;i++) {
@@ -2812,13 +2827,17 @@ if(menu == 2) { // Timers menu
 			} 
 
 		if (timer.length > x) {
+			try {
+				if (ss.getParameter(y[x], "assetURI")) { booking += "\uE003\uE017"; }
+			} catch(e) {
+				booking += "\uE003\uE016";
+			}
 			booking += timer[x];
 		} else {
 			booking += "\n";
 		}
 	}
 	}
-
 
 	mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";" + color_main_head + ";'>" + Lang[7] + "</center></h1><pre style='" + color_main_font + ";font-size:" + fsMenu + ";'>\n   0 -" + Lang[9] + "\n" + booking + "   <font style='color:red;'>\u25CF<font style='" + color_main_font + ";'> -" + Lang[48] + "<font style='color:green;'>\u25CF<font style='" + color_main_font + ";'> -" + Lang[19] + "<font style='color:yellow;'>\u25CF<font style='" + color_main_font + ";'> -" + Lang[19] + "   <font style='color:blue;'>\u25CF<font style='" + color_main_font + ";'> -" + Lang[19] + "</pre>";
 }
@@ -2998,7 +3017,7 @@ function LoadTimers() {
 						booking += " " + (y.duration/60).toFixed(0) + " min";
 					}
 
-				timer[(x[i])] = booking + "\n" ;
+				timer[i] = booking + "\n" ;
 
 				}
 }
@@ -3388,6 +3407,7 @@ function UnloadMediaSettings() {
 	isFullscreen = 1;
 	isPause = 0;
 	set_yellow_key = 0;
+	localRecording = 0;
 	if (mediaPlayer.getState() != mediaPlayer.STATE_PLAYING ) {
         play(channels[currChan]);
 	}
@@ -3636,7 +3656,7 @@ if (DelisOK) {
         break;
     case "Up":
 	if (mediaPlayer.getState() != mediaPlayer.STATE_PLAYING) {
-		if (currMed == -1 ) {
+		if (currMed == -1 || localRecording == 1 ) {
 		      showDisplay("PLAY", false, 100, 0 );
 		      mediaPlayer.play(1000);
 		} else {		
@@ -3716,7 +3736,7 @@ if (DelisOK) {
 	    }
     break;
     case "MediaStop":
-	    if (currMed == -1 || isPause == 1) {
+	    if (currMed == -1 || isPause == 1 || localRecording == 1) {
 		    osdepginfo.style.opacity = 0;
 		    isFullscreen = 1; play(channels[currChan]); 
 		    UnloadMediaSettings();		
@@ -3739,7 +3759,7 @@ if (DelisOK) {
 	      showDisplay("PAUS", false, 100, 0 );
 	      mediaPlayer.play(0);
 	    } else {
-		if (currMed == -1 ) {
+		if (currMed == -1 || localRecording == 1) {
 		      showDisplay("PLAY", false, 100, 0 );
 		      mediaPlayer.play(1000);
 		} else {		
@@ -3753,99 +3773,135 @@ if (DelisOK) {
     	    }
 	break;
     case KEY_1:
-	position += (mediaPlayer.getPosition()/1000) - 30;
-	if (position <= 0) { position = 0;} 
+	if (localRecording != 1 ) {
+		position += (mediaPlayer.getPosition()/1000) - 30;
+		if (position <= 0) { position = 0;} 
 			if (get_recordings == 1) {
 			      playRec((recLink[currMed] + "?mode=streamtoend&time=" + position));
 			} else if (get_recordings == 2) {
 			      playRec((recLink[currMed] + "?pos=time." + position));
 			}
+	} else {
+		mediaPlayer.playFromPosition((mediaPlayer.getPosition()-30000),1000);
+	}
 	break;
     case KEY_4:
-	position += (mediaPlayer.getPosition()/1000) - 60;
-	if (position <= 0) { position = 0;} 
+	if (localRecording != 1 ) {
+		position += (mediaPlayer.getPosition()/1000) - 60;
+		if (position <= 0) { position = 0;} 
 			if (get_recordings == 1) {
 			      playRec((recLink[currMed] + "?mode=streamtoend&time=" + position));
 			} else if (get_recordings == 2) {
 			      playRec((recLink[currMed] + "?pos=time." + position));
 			}
+	} else {
+		mediaPlayer.playFromPosition((mediaPlayer.getPosition()-60000),1000);
+
+	}
 	break;
     case KEY_7:
-	position += (mediaPlayer.getPosition()/1000) - 240;
-	if (position <= 0) { position = 0;} 
+	if (localRecording != 1 ) {
+		position += (mediaPlayer.getPosition()/1000) - 240;
+		if (position <= 0) { position = 0;} 
 			if (get_recordings == 1) {
 			      playRec((recLink[currMed] + "?mode=streamtoend&time=" + position));
 			} else if (get_recordings == 2) {
 			      playRec((recLink[currMed] + "?pos=time." + position));
 			}
+	} else {
+		mediaPlayer.playFromPosition((mediaPlayer.getPosition()-240000),1000);
+
+	}
 	break;
 
     case KEY_5:
+	if (localRecording != 1 ) {
 	if (recMark.length>posMark && get_recordings == 1) {	
 		position = recMark[posMark]; 
 		playRec(recLink[currMed] + "?mode=streamtoend&time=" + position); 
 	}
+	}
 	break;
     case KEY_2:
+	if (localRecording != 1 ) {
 	if (posMark>0 && get_recordings == 1) {	
 		posMark -= 1;
 		position = recMark[posMark]; 
 		playRec(recLink[currMed] + "?mode=streamtoend&time=" + position); 
 	}
+	}
 	break;
     case KEY_8:
+	if (localRecording != 1 ) {
 	if (recMark[posMark+1] && get_recordings == 1) {	
 		posMark += 1;
 		position = recMark[posMark]; 
 		playRec(recLink[currMed] + "?mode=streamtoend&time=" + position); 
+	}
 	}
 	break;
 
 
 
     case KEY_3:
-	position += (mediaPlayer.getPosition()/1000) + 30;
-	if (get_recordings == 1) {
-		if (position >= recDura[currMed]) {
-		 	BackToTV();
-		} else {
-			playRec((recLink[currMed] + "?mode=streamtoend&time=" + position));
+	if (localRecording != 1 ) {
+		position += (mediaPlayer.getPosition()/1000) + 30;
+		if (get_recordings == 1) {
+			if (position >= recDura[currMed]) {
+			 	BackToTV();
+			} else {
+				playRec((recLink[currMed] + "?mode=streamtoend&time=" + position));
+			}
+		} else if (get_recordings == 2) {
+			playRec((recLink[currMed] + "?pos=time." + position));
 		}
-	} else if (get_recordings == 2) {
-		playRec((recLink[currMed] + "?pos=time." + position));
+	} else {
+		mediaPlayer.playFromPosition((mediaPlayer.getPosition()+30000),1000);
 	}
 	break;
     case KEY_6:
-	position += (mediaPlayer.getPosition()/1000) + 60;
-	if (get_recordings == 1) {
-		if (position >= recDura[currMed]) {
-		 	BackToTV();
-		} else {
-			playRec((recLink[currMed] + "?mode=streamtoend&time=" + position));
+	if (localRecording != 1 ) {
+		position += (mediaPlayer.getPosition()/1000) + 60;
+		if (get_recordings == 1) {
+			if (position >= recDura[currMed]) {
+			 	BackToTV();
+			} else {
+				playRec((recLink[currMed] + "?mode=streamtoend&time=" + position));
+			}
+		} else if (get_recordings == 2) {
+			playRec((recLink[currMed] + "?pos=time." + position));
 		}
-	} else if (get_recordings == 2) {
-		playRec((recLink[currMed] + "?pos=time." + position));
+	} else {
+		mediaPlayer.playFromPosition((mediaPlayer.getPosition()+60000),1000);
 	}
 	break;
     case KEY_9:
-	position += (mediaPlayer.getPosition()/1000) + 240;
-	if (get_recordings == 1) {
-		if (position >= recDura[currMed]) {
-		 	BackToTV();
-		} else {
-			playRec((recLink[currMed] + "?mode=streamtoend&time=" + position));
+	if (localRecording != 1 ) {
+		position += (mediaPlayer.getPosition()/1000) + 240;
+		if (get_recordings == 1) {
+			if (position >= recDura[currMed]) {
+			 	BackToTV();
+			} else {
+				playRec((recLink[currMed] + "?mode=streamtoend&time=" + position));
+			}
+		} else if (get_recordings == 2) {
+			playRec((recLink[currMed] + "?pos=time." + position));
 		}
-	} else if (get_recordings == 2) {
-		playRec((recLink[currMed] + "?pos=time." + position));
+	} else {
+		mediaPlayer.playFromPosition((mediaPlayer.getPosition()+240000),1000);
 	}
 	break;
    case KEY_0:
+	if (localRecording != 1 ) {
 	position = 0; posMark = 0;
 			if (get_recordings == 1) {
 			      playRec((recLink[currMed] + "?mode=streamtoend&time=" + position));
 			} else if (get_recordings == 2) {
 			      playRec((recLink[currMed] + "?pos=time." + position));
 			}
+	} else {
+		mediaPlayer.playFromPosition(0,1000)
+	}
 	break;
 
 	default:
@@ -4866,7 +4922,7 @@ try {
 
 function BackToTV() {
 	    play(channels[currChan]);
-	    if (isPause == 1) { 
+	    if (isPause == 1 || localRecording == 1) { 
 		UnloadMediaSettings(); 
 	    } else {
 	    	medialist.style.opacity = 0.9;
