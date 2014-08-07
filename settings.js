@@ -244,7 +244,6 @@ var preChan = 0;
 var preGrp = 0;
 var timerChan = 10;
 var TimerActions;
-var switchtimerID = 0;
 var initialDelayID = 0;
 var CAdelayID = 0;
 var ProtectID = 0;

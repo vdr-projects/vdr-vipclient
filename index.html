@@ -502,8 +502,6 @@ function play(uri) {
         
   } catch (e) {
     alert("Failed opening stream: " + e);
-    alert("error: " + mediaPlayer.getTimeshiftError().source);
-    alert("error: " + mediaPlayer.getTimeshiftError().details);
     return;
   }
 }
@@ -843,9 +841,9 @@ function onKeyDown(event) {
 			showDisplay(Right(currChan.toString(),4), false, 100, 0 );
 		}
 	} else if(isSchedule == 0){
-		if(NowNext) {	
-			settimer(EPG[NowNext][2][currChan],EPG[NowNext][1][currChan],0,1);
-		}
+	   if(NowNext) {	
+		settimer(EPG[1][2][currChan],EPG[1][1][currChan],0,1,"",(EPG[1][4][currChan] + EPG[1][5][currChan]),EPG[1][6][currChan]);
+	   }
 	}
         break;
    case "Green":
@@ -1477,19 +1475,20 @@ function updateOSDtime(timchan) {
 }
 
 
-function settimer(ProgTime,ProgName,ProgDura,SwitchTimer,BackGroundColor,ProgDesc) {
+function settimer(ProgTime,ProgName,ProgDura,SwitchTimer,BackGroundColor,ProgDesc,ProgEvID) {
 
 if (!BackGroundColor) { BackGroundColor = DefaultBGColor;}
 // 1 - switchonly, 2 - record on server (display info only), 3 - record local
 	if(SwitchTimer == 1) {	
 		  try {
-		    switchtimerID = ss.schedule("SwitchOnly","notification", ProgTime , 0);
-		    ss.setParameter(switchtimerID, "Channel", currChan.toString() );
-		    ss.setParameter(switchtimerID, "Title", ProgName );
-		    ss.setParameter(switchtimerID, "Info", ProgDesc);
-		    ss.setParameter(switchtimerID, "active", "False");
-		    ss.setParameter(switchtimerID, "Type", "\uE00C"); //Timer Symbol
-		    ss.setParameter(switchtimerID, "resume", "0");
+		    var x = ss.schedule("SwitchOnly","notification", ProgTime , 0);
+		    ss.setParameter(x, "Channel", currChan.toString() );
+		    ss.setParameter(x, "Title", ProgName );
+		    ss.setParameter(x, "Info", ProgDesc);
+		    ss.setParameter(x, "active", "False");
+		    ss.setParameter(x, "Type", "\uE00C"); //Timer Symbol
+		    ss.setParameter(x, "resume", "0");
+		    ss.setParameter(x, "Eventid", ProgEvID);
 		  }
 		  catch (e) {
 			    ProgName = "ERROR" ;
@@ -1513,6 +1512,7 @@ if (!BackGroundColor) { BackGroundColor = DefaultBGColor;}
 			    ss.setParameter(x, "active", "False");
 			    ss.setParameter(x, "Type", "\uE00C"); //Timer Symbol
 			    ss.setParameter(x, "resume", "0");
+			    ss.setParameter(x, "Eventid", ProgEvID);
 		    } else {
 			    ProgName = "ERROR" ;
 			    BackGroundColor = "red";
@@ -2449,6 +2449,13 @@ function onKeyMenu(keyCode) {
 
 		VideoOutput();
 		InitMenu(menu);
+	} else if (menu == 2 && mediaRecorder) {
+		var x = ss.getBookingIds("*", 0, 0);
+		if (ss.getBooking(x[timerID-1]).category == "RecLocal") {
+			ss.reschedule(x[timerID-1],"SwitchOnly","notification",ss.getBooking(x[timerID-1]).start,ss.getBooking(x[timerID-1]).duration)
+		} else if (ss.getBooking(x[timerID-1]).category == "SwitchOnly") {
+			ss.reschedule(x[timerID-1],"RecLocal","record_hd_from_ip",ss.getBooking(x[timerID-1]).start,ss.getBooking(x[timerID-1]).duration)
+		}
 	} else 	if (menu == 5 && smartTVplugin) {
 		activate_timers(timerID);
 		InitMenu(menu);
@@ -2507,8 +2514,9 @@ function onKeyMenu(keyCode) {
 	} else if (menu == 2) {
 		// Show Info local timer/ recording
 		var x = ss.getBookingIds("*", 0, 0);
+		var y = Number(ss.getParameter(x[timerID-1], "Channel"));
 		osdepginfo.style.opacity = 1 - osdepginfo.style.opacity;
-	       	osdepginfo.innerHTML = "<center><pre style='" + color_timerinfo + ";'>" + ss.getParameter(x[timerID-1], "Title") + "\n " + "\n" + channelsnames[Number(ss.getParameter(x[timerID-1], "Channel"))] + "\n </pre><p style='" + color_epg_info + ";'>" + ss.getParameter(x[timerID-1], "Info") + "</p></center>" ;
+	       	osdepginfo.innerHTML = "<center><pre style='" + color_timerinfo + ";'>" + ss.getParameter(x[timerID-1], "Title") + "\n " + "\n" + y + " - " + channelsnames[y] + "(" + ss.getParameter(x[timerID-1], "Eventid") + ")" + "\n </pre><p style='" + color_epg_info + ";'>" + ss.getParameter(x[timerID-1], "Info") + "</p></center>" ;
 	} else 	if (menu == 5) {
 		// Show EPG info Timer
 		osdepginfo.style.opacity = 1 - osdepginfo.style.opacity;
@@ -2904,8 +2912,8 @@ if(menu == 2) { // Timers menu
 		}
 	}
 	}
-
-	mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";" + color_main_head + ";'>" + Lang[7] + "</center></h1><pre style='" + color_main_font + ";font-size:" + fsMenu + ";'>\n   0 -" + Lang[9] + "\n" + booking + "   <font style='color:red;'>\u25CF<font style='" + color_main_font + ";'> -" + Lang[48] + "<font style='color:green;'>\u25CF<font style='" + color_main_font + ";'> -" + Lang[19] + "<font style='color:yellow;'>\u25CF<font style='" + color_main_font + ";'> -" + Lang[19] + "   <font style='color:blue;'>\u25CF<font style='" + color_main_font + ";'> - " + NN[5] + "</pre>";
+	if (mediaRecording) { var x = NN[3]; } else { var x =  Lang[19]; }
+	mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";" + color_main_head + ";'>" + Lang[7] + "</center></h1><pre style='" + color_main_font + ";font-size:" + fsMenu + ";'>\n   0 -" + Lang[9] + "\n" + booking + "   <font style='color:red;'>\u25CF<font style='" + color_main_font + ";'> -" + Lang[48] + "<font style='color:green;'>\u25CF<font style='" + color_main_font + ";'> -" + Lang[19] + "<font style='color:yellow;'>\u25CF<font style='" + color_main_font + ";'> - " + x + "  <font style='color:blue;'>\u25CF<font style='" + color_main_font + ";'> - " + NN[5] + "</pre>";
 }
 
 if(menu == 3) { // MPD Menu
@@ -3602,7 +3610,7 @@ if (DelisOK) {
 	   DelRec(); 
 	}
 	if (getRecOK == 2) { //set timer
-			settimer(recStrt[currMed],recTitl[currMed],recDura[currMed],1,"",recDesc[currMed]);
+			settimer(recStrt[currMed],recTitl[currMed],recDura[currMed],1,"",recDesc[currMed],recGUID[currMed]);
 	 }
 	break;
     case "Blue":
@@ -3614,7 +3622,7 @@ if (DelisOK) {
 	break;
     case "Green":
 	if (getRecOK == 2 && mediaRecorder) { //set timer only if mediaRecorder = 1, unit has harddisk
-			settimer(recStrt[currMed],recTitl[currMed],recDura[currMed],3,"",recDesc[currMed]);
+			settimer(recStrt[currMed],recTitl[currMed],recDura[currMed],3,"",recDesc[currMed],recGUID[currMed]);
 	 }
 	break;
 
@@ -4993,7 +5001,7 @@ function onRecorderStateChanged(event) {
       break;
     case mediaRecorder.STATE_FAILED:
 	//  "STATE_FAILED";
-	recordStop();
+	RECicon = "\uE01A"; // Bomb Icoon
       break;
   }
 
