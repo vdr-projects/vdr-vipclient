@@ -1482,7 +1482,7 @@ function updateOSDtime(timchan) {
 }
 
 
-function settimer(ProgTime,ProgName,ProgDura,SwitchTimer,BackGroundColor) {
+function settimer(ProgTime,ProgName,ProgDura,SwitchTimer,BackGroundColor,ProgDesc) {
 
 if (!BackGroundColor) { BackGroundColor = DefaultBGColor;}
 // 1 - switchonly, 2 - record on server (display info only), 3 - record local
@@ -1490,9 +1490,15 @@ if (!BackGroundColor) { BackGroundColor = DefaultBGColor;}
 		  try {
 		    switchtimerID = ss.schedule("SwitchOnly","notification", ProgTime , 0);
 		    ss.setParameter(switchtimerID, "Channel", currChan.toString() );
+		    ss.setParameter(switchtimerID, "Title", ProgName );
+		    ss.setParameter(switchtimerID, "Info", ProgDesc);
+		    ss.setParameter(switchtimerID, "active", "False");
+		    ss.setParameter(switchtimerID, "Type", "\uE00C"); //Timer Symbol
+		    ss.setParameter(switchtimerID, "resume", "0");
 		  }
 		  catch (e) {
-		    alert(e);
+			    ProgName = "ERROR" ;
+			    BackGroundColor = "red";
 		  }
 	} else if(SwitchTimer == 3) {
 		ProgTime -= preRecTime;
@@ -1508,8 +1514,10 @@ if (!BackGroundColor) { BackGroundColor = DefaultBGColor;}
 		    if (x != 0) {
 			    ss.setParameter(x, "Channel", currChan.toString() );
 			    ss.setParameter(x, "Title", ProgName );
-			    ss.setParameter(x, "Info", EPG[0][4][currChan]);
+			    ss.setParameter(x, "Info", ProgDesc);
 			    ss.setParameter(x, "active", "False");
+			    ss.setParameter(x, "Type", "\uE00C"); //Timer Symbol
+			    ss.setParameter(x, "resume", "0");
 		    } else {
 			    ProgName = "ERROR" ;
 			    BackGroundColor = "red";
@@ -2315,8 +2323,7 @@ function onKeyMenu(keyCode) {
     case "Up":
 	if (menu == 2) {
 	    timerID -= 1;
-			var x = ss.getBookingIds("*", 0, 0);
-		    if (timerID < x[0]) { timerID = x[0]; }
+		    if (timerID < 1) { timerID = 1; }
 	} else 	if (menu == 5 || menu == 7 || menu == 10) {
 	    timerID -= 1;
 		    if (timerID < 0) { timerID = 0; }
@@ -2327,7 +2334,7 @@ function onKeyMenu(keyCode) {
 	if (menu == 2) {
 	    timerID += 1;
 		var x = ss.getBookingIds("*", 0, 0);
-		    if (timerID > x[x.length-1] ) { timerID = x[x.length-1]; }
+		    if (timerID > x.length ) { timerID = x.length; }
 	} else 	if (menu == 5 || menu == 7 || menu == 10) {
 	    timerID += 1;
 			if (timerID > (maxTimers - 1) && maxTimers !== 0) { timerID = maxTimers - 1; }
@@ -2345,6 +2352,8 @@ function onKeyMenu(keyCode) {
 			recDura[0] = ss.getBooking(x[timerID-1]).duration;// Is updated if real length is different
 			recStrt[0] = ss.getBooking(x[timerID-1]).start;
 			recDesc[0] = ss.getParameter(x[timerID-1], "Info");
+			recDummy[0] = x[timerID-1];
+			resume_position = Number(ss.getParameter(x[timerID-1], "resume"));
 			localRecording = 1;
 			currMed = 0;
 			getRecOK = 0;
@@ -2352,9 +2361,9 @@ function onKeyMenu(keyCode) {
 			isSetupMenu = 0;
 			medialist.style.opacity = 0;
 			mainmenu.style.opacity = 0;
-			playRec(recLink[0]);
+			playRec(recLink[0],resume_position);
 			} catch(e) {
-
+				alert("error : " + e);
 			}
 	}
 	if (menu == 10) { 
@@ -2500,6 +2509,11 @@ function onKeyMenu(keyCode) {
     case "Blue":
 		if (menu == 0) {
 		RestartPortal();
+	} else if (menu == 2) {
+		// Show Info local timer/ recording
+		var x = ss.getBookingIds("*", 0, 0);
+		osdepginfo.style.opacity = 1 - osdepginfo.style.opacity;
+	       	osdepginfo.innerHTML = "<center><pre style='" + color_timerinfo + ";'>" + ss.getParameter(x[timerID-1], "Title") + "\n " + "\n" + channelsnames[Number(ss.getParameter(x[timerID-1], "Channel"))] + "\n </pre><p style='" + color_epg_info + ";'>" + ss.getParameter(x[timerID-1], "Info") + "</p></center>" ;
 	} else 	if (menu == 5) {
 		// Show EPG info Timer
 		osdepginfo.style.opacity = 1 - osdepginfo.style.opacity;
@@ -2541,6 +2555,11 @@ function onKeyMenu(keyCode) {
 		} else {
 			SleepTimerID = setTimeout("SleepTimer = 0;toi.platformService.setStandby(true);", (SleepTimer * 60 * 1000));
 		}
+	} else if (menu == 2) {
+		var x = ss.getBookingIds("*", 0, 0);
+		var y = Number((new Date().getTime()/1000).toFixed(0)) + 2;
+		//stop current recording after 2 sec.
+		ss.reschedule(x[timerID-1],"RecLocal","record_hd_from_ip", y , 0)
 	}
 	InitMenu(menu);
     break;
@@ -2872,10 +2891,18 @@ if(menu == 2) { // Timers menu
 
 		if (timer.length > x) {
 			try {
-				if (ss.getParameter(y[x], "assetURI")) { booking += "\uE003\uE017"; }
+				if (ss.getParameter(y[x], "assetURI")) {
+				// test if there is a file with the timer if so more info is added
+					if (Number(ss.getParameter(y[x], "resume")) == 0 ) {
+						booking += "\uE003\uE010";
+					} else {
+						booking += "\uE003\uE003";
+					}			
+				}
 			} catch(e) {
-				booking += "\uE003\uE016";
+			    booking += "\uE003\uE003";
 			}
+			booking += ss.getParameter(y[x], "Type");
 			booking += timer[x];
 		} else {
 			booking += "\n";
@@ -2883,7 +2910,7 @@ if(menu == 2) { // Timers menu
 	}
 	}
 
-	mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";" + color_main_head + ";'>" + Lang[7] + "</center></h1><pre style='" + color_main_font + ";font-size:" + fsMenu + ";'>\n   0 -" + Lang[9] + "\n" + booking + "   <font style='color:red;'>\u25CF<font style='" + color_main_font + ";'> -" + Lang[48] + "<font style='color:green;'>\u25CF<font style='" + color_main_font + ";'> -" + Lang[19] + "<font style='color:yellow;'>\u25CF<font style='" + color_main_font + ";'> -" + Lang[19] + "   <font style='color:blue;'>\u25CF<font style='" + color_main_font + ";'> -" + Lang[19] + "</pre>";
+	mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";" + color_main_head + ";'>" + Lang[7] + "</center></h1><pre style='" + color_main_font + ";font-size:" + fsMenu + ";'>\n   0 -" + Lang[9] + "\n" + booking + "   <font style='color:red;'>\u25CF<font style='" + color_main_font + ";'> -" + Lang[48] + "<font style='color:green;'>\u25CF<font style='" + color_main_font + ";'> -" + Lang[19] + "<font style='color:yellow;'>\u25CF<font style='" + color_main_font + ";'> -" + Lang[19] + "   <font style='color:blue;'>\u25CF<font style='" + color_main_font + ";'> - " + NN[5] + "</pre>";
 }
 
 if(menu == 3) { // MPD Menu
@@ -3194,6 +3221,7 @@ if (get_timer==1) {
   }
  }
 }
+
 
 function ShowTimerInfo() {
  if (osdepginfo.style.opacity == 1) {
@@ -3579,7 +3607,7 @@ if (DelisOK) {
 	   DelRec(); 
 	}
 	if (getRecOK == 2) { //set timer
-			settimer(recStrt[currMed],recTitl[currMed],recDura[currMed],1);
+			settimer(recStrt[currMed],recTitl[currMed],recDura[currMed],1,"",recDesc[currMed]);
 	 }
 	break;
     case "Blue":
@@ -3591,7 +3619,7 @@ if (DelisOK) {
 	break;
     case "Green":
 	if (getRecOK == 2 && mediaRecorder) { //set timer only if mediaRecorder = 1, unit has harddisk
-			settimer(recStrt[currMed],recTitl[currMed],recDura[currMed],3);
+			settimer(recStrt[currMed],recTitl[currMed],recDura[currMed],3,"",recDesc[currMed]);
 	 }
 	break;
 
@@ -3781,6 +3809,10 @@ if (DelisOK) {
     break;
     case "MediaStop":
 	    if (currMed == -1 || isPause == 1 || localRecording == 1) {
+		    if (localRecording == 1) { 
+			ss.setParameter(recDummy[0], "resume", mediaPlayer.getPosition().toString());
+			alert("ID :" + recDummy[0] + "position" + mediaPlayer.getPosition());
+		    }
 		    osdepginfo.style.opacity = 0;
 		    isFullscreen = 1; play(channels[currChan]); 
 		    UnloadMediaSettings();		
@@ -4780,14 +4812,18 @@ function decMed(step) {
     }
 }
 
-function playRec(uri) {
+function playRec(uri,posrec) {
   try {
     if (mediaPlayer.getState() != mediaPlayer.STATE_IDLE) {
       mediaPlayer.close();
     }
 	if (osdepginfo.style.opacity == 1) {osdepginfo.style.opacity = 0;}
 	mediaPlayer.open(uri);
-	mediaPlayer.play(1000);
+	if (posrec) {
+		mediaPlayer.playFromPosition(posrec,1000);
+	} else {
+		mediaPlayer.play(1000);
+	}
 	showDisplay("PLAY", false, 100, 0 );
   } catch (e) {
     alert("Failed opening recording: " + e);
@@ -5130,6 +5166,7 @@ function onScheduledStart(event) {
 	    ss.setParameter(event.booking.id, "assetURI", assetURI);
 	    ss.setParameter(event.booking.id, "assetId", assetId);
 	    ss.setParameter(event.booking.id, "active", "True");
+	    ss.setParameter(event.booking.id, "Type", "\uE00B");
 
 	    mediaRecorder.record();
 //	    alert("Recording to " + assetURI);
@@ -5149,6 +5186,7 @@ function onScheduledStop(event) {
 	} else {
 	  try {
 	    ss.setParameter(event.booking.id, "active", "False");
+	    ss.setParameter(event.booking.id, "Type", "\uE01C");
 	    mediaRecorder.close();
 	  }
 	  catch (e) {
