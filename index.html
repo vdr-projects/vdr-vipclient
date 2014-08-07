@@ -26,7 +26,6 @@ function onLoad() {
 	vos = toi.videoOutputService;
 	fps = toi.frontPanelService;
 	ams = toi.assetManagerService;
-	om = toi.OperationManager;
 
 	GetSettings();
 	createPlayer();
@@ -68,6 +67,8 @@ function onLoad() {
 	if (mediaRecorder) {
 		createRecorder();
 		mediaRecorder.addEventListener(mediaRecorder.ON_STATE_CHANGED, onRecorderStateChanged);
+		om = toi.assetManagerService.getAssetOperationManager(); //toi.OperationManager;
+		rma = om.createOperation("Remove Asset");
 	}
 
 	    is.addEventListener(is.ON_OBJECTS_CHANGED, onEvent);
@@ -109,7 +110,9 @@ function SetupFonts() {
 	osdepg.style.color = "white";
 	osdca.style.color = "black";
 	switchtimer.style.color = "white";
-	switchtimer.style.background = "red";
+	DefaultBGColor = "green";
+	ErrorColor = "red";
+	switchtimer.style.background = DefaultBGColor;
 	osdnr.style.background = "red";
 	var i = "#3366ff";
 	osdmedia.style.background = i;
@@ -332,6 +335,7 @@ function onUnload() {
 		mediaPlayer.discardTimeshiftBuffer();
 		}
 	if(mediaRecorder){
+		om.releaseOperation(rma);
 		mediaRecorder.close();
 		mediaRecorder.releaseInstance();
 	}
@@ -678,9 +682,10 @@ function ExtraStuff(){
 			(currChan > 632 && currChan < 700) || (currChan > 8004 && currChan < 8027) )
 		{
 			//Show info if set nonfree
+			switchtimer.style.background = "red";
 			switchtimer.innerHTML = "<pre><center>\n" + Lang[90] +"\n\n </center></pre>"; // Non free channel message
 			switchtimer.style.opacity = 1;
-			CAdelayID = setTimeout("switchtimer.style.opacity = 0; ",ShowSetTimer);
+			CAdelayID = setTimeout("switchtimer.style.opacity = 0;",ShowSetTimer);
 		}
 	}
 
@@ -1477,7 +1482,9 @@ function updateOSDtime(timchan) {
 }
 
 
-function settimer(ProgTime,ProgName,ProgDura,SwitchTimer) {
+function settimer(ProgTime,ProgName,ProgDura,SwitchTimer,BackGroundColor) {
+
+if (!BackGroundColor) { BackGroundColor = DefaultBGColor;}
 // 1 - switchonly, 2 - record on server (display info only), 3 - record local
 	if(SwitchTimer == 1) {	
 		  try {
@@ -1494,14 +1501,20 @@ function settimer(ProgTime,ProgName,ProgDura,SwitchTimer) {
 		if(ProgTime < y) { 
 			ProgDura = ProgDura - (y - ProgTime);
 			ProgTime = y; 
-			}	
+			}
+			
 		  try {
 		    var x = ss.schedule("RecLocal","record_hd_from_ip", ProgTime , ProgDura);
-		    ss.setParameter(x, "Channel", currChan.toString() );
-		    ss.setParameter(x, "Title", ProgName );
-		    ss.setParameter(x, "Info", EPG[0][4][currChan]);
-		  }
-		  catch (e) {
+		    if (x != 0) {
+			    ss.setParameter(x, "Channel", currChan.toString() );
+			    ss.setParameter(x, "Title", ProgName );
+			    ss.setParameter(x, "Info", EPG[0][4][currChan]);
+			    ss.setParameter(x, "active", "False");
+		    } else {
+			    ProgName = "ERROR" ;
+			    BackGroundColor = "red";
+		    }
+		  } catch (e) {
 		    alert(e);
 		  }
 	}
@@ -1522,11 +1535,12 @@ function settimer(ProgTime,ProgName,ProgDura,SwitchTimer) {
 		var x = Lang[4] + th + ":" + tm  + "</pre>";
 	}
 
+	switchtimer.style.background = BackGroundColor;
 	switchtimer.innerHTML = "<pre>" + Lang[2] + Left(ProgName,30) + "\n" + Lang[3] + channelsnames[currChan] + "\n" + x;
 	setOSDtimer();
 
 	switchtimer.style.opacity = 1;
-	setTimeout("switchtimer.style.opacity = 0; ", ShowSetTimer);
+	setTimeout("switchtimer.style.opacity = 0;", ShowSetTimer);
 
 }
 
@@ -2376,26 +2390,25 @@ function onKeyMenu(keyCode) {
 	} else if (menu == 2) {
 		var x = ss.getBookingIds("*", 0, 0);
 		if (x.length > 0) {
-
-			try {
+			if (mediaRecorder) {
+			  try {
 				if (ss.getParameter(x[timerID-1], "active") == "True") {
+					ss.setParameter(x[timerID-1], "active", "False");
 					mediaRecorder.close();
 				}
-			} catch (e) {
+			  } catch (e) {
 				alert(e);
-			}
+			  }
 
-			try {
-				//var y = toi.OperationManager.createOperation("Test");
-				alert(ss.getParameter(x[timerID-1], "assetId"));
-				//ss.removeAsset(ss.getParameter(x[timerID-1], "assetId"));
-				//om.releaseOperation(y);
-			} catch(e) {
+			  try {
+				ams.removeAsset(rma, ss.getParameter(x[timerID-1], "assetId"));
+			  } catch(e) {
 				alert("Error remove asset" + e);
+			  }
 			}
 
 			//Remove timer from schedule DB
-			//Recording is still in Asset DB!!
+
 			ss.remove(x[timerID-1]);
 			timer[timerID] = "";
 			timerID -= 1; if (timerID < 1) { timerID = 1;}
@@ -3369,9 +3382,9 @@ if (MPDListener == 0) {
 			alert("Media player state changed: state=" + ev.state + ", reason=" + ev.reason + ", code=" + ev.code);
 			showDisplay("ERRR", false, 100, 0 ); 
 			if (experimental) {
-				settimer(0,ev.reason,0,2);
+				settimer(0,ev.reason,0,2,ErrorColor);
 			} else {
-				settimer(0,Lang[67],0,2);
+				settimer(0,Lang[67],0,2,ErrorColor);
 			}
 		}
 	}
@@ -4291,6 +4304,7 @@ function DelRec() {
 	if (osdepginfo.style.opacity == 1) {osdepginfo.style.opacity = 0;}
 try {
 	//popup for confirm
+	switchtimer.style.background = "red";
 	switchtimer.style.opacity = 1;
 	switchtimer.innerHTML = "<pre><center>" + Lang[44] +"\n" + Lang[45] + "\n\n " + Left(recTitl[currMed],30) + "</center></pre>"; // Recording Name
 	DelisOK = 1
@@ -4802,14 +4816,14 @@ function pauseRec(uri) {
 function createNewAsset() {
 	try {
 		assetId = ams.createAsset(ams.ASSET_PVR);
-		alert("Created " + assetId);
+//		alert("Created " + assetId);
 	} catch(e) {
 		alert("Couldn't create asset: " + e);
 	}
 }
 
 function recordStart(uri) {
-	alert("opening mediaRecorder...");
+//	alert("opening mediaRecorder...");
 	createNewAsset();
 	try {
 		mediaRecorder.open(uri, assetId);
@@ -4865,7 +4879,7 @@ function ServerRecordStart() {
 
 	  } catch(e) {
 	    alert("Sending Timers to server problem: " + e);
-	    settimer(0,Lang[55],0,2);
+	    settimer(0,Lang[55],0,2,ErrorColor);
 	  }
 
 }
@@ -4883,7 +4897,7 @@ function ServerRecord() {
 	setTimeout("xmlhttp.open('POST',(server_ip + RestFulAPI + '/remote/Record'),false);xmlhttp.send();",5000);
   } catch(e) {
    alert("Sending key to server problem: " + e);
-   settimer(0,Lang[55],0,2);
+   settimer(0,Lang[55],0,2,ErrorColor);
   }
 
 //end of function
@@ -5134,7 +5148,6 @@ function onScheduledStop(event) {
 	    setOSDtimer();
 	} else {
 	  try {
-	    ss.unsetParameter(event.booking.id, "active");
 	    ss.setParameter(event.booking.id, "active", "False");
 	    mediaRecorder.close();
 	  }
