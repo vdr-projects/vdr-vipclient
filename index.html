@@ -1244,16 +1244,11 @@ function onKeyDown(event) {
 		}
 		break;
 	case "MediaStop":
-	    if (isRecording == 1) { 
-		recordStop();
-		isRecording = 0;
-	    } else {
 		try {
 		SetLed(1,1,0);
 		if(TimeShift){ mediaPlayer.playFromPosition(mediaPlayer.POSITION_LIVE,mediaPlayer.PACE_PLAY); }
 		} catch(e) {
 			alert(e);
-		}
 		}
 	break;
 	case KEY_REC:
@@ -3792,8 +3787,6 @@ if (DelisOK) {
 
     case KEY_REC:
     case "MediaRecord":
-	//	recordStart(recLink[currMed]);
-	//	UnloadMediaSettings();
 	break;
     case "MediaRewind":
 	    if (mediaPlayer.getState() != mediaPlayer.STATE_IDLE) {
@@ -3811,7 +3804,6 @@ if (DelisOK) {
 	    if (currMed == -1 || isPause == 1 || localRecording == 1) {
 		    if (localRecording == 1) { 
 			ss.setParameter(recDummy[0], "resume", mediaPlayer.getPosition().toString());
-			alert("ID :" + recDummy[0] + "position" + mediaPlayer.getPosition());
 		    }
 		    osdepginfo.style.opacity = 0;
 		    isFullscreen = 1; play(channels[currChan]); 
@@ -3820,11 +3812,6 @@ if (DelisOK) {
 		    setResume();
 		    osdepginfo.style.opacity = 0;
 		    isFullscreen = 0; play(channels[currChan]); isFullscreen = 1;
-		//	if (isRecording == 1) { 
-		//	recordStop();
-		//	isRecording = 0;
-		//	}
-
 		    medialist.style.opacity = 0.9;
 		    showDisplay("STOP", false, 100, 0 );
 		    showMediaList();
@@ -4855,33 +4842,6 @@ function createNewAsset() {
 //		alert("Created " + assetId);
 	} catch(e) {
 		alert("Couldn't create asset: " + e);
-	}
-}
-
-function recordStart(uri) {
-//	alert("opening mediaRecorder...");
-	createNewAsset();
-	try {
-		mediaRecorder.open(uri, assetId);
-	} catch(e) {
-		alert("Cannot open mediaRecorder. " + e);
-	}
-
-	try {
-		mediaRecorder.record();
-		isRecording = 1;
-	} catch(e) {
-		alert("Cannot record! " + e);
-	}
-}
-
-
-function recordStop() {
-	try {
-		mediaRecorder.close();
-		isRecording = 0;
-	} catch(e) {
-		alert("Cannot stop mediaRecorder! " + e);
 	}
 }
 

@@ -284,7 +284,6 @@ var fsEpginfo; var fsList; var fsSchedList; var fsSched; var fsRec; var fsReclis
 var AvInfo = new Array();
 var xx = 0;
 
-var isRecording = 0; // set by recording subroutine
 var subsmode = 0;  // "cfg.media.subtitling.modepriority","Teletext,DVB"
 
 var rec_lst = new Array(); // Full recording list, used for sorting
