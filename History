@@ -19,6 +19,9 @@ VDR 1.7.29+
 	Localrecordings support FF/REW but also the jump in time with 1/4/7 and 3/6/9
 	Local recordings time is corrected when watching a local recording. Overview shows epg duration. 
 	Changed the color of the infowindow to 'Green' // Infowindow is now 'Red' in case of error, warning or if User attention is needed.
+	To stop local recording goto timer menu press stop button.
+	<Blue> button gives more info about a (local) timer
+
 
 0.24	vip.getmarks used for selecting getmarks 0 = restfulapi, 1 = SmartTVWeb (not all users have the newest SmartTVWeb)
 	Channels update.
