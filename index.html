@@ -842,7 +842,7 @@ function onKeyDown(event) {
 		}
 	} else if(isSchedule == 0){
 	   if(NowNext) {	
-		settimer(EPG[1][2][currChan],EPG[1][1][currChan],0,1,"",(EPG[1][4][currChan] + EPG[1][5][currChan]),EPG[1][6][currChan]);
+		settimer(EPG[1][2][currChan],EPG[1][1][currChan],0,1,"",(EPG[1][4][currChan] + EPG[1][5][currChan]),EPG[1][6][currChan].toString());
 	   }
 	}
         break;
@@ -2912,7 +2912,7 @@ if(menu == 2) { // Timers menu
 		}
 	}
 	}
-	if (mediaRecording) { var x = NN[3]; } else { var x =  Lang[19]; }
+	if (mediaRecorder) { var x = NN[3]; } else { var x =  Lang[19]; }
 	mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";" + color_main_head + ";'>" + Lang[7] + "</center></h1><pre style='" + color_main_font + ";font-size:" + fsMenu + ";'>\n   0 -" + Lang[9] + "\n" + booking + "   <font style='color:red;'>\u25CF<font style='" + color_main_font + ";'> -" + Lang[48] + "<font style='color:green;'>\u25CF<font style='" + color_main_font + ";'> -" + Lang[19] + "<font style='color:yellow;'>\u25CF<font style='" + color_main_font + ";'> - " + x + "  <font style='color:blue;'>\u25CF<font style='" + color_main_font + ";'> - " + NN[5] + "</pre>";
 }
 
@@ -3610,7 +3610,7 @@ if (DelisOK) {
 	   DelRec(); 
 	}
 	if (getRecOK == 2) { //set timer
-			settimer(recStrt[currMed],recTitl[currMed],recDura[currMed],1,"",recDesc[currMed],recGUID[currMed]);
+			settimer(recStrt[currMed],recTitl[currMed],recDura[currMed],1,"",recDesc[currMed],recGUID[currMed].toString());
 	 }
 	break;
     case "Blue":
@@ -3622,7 +3622,7 @@ if (DelisOK) {
 	break;
     case "Green":
 	if (getRecOK == 2 && mediaRecorder) { //set timer only if mediaRecorder = 1, unit has harddisk
-			settimer(recStrt[currMed],recTitl[currMed],recDura[currMed],3,"",recDesc[currMed],recGUID[currMed]);
+			settimer(recStrt[currMed],recTitl[currMed],recDura[currMed],3,"",recDesc[currMed],recGUID[currMed].toString());
 	 }
 	break;
 
