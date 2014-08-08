@@ -1481,7 +1481,7 @@ if (!BackGroundColor) { BackGroundColor = DefaultBGColor;}
 // 1 - switchonly, 2 - record on server (display info only), 3 - record local
 	if(SwitchTimer == 1) {	
 		  try {
-		    var x = ss.schedule("SwitchOnly","notification", ProgTime , 0);
+		    var x = ss.schedule("SwitchOnly","notification", ProgTime , ProgDura);
 		    ss.setParameter(x, "Channel", currChan.toString() );
 		    ss.setParameter(x, "Title", ProgName );
 		    ss.setParameter(x, "Info", ProgDesc);
@@ -1489,6 +1489,7 @@ if (!BackGroundColor) { BackGroundColor = DefaultBGColor;}
 		    ss.setParameter(x, "Type", "\uE00C"); //Timer Symbol
 		    ss.setParameter(x, "resume", "0");
 		    ss.setParameter(x, "Eventid", ProgEvID);
+
 		  }
 		  catch (e) {
 			    ProgName = "ERROR" ;
@@ -2456,6 +2457,8 @@ function onKeyMenu(keyCode) {
 		} else if (ss.getBooking(x[timerID-1]).category == "SwitchOnly") {
 			ss.reschedule(x[timerID-1],"RecLocal","record_hd_from_ip",ss.getBooking(x[timerID-1]).start,ss.getBooking(x[timerID-1]).duration)
 		}
+		LoadTimers();
+		InitMenu(menu);
 	} else 	if (menu == 5 && smartTVplugin) {
 		activate_timers(timerID);
 		InitMenu(menu);
@@ -2913,7 +2916,7 @@ if(menu == 2) { // Timers menu
 	}
 	}
 	if (mediaRecorder) { var x = NN[3]; } else { var x =  Lang[19]; }
-	mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";" + color_main_head + ";'>" + Lang[7] + "</center></h1><pre style='" + color_main_font + ";font-size:" + fsMenu + ";'>\n   0 -" + Lang[9] + "\n" + booking + "   <font style='color:red;'>\u25CF<font style='" + color_main_font + ";'> -" + Lang[48] + "<font style='color:green;'>\u25CF<font style='" + color_main_font + ";'> -" + Lang[19] + "<font style='color:yellow;'>\u25CF<font style='" + color_main_font + ";'> - " + x + "  <font style='color:blue;'>\u25CF<font style='" + color_main_font + ";'> - " + NN[5] + "</pre>";
+	mainmenu.innerHTML = "<h1><center style='font-size:" + fsMenuMain + ";" + color_main_head + ";'>" + Lang[7] + "</center></h1><pre style='" + color_main_font + ";font-size:" + fsMenu + ";'>\n   0 -" + Lang[9] + "\n" + booking + "   <font style='color:red;'>\u25CF<font style='" + color_main_font + ";'> -" + Lang[48] + "<font style='color:green;'>\u25CF<font style='" + color_main_font + ";'> -" + x + "<font style='color:yellow;'>\u25CF<font style='" + color_main_font + ";'> - " + Lang[19] + "  <font style='color:blue;'>\u25CF<font style='" + color_main_font + ";'> - " + NN[5] + "</pre>";
 }
 
 if(menu == 3) { // MPD Menu
@@ -3070,9 +3073,8 @@ function LoadTimers() {
 		var x = ss.getBookingIds("*", 0, 0);
 			for (var i=0;i<x.length;i++) { 
 				var y = ss.getBooking(x[i]);
-				booking = "   ID " + x[i];
-				booking += " " + y.category;
-				booking += " " + ss.getParameter(x[i], "Channel");
+				booking = " ID " + x[i];
+				booking += " " + Left(y.category,1);
 				tijd = y.start;
 				date = new Date(tijd*1000); 
 				tijd = date.toUTCString();
@@ -3085,12 +3087,11 @@ function LoadTimers() {
 				th=addzero(th);
 				tm=addzero(tm);
 
-				booking += " Start " + Left(days[day],3) + " " + d + " " + Left(months[month],3) + " " + th + ":" + tm + "  ";
+//				booking += " Start " + Left(days[day],3) + " " + d + " " + Left(months[month],3) + " " + th + ":" + tm + "   " + (y.duration/60).toFixed(0) + " min";
+				booking += " " + d + " " + Left(months[month],3) + " " + th + ":" + tm + "   " + (y.duration/60).toFixed(0) + " min";
 
-					if (y.category !== "SwitchOnly") {
-						booking += " " + (y.duration/60).toFixed(0) + " min";
-					}
-
+				booking += " " + Left(channelsnames[ss.getParameter(x[i], "Channel")],8);
+				booking += "  " + Left(ss.getParameter(x[i], "Title"),15);
 				timer[i] = booking + "\n" ;
 
 				}
@@ -5088,7 +5089,6 @@ function onScheduledStart(event) {
 	ClearScreen();
 	isFullscreen = 1; FullScreen(); 
 	isVisible = 0; setVisible(isVisible); 
-	setOSDtimer();
 
 	//Switch from recordings
 	if (isMediaMenu) { 
@@ -5110,6 +5110,8 @@ function onScheduledStart(event) {
 	if (currChan !== prevChan) {
 		play(channels[currChan]);
 	} 
+	ss.remove(event.booking.id);
+	setOSDtimer();
   } else {
 	  try {
 	    createNewAsset();

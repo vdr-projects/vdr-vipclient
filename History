@@ -21,6 +21,7 @@ VDR 1.7.29+
 	Changed the color of the infowindow to 'Green' // Infowindow is now 'Red' in case of error, warning or if User attention is needed.
 	To stop local recording goto timer menu press stop button.
 	<Blue> button gives more info about a (local) timer
+	Updated view of local timers, to match more the server timer menu layout.
 
 
 0.24	vip.getmarks used for selecting getmarks 0 = restfulapi, 1 = SmartTVWeb (not all users have the newest SmartTVWeb)
