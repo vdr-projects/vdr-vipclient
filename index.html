@@ -3111,10 +3111,11 @@ try {
    xmlDoc=xmlhttp.responseXML; 
    var x=xmlDoc.getElementsByTagName("timer");
    maxTimers = x.length;
-	timers.length = 0; // clear timers[i] tries to clear crap if current x.length < previous x.length
-   for (var i=0;i<x.length;i++)
+   timers.length = 0; // clear timers[i] tries to clear crap if current x.length < previous x.length
+   if (x.length > 0) {
+    for (var i=0;i<x.length;i++)
 	  { 
-		var fill = "\uE003\uE003\uE003\uE003\uE003\uE003\uE003\uE003\uE003\uE003";
+	  var fill = "\uE003\uE003\uE003\uE003\uE003\uE003\uE003\uE003\uE003\uE003";
 	  timersFlag[i] = x[i].getElementsByTagName("flags")[0].childNodes[0].nodeValue;
 	  timersStrt[i] = Right("000" + x[i].getElementsByTagName("start")[0].childNodes[0].nodeValue,4);
 	  timersStop[i] = Right("000" + x[i].getElementsByTagName("stop")[0].childNodes[0].nodeValue,4);
@@ -3139,8 +3140,9 @@ try {
 	  }
 
 	  timers[i] += timersDays[i] + "\uE003" + timersStrt[i] + "\uE003" + timersStop[i] + "\uE003" + Left(timersName[i],8) + "\uE003" + Left(timersFile[i],15) + "\n" ;
-	  timerOK = 1;
-	  }
+    }
+   }
+    timerOK = 1;
  } else if (get_timer == 0) {
    xmlhttp=new XMLHttpRequest();
    xmlhttp.open("GET",(server_ip + RestFulAPI + "/timers.xml"),false);  // ?" + new Date().getTime()),false);
@@ -3148,7 +3150,9 @@ try {
    xmlDoc=xmlhttp.responseXML; 
    var x=xmlDoc.getElementsByTagName("timer");
    maxTimers = x.length;
-   for (var i=0;i<x.length;i++)
+   timers.length = 0; // clear timers[i] tries to clear crap if current x.length < previous x.length
+   if (x.length > 0) {
+    for (var i=0;i<x.length;i++)
 	  { 
 	  var fill = "\uE003\uE003\uE003\uE003\uE003\uE003\uE003\uE003\uE003\uE003";
 	  timersID[i] = x[i].getElementsByTagName("param")[0].childNodes[0].nodeValue;
@@ -3173,9 +3177,9 @@ try {
 		timers[i] = "\uE003\uE003\uE003";
 	  }
 	  timers[i] += timersDays[i] + "\uE003" + timersStrt[i] + "\uE003" + timersStop[i] + "\uE003" + Left(timersName[i],8) + "\uE003" + Left(timersFile[i],15) + "\n" ;
-	  timerOK = 1;
-	  }
-
+   } 
+  }
+   timerOK = 1;
  }
   } catch(e) {
     timerOK = 0;
@@ -3272,10 +3276,11 @@ try {
    xmlDoc=xmlhttp.responseXML; 
    var x=xmlDoc.getElementsByTagName("searchtimer");
    maxTimers = x.length;
-	searchtimers.length = 0; // clear timers[i] tries to clear crap if current x.length < previous x.length
-   for (var i=0;i<x.length;i++)
+   searchtimers.length = 0; // clear timers[i] tries to clear crap if current x.length < previous x.length
+   if (x.length > 0) {
+     for (var i=0;i<x.length;i++)
 	  { 
-		var fill = "\uE003\uE003\uE003\uE003\uE003\uE003\uE003\uE003\uE003\uE003";
+	  var fill = "\uE003\uE003\uE003\uE003\uE003\uE003\uE003\uE003\uE003\uE003";
 	  searchtimersID[i] = x[i].getElementsByTagName("id")[0].childNodes[0].nodeValue;
 	  searchtimersSearch[i] = x[i].getElementsByTagName("search")[0].childNodes[0].nodeValue;
 	  searchtimersFlag[i] = x[i].getElementsByTagName("use_as_searchtimer")[0].childNodes[0].nodeValue;
@@ -3332,8 +3337,9 @@ try {
 
 
 	  searchtimers[i] += searchtimersSearch[i]  + "\uE003\uE003\n" ;
+    }
 	  timerOK = 1;
-	  }
+   }
   } catch(e) {
     timerOK = 0;
     alert("Get SearchTimers problem: " + e);
