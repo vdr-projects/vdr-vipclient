@@ -4,6 +4,7 @@ Motorola Vip : 1960, 1910, 1903, 1963.
 VDR 1.7.29+
 
 0.26	Fix for [undefined] in (search)timer menu when there are no (search)timers on server
+	Changed Plugin check, only check if digit 1,2,3 from server ip & box ip are the same.
 	
 
 0.25	Get recordings from Streamdev, Restfulapi or SmartTVweb.

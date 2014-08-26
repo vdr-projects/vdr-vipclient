@@ -2,9 +2,9 @@
 // Default settings
 // 
 
-var Version = "0.26.1";
+var Version = "0.26.2";
 
-server_ip_array = new Array("http://192.168.1.15","http://192.168.3.15","http://easyvdr","http://192.168.3.100","http://192.168.178.19","http://192.168.1.21","http://192.168.2.100","http://192.168.178.52");
+server_ip_array = new Array("http://192.168.1.15","http://192.168.3.15","http://192.168.178.56","http://192.168.3.100","http://192.168.178.19","http://192.168.1.21","http://192.168.2.100","http://192.168.178.52");
 
 var server_ip = server_ip_array[0]; // default server
 var StartVolume = 15; // Volume on (re)start of the portal.
@@ -359,6 +359,8 @@ var PIPDelayID;
 var ErrorAgain = 0;
 var smartTVplugin; // Turn on or off the use of smartTVplugin
 var Restfulapiplugin; // Turn on or off the use of Restfulapiplugin
-var firstrun = 0;// First time run or settings are cleaned.
 var localRecording = 0;
+var box_ip; // Used for testing plugins
+var test_ip; // Used for testing plugins
+
 

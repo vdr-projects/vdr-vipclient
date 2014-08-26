@@ -150,7 +150,6 @@ function GetSettings() {
 		if (!is.getObject("vip.serveraddress")) {} 
 	} catch(e) {
 		is.setObject("vip.serveraddress","0",is.STORAGE_PERMANENT)
-		firstrun = 1;
 	}
 
 	try {
@@ -259,10 +258,14 @@ function GetSettings() {
 	for (var i = minChan[Fav_group];  i < (maxChan[Fav_group]+10); i++) { 
 		EPG[0][4][i] = "";EPG[1][4][i] = "";EPG[0][5][i] = "";EPG[1][5][i] = "";EPG[0][7][i] = "";EPG[1][7][i] = "";AvInfo[i] = "";
 	}
-	//Check if there is a SmartTV or Restfulapi VDR server plugin but not on first run.
-	if (!firstrun) {
-	CheckPlugins();
+	//Check if there is a SmartTV or Restfulapi VDR server plugin but not when box ip isn't the same range as server ip
+ 	test_ip = server_ip.split(".");
+	box_ip = (is.getObject("config.ipaddress")).split(".");
+
+	if (("http://" + box_ip[0] == test_ip[0]) && (box_ip[1] == test_ip[1]) && (box_ip[2] == test_ip[2])) {
+		CheckPlugins();
 	}
+
 // override check for testing :
 //	smartTVplugin = 0 ;
 //	Restfulapiplugin = 1;
@@ -3348,7 +3351,7 @@ try {
 }
 
 function ShowSearchTimerInfo() {
-	// info about a search timer.
+  // info about a search timer.
   //Like Show EPG Info
   //setup some dummy vars
 
