@@ -1,10 +1,17 @@
 #! /bin/bash
 #
 # Script by rekordc@gmail.com
-# 0.36 05/06/2014
-#
+# 0.37 12/sept/2014
+# $1 script with pl extension : "1" or "0"
 
-svdrpsend.pl -p 6419 lstc > channels.list
+
+if (($1)); then
+	Svdrpsend="svdrpsend.pl"
+else
+	Svdrpsend="svdrpsend"
+fi
+
+$Svdrpsend -p 6419 lstc > channels.list
 
 while IFS=: read Name Frequency Parameters Source SRate VPID APID TPID CA SID NID TID RID
 do 
@@ -34,6 +41,7 @@ do
 
 	echo -e "channelsnames[$channr]=\"$nameArray\";\n\
 channels[$channr]=\"$Source-$NID-$TID-$SID\";"
+
 	if [ "$groupnr" == "$oldnr" ]; 
 	 then max_grp[$groupnr]=$channr
 	 else min_grp[$groupnr]=$channr

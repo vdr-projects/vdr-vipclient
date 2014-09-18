@@ -68,6 +68,26 @@ var RecCmdsIcon = new Array("","\uE005","","","","","","","","");
 var preRecTime = 300 ;// for local recordings time before recording in seconds
 var afterRecTime = 600 ; // for local recordings time after recording in seconds
 
+var color_bg = "#fc5";
+var color_main_head = "color:white";
+var color_main_font = "color:black";
+var color_epg_head = "color:white";
+var color_epg_title = "color:white";
+var color_epg_avinfo = "color:black";
+var color_epg_info = "color:yellow";
+var color_sched_head = "color:white";
+var color_sched_font = "color:black";
+var color_chan_epg = "color:black";
+var color_osdtimer = "color:black";
+var color_timerinfo = "color:white";
+var color_media_osd = "color:white";
+var color_progress1 = "<font color=red>";
+var color_progress2 = "<font color=white>";
+var color_notset = "color:grey";
+var color_switchtimer = "#660066";
+var DefaultBGColor = "green";
+var ErrorColor = "red";
+
 
 //
 // No need to change anything from here on.
@@ -158,6 +178,8 @@ var Change = 0;
 var ChangeOK = 0;
 var Extok = 0;
 var count = 0;
+
+//keys
 var KEY_0 = "U+0030";
 var KEY_1 = "U+0031";
 var KEY_2 = "U+0032";
@@ -169,16 +191,27 @@ var KEY_7 = "U+0037";
 var KEY_8 = "U+0038";
 var KEY_9 = "U+0039";
 var KEY_REC = "U+00bd";
-var KEY_FAV = "U+e0003"; 	// comhem
-var KEY_FILM = "U+e0033";	// comhem
-var KEY_HELP2 = "U+f0001";	// comhem
-var KEY_OPNAMES = "U+0046";	// old kpn (vip1710/1760)
-var KEY_HELP = "Info";		// old kpn (vip1710/1760)
-var KEY_DIENSTEN = "Portal";	// old kpn (vip1710/1760)
-var KEY_A = "U+0041";	// |> old kpn (vip1710/1760)
-var KEY_B = "U+0042";	// hh old kpn (vip1710/1760)
-var KEY_C = "U+0043";	// @  old kpn (vip1710/1760)
-var KEY_D = "U+0044";	// >@ old kpn (vip1710/1760)
+//Extra keys
+// Comhem Remote
+var KEY_FAV = "U+e0003";
+var KEY_FILM = "U+e0033";
+var KEY_HELP2 = "U+f0001";
+// old kpn (vip1710/1760)
+var KEY_OPNAMES = "U+0046";
+var KEY_HELP = "Info";
+var KEY_DIENSTEN = "Portal";
+var KEY_A = "U+0041";	// |>
+var KEY_B = "U+0042";	// hh
+var KEY_C = "U+0043";	// @
+var KEY_D = "U+0044";	// >@
+// comx keyboard
+var KEY_DVR = "DVR";
+var KEY_WWW = "Web";
+var KEY_STOP = "U+001B";
+var KEY_EPG = "List";
+var KEY_REC2 = "MediaRecord";
+var KEY_MPT = "MediaPreviousTrack";
+var KEY_MNT = "MediaNextTrack";
 
 
 
@@ -258,24 +291,6 @@ var switchicon = "\uE003";
 var CAicon = "\uE00F";
 var RECicon = "\uE003";
 var Radioicon = "\uE003";
-
-var color_bg;
-var color_main_head;
-var color_main_font;
-var color_epg_head;
-var color_epg_title;
-var color_epg_avinfo;
-var color_epg_info;
-var color_sched_head;
-var color_sched_font;
-var color_chan_epg;
-var color_osdtimer;
-var color_timerinfo;
-var color_media_osd;
-var color_progress1;
-var color_progress2;
-var color_notset;
-
 
 var fsAudio; var fsTime; var fsName; var fsMenu; var fsChan; var fsCA; var fsMenuMain; var fsEpg;
 var fsEpginfo; var fsList; var fsSchedList; var fsSched; var fsRec; var fsReclist; var fsMedia; var fsKeys;
