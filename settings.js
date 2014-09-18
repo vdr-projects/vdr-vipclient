@@ -191,6 +191,8 @@ var KEY_7 = "U+0037";
 var KEY_8 = "U+0038";
 var KEY_9 = "U+0039";
 var KEY_REC = "U+00bd";
+var KEY_REC2 = "MediaRecord";
+var KEY_OK = "Accept";
 //Extra keys
 // Comhem Remote
 var KEY_FAV = "U+e0003";
@@ -204,14 +206,14 @@ var KEY_A = "U+0041";	// |>
 var KEY_B = "U+0042";	// hh
 var KEY_C = "U+0043";	// @
 var KEY_D = "U+0044";	// >@
-// comx keyboard
+// Comx keyboard
 var KEY_DVR = "DVR";
 var KEY_WWW = "Web";
 var KEY_STOP = "U+001B";
 var KEY_EPG = "List";
-var KEY_REC2 = "MediaRecord";
 var KEY_MPT = "MediaPreviousTrack";
 var KEY_MNT = "MediaNextTrack";
+// Comx remote
 
 
 

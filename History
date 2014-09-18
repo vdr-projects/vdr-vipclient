@@ -7,6 +7,7 @@ VDR 1.7.29+
 	Changed Plugin check, only check if digit 1,2,3 from server ip & box ip are the same.
 	Updated epgfilter for CDS on 19.2E
 	Updated remote keys in settings file.
+	Added parameter to script, if set script uses 'svdrpsend.pl', if not 'svdrpsend'
 	
 
 0.25	Get recordings from Streamdev, Restfulapi or SmartTVweb.

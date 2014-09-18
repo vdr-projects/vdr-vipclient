@@ -950,7 +950,7 @@ function onKeyDown(event) {
 
    case "Enter":
 	// OK key on frontpanel
-   case "Accept":
+   case KEY_OK:
 	if(isFullscreen) {
 	// fullscreen
 		if (osdmain.style.opacity !== 0) {opacity = 0; OSD(opacity);}
@@ -2315,7 +2315,7 @@ function onKeyMenu(keyCode) {
 	}
 		InitMenu(menu);
     break;
-    case "Accept":
+    case KEY_OK:
     	if (menu == 2 && isMediaMenu !== 1) {
 		var x = ss.getBookingIds("*", 0, 0);
 		try {
@@ -3480,7 +3480,7 @@ function UnloadMediaSettings() {
 function onKeyMedia(keyCode) {
 if (DelisOK) {
 	switch(keyCode) {
-	case "Accept":
+	case KEY_OK:
 	  medialist.innerHTML = "<h1><center style='font-size:" + fsRec + ";" + color_main_head + ";'>" + Lang[0] + "</center></h1>";
 	  switchtimer.style.opacity = 0;
 	  setTimeout("DelRec2(); getRecList(); showMediaList();",100)
@@ -3561,7 +3561,7 @@ if (DelisOK) {
 	showMediaList();
 	}
 	break;
-  case "Accept":
+  case KEY_OK:
   case "MediaPlayPause":
 	if (getRecOK == 2) {
 		ShowInfo();
@@ -3731,7 +3731,7 @@ if (DelisOK) {
 		}
 	}
 	break;
-  case "Accept":
+  case KEY_OK:
 	osdmedia.style.opacity = 1 - osdmedia.style.opacity;
 	osdtime.style.opacity = osdmedia.style.opacity;
 	ShowMediaOSD();
