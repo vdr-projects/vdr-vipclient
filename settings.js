@@ -127,11 +127,14 @@ var Yfactor = new Array();
 
 // keep scale compliant with Videooutputmodes!!
 //  720x576
-Xfactor[0] = 720 / 720; Yfactor[0] = 576 / 576;
+Xfactor[0] = 720 / 720;
+Yfactor[0] = 576 / 576;
 // 1280x720
-Xfactor[1] = 1280 / 720; Yfactor[1] = 720 / 576;
+Xfactor[1] = 1280 / 720; 
+Yfactor[1] = 720 / 576;
 // 1920x1080
-Xfactor[2] = 1920 / 720; Yfactor[2] = 1080 / 576;
+Xfactor[2] = 1920 / 720;
+Yfactor[2] = 1080 / 576;
 
 
 var audio = 0;

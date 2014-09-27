@@ -8,6 +8,7 @@ VDR 1.7.29+
 	Updated epgfilter for CDS on 19.2E
 	Updated remote keys in settings file.
 	Added parameter to script, if set script uses 'svdrpsend.pl', if not 'svdrpsend'
+	Fixed show ext epg info if ext info != short info.
 	
 
 0.25	Get recordings from Streamdev, Restfulapi or SmartTVweb.

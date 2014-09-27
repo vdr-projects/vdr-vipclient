@@ -699,6 +699,9 @@ function FullScreen() {
 
 
 function onKeyDown(event) {
+//show key info, needed when a 'new' remote is used
+//alert( "keyIdentifier  : " + event.keyIdentifier +"\n"+"ctrlKey    : " + event.ctrlKey +"\n"+"altKey     : " + event.altKey  +"\n"+"shiftKey  : " + event.shiftKey +"\n"+"RAW  : " + event );
+
     if(isVisible) {
  	onKeyTeletext(event.keyIdentifier);
     } else if(isSetupMenu) {
@@ -1688,13 +1691,16 @@ function GetEPG(epgchan)
 	    EPGShortnow = extEventsnow.shortInfo;
 	    EPGExtnow = extEventsnow.extendedInfo;
 	    Extok = 1;
+
 	} else { Extok = 0; }
+
+
 
 	EPG[0][1][epgchan] = event.name;
 	EPG[0][2][epgchan] = event.time;
 	EPG[0][3][epgchan] = (event.duration/60);
-	EPG[0][4][epgchan] = "";
-	EPG[0][5][epgchan] = "";
+//	EPG[0][4][epgchan] = "";
+//	EPG[0][5][epgchan] = "";
 	EPG[0][6][epgchan] = event.eventId;
 	if (event.parentalRating) {
 		EPG[0][8][epgchan] = "<br>(" + Lang[5] + (event.parentalRating + 3) + " )";
@@ -1722,7 +1728,9 @@ function GetEPG(epgchan)
 	EPG[0][5][epgchan] = "";
 	}
 
-	if (EPG[0][5][epgchan] = EPG[0][4][epgchan]) { EPG[0][5][epgchan] = "";}
+	if (EPG[0][5][epgchan] == EPG[0][4][epgchan]) { EPG[0][5][epgchan] = "";}
+
+
 
 	updateOSDtime(epgchan);
 
@@ -1740,8 +1748,8 @@ function GetEPG(epgchan)
 	EPG[1][1][epgchan] = event.name;
 	EPG[1][2][epgchan] = event.time;
 	EPG[1][3][epgchan] = (event.duration/60);
-	EPG[1][4][epgchan] = "";
-	EPG[1][5][epgchan] = "";
+//	EPG[1][4][epgchan] = "";
+//	EPG[1][5][epgchan] = "";
 	EPG[1][6][epgchan] = event.eventId;
 	if (event.parentalRating) {
 		EPG[1][8][epgchan] = "<br>(" + Lang[5] + (event.parentalRating + 3) + " )";
@@ -1768,7 +1776,7 @@ function GetEPG(epgchan)
 	EPG[1][5][epgchan] = "";
 	}
 	
-	if (EPG[1][5][epgchan] = EPG[1][4][epgchan]) { EPG[1][5][epgchan] = "";}
+	if (EPG[1][5][epgchan] == EPG[1][4][epgchan]) { EPG[1][5][epgchan] = "";}
 
 	tijd = event.time;
 	date = new Date(tijd*1000); 
