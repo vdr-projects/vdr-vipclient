@@ -2,7 +2,7 @@
 // Default settings
 // 
 
-var Version = "0.26.2";
+var Version = "0.26.3";
 
 server_ip_array = new Array("http://192.168.1.15","http://192.168.3.15","http://192.168.178.56","http://192.168.3.100","http://192.168.178.19","http://192.168.1.21","http://192.168.2.100","http://192.168.178.52");
 
@@ -71,19 +71,25 @@ var afterRecTime = 600 ; // for local recordings time after recording in seconds
 var color_bg = "#fc5";
 var color_main_head = "color:white";
 var color_main_font = "color:black";
+//var color_main_font = "color:lightgreen";
 var color_epg_head = "color:white";
 var color_epg_title = "color:white";
 var color_epg_avinfo = "color:black";
+//var color_epg_avinfo = "color:lightgreen";
 var color_epg_info = "color:yellow";
 var color_sched_head = "color:white";
 var color_sched_font = "color:black";
+//var color_sched_font = "color:lightgreen";
 var color_chan_epg = "color:black";
+//var color_chan_epg = "color:lightgreen";
 var color_osdtimer = "color:black";
+//var color_osdtimer = "color:lightgreen";
 var color_timerinfo = "color:white";
 var color_media_osd = "color:white";
 var color_progress1 = "<font color=red>";
 var color_progress2 = "<font color=white>";
-var color_notset = "color:grey";
+var color_notset = "color:grey"
+//var color_notset = "color:black";
 var color_switchtimer = "#660066";
 var DefaultBGColor = "green";
 var ErrorColor = "red";
