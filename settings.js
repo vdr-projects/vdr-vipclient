@@ -88,7 +88,7 @@ var color_timerinfo = "color:white";
 var color_media_osd = "color:white";
 var color_progress1 = "<font color=red>";
 var color_progress2 = "<font color=white>";
-var color_notset = "color:grey"
+var color_notset = "color:grey";
 //var color_notset = "color:black";
 var color_switchtimer = "#660066";
 var DefaultBGColor = "green";
