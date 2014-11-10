@@ -1,0 +1,13 @@
+div#osdmain {
+	background: rgba(0,0,0,0.8) !important;
+	width: 100% !important;
+	height: 20% !important;
+	position: absolute;
+	border-top: 3px solid #DADADA !important;
+	bottom: 0% !important;
+	left: 0% !important;
+	border-radius: 0px !important;
+	-webkit-border-radius: 0px !important;
+	color: #FFF !important;
+}
+
