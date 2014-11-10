@@ -68,32 +68,6 @@ var RecCmdsIcon = new Array("","\uE005","","","","","","","","");
 var preRecTime = 300 ;// for local recordings time before recording in seconds
 var afterRecTime = 600 ; // for local recordings time after recording in seconds
 
-var color_bg = "#fc5";
-var color_main_head = "color:white";
-var color_main_font = "color:black";
-//var color_main_font = "color:lightgreen";
-var color_epg_head = "color:white";
-var color_epg_title = "color:white";
-var color_epg_avinfo = "color:black";
-//var color_epg_avinfo = "color:lightgreen";
-var color_epg_info = "color:yellow";
-var color_sched_head = "color:white";
-var color_sched_font = "color:black";
-//var color_sched_font = "color:lightgreen";
-var color_chan_epg = "color:black";
-//var color_chan_epg = "color:lightgreen";
-var color_osdtimer = "color:black";
-//var color_osdtimer = "color:lightgreen";
-var color_timerinfo = "color:white";
-var color_media_osd = "color:white";
-var color_progress1 = "<font color=red>";
-var color_progress2 = "<font color=white>";
-var color_notset = "color:grey";
-//var color_notset = "color:black";
-var color_switchtimer = "#660066";
-var DefaultBGColor = "green";
-var ErrorColor = "red";
-
 
 //
 // No need to change anything from here on.
@@ -302,9 +276,6 @@ var switchicon = "\uE003";
 var CAicon = "\uE00F";
 var RECicon = "\uE003";
 var Radioicon = "\uE003";
-
-var fsAudio; var fsTime; var fsName; var fsMenu; var fsChan; var fsCA; var fsMenuMain; var fsEpg;
-var fsEpginfo; var fsList; var fsSchedList; var fsSched; var fsRec; var fsReclist; var fsMedia; var fsKeys;
 
 var AvInfo = new Array();
 var xx = 0;

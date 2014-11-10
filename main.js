@@ -71,44 +71,7 @@ function onLoad() {
 	medialist.innerHTML = "<h1><center style='font-size:" + fsRec + ";" + color_main_head + ";'>" + Lang[0] + "</center></h1>";
 }
 
-function SetupFonts() {
-//setup fontsize
-	colorkeys.style.fontSize = fsKeys;
-	osdvolume.style.fontSize = fsCA;
-	osdtime.style.fontSize = fsTime;
-	osdname.style.fontSize = fsName;
-	osdepg.style.fontSize = fsEpg;
-	osdca.style.fontSize = fsCA;
-	switchtimer.style.fontSize = fsEpg;
-	osdepginfo.style.fontSize = fsEpginfo;
-	osdepginfonext.style.fontSize = fsEpginfo;
-	osdnr.style.fontSize = fsChan;
-	osdlang.style.fontSize = fsAudio;
-//setup fontcolors/ backgroundcolor
-	document.body.style.backgroundColor = "#ccc";
-	osdvolume.style.color = "green";
-	osdtime.style.color = "white";
-	osdname.style.color = "black";
-//	osdname.style.color = "yellow";
-	osdepg.style.color = "white";
-	osdca.style.color = "black";
-//	osdca.style.color = "yellow";
-	switchtimer.style.color = "white";
-	switchtimer.style.background = DefaultBGColor;
-	osdnr.style.background = "red";
-	var i = "#3366ff";
-//	var i = "#101010";
-	osdmedia.style.background = i;
-	osdmain.style.background = i;
-	schedule.style.background = i;
-	mainmenu.style.background = i;
-	medialist.style.background = i;
-	osdepginfo.style.background = i;
-	osdepginfonext.style.background = i;
-	channellist.style.background = "#bbb";
-	osdnr.style.color = "black";
-	osdlang.style.color = "white";
-}
+
 
 
 function GetSettings() {
@@ -608,25 +571,6 @@ videoConfig = vos.getVideoConfiguration();
 setOSDscale();
 SetupFonts();
 
-}
-
-function setOSDscale() {
-	fsAudio = (16*Yfactor[Set_Res]) + "px";
-	fsTime = (16*Yfactor[Set_Res]) + "px";
-	fsName = (27*Yfactor[Set_Res]) + "px";
-	fsMenu = (27*Yfactor[Set_Res]) + "px";
-	fsChan = (43*Yfactor[Set_Res]) + "px"; 
-	fsCA = (32*Yfactor[Set_Res]) + "px";
-	fsMenuMain = (35*Yfactor[Set_Res]) + "px";
-	fsEpg = (19*Yfactor[Set_Res]) + "px";
-	fsEpginfo = (21*Yfactor[Set_Res]) + "px";
-	fsList = (18*Yfactor[Set_Res]) + "px";
-	fsSchedList = (18*Yfactor[Set_Res]) + "px";
-	fsSched = (26*Yfactor[Set_Res]) + "px";
-	fsRec = (35*Yfactor[Set_Res]) + "px";
-	fsReclist = (19*Yfactor[Set_Res]) + "px";
-	fsMedia = (27*Yfactor[Set_Res]) + "px";
-	fsKeys = (19*Yfactor[Set_Res]) + "px";
 }
 
 function addzero(zero)
