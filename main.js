@@ -127,6 +127,12 @@ function GetSettings() {
 	}
 
 
+	try {
+		if (!is.getObject("vip.css_nr")) {} 
+	} catch(e) {
+		is.setObject("vip.css_nr","0",is.STORAGE_PERMANENT)
+	}
+
 	var sel_group;
 	for (var i=0;i<10;i++) {
 		sel_group = "vip.group." + i;
@@ -158,6 +164,8 @@ function GetSettings() {
 	experimental = Number(is.getObject("vip.testing"));// Use some experimental code
 	testing2 = Number(is.getObject("vip.testing2"));// Use some experimental code
 	ShowSubs = Number(is.getObject("vip.showsubs"));
+	css_nr = Number(is.getObject("vip.css_nr"));
+	loadcss(cssfile[css_nr]);
 
 	Set_Res = Number(is.getObject("vip.resolution"));
 	VideoOutput();
@@ -225,6 +233,16 @@ function loadjs(filename){
 	oScript.src= filename;
 	oHead.appendChild( oScript);
 }
+
+function loadcss(filename){
+	var oHead = document.getElementsByTagName('HEAD').item(0);
+	var oScript= document.createElement("link");
+	oScript.type = "text/css";
+	oScript.rel = "stylesheet";
+	oScript.href = filename;
+	oHead.appendChild( oScript);
+}
+
 
 function onEvent(event) {
 var numObjs = event.objectNames.length;
@@ -2437,6 +2455,14 @@ function onKeyMenu(keyCode) {
     case "Blue":
 		if (menu == 0) {
 		RestartPortal();
+	} else if (menu == 1) {
+		css_nr += 1;
+		if (css_nr > (cssfile.length - 1)) { css_nr = 0;}
+		loadcss(cssfile[css_nr]);
+		alert(css_nr);
+		alert(cssfile[css_nr]);
+		is.setObject("vip.css_nr",css_nr.toString(),is.STORAGE_PERMANENT)
+		setTimeout("InitMenu(menu);",100);
 	} else if (menu == 2) {
 		// Show Info local timer/ recording
 		var x = ss.getBookingIds("*", 0, 0);
@@ -2801,7 +2827,7 @@ if(menu == 1) { // settings menu
 	htmltext += "\n\n   <font style='color:red;'>\u25CF<font style='" + color_main_font + ";'> -" + Lang[20];
 	htmltext += "<font style='color:green;'>\u25CF<font style='" + color_main_font + ";'> - " + VideoOutputModes_txt[VideoOutputModes[Set_Res]] + " ";  
 	htmltext += "<font style='color:yellow;'>\u25CF<font style='" + color_main_font + ";'> -" + Lang[35];
-	htmltext += "<font style='color:blue;'>\u25CF<font style='" + color_main_font + ";'> -" + Lang[19] +"</pre>";
+	htmltext += "<font style='color:blue;'>\u25CF<font style='" + color_main_font + ";'> - " + Left(cssfile[css_nr],8) +"</pre>";
 //	htmltext += "\n   0 -" + Lang[9] +"</pre>";
 	mainmenu.innerHTML = htmltext;
 }
