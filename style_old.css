@@ -1,0 +1,63 @@
+	div#osdmain {
+	position		: absolute;
+	z-index			: 505;
+	width			: 80%;
+	top			: 60%;
+	bottom			: 9%;
+	left			: 10%;
+	-webkit-border-radius		: 50px;
+	}
+
+	div#osdnr {
+		position 	: absolute;
+	z-index			: 505;
+		width 		: 10%;
+		height		: 9%;
+		left		: 12%;
+		top		: 56%;
+	-webkit-border-radius		: 25px;
+	}
+	
+	div#osdname {
+	z-index			: 505;
+		position	: absolute;
+		width		: 69%;
+		height		: 4%;
+		left		: 12%;
+		top 		: 66%;
+	}
+
+
+	div#osdtimer {
+	z-index			: 505;
+		position		: absolute;
+		width			: 7%;
+		left			: 12%;
+		top			: 69%;
+	}
+	
+	div#osdepg {
+	z-index			: 505;
+		position	: absolute;
+		width		: 63%;
+		left		: 21%;
+		top		: 69%;
+	}
+	
+	div#osdtime {
+	z-index			: 505;
+		position	: absolute;
+		width		: 42%;
+		left		: 58%;
+		top		: 63%;
+	}
+
+	div#osdca { 
+	z-index			: 505;
+		position	: absolute;
+		width		: 5%;
+		left		: 75%;
+		top		: 67%;
+	}
+	
+

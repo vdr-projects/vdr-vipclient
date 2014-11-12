@@ -1,26 +1,23 @@
 <html>
-    <head>
-      <script type="text/javascript" src="settings.js" />
-      <script type="text/javascript" src="settings2.js" />
-      <script type="text/javascript" src="lang_eng.js" />
-      <script type="text/javascript" src="channels.js" />
-      <script type="text/javascript" src="main.js" />
-      <link rel="stylesheet" type="text/css" href="style_1.css">
-    </head>
-<script language="Javascript">
+<head>
+<script type="text/javascript" src="settings.js"></script>
+<script type="text/javascript" src="settings2.js"></script>
+<script type="text/javascript" src="lang_eng.js"></script>
+<script type="text/javascript" src="channels.js"></script>
+<script type="text/javascript" src="main.js"></script>
+<script type="text/javascript">
 
-//
-// Javascript VDR client for Motorola VIP19x0 & VIP19x3
-//
-// Martin Voerman Rekordc@gmail.com
-//
-// "THE BEER-WARE LICENSE"
-// If we meet some day, and you think
-// this stuff is worth it, you can buy me a beer in return
-//
-
+/***********************************************************/
+/*   Javascript VDR client for Motorola VIP19x0 & VIP19x3  */
+/*            Martin Voerman Rekordc@gmail.com             */
+/*                "THE BEER-WARE LICENSE"                  */
+/*            If we meet some day, and you think           */
+/* this stuff is worth it, you can buy me a beer in return */
+/***********************************************************/
 
 </script>
+<link rel="stylesheet" type="text/css" href="style_old.css">
+</head>
 
 <body onload="onLoad()" onunload="onUnload()">
     	<embed type="application/x-motorola-toi" hidden="true">
@@ -35,6 +32,7 @@
 	<div id="osdvolume" style="width:63%; position:absolute; left:10%; top:80%;z-index:501;opacity:0;">Volume : </div>
 	<div id="osdmedia" style="width:80%;position:absolute;left:10%;top:60%;z-index:505;opacity:0;-webkit-border-radius:50px;"></div>
 
+<!--
 	<div id="osdmain" style="width:80%; position:absolute;left:10%;top:60%;bottom:9%;z-index:505;-webkit-border-radius:50px;"></div>
 	<div id="osdtime" style="width:42%; position:absolute; left:58%; top:63%;z-index:505;"></div>
 	<div id="osdname" style="width:69%;height:4%; position:absolute; left:12%; top:66%;z-index:505;"></div>
@@ -43,6 +41,16 @@
 	<div id="osdca" style="width:5%; position:absolute; left:75%; top:67%;z-index:505;"></div>
 
 	<div id="osdnr" style="width:10%;height:9%; position:absolute; left:12%; top:56%;z-index:505;opacity:0;-webkit-border-radius:25px;"></div>
+
+-->
+    <div id="osdmain">    </div>
+        <div id="osdnr"></div>
+        <div id="osdname"></div>
+        <div id="osdtimer"></div>
+        <div id="osdepg"></div>
+        <div id="osdtime"></div>
+        <div id="osdca"></div>    
+
 
 	<div id="schedule" style="width:50%; height:75%; position:absolute; left:25%; top:10%;opacity:0;z-index:510;-webkit-border-radius:50px;"></div>
 
