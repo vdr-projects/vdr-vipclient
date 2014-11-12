@@ -6,16 +6,19 @@
 	bottom			: 9%;
 	left			: 10%;
 	-webkit-border-radius		: 50px;
+	background		: #3366ff;
 	}
 
 	div#osdnr {
-		position 	: absolute;
+	position	 	: absolute;
 	z-index			: 505;
-		width 		: 10%;
-		height		: 9%;
-		left		: 12%;
-		top		: 56%;
-	-webkit-border-radius		: 25px;
+	width 			: 10%;
+	height			: 9%;
+	left			: 12%;
+	top			: 56%;
+	-webkit-border-radius	: 25px;
+	background		: red;
+	color			: black;
 	}
 	
 	div#osdname {
@@ -25,6 +28,7 @@
 		height		: 4%;
 		left		: 12%;
 		top 		: 66%;
+		color		: black;
 	}
 
 
@@ -42,6 +46,7 @@
 		width		: 63%;
 		left		: 21%;
 		top		: 69%;
+		color		: white;
 	}
 	
 	div#osdtime {
@@ -50,6 +55,7 @@
 		width		: 42%;
 		left		: 58%;
 		top		: 63%;
+		color		: white;
 	}
 
 	div#osdca { 
@@ -58,6 +64,140 @@
 		width		: 5%;
 		left		: 75%;
 		top		: 67%;
+		color		: black;
 	}
-	
+	div#channellist { 
+	z-index			: 400;
+		position	: absolute;
+		width		: 100%;
+		height		: 48%;
+		left		: 7%;
+		top		: 4%;
+	background		: #bbb;
+	}
+
+	div#colorkeys { 
+	z-index			: 401;
+		position	: absolute;
+		width		: 100%;
+		left		: 10%;
+		top		: 84%;
+	}
+
+	div#chanlistepg { 
+	z-index			: 402;
+		position	: absolute;
+		width		: 42%;
+		left		: 7%;
+		top		: 50%;
+	}
+
+	div#chanlistepg { 
+	z-index			: 501;
+		position	: absolute;
+		width		: 63%;
+		left		: 10%;
+		top		: 80%;
+		opacity		: 0;
+		color		: green;
+	}
+
+	div#osdmedia { 
+		width		:80%;
+		position	:absolute;
+		left		:10%;
+		top		:60%;
+		z-index		:505;
+		opacity		:0;
+		-webkit-border-radius:50px;
+	background		: #3366ff;
+	}
+
+	div#schedule {
+	width		:50%;
+	height		:75%;
+	position	:absolute;
+	left		:25%;
+	top		:10%;
+	opacity		:0;
+	z-index		:510;
+	-webkit-border-radius:50px;
+	background		: #3366ff;
+	}
+
+	div#osdmute {
+	width		:7%; 
+	position	:absolute; 
+	left		:76%; 
+	top		:9%;
+	z-index		:515;
+	opacity		:0;
+	}
+
+	div#osdlang {
+	width		:7%;
+	position	:absolute;
+	left		:76%;
+	top		:9%;
+	z-index		:515;
+	opacity		:0;
+	color		:white;
+	}
+
+	div#mainmenu {
+	width		:80%;
+	position	:absolute;
+	left		:10%;
+	top		:10%;
+	bottom		:10%;
+	z-index		:520;
+	opacity		:0;
+	-webkit-border-radius:50px;
+	background		: #3366ff;
+	}
+
+	div#medialist {
+	width		:80%;
+	position	:absolute;
+	left		:10%;
+	top		:10%;
+	bottom		:10%;
+	z-index		:520;
+	opacity		:0;
+	-webkit-border-radius:50px;
+	background		: #3366ff;
+	}
+
+	div#switchtimer {
+	width		:45%;
+	position	:absolute;
+	left		:21%;
+	top		:26%;
+	z-index		:530;
+	opacity		:0;
+	-webkit-border-radius:25px;
+	color		:white;
+	}
+
+	div#osdepginfo {
+	width		:80%;
+	position	:absolute;
+	left		:10%;
+	top		:10%;
+	z-index		:525;
+	opacity		:0;
+	-webkit-border-radius:50px;
+	background		: #3366ff;
+	}
+
+	div#osdepginfonext {
+	width		:80%;
+	position	:absolute;
+	left		:10%;
+	top		:10%;
+	z-index		:525;
+	opacity		:0;
+	-webkit-border-radius:50px;
+	background		: #3366ff;
+	}
 

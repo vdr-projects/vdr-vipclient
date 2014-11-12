@@ -42,30 +42,10 @@ function SetupFonts() {
 	osdepginfonext.style.fontSize = fsEpginfo;
 	osdnr.style.fontSize = fsChan;
 	osdlang.style.fontSize = fsAudio;
+
 //setup fontcolors/ backgroundcolor
 	document.body.style.backgroundColor = "#ccc";
-	osdvolume.style.color = "green";
-	osdtime.style.color = "white";
-	osdname.style.color = "black";
-//	osdname.style.color = "yellow";
-	osdepg.style.color = "white";
-	osdca.style.color = "black";
-//	osdca.style.color = "yellow";
-	switchtimer.style.color = "white";
 	switchtimer.style.background = DefaultBGColor;
-	osdnr.style.background = "red";
-	var i = "#3366ff";
-//	var i = "#101010";
-	osdmedia.style.background = i;
-	osdmain.style.background = i;
-	schedule.style.background = i;
-	mainmenu.style.background = i;
-	medialist.style.background = i;
-	osdepginfo.style.background = i;
-	osdepginfonext.style.background = i;
-	channellist.style.background = "#bbb";
-	osdnr.style.color = "black";
-	osdlang.style.color = "white";
 }
 
 function setOSDscale() {
