@@ -11,6 +11,7 @@ VDR 1.7.29+
 	Fixed show ext epg info if ext info != short info.
 	Moved script to main.js
 	Display shows R/F + channelnumber ('R' for Radio, 'F' for favorite)
+	Skinning, CSS styling
 	
 
 0.25	Get recordings from Streamdev, Restfulapi or SmartTVweb.

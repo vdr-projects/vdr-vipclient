@@ -2,7 +2,7 @@
 // Default settings
 // 
 
-var Version = "0.26.3";
+var Version = "0.26.4";
 
 server_ip_array = new Array("http://192.168.1.15","http://192.168.3.15","http://192.168.178.56","http://192.168.3.100","http://192.168.178.19","http://192.168.1.21","http://192.168.2.100","http://192.168.178.52");
 

@@ -1302,7 +1302,11 @@ function showDisplay(showtxt,colonState,intensity,currentMode) {
 		if (Number(showtxt) > 8999 && Number(showtxt) < 10000) { showtxt = "R" + Right(showtxt,3); }
 		if (Number(showtxt) > 9999 && Number(showtxt) < 20000) { showtxt = "F" + Right(showtxt,3); }
 	showtxt = Right(showtxt,4);
-	fps.setSegmentDisplayState(toi.statics.ToiFrontPanelServiceSegmentDisplayState.create(showtxt,colonState,intensity,currentMode));
+	try {
+	 fps.setSegmentDisplayState(toi.statics.ToiFrontPanelServiceSegmentDisplayState.create(showtxt,colonState,intensity,currentMode));
+	} catch (e) {
+	// Display error, maybe no display...
+	 }
 	}
 }
 
@@ -4082,7 +4086,7 @@ try {
 	} else {
 		MakeRecList();
 	}
-	if (i!==0) { getRecOK = 1; } else {
+	if (nrMedia!==0) { getRecOK = 1; } else {
 	getRecOK = 0;
 	medialist.innerHTML = "<h1><center style='font-size:" + fsRec + ";" + color_main_head + ";'>" + Lang[38] + "</center><pre>\n\n\n" + Lang[37] + "</pre></h1>";
 	}
