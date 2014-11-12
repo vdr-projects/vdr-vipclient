@@ -92,7 +92,7 @@
 		top		: 50%;
 	}
 
-	div#chanlistepg { 
+	div#osdvolume { 
 	z-index			: 501;
 		position	: absolute;
 		width		: 63%;
