@@ -42,6 +42,21 @@
 	color:black;
 	}
 
+	pre.deletefile {
+	text-align	: center;
+	color		:white;
+	font-size	:36px;
+	background	:red;
+	}
+
+	pre.nonfree {
+	text-align	: center;
+	color		:white;
+	font-size	:36px;
+	background	:red;
+	}
+
+
 	p.epg_head { 
 	color:white;
 	text-align: center;
@@ -156,6 +171,7 @@
 	background		: red;
 	color			: black;
 		font-size:81px;
+	text-align: center;
 	}
 	
 	div#osdname {

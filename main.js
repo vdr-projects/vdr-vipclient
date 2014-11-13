@@ -610,7 +610,7 @@ function ExtraStuff(){
 		{
 			//Show info if set nonfree
 			switchtimer.style.background = "red";
-			switchtimer.innerHTML = "<pre><center>\n" + Lang[90] +"\n\n </center></pre>"; // Non free channel message
+			switchtimer.innerHTML = "<pre class=nonfree>\n" + Lang[90] +"\n\n </pre>"; // Non free channel message
 			switchtimer.style.opacity = 1;
 			CAdelayID = setTimeout("switchtimer.style.opacity = 0;",ShowSetTimer);
 		}
@@ -894,9 +894,11 @@ function onKeyDown(event) {
 		}
 	}
 	break;
-
    case "Enter":
 	// OK key on frontpanel
+	if (experimental) {
+		RestartPortal();
+	}
    case KEY_OK:
 	if(isFullscreen) {
 	// fullscreen
@@ -1396,7 +1398,7 @@ function OSDchannr(channr) {
 	if (experimental) {
 //	osdnr.innerHTML = "<img src='" + channels[currChan] + ".logo.jpg' style='width:80%; max-height:100%; position:absolute; left:10%;' >";
 	}
-	osdnr.innerHTML = "<center>" + Right(channr,3) + "</center>";
+	osdnr.innerHTML = Right(channr,3);
 }
 
 function OSDhtml(){
@@ -1501,7 +1503,7 @@ if (!BackGroundColor) { BackGroundColor = color_default;}
 	}
 
 //	switchtimer.style.background = BackGroundColor;
-	switchtimer.innerHTML = "<pre class=" + BackGroundColor + ">" + Lang[2] + Left(ProgName,30) + "\n" + Lang[3] + channelsnames[currChan] + "\n" + x;
+	switchtimer.innerHTML = "<pre class=" + BackGroundColor + ">" + Lang[2] + Left(ProgName,30) + "\n" + Lang[3] + channelsnames[currChan] + "\n" + x + "</pre>";
 	setOSDtimer();
 
 	switchtimer.style.opacity = 1;
@@ -2286,7 +2288,7 @@ function onKeyMenu(keyCode) {
 		}
 	} else 	if (menu == 5 && smartTVplugin) {
 		osdepginfo.style.opacity = 0;
-		mainmenu.innerHTML = "<h1 class=mainmenu>" + Lang[7] + "</h1><pre class=mainmenu>\n\n\n<center>" + Lang[0] + "</center></pre>";
+		mainmenu.innerHTML = "<h1 class=mainmenu>" + Lang[7] + "</h1><pre class=mainmenu>\n\n\n" + Lang[0] + "</pre>";
 		DeleteTimers();
 		setTimeout("LoadTimersServer();InitMenu(menu);",100);
 	} else 	if (menu == 10) {
@@ -2517,7 +2519,7 @@ function onKeyMenu(keyCode) {
 	break;
 	case KEY_5:
 		if (menu == MainMenu && (Restfulapiplugin || smartTVplugin)) {
-			mainmenu.innerHTML = "<h1 class=mainmenu>" + Lang[7] + "</h1><pre class=mainmenu>\n\n\n<center>" + Lang[0] + "</center></pre>";
+			mainmenu.innerHTML = "<h1 class=mainmenu>" + Lang[7] + "</h1><pre class=mainmenu>\n\n\n" + Lang[0] + "</pre>";
 			timerID = 0;
 			menu = 5;
 			setTimeout("LoadTimersServer();InitMenu(menu);",200);
@@ -2593,7 +2595,7 @@ function onKeyMenu(keyCode) {
 	break;
 	case KEY_8:
 	if (menu == MainMenu && Restfulapiplugin) {
-			mainmenu.innerHTML = "<h1 class=mainmenu>" + Lang[8] + "</h1><pre class=mainmenu>\n\n\n<center>" + Lang[0] + "</center></pre>";
+			mainmenu.innerHTML = "<h1 class=mainmenu>" + Lang[8] + "</h1><pre class=mainmenu>\n\n\n" + Lang[0] + "</pre>";
 			timerID = 0;
 			menu = 7;
 			setTimeout("LoadSearchTimersServer();InitMenu(menu);",200);
@@ -3050,7 +3052,7 @@ try {
   } catch(e) {
     timerOK = 0;
     alert("Get Timers problem: " + e);
-    mainmenu.innerHTML = "<h1 class=mainmenu>" + Lang[7] + "</h1><pre class=mainmenu><center>\n  " + Lang[36] + ": \n " + server_ip + "</center></pre>";
+    mainmenu.innerHTML = "<h1 class=mainmenu>" + Lang[7] + "</h1><pre class=mainmenu>\n  " + Lang[36] + ": \n " + server_ip + "</pre>";
   }
 }
 
@@ -3209,7 +3211,7 @@ try {
   } catch(e) {
     timerOK = 0;
     alert("Get SearchTimers problem: " + e);
-    mainmenu.innerHTML = "<h1 class=mainmenu>" + Lang[8] + "</h1><pre class=mainmenu><center>\n  " + Lang[43] + ": \n " + server_ip + RestFulAPI + "</center></pre>";
+    mainmenu.innerHTML = "<h1 class=mainmenu>" + Lang[8] + "</h1><pre class=mainmenu>\n  " + Lang[43] + ": \n " + server_ip + RestFulAPI + "</pre>";
   }
 }
 
@@ -4208,7 +4210,7 @@ try {
 	//popup for confirm
 	switchtimer.style.background = "red";
 	switchtimer.style.opacity = 1;
-	switchtimer.innerHTML = "<pre><center>" + Lang[44] +"\n" + Lang[45] + "\n\n " + Left(recTitl[currMed],30) + "</center></pre>"; // Recording Name
+	switchtimer.innerHTML = "<pre class=deletefile>" + Lang[44] +"\n" + Lang[45] + "\n\n " + Left(recTitl[currMed],30) + "</pre>"; // Recording Name
 	DelisOK = 1
   } catch(e) {
     alert("Delete Recordings problem: " + e);
