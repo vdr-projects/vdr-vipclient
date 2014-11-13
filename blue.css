@@ -95,11 +95,26 @@
 	font-size:49px;
 	color:black;
 	}
+	pre.mainhead {
+	font-size:66px;
+	color:white;
+	text-align: center;
+	}
 
 	pre.media {
 	color:white;
 	font-size:49px;
 	}
+
+	pre.epgtimerinfo {
+	color:white;
+	text-align: center;
+	}
+
+	p.epgtimerinfo {
+	text-align: center;
+	}
+
 
 	p.epg {
 	font-size:36px;

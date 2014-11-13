@@ -2232,7 +2232,7 @@ function onKeyMenu(keyCode) {
 	if (menu == 5) {
 		// Show EPG info Timer
 		osdepginfo.style.opacity = 1 - osdepginfo.style.opacity;
-		osdepginfo.innerHTML = "<center><pre style='" + color_timerinfo + ";'>\n\n\n" + Lang[0] + "\n\n\n </pre></center>" ;
+		osdepginfo.innerHTML = "<pre class=epgtimerinfo>\n\n\n" + Lang[0] + "\n\n\n </pre>" ;
 		setTimeout("ShowTimerInfo();",100);
 	}
 	if (menu == 7) {
@@ -2389,11 +2389,11 @@ function onKeyMenu(keyCode) {
 		var x = ss.getBookingIds("*", 0, 0);
 		var y = Number(ss.getParameter(x[timerID-1], "Channel"));
 		osdepginfo.style.opacity = 1 - osdepginfo.style.opacity;
-	       	osdepginfo.innerHTML = "<center><pre style='" + color_timerinfo + ";'>" + ss.getParameter(x[timerID-1], "Title") + "\n " + "\n" + y + " - " + channelsnames[y] + "(" + ss.getParameter(x[timerID-1], "Eventid") + ")" + "\n </pre><p class=epg_info>" + ss.getParameter(x[timerID-1], "Info") + "</p></center>" ;
+	       	osdepginfo.innerHTML = "<pre class=epgtimerinfo>" + ss.getParameter(x[timerID-1], "Title") + "\n " + "\n" + y + " - " + channelsnames[y] + "(" + ss.getParameter(x[timerID-1], "Eventid") + ")" + "\n </pre><p class=epg_info>" + ss.getParameter(x[timerID-1], "Info") + "</p>" ;
 	} else 	if (menu == 5) {
 		// Show EPG info Timer
 		osdepginfo.style.opacity = 1 - osdepginfo.style.opacity;
-		osdepginfo.innerHTML = "<center><pre style='" + color_timerinfo + ";'>\n\n\n" + Lang[0] + "\n\n\n </pre></center>" ;
+		osdepginfo.innerHTML = "<pre class=epgtimerinfo>\n\n\n" + Lang[0] + "\n\n\n </pre>" ;
 		setTimeout("ShowTimerInfo();",100);
 	} else 	if (menu == 7) {
 		// Show info SearchTimers
@@ -3129,8 +3129,8 @@ function ShowTimerInfo() {
   } else {
 	info3 = Lang[37];
   }
-       	osdepginfo.innerHTML = "<center><pre style='" + color_timerinfo + ";'>" + Left(info1,60) + "\n " + timersDays[timerID] + " " + 
-	timersStrt[timerID] + " - " + timersStop[timerID] + "\n" + info2 + "\n </pre><p>" + info3 + Left(info4,750) + "</p></center>" ;
+       	osdepginfo.innerHTML = "<pre class=epgtimerinfo>" + Left(info1,60) + "\n " + timersDays[timerID] + " " + 
+	timersStrt[timerID] + " - " + timersStop[timerID] + "\n" + info2 + "\n </pre><p class=epgtimerinfo>" + info3 + Left(info4,750) + "</p>" ;
  }
 }
 
@@ -3159,7 +3159,7 @@ try {
 	  }
 
 		// Extended INFO
-		SearchTimer[i] = "<center><pre style='" + color_main_head + ";'>" + x[i].getElementsByTagName("search")[0].childNodes[0].nodeValue + "\n </pre></center><pre>";
+		SearchTimer[i] = "<pre class=mainhead>" + x[i].getElementsByTagName("search")[0].childNodes[0].nodeValue + "\n </pre><pre>";
 		if ((x[i].getElementsByTagName("use_as_searchtimer")[0].childNodes[0].nodeValue) == 0) {
 			SearchTimer[i]  += "\uE003\uE016\uE003" + Lang[40] + "\n";
 		} else {
@@ -3266,7 +3266,7 @@ function ShowSearchTimerInfo() {
 
 	  }
 
-       	osdepginfo.innerHTML = "<center><pre style='" + color_main_head + ";'>" + searchtimersSearch[timerID] + "\n </pre></center><pre>" + info1 + "</pre>" ;
+       	osdepginfo.innerHTML = "<pre class=mainhead>" + searchtimersSearch[timerID] + "\n </pre><pre>" + info1 + "</pre>" ;
 
 }
 
@@ -3298,16 +3298,16 @@ if (MPDListener == 0) {
 } else {
 	if ( ev.state == 6 && ev.reason == "HostUnreachable" ) {
 	    showDisplay("ERRR", false, 100, 0 );
-	mainmenu.innerHTML = "<h1 class=mainmenu>" + Lang[60] + "</h1><pre class=mainmenu>" + Lang[34] + "\n   0 -" + Lang[9] + "\n   9 -" + Lang[61] + "\n\n<center style='" + color_main_head + ";'>" + Lang[62] + ": \n" + server_ip + MPDAddress + "</center></pre>";
+	mainmenu.innerHTML = "<h1 class=mainmenu>" + Lang[60] + "</h1><pre class=mainmenu>" + Lang[34] + "\n   0 -" + Lang[9] + "\n   9 -" + Lang[61] + "\n\n<pre class=mainhead>" + Lang[62] + ": \n" + server_ip + MPDAddress + "</pre></pre>";
 	  } else if ( ev.state == 2 ) { // && ev.reason == "PositionEnd" ) {
 	    showDisplay("STOP", false, 100, 0 );
-	mainmenu.innerHTML = "<h1 class=mainmenu>" + Lang[60] + "</h1><pre class=mainmenu>" + Lang[34] + "\n   0 -" + Lang[9] + "\n   9 -" + Lang[63] + "\n\n<center style='" + color_main_head + ";'>" + Lang[64] + ": \n" + server_ip + MPDAddress + "\n" + Lang[65] + "</center></pre>";
+	mainmenu.innerHTML = "<h1 class=mainmenu>" + Lang[60] + "</h1><pre class=mainmenu>" + Lang[34] + "\n   0 -" + Lang[9] + "\n   9 -" + Lang[63] + "\n\n<pre class=mainhead>" + Lang[64] + ": \n" + server_ip + MPDAddress + "\n" + Lang[65] + "</pre></pre>";
 	  } else if ( ev.state == 3 && ev.reason == "CommandPlay" ) {
 	showDisplay("MPD", false, 100, 0 );
-	mainmenu.innerHTML = "<h1 class=mainmenu>" + Lang[60] + "</h1><pre class=mainmenu>" + Lang[34] + "\n   0 -" + Lang[9] + "\n\n\n<center style='" + color_main_head + ";'>" + Lang[64] + ": \n" + server_ip + MPDAddress + "</center></pre>";
+	mainmenu.innerHTML = "<h1 class=mainmenu>" + Lang[60] + "</h1><pre class=mainmenu>" + Lang[34] + "\n   0 -" + Lang[9] + "\n\n\n<pre class =mainhead>" + Lang[64] + ": \n" + server_ip + MPDAddress + "</pre></pre>";
 	  } else {
 	    showDisplay("ERRR", false, 100, 0 );
-	mainmenu.innerHTML = "<h1 class=mainmenu>" + Lang[60] + "</h1><pre class=mainmenu>" + Lang[34] + "\n   0 -" + Lang[9] + "\n   9 -" + Lang[63] + "\n\n<center style='" + color_main_head + ";'>Error : " + ev.state + "\n" + Lang[66] + ": " + ev.reason + "</center></pre>";
+	mainmenu.innerHTML = "<h1 class=mainmenu>" + Lang[60] + "</h1><pre class=mainmenu>" + Lang[34] + "\n   0 -" + Lang[9] + "\n   9 -" + Lang[63] + "\n\n<pre class=main_head>Error : " + ev.state + "\n" + Lang[66] + ": " + ev.reason + "</pre></pre>";
 	}
 }
 
