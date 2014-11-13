@@ -47,6 +47,7 @@ var fullupdate = 1; // If guideview is too slow, set it to 0 (for 1910/1960), fa
 
 var ShowOsdTime = 5000; //Time to show OSD, in seconds * 1000
 var ShowSetTimer = 3000; //Time to show set timer popup, in seconds * 1000
+var ChangeTime = 2000; // Time before the channel change happens (was only with OK)
 
 var serverEPGdays = 3 * (60 * 60 * 24); // the higher the longer you wait while getting the epg info
 
@@ -271,6 +272,7 @@ var ProtectID = 0;
 var SleepTimer = 0;
 var SleepTimerID = -1;
 var initialDelayPlayID = -1;
+var TimedChangeID = -1;
 
 var instanttimer = new Array();
 var inst_timer = 0;

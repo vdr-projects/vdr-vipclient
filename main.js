@@ -311,7 +311,7 @@ function incChan(step) {
     if (currChan > maxChan[ChanGroup]) {
         currChan = minChan[ChanGroup];
     }
-    osdnr.style.opacity = isFullscreen; 
+    osdmain.style.opacity = isFullscreen; 
     OSDchannr(currChan);
 }
 
@@ -320,7 +320,7 @@ function decChan(step) {
     if (currChan < minChan[ChanGroup] ) {
         currChan = maxChan[ChanGroup] ;
     }
-    osdnr.style.opacity = isFullscreen; 
+    osdmain.style.opacity = isFullscreen; 
     OSDchannr(currChan);
 }
 
@@ -858,7 +858,7 @@ function onKeyDown(event) {
    case "BrowserBack":
 	if(count) {
 		count = 0;
-		osdnr.style.opacity = 0;
+		osdmain.style.opacity = 0;
 		if(isFullscreen) {
 			showDisplay(currChan.toString(), false, 100, 0 );
 		}
@@ -948,7 +948,7 @@ function onKeyDown(event) {
 		if(isFullscreen) {
 			if(count) {
 				count = 0;
-				osdnr.style.opacity = 0;
+				osdmain.style.opacity = 0;
 				showDisplay(currChan.toString(), false, 100, 0 );
 				Change = 0;
 			}
@@ -1069,7 +1069,7 @@ function onKeyDown(event) {
 	if(isFullscreen && Fav_max_channel !== 0) {
 		if(count) {
 			count = 0;
-			osdnr.style.opacity = 0;
+			osdmain.style.opacity = 0;
 			showDisplay(currChan.toString(), false, 100, 0 );
 			Change = 0;
 		}
@@ -1218,7 +1218,7 @@ function onKeyDown(event) {
 		if(isFullscreen) {
 			if(count) {
 				count = 0;
-				osdnr.style.opacity = 0;
+				osdmain.style.opacity = 0;
 				showDisplay(currChan.toString(), false, 100, 0 );
 				Change = 0;
 			}
@@ -1271,10 +1271,12 @@ function Read_Fav() {
 
 
 function Makedigit() {
+    if (TimedChangeID != -1) { clearTimeout(TimedChangeID); TimedChangeID = -1; }
+
 	prevChan = currChan;
 	Change = (Change*10) + digit;
 	count += 1;
-	osdnr.style.opacity = isFullscreen; 
+	osdmain.style.opacity = isFullscreen; 
         OSDchannr(Change);
 	if(isFullscreen) {
 		showDisplay((Change.toString()), false, 100, 0 ); 
@@ -1283,7 +1285,10 @@ function Makedigit() {
     if (count>channeldigits) {
 	CheckChannel(Change);
 	count = 0;
-	}
+    } else {
+	TimedChangeID = setTimeout("TimedChange();",ChangeTime);
+    }
+
     if(ChangeOK) { 
 	if(isFullscreen) {
 	        play(channels[currChan]);
@@ -1306,12 +1311,27 @@ function CheckChannel(CheckThis) {
 	if(prevChan == currChan) { 
 	ChangeOK = 0 ;
 	}
-	osdnr.style.opacity = 0;
+	osdmain.style.opacity = 0;
 	if(isFullscreen) {
 	showDisplay(currChan.toString(), false, 100, 0 );
 	}
 	Change = 0;
 
+}
+
+function TimedChange() {
+  if (count && ChangeTime) {
+	CheckChannel(Change);
+	count = 0;
+	if(ChangeOK) {
+		if(isFullscreen) { 	
+			play(channels[currChan]);
+		} else {
+			preview(channels[currChan]);			
+		}
+		ChangeOK = 0;
+	}
+  }
 }
 
 
@@ -1357,12 +1377,6 @@ function showVolume() {
 
 function OSD(opacity) {
     osdmain.style.opacity = opacity;
-    osdnr.style.opacity = opacity;
-    osdtime.style.opacity = opacity;
-    osdname.style.opacity = opacity;
-    osdepg.style.opacity = opacity;
-    osdca.style.opacity = opacity;
-    osdtimer.style.opacity = opacity;
 }
 
 
@@ -2831,7 +2845,7 @@ if(menu == 1) { // settings menu
 	htmltext += "\n\n   <font style='color:red;'>\u25CF<font style='" + color_main_font + ";'> -" + Lang[20];
 	htmltext += "<font style='color:green;'>\u25CF<font style='" + color_main_font + ";'> - " + VideoOutputModes_txt[VideoOutputModes[Set_Res]] + " ";  
 	htmltext += "<font style='color:yellow;'>\u25CF<font style='" + color_main_font + ";'> -" + Lang[35];
-	htmltext += "<font style='color:blue;'>\u25CF<font style='" + color_main_font + ";'> - " + Left(cssfile[css_nr].split("."),8) +"</pre>";
+	htmltext += "<font style='color:blue;'>\u25CF<font style='" + color_main_font + ";'> - " + Left(cssfile[css_nr].split(".")[0],8) +"</pre>";
 //	htmltext += "\n   0 -" + Lang[9] +"</pre>";
 	mainmenu.innerHTML = htmltext;
 }
