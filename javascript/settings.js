@@ -2,7 +2,7 @@
 // Default settings
 // 
 
-var Version = "0.26.4";
+var Version = "0.26.5";
 
 server_ip_array = new Array("http://192.168.1.15","http://192.168.3.15","http://192.168.178.56","http://192.168.3.100","http://192.168.178.19","http://192.168.1.21","http://192.168.2.100","http://192.168.178.52");
 
@@ -14,7 +14,7 @@ OSDLang = new Array ("English", "Nederlands", "Deutsch");
 langfile = new Array ("languages/lang_eng.js", "languages/lang_dut.js","languages/lang_ger.js");
 lang_prio = new Array("dut,eng,und","ger,deu,eng","eng,und","fre,fra,eng");
 
-cssfile = new Array ("skins/blue.css","skins/black.css");
+cssfile = new Array ("blue.css","black.css");
 var css_nr;
 
 var subs_prio = "dut,eng"; //Subtitle prio

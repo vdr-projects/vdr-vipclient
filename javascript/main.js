@@ -237,7 +237,7 @@ function loadcss(filename){
 	var oScript= document.createElement("link");
 	oScript.type = "text/css";
 	oScript.rel = "stylesheet";
-	oScript.href = filename;
+	oScript.href = "skins/" + filename;
 	oHead.appendChild( oScript);
 }
 
