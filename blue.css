@@ -1,3 +1,12 @@
+	videoplane#videoplane {
+		position:absolute;
+		left:0px;
+		top:0px;
+		height:100%;
+		width:100%;
+		z-index:500;
+	}
+
 	div#osdmain {
 	position		: absolute;
 	z-index			: 505;
@@ -12,10 +21,10 @@
 	div#osdnr {
 	position	 	: absolute;
 	z-index			: 505;
-	width 			: 10%;
-	height			: 9%;
-	left			: 12%;
-	top			: 56%;
+	width 			: 13%;
+	height			: 30%;
+	left			: 3%;
+	top			: -15%;
 	-webkit-border-radius	: 25px;
 	background		: red;
 	color			: black;
@@ -26,8 +35,8 @@
 		position	: absolute;
 		width		: 69%;
 		height		: 4%;
-		left		: 12%;
-		top 		: 66%;
+		left		: 3%;
+		top 		: 18%;
 		color		: black;
 	}
 
@@ -36,36 +45,39 @@
 	z-index			: 505;
 		position		: absolute;
 		width			: 7%;
-		left			: 12%;
-		top			: 69%;
+		left			: 5%;
+		top			: 30%;
 	}
-	
-	div#osdepg {
-	z-index			: 505;
-		position	: absolute;
-		width		: 63%;
-		left		: 21%;
-		top		: 69%;
-		color		: white;
-	}
-	
+
 	div#osdtime {
 	z-index			: 505;
 		position	: absolute;
 		width		: 42%;
 		left		: 58%;
-		top		: 63%;
+		top		: 7%;
 		color		: white;
 	}
 
+	
+	div#osdepg {
+	z-index			: 505;
+		position	: absolute;
+		width		: 63%;
+		left		: 17%;
+		top		: 30%;
+		color		: white;
+	}
+	
 	div#osdca { 
 	z-index			: 505;
 		position	: absolute;
 		width		: 5%;
 		left		: 75%;
-		top		: 67%;
+		top		: 20%;
 		color		: black;
 	}
+
+
 	div#channellist { 
 	z-index			: 400;
 		position	: absolute;

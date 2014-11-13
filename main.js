@@ -1406,6 +1406,9 @@ function updateOSDtime(timchan) {
 	tijd = new Date(tijd);
 	dateCurrent = new Date();
 	var EPGminutes = Math.floor((dateCurrent.getTime() - date.getTime()) /1000/60);
+	if (EPGminutes > 1440) { 
+		EPGminutes = 0; // Duration is >24h, maybe current time isn't right.
+	}
 	var tm = tijd.getMinutes();
 	var th = tijd.getHours();
 	th=addzero(th);
@@ -2324,6 +2327,7 @@ function onKeyMenu(keyCode) {
 
     break;
     case "Red":
+
     	if (menu == 1) {
 		if (subs_dyn < (subs_prio_dyn.length -1)) { subs_dyn += 1} else { subs_dyn = 0 }
 		if (subs_prio_dyn.length > 0) {
@@ -2827,7 +2831,7 @@ if(menu == 1) { // settings menu
 	htmltext += "\n\n   <font style='color:red;'>\u25CF<font style='" + color_main_font + ";'> -" + Lang[20];
 	htmltext += "<font style='color:green;'>\u25CF<font style='" + color_main_font + ";'> - " + VideoOutputModes_txt[VideoOutputModes[Set_Res]] + " ";  
 	htmltext += "<font style='color:yellow;'>\u25CF<font style='" + color_main_font + ";'> -" + Lang[35];
-	htmltext += "<font style='color:blue;'>\u25CF<font style='" + color_main_font + ";'> - " + Left(cssfile[css_nr],8) +"</pre>";
+	htmltext += "<font style='color:blue;'>\u25CF<font style='" + color_main_font + ";'> - " + Left(cssfile[css_nr].split("."),8) +"</pre>";
 //	htmltext += "\n   0 -" + Lang[9] +"</pre>";
 	mainmenu.innerHTML = htmltext;
 }
