@@ -365,4 +365,7 @@ var localRecording = 0;
 var box_ip; // Used for testing plugins
 var test_ip; // Used for testing plugins
 
+var color_switchtimer = "color_switchtimer";
+var color_default = "color_default";
+var color_error = "color_error";
 
