@@ -11,10 +11,10 @@ var StartVolume = 15; // Volume on (re)start of the portal.
 var currChan = 10; // default channel
 
 OSDLang = new Array ("English", "Nederlands", "Deutsch");
-langfile = new Array ("lang_eng.js", "lang_dut.js","lang_ger.js");
+langfile = new Array ("languages/lang_eng.js", "languages/lang_dut.js","languages/lang_ger.js");
 lang_prio = new Array("dut,eng,und","ger,deu,eng","eng,und","fre,fra,eng");
 
-cssfile = new Array ("blue.css","style_1.css");
+cssfile = new Array ("skins/blue.css","skins/black.css");
 var css_nr;
 
 var subs_prio = "dut,eng"; //Subtitle prio

@@ -1,0 +1,420 @@
+* {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	vertical-align: baseline;
+}
+
+body {
+	background		: url(../images/background.png) repeat #000;
+	width			: 100%;
+	height			: 100%;
+	margin			: 0;
+	padding			: 0;
+	font-family		: 'Ubuntu', sans-serif;
+}
+
+videoplane#videoplane {
+	position	: absolute;
+	left		: 0px;
+	top			: 0px;
+	height		: 100%;
+	width		: 100%;
+	z-index		: 500;
+}
+
+/* OSD Bottom of Decorder */
+
+div#osdmain {
+	font-family		: 'Ubuntu', sans-serif;
+	font-weight		: 400;
+	position		: absolute;
+	z-index			: 505;
+	background		: url(../images/osd-bg.png) top center repeat-x rgba(0,0,0,0.8);
+	width			: 94%;
+	height			: 25%;
+	bottom			: 3%;
+	left			: 3%;
+	color			: #FFF;
+	overflow		: hidden;
+}
+
+	div#osdnr {
+		font-size		: 58px;
+		display			: table;
+		font-weight		: 700;
+		color			: #feb900;
+		position 		: absolute;
+		width 			: 8%;
+		height			: 100%;
+		left			: 0%;
+		top				: 0%;
+		text-align		: center;
+		border-right	: 1px solid #444;
+		background		: rgba(0,0,0,0.4);
+	}
+	
+		div#osdnr span {	
+			display			: table-cell;
+			vertical-align	: middle;
+		}
+		
+	div#osdname {
+		font-size		: 40px;
+		font-weight		: 700;
+		position		: absolute;
+		width			: 60%;
+		height			: 25%;
+		left			: 10%;
+		top 			: 15%;
+		border-bottom	: 1px solid #444;
+		white-space		: nowrap; 
+		overflow		: hidden;
+		text-overflow	: ellipsis; 
+	}
+
+	div#osdtimer {
+		color			: #feb900;
+		position		: absolute;
+		width			: auto;
+		text-align		: center;
+		left			: 10%;
+		top				: 45%;
+		border-radius	: 10px;
+		-webkit-border-radius: 10px;
+		background		: rgba(0,0,0,0.3);
+		padding			: 10px;
+		font-size		: 28px;
+	}
+	
+	div#osdepg {
+		position		: absolute;
+		width			: 50%;
+		height			: 55%;
+		left			: 20%;
+		top				: 45%;
+		line-height		: 28px;
+		white-space		: nowrap;
+		overflow		: hidden;
+		text-overflow	: ellipsis;
+		font-size		: 28px;
+	}
+	
+	div#osdtime {
+		font-size		: 28px;
+		line-height		: 45px;
+		color			: #FFF;
+		position		: absolute;
+		width			: 30%;
+		height			: 25%;
+		right			: 3%;
+		top				: 15%;
+		text-align		: right;
+		border-bottom	: 1px solid #444;
+		white-space		: nowrap;
+		overflow		: hidden;
+		text-overflow	: ellipsis;
+	}
+
+	div#osdca {
+		font-size		: 50px;
+		color			: #999;
+		position		: absolute;
+		width			: auto;
+		right			: 3%;
+		top				: 45%;
+		text-align		: right;
+		border-radius	: 10px;
+		-webkit-border-radius: 10px;
+		background		: rgba(0,0,0,0.3);
+		padding			: 10px;
+	}
+	
+/* END - OSD Bottom of Decorder */
+
+	.bluekey {
+	color	: blue;
+	}
+	.#ad0806key {
+	color	: #ad0806;
+	}
+	.yellowkey {
+	color	:yellow;
+	}
+	.greenkey {
+	color	:green;
+	}
+	.mainfont {
+	font-size:49px;
+	color:black;
+	}
+	
+	.notset {
+	color	:grey;
+	}
+
+	.select {
+	background	:#fc5;
+	-webkit-border-radius:25px;
+	color:black;
+	font-size:49px;
+	}
+
+	.mediaselect {
+	background	:#fc5;
+	-webkit-border-radius:25px;
+	color:black;
+	font-size:38px;
+	}
+
+	pre.mediamenu {
+	font-size:38px;
+	color:black;
+	}
+
+	p.epg_head { 
+	color:white;
+	text-align: center;
+	}
+
+	p.epg_avinfo {
+	color:black;
+	text-align: center;
+	}
+
+	p.epg_title {
+	color:white;
+	text-align: center;
+	}
+
+	p.epg_info {
+	color:yellow;
+	text-align: center;
+	}
+
+	pre.color_switchtimer {
+	background		: #660066;
+	}
+
+	pre.color_default {
+	background		: green;
+	}
+
+	pre.color_error {
+	background		: #ad0806;
+	}
+
+
+
+	videoplane#videoplane {
+		position:absolute;
+		left:0px;
+		top:0px;
+		height:100%;
+		width:100%;
+		z-index:500;
+	}
+
+	h1.mainmenu {
+	font-size:66px;
+	color:white;
+	text-align: center;
+	}
+
+	pre.mainmenu {
+	font-size:49px;
+	color:black;
+	}
+	pre.mainhead {
+	font-size:66px;
+	color:white;
+	text-align: center;
+	}
+
+	pre.media {
+	color:white;
+	font-size:49px;
+	}
+
+	pre.epgtimerinfo {
+	color:white;
+	text-align: center;
+	}
+
+	p.epgtimerinfo {
+	text-align: center;
+	}
+
+
+	p.epg {
+	font-size:36px;
+	color:black;
+	text-align: center;
+	}
+	
+	p.list {
+	font-size:34px;
+	color:black;
+	text-align: center;
+	}
+
+	p.osdtimer {
+	font-size:34px;
+	color:black;
+	}
+
+	div#channellist { 
+	z-index			: 400;
+		position	: absolute;
+		width		: 100%;
+		height		: 48%;
+		left		: 7%;
+		top		: 4%;
+	background		: #bbb;
+	}
+
+	div#colorkeys { 
+	z-index			: 401;
+		position	: absolute;
+		width		: 100%;
+		left		: 10%;
+		top		: 84%;
+		font-size:36px;
+	}
+
+	div#chanlistepg { 
+	z-index			: 402;
+		position	: absolute;
+		width		: 42%;
+		left		: 7%;
+		top		: 50%;
+	}
+
+	div#osdvolume { 
+	z-index			: 501;
+		position	: absolute;
+		width		: 63%;
+		left		: 10%;
+		top		: 80%;
+		opacity		: 0;
+		color		: green;
+		font-size:66px;
+	}
+
+	div#osdmedia { 
+		width		:80%;
+		position	:absolute;
+		left		:10%;
+		top		:60%;
+		z-index		:506;
+		opacity		:0;
+		-webkit-border-radius:50px;
+	background		: #3366ff;
+	}
+
+	div#osdmediatime {
+	z-index			: 506;
+		position	: absolute;
+		width		: 42%;
+		right		: 15%;
+		top		: 63%;
+		color		: white;
+		font-size:35px;
+		text-align: right;
+	}
+
+
+
+	div#schedule {
+	width		:50%;
+	height		:75%;
+	position	:absolute;
+	left		:25%;
+	top		:10%;
+	opacity		:0;
+	z-index		:510;
+	-webkit-border-radius:50px;
+	background		: #3366ff;
+	}
+
+	div#osdmute {
+	width		:7%; 
+	position	:absolute; 
+	left		:76%; 
+	top		:9%;
+	z-index		:515;
+	opacity		:0;
+	}
+
+	div#osdlang {
+	width		:7%;
+	position	:absolute;
+	left		:76%;
+	top		:9%;
+	z-index		:515;
+	opacity		:0;
+	color		:white;
+		font-size:30px;
+	}
+
+	div#mainmenu {
+		width		: 40%;
+		height		: 100%;
+		color		: #FFF;
+		text-align	: left;
+		position	: absolute;
+		left		: 3%;
+		top			: 3%;
+		z-index		: 520;
+		opacity		: 0;
+		background	: url(../images/osd-bg.png) top center repeat-x rgba(0,0,0,0.8);
+	}
+
+	div#medialist {
+		width		: 80%;
+		position	: absolute;
+		left		: 10%;
+		top			: 10%;
+		bottom		: 10%;
+		z-index		: 520;
+		opacity		: 0;
+		-webkit-border-radius:50px;
+		background	: #3366ff;
+	}
+
+	div#switchtimer {
+		width		: 45%;
+		position	: absolute;
+		left		: 21%;
+		top			: 26%;
+		z-index		: 530;
+		opacity		: 0;
+		-webkit-border-radius: 25px;
+		color		: white;
+		font-size 	: 36px;
+		background	: green;
+	}
+
+	div#osdepginfo {
+		width		: 80%;
+		position	: absolute;
+		left		: 10%;
+		top			: 10%;
+		z-index		: 525;
+		opacity		: 0;
+		-webkit-border-radius :0 25px 0 25px;
+		background	: #3366ff;
+		font-size	: 39px;
+	}
+
+	div#osdepginfonext {
+		width		: 80%;
+		position	: absolute;
+		left		: 10%;
+		top			: 10%;
+		z-index		: 525;
+		opacity		: 0;
+		-webkit-border-radius :0 25px 0 25px;
+		background	: #3366ff;
+		font-size	: 39px;
+	}

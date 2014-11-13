@@ -2,8 +2,10 @@
 var fsList; var fsSchedList; var fsSched;
 
 var color_bg = "#fc5";
+var color_main_head = "color:white";
 var color_sched_head = "color:white";
 var color_sched_font = "color:black";
+var color_timerinfo = "color:white";
 
 var color_progress1 = "<font color=red>";
 var color_progress2 = "<font color=white>";
