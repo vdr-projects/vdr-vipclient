@@ -91,7 +91,7 @@
 	text-align: center;
 	}
 
-	pre.mmenu {
+	pre.mainmenu {
 	font-size:49px;
 	color:black;
 	}
@@ -231,7 +231,7 @@
 		top		: 80%;
 		opacity		: 0;
 		color		: green;
-		font-size:36px;
+		font-size:66px;
 	}
 
 	div#osdmedia { 
