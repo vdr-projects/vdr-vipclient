@@ -10,10 +10,44 @@ var color_progress2 = "<font color=white>";
 
 
 function setOSDscale() {
-	fsList = (18*Yfactor[Set_Res]) + "px"; //1080 = 34, 720 = 23, 576 = 18
-	fsSchedList = (18*Yfactor[Set_Res]) + "px"; //1080 = 34, 720 = 23, 576 = 18
-	fsSched = (26*Yfactor[Set_Res]) + "px"; //1080 = 49, 720 = 33, 576 = 26
+	fsList = "34px"; //1080 = 34, 720 = 23, 576 = 18
+	fsSchedList = "34px"; //1080 = 34, 720 = 23, 576 = 18
+	fsSched = "49px"; //1080 = 49, 720 = 33, 576 = 26
 }
+
+
+function GuideView_start() {
+			NowNext = 0;
+			videoplane.style.width = "44%";
+			videoplane.style.height = "42%";
+			videoplane.style.left = "53%";
+			videoplane.style.top = "52%";
+			isFullscreen = 0;
+			ClearScreen();
+			channellist.style.opacity = 1;
+			colorkeys.innerHTML = "<span class=redkey> " +  NN[3 + (1 - NowNext)] + " </span><span class=greenkey > " 
+				+ NN[1 - NowNext] + " </span><span class=yellowkey> " + NN[2] + " </span><span class=bluekey> " 
+				+ NN[5] + " </span>";
+			colorkeys.style.opacity = 1;
+			showChannelList();
+			if(!SwitchGuide) {
+			preChan = currChan;
+			preGrp = ChanGroup;
+			}
+}
+
+function GuideView_end() {
+			isSchedule = 0;
+			schedule.style.opacity = 0;
+			isFullscreen = 1;
+			FullScreen();
+			if(!SwitchGuide) {
+			currChan = preChan;
+			ChanGroup = preGrp;
+			}
+}
+
+
 
 function GetSchedule(schchan,tablelength){
 	//Old style Schedule, used in Guide View.

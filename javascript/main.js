@@ -66,7 +66,7 @@ function onLoad() {
 	showOSD();
 	videoplane.subtitles = Boolean(ShowSubs);
 	colorkeys.innerHTML = "<span class=redkey> " +  NN[4] + " </span><span class=greenkey > " + NN[1] + " </span><span class=yellowkey> " + NN[2] + " </span><span class=bluekey> " + NN[5] + " </span>";
-	medialist.innerHTML = "<h1 class=mainmenu>" + Lang[0] + "</h1>";
+	medialist.innerHTML = "<h1 class=mainmenu" + cssres[css_nr][Set_Res] + ">" + Lang[0] + "</h1>";
 }
 
 
@@ -610,7 +610,7 @@ function ExtraStuff(){
 		{
 			//Show info if set nonfree
 			switchtimer.style.background = "red";
-			switchtimer.innerHTML = "<pre class=nonfree>\n" + Lang[90] +"\n\n </pre>"; // Non free channel message
+			switchtimer.innerHTML = "<pre class=nonfree" + cssres[css_nr][Set_Res] + ">\n" + Lang[90] +"\n\n </pre>"; // Non free channel message
 			switchtimer.style.opacity = 1;
 			CAdelayID = setTimeout("switchtimer.style.opacity = 0;",ShowSetTimer);
 		}
@@ -962,32 +962,9 @@ function onKeyDown(event) {
    case KEY_FAV:
    case "Scroll":
 		if(isFullscreen) {
-			NowNext = 0;
-			videoplane.style.width = (320*Xfactor[Set_Res])+"px";
-			videoplane.style.height = (240*Yfactor[Set_Res])+"px";
-			videoplane.style.left = (380*Xfactor[Set_Res])+"px";
-			videoplane.style.top = (300*Yfactor[Set_Res])+"px";
-			isFullscreen = 0;
-			ClearScreen();
-			channellist.style.opacity = 1;
-			colorkeys.innerHTML = "<span class=redkey> " +  NN[3 + (1 - NowNext)] + " </span><span class=greenkey > " 
-				+ NN[1 - NowNext] + " </span><span class=yellowkey> " + NN[2] + " </span><span class=bluekey> " 
-				+ NN[5] + " </span>";
-			colorkeys.style.opacity = 1;
-			showChannelList();
-			if(!SwitchGuide) {
-			preChan = currChan;
-			preGrp = ChanGroup;
-			}
+			GuideView_start();
 		} else {
-			isSchedule = 0;
-			schedule.style.opacity = 0;
-			isFullscreen = 1;
-			FullScreen();
-			if(!SwitchGuide) {
-			currChan = preChan;
-			ChanGroup = preGrp;
-			}
+			GuideView_end();
 		}
 		break;
     case "TV":
@@ -1398,7 +1375,8 @@ function OSDchannr(channr) {
 	if (experimental) {
 //	osdnr.innerHTML = "<img src='" + channels[currChan] + ".logo.jpg' style='width:80%; max-height:100%; position:absolute; left:10%;' >";
 	}
-	osdnr.innerHTML = Right(channr,3);
+	osdnr.innerHTML = "<span class=osdnr" + cssres[css_nr][Set_Res] + ">" + Right(channr,3) + "</span>";
+	alert(cssres[css_nr][Set_Res]);
 }
 
 function OSDhtml(){
@@ -2240,7 +2218,7 @@ function onKeyMenu(keyCode) {
 	if (menu == 7) {
 		// Show more info Current SearchTimer
 		osdepginfo.style.opacity = 1 - osdepginfo.style.opacity;
-	       	osdepginfo.innerHTML = "<h1 class=mainmenu>" + searchtimersSearch[timerID] + "\n\n\n\n" + Lang[0] + "</h1>" ;
+	       	osdepginfo.innerHTML = "<h1 class=mainmenu" + cssres[css_nr][Set_Res] + ">" + searchtimersSearch[timerID] + "\n\n\n\n" + Lang[0] + "</h1>" ;
 		setTimeout("ShowSearchTimerInfo();",100);
 	}
 
@@ -2288,7 +2266,7 @@ function onKeyMenu(keyCode) {
 		}
 	} else 	if (menu == 5 && smartTVplugin) {
 		osdepginfo.style.opacity = 0;
-		mainmenu.innerHTML = "<h1 class=mainmenu>" + Lang[7] + "</h1><pre class=mainmenu>\n\n\n" + Lang[0] + "</pre>";
+		mainmenu.innerHTML = "<h1 class=mainmenu" + cssres[css_nr][Set_Res] + ">" + Lang[7] + "</h1><pre class=mainmenu" + cssres[css_nr][Set_Res] + ">\n\n\n" + Lang[0] + "</pre>";
 		DeleteTimers();
 		setTimeout("LoadTimersServer();InitMenu(menu);",100);
 	} else 	if (menu == 10) {
@@ -2519,7 +2497,7 @@ function onKeyMenu(keyCode) {
 	break;
 	case KEY_5:
 		if (menu == MainMenu && (Restfulapiplugin || smartTVplugin)) {
-			mainmenu.innerHTML = "<h1 class=mainmenu>" + Lang[7] + "</h1><pre class=mainmenu>\n\n\n" + Lang[0] + "</pre>";
+			mainmenu.innerHTML = "<h1 class=mainmenu" + cssres[css_nr][Set_Res] + ">" + Lang[7] + "</h1><pre class=mainmenu" + cssres[css_nr][Set_Res] + ">\n\n\n" + Lang[0] + "</pre>";
 			timerID = 0;
 			menu = 5;
 			setTimeout("LoadTimersServer();InitMenu(menu);",200);
@@ -2595,7 +2573,7 @@ function onKeyMenu(keyCode) {
 	break;
 	case KEY_8:
 	if (menu == MainMenu && Restfulapiplugin) {
-			mainmenu.innerHTML = "<h1 class=mainmenu>" + Lang[8] + "</h1><pre class=mainmenu>\n\n\n" + Lang[0] + "</pre>";
+			mainmenu.innerHTML = "<h1 class=mainmenu" + cssres[css_nr][Set_Res] + ">" + Lang[8] + "</h1><pre class=mainmenu" + cssres[css_nr][Set_Res] + ">\n\n\n" + Lang[0] + "</pre>";
 			timerID = 0;
 			menu = 7;
 			setTimeout("LoadSearchTimersServer();InitMenu(menu);",200);
@@ -2692,7 +2670,7 @@ osdepginfo.style.opacity = 0;
 
 if(menu == 0) { // Main Menu
 	MainMenu = 0;
-	var htmltext = "<h1 class=mainmenu>" + Lang[9] + "\n ( " + Version + " )</h1><pre class=mainmenu>   1 -" + Lang[10] + "\n   2 -" + Lang[7] + "\n   3 -" + Lang[11];
+	var htmltext = "<h1 class=mainmenu" + cssres[css_nr][Set_Res] + ">" + Lang[9] + "\n ( " + Version + " )</h1><pre class=mainmenu" + cssres[css_nr][Set_Res] + ">   1 -" + Lang[10] + "\n   2 -" + Lang[7] + "\n   3 -" + Lang[11];
 	htmltext += "\n   4 -" + Lang[12]; 
 	if (Restfulapiplugin) { 
 		htmltext += "\n   5 -" + Lang[13]; 
@@ -2720,18 +2698,18 @@ if(menu == 0) { // Main Menu
 		htmltext += "<span class=notset>" + "\n   9 -" + Lang[17] + "</span>" ; 
 	}
 
-	htmltext += "\n   0 - " + Lang[83] + "\n\n   <span class=redkey>\u25CF</span><span class=mainfont> -" + Lang[19] + "</span><span class=greenkey>\u25CF</span><span class=mainfont> -" + Lang[19] + "</span><span class=yellowkey>\u25CF</span><span class=mainfont> -" + Lang[35] + "   </span><span class=bluekey>\u25CF</span><span class=mainfont> -" + Lang[18] + "</pre>";
+	htmltext += "\n   0 - " + Lang[83] + "\n\n   <span class=redkey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> -" + Lang[19] + "</span><span class=greenkey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> -" + Lang[19] + "</span><span class=yellowkey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> -" + Lang[35] + "   </span><span class=bluekey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> -" + Lang[18] + "</pre>";
 	mainmenu.innerHTML = htmltext;
 }
 
 if(menu == 6) { // Main Menu when watching recording
 	MainMenu = 6;
-	mainmenu.innerHTML = "<h1 class=mainmenu>" + Lang[9] + "\n ( " + Version + " )</h1><pre class=mainmenu>   1 -" + Lang[10] + "\n   2 -" + Lang[7] + "\n\n\n   5 -" + Lang[13] + "\n\n\n   8 -" + Lang[16] + "\n\n\n\n   <span class=redkey>\u25CF</span><span class=mainfont> -" + Lang[19] + "</span><span class=greenkey>\u25CF</span><span class=mainfont> -" + Lang[19] + "</span><span class=yellowkey>\u25CF</span><span class=mainfont> -" + Lang[35] + "   </span><span class=bluekey>\u25CF</span><span class=mainfont> -" + Lang[19] + "</pre>";
+	mainmenu.innerHTML = "<h1 class=mainmenu" + cssres[css_nr][Set_Res] + ">" + Lang[9] + "\n ( " + Version + " )</h1><pre class=mainmenu" + cssres[css_nr][Set_Res] + ">   1 -" + Lang[10] + "\n   2 -" + Lang[7] + "\n\n\n   5 -" + Lang[13] + "\n\n\n   8 -" + Lang[16] + "\n\n\n\n   <span class=redkey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> -" + Lang[19] + "</span><span class=greenkey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> -" + Lang[19] + "</span><span class=yellowkey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> -" + Lang[35] + "   </span><span class=bluekey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> -" + Lang[19] + "</pre>";
 }
 
 
 if(menu == 1) { // settings menu
-	var htmltext = "<h1 class=mainmenu>" + Lang[10] + "</h1><pre class=mainmenu>   1 - ";
+	var htmltext = "<h1 class=mainmenu" + cssres[css_nr][Set_Res] + ">" + Lang[10] + "</h1><pre class=mainmenu" + cssres[css_nr][Set_Res] + ">   1 - ";
 	if (ShowSubs) { htmltext += "\uE017"; } else { htmltext += "\uE016"; }
 	htmltext += Lang[20] + ": " + (is.getObject("cfg.media.subtitling.languagepriority"));
 	if (subs_prio_dyn.length > 0) { htmltext += " (" + (subs_dyn + 1 ) + "/" + subs_prio_dyn.length + ") "; }
@@ -2747,10 +2725,10 @@ if(menu == 1) { // settings menu
 
 	if (SleepTimer) { htmltext += SleepTimer + Lang[30]; } else { htmltext += Lang[31]; }
 
-	htmltext += "\n\n   <span class=redkey>\u25CF</span><span class=mainfont> -" + Lang[20];
-	htmltext += "</span><span class=greenkey>\u25CF</span><span class=mainfont> - " + VideoOutputModes_txt[VideoOutputModes[Set_Res]] + " ";  
-	htmltext += "</span><span class=yellowkey>\u25CF</span><span class=mainfont> -" + Lang[35];
-	htmltext += "</span><span class=bluekey>\u25CF</span><span class=mainfont> - " + Left(cssfile[css_nr].split(".")[0],8) +"</pre>";
+	htmltext += "\n\n   <span class=redkey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> -" + Lang[20];
+	htmltext += "</span><span class=greenkey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> - " + VideoOutputModes_txt[VideoOutputModes[Set_Res]] + " ";  
+	htmltext += "</span><span class=yellowkey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> -" + Lang[35];
+	htmltext += "</span><span class=bluekey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> - " + Left(cssfile[css_nr].split(".")[0],8) +"</pre>";
 //	htmltext += "\n   0 -" + Lang[9] +"</pre>";
 	mainmenu.innerHTML = htmltext;
 }
@@ -2764,7 +2742,7 @@ if(menu == 2) { // Timers menu
 		if (timer.length !== 0) { do { x += 1; } while (!timer[x] && (x < timer.length)) }
 
 			if (i == 0) {
-			booking += "<span class=select>";
+			booking += "<span class=select" + cssres[css_nr][Set_Res] + ">";
 			} else if (i == 1) {
 			booking += "</span>";
 			} 
@@ -2790,15 +2768,15 @@ if(menu == 2) { // Timers menu
 	}
 	}
 	if (mediaRecorder) { var x = NN[3]; } else { var x =  Lang[19]; }
-	mainmenu.innerHTML = "<h1 class=mainmenu>" + Lang[7] + "</h1><pre class=mainmenu>\n   0 -" + Lang[9] + "\n" + booking + "   <span class=redkey>\u25CF</span><span class=mainfont> -" + Lang[48] + "</span><span class=greenkey>\u25CF</span><span class=mainfont> - " + x + "  </span><span class=yellowkey>\u25CF</span><span class=mainfont> -" + Lang[19] + "</span><span class=bluekey>\u25CF</span><span class=mainfont> - " + NN[5] + "</pre>";
+	mainmenu.innerHTML = "<h1 class=mainmenu" + cssres[css_nr][Set_Res] + ">" + Lang[7] + "</h1><pre class=mainmenu" + cssres[css_nr][Set_Res] + ">\n   0 -" + Lang[9] + "\n" + booking + "   <span class=redkey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> -" + Lang[48] + "</span><span class=greenkey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> - " + x + "  </span><span class=yellowkey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> -" + Lang[19] + "</span><span class=bluekey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> - " + NN[5] + "</pre>";
 }
 
 if(menu == 3) { // MPD Menu
-	mainmenu.innerHTML = "<h1 class=mainmenu>" + Lang[33] + "</h1><pre class=mainmenu>" + Lang[34] + "\n 0 -" + Lang[9] + "</pre>";
+	mainmenu.innerHTML = "<h1 class=mainmenu" + cssres[css_nr][Set_Res] + ">" + Lang[33] + "</h1><pre class=mainmenu" + cssres[css_nr][Set_Res] + ">" + Lang[34] + "\n 0 -" + Lang[9] + "</pre>";
 }
 
 if(menu == 4) { // INFO Menu
-	var htmltext = "<h1 class=mainmenu>" + Lang[35] + "</h1><pre class=mainmenu>";
+	var htmltext = "<h1 class=mainmenu" + cssres[css_nr][Set_Res] + ">" + Lang[35] + "</h1><pre class=mainmenu" + cssres[css_nr][Set_Res] + ">";
 	try {
 		htmltext += "\n   Product name: " + is.getObject("config.productdisplayname");
 		htmltext += "\n   Build date : " + is.getObject("config.build.date");
@@ -2825,7 +2803,7 @@ if(menu == 4) { // INFO Menu
 if(menu == 5) { // Timers from Server
 	if (timerOK) {
 	//	booking = "<center>" + Lang[32] + "</center>";
-	booking = "<span class=select>";
+	booking = "<span class=select" + cssres[css_nr][Set_Res] + ">";
 	var x = timerID - 1;
 	for (var i=0;i<10;i++) {
 		if (maxTimers !== 0) { do { x += 1; } while (!timers[x] && (x < maxTimers)) }
@@ -2833,9 +2811,9 @@ if(menu == 5) { // Timers from Server
 		if (i == 0) { booking += "</span>"; } 
 	}
 	if (get_timer) {
-	mainmenu.innerHTML = "<h1 class=mainmenu>" + Lang[7] + "</h1><pre class=mainmenu>\n" + booking + "\n   <span class=redkey>\u25CF</span><span class=mainfont> -" + Lang[48] + "</span><span class=greenkey>\u25CF</span><span class=mainfont> -" + Lang[49] + "</span><span class=yellowkey>\u25CF</span><span class=mainfont> -" + Lang[19] + "   </span><span class=bluekey>\u25CF</span><span class=mainfont> -" + Lang[28] + "</pre>";
+	mainmenu.innerHTML = "<h1 class=mainmenu" + cssres[css_nr][Set_Res] + ">" + Lang[7] + "</h1><pre class=mainmenu" + cssres[css_nr][Set_Res] + ">\n" + booking + "\n   <span class=redkey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> -" + Lang[48] + "</span><span class=greenkey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> -" + Lang[49] + "</span><span class=yellowkey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> -" + Lang[19] + "   </span><span class=bluekey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> -" + Lang[28] + "</pre>";
 	 } else {
-	mainmenu.innerHTML = "<h1 class=mainmenu>" + Lang[7] + "</h1><pre class=mainmenu>\n" + booking + "\n   <span class=redkey>\u25CF</span><span class=mainfont> -" + Lang[19] + "</span><span class=greenkey>\u25CF</span><span class=mainfont> -" + Lang[19] + "</span><span class=yellowkey>\u25CF</span><span class=mainfont> -" + Lang[19] + "   </span><span class=bluekey>\u25CF</span><span class=mainfont> -" + Lang[28] + "</pre>";
+	mainmenu.innerHTML = "<h1 class=mainmenu" + cssres[css_nr][Set_Res] + ">" + Lang[7] + "</h1><pre class=mainmenu" + cssres[css_nr][Set_Res] + ">\n" + booking + "\n   <span class=redkey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> -" + Lang[19] + "</span><span class=greenkey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> -" + Lang[19] + "</span><span class=yellowkey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> -" + Lang[19] + "   </span><span class=bluekey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> -" + Lang[28] + "</pre>";
 	 }
 	}
 }
@@ -2844,20 +2822,20 @@ if(menu == 5) { // Timers from Server
 if(menu == 7) { // SearchTimers from Server
 	if (timerOK) {
 	// 	booking = "<center>" + Lang[32] + "</center>";
-	booking = "<span class=select>";
+	booking = "<span class=select" + cssres[css_nr][Set_Res] + ">";
 	var x = timerID - 1;
 	for (var i=0;i<10;i++) {
 		if (maxTimers !== 0) { do { x += 1; } while (!searchtimers[x] && (x < maxTimers)) }
 		if (maxTimers > x) { booking += searchtimers[x]; } else { booking += "\n"; }
 		if (i == 0) { booking += "</span>"; } 
 	}
-	mainmenu.innerHTML = "<h1 class=mainmenu>" + Lang[8] + "</h1><pre class=mainmenu>\n" + booking + "\n   <span class=redkey>\u25CF</span><span class=mainfont> -" + Lang[19] + "</span><span class=greenkey>\u25CF</span><span class=mainfont> -" + Lang[19] + "</span><span class=yellowkey>\u25CF</span><span class=mainfont> -" + Lang[19] + "   </span><span class=bluekey>\u25CF</span><span class=mainfont> -" + Lang[28] + "</pre>";
+	mainmenu.innerHTML = "<h1 class=mainmenu" + cssres[css_nr][Set_Res] + ">" + Lang[8] + "</h1><pre class=mainmenu" + cssres[css_nr][Set_Res] + ">\n" + booking + "\n   <span class=redkey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> -" + Lang[19] + "</span><span class=greenkey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> -" + Lang[19] + "</span><span class=yellowkey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> -" + Lang[19] + "   </span><span class=bluekey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> -" + Lang[28] + "</pre>";
 
 	}
 }
 
 if(menu == 8) { // ChannelGroups enable/disable
-	var htmltext = "<h1 class=mainmenu>" + Lang[80] + "</h1><pre class=mainmenu>\n";
+	var htmltext = "<h1 class=mainmenu" + cssres[css_nr][Set_Res] + ">" + Lang[80] + "</h1><pre class=mainmenu" + cssres[css_nr][Set_Res] + ">\n";
 	for (var i=0;i<10;i++) {
 		if (maxChan[i]) { } else { htmltext += "<span class=notset>"; }
 		htmltext += "\uE003" + i + "\uE003-\uE003";
@@ -2870,7 +2848,7 @@ if(menu == 8) { // ChannelGroups enable/disable
 	}
 
 if(menu == 9) { // INFO2 Menu
-	var htmltext = "<h1 class=mainmenu>" + Lang[35] + "</h1><pre class=mainmenu>";
+	var htmltext = "<h1 class=mainmenu" + cssres[css_nr][Set_Res] + ">" + Lang[35] + "</h1><pre class=mainmenu" + cssres[css_nr][Set_Res] + ">";
 	try {
 		if (fullupdate !== 0) { htmltext += "\n \uE017 "; } else { htmltext += "\n \uE016 "; }
 		htmltext += "Full EPG Update ";
@@ -2912,21 +2890,21 @@ if(menu == 9) { // INFO2 Menu
 }
 
 if(menu == 10) { // Favorite edit Menu
-	var htmltext = "<h1 class=mainmenu>" + Lang[83]
-	htmltext += "</h1><pre class=mainmenu>\n"
-	htmltext += "<span class=select>";
+	var htmltext = "<h1 class=mainmenu" + cssres[css_nr][Set_Res] + ">" + Lang[83]
+	htmltext += "</h1><pre class=mainmenu" + cssres[css_nr][Set_Res] + ">\n"
+	htmltext += "<span class=select" + cssres[css_nr][Set_Res] + ">";
 	var x = timerID;
 	for (var i=0;i<10;i++) {
 		if (maxTimers !== 0) { x += 1;}
 		if (maxTimers >= x && x !== 0) { htmltext += " \u0003\u0003 " + x + " \u0003\u0003 " + channelsnames[(x + Fav_base)] + " \u0003\u0003\u0003 \n"; } else { htmltext += "\n"; }
 		if (i == 0) { htmltext += "</span>"; } 
 	}
-	htmltext += "\n   <span class=redkey>\u25CF</span><span class=mainfont> -" + Lang[87]; 
-	htmltext += "</span><span class=greenkey>\u25CF</span><span class=mainfont> -"
+	htmltext += "\n   <span class=redkey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> -" + Lang[87]; 
+	htmltext += "</span><span class=greenkey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> -"
 	if (timerID == 0) { htmltext += Lang[19] } else { htmltext += Lang[84] } //no move up
-	htmltext += "</span><span class=yellowkey>\u25CF</span><span class=mainfont> -"
+	htmltext += "</span><span class=yellowkey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> -"
 	if (timerID == (maxTimers - 1) || x == 0) { htmltext += Lang[19] } else { htmltext += Lang[85] } //no move down
-	htmltext += "</span><span class=bluekey>\u25CF</span><span class=mainfont> -" + Fav_key1 + "</pre>";
+	htmltext += "</span><span class=bluekey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> -" + Fav_key1 + "</pre>";
 	mainmenu.innerHTML = htmltext;
 }
 
@@ -3052,7 +3030,7 @@ try {
   } catch(e) {
     timerOK = 0;
     alert("Get Timers problem: " + e);
-    mainmenu.innerHTML = "<h1 class=mainmenu>" + Lang[7] + "</h1><pre class=mainmenu>\n  " + Lang[36] + ": \n " + server_ip + "</pre>";
+    mainmenu.innerHTML = "<h1 class=mainmenu" + cssres[css_nr][Set_Res] + ">" + Lang[7] + "</h1><pre class=mainmenu" + cssres[css_nr][Set_Res] + ">\n  " + Lang[36] + ": \n " + server_ip + "</pre>";
   }
 }
 
@@ -3161,7 +3139,7 @@ try {
 	  }
 
 		// Extended INFO
-		SearchTimer[i] = "<pre class=mainhead>" + x[i].getElementsByTagName("search")[0].childNodes[0].nodeValue + "\n </pre><pre>";
+		SearchTimer[i] = "<pre class=mainhead" + cssres[css_nr][Set_Res] + ">" + x[i].getElementsByTagName("search")[0].childNodes[0].nodeValue + "\n </pre><pre>";
 		if ((x[i].getElementsByTagName("use_as_searchtimer")[0].childNodes[0].nodeValue) == 0) {
 			SearchTimer[i]  += "\uE003\uE016\uE003" + Lang[40] + "\n";
 		} else {
@@ -3211,7 +3189,7 @@ try {
   } catch(e) {
     timerOK = 0;
     alert("Get SearchTimers problem: " + e);
-    mainmenu.innerHTML = "<h1 class=mainmenu>" + Lang[8] + "</h1><pre class=mainmenu>\n  " + Lang[43] + ": \n " + server_ip + RestFulAPI + "</pre>";
+    mainmenu.innerHTML = "<h1 class=mainmenu" + cssres[css_nr][Set_Res] + ">" + Lang[8] + "</h1><pre class=mainmenu" + cssres[css_nr][Set_Res] + ">\n  " + Lang[43] + ": \n " + server_ip + RestFulAPI + "</pre>";
   }
 }
 
@@ -3268,7 +3246,7 @@ function ShowSearchTimerInfo() {
 
 	  }
 
-       	osdepginfo.innerHTML = "<pre class=mainhead>" + searchtimersSearch[timerID] + "\n </pre><pre>" + info1 + "</pre>" ;
+       	osdepginfo.innerHTML = "<pre class=mainhead" + cssres[css_nr][Set_Res] + ">" + searchtimersSearch[timerID] + "\n </pre><pre>" + info1 + "</pre>" ;
 
 }
 
@@ -3300,16 +3278,16 @@ if (MPDListener == 0) {
 } else {
 	if ( ev.state == 6 && ev.reason == "HostUnreachable" ) {
 	    showDisplay("ERRR", false, 100, 0 );
-	mainmenu.innerHTML = "<h1 class=mainmenu>" + Lang[60] + "</h1><pre class=mainmenu>" + Lang[34] + "\n   0 -" + Lang[9] + "\n   9 -" + Lang[61] + "\n\n<pre class=mainhead>" + Lang[62] + ": \n" + server_ip + MPDAddress + "</pre></pre>";
+	mainmenu.innerHTML = "<h1 class=mainmenu" + cssres[css_nr][Set_Res] + ">" + Lang[60] + "</h1><pre class=mainmenu" + cssres[css_nr][Set_Res] + ">" + Lang[34] + "\n   0 -" + Lang[9] + "\n   9 -" + Lang[61] + "\n\n<pre class=mainhead" + cssres[css_nr][Set_Res] + ">" + Lang[62] + ": \n" + server_ip + MPDAddress + "</pre></pre>";
 	  } else if ( ev.state == 2 ) { // && ev.reason == "PositionEnd" ) {
 	    showDisplay("STOP", false, 100, 0 );
-	mainmenu.innerHTML = "<h1 class=mainmenu>" + Lang[60] + "</h1><pre class=mainmenu>" + Lang[34] + "\n   0 -" + Lang[9] + "\n   9 -" + Lang[63] + "\n\n<pre class=mainhead>" + Lang[64] + ": \n" + server_ip + MPDAddress + "\n" + Lang[65] + "</pre></pre>";
+	mainmenu.innerHTML = "<h1 class=mainmenu" + cssres[css_nr][Set_Res] + ">" + Lang[60] + "</h1><pre class=mainmenu" + cssres[css_nr][Set_Res] + ">" + Lang[34] + "\n   0 -" + Lang[9] + "\n   9 -" + Lang[63] + "\n\n<pre class=mainhead" + cssres[css_nr][Set_Res] + ">" + Lang[64] + ": \n" + server_ip + MPDAddress + "\n" + Lang[65] + "</pre></pre>";
 	  } else if ( ev.state == 3 && ev.reason == "CommandPlay" ) {
 	showDisplay("MPD", false, 100, 0 );
-	mainmenu.innerHTML = "<h1 class=mainmenu>" + Lang[60] + "</h1><pre class=mainmenu>" + Lang[34] + "\n   0 -" + Lang[9] + "\n\n\n<pre class =mainhead>" + Lang[64] + ": \n" + server_ip + MPDAddress + "</pre></pre>";
+	mainmenu.innerHTML = "<h1 class=mainmenu" + cssres[css_nr][Set_Res] + ">" + Lang[60] + "</h1><pre class=mainmenu" + cssres[css_nr][Set_Res] + ">" + Lang[34] + "\n   0 -" + Lang[9] + "\n\n\n<pre class =mainhead" + cssres[css_nr][Set_Res] + ">" + Lang[64] + ": \n" + server_ip + MPDAddress + "</pre></pre>";
 	  } else {
 	    showDisplay("ERRR", false, 100, 0 );
-	mainmenu.innerHTML = "<h1 class=mainmenu>" + Lang[60] + "</h1><pre class=mainmenu>" + Lang[34] + "\n   0 -" + Lang[9] + "\n   9 -" + Lang[63] + "\n\n<pre class=main_head>Error : " + ev.state + "\n" + Lang[66] + ": " + ev.reason + "</pre></pre>";
+	mainmenu.innerHTML = "<h1 class=mainmenu" + cssres[css_nr][Set_Res] + ">" + Lang[60] + "</h1><pre class=mainmenu" + cssres[css_nr][Set_Res] + ">" + Lang[34] + "\n   0 -" + Lang[9] + "\n   9 -" + Lang[63] + "\n\n<pre class=main_head>Error : " + ev.state + "\n" + Lang[66] + ": " + ev.reason + "</pre></pre>";
 	}
 }
 
@@ -3353,7 +3331,7 @@ function UnloadMediaSettings() {
 	osdmedia.style.opacity = 0;
 	osdmediatime.style.opacity = 0;
 	osdepginfo.style.opacity = 0;
-	medialist.innerHTML = "<h1 class=mainmenu>" + Lang[0] + "</h1>";
+	medialist.innerHTML = "<h1 class=mainmenu" + cssres[css_nr][Set_Res] + ">" + Lang[0] + "</h1>";
 	showDisplay(currChan.toString(), false, 100, 0 );
 	isMediaMenu = 0;
 	isFullscreen = 1;
@@ -3371,7 +3349,7 @@ function onKeyMedia(keyCode) {
 if (DelisOK) {
 	switch(keyCode) {
 	case KEY_OK:
-	  medialist.innerHTML = "<h1 class=mainmenu>" + Lang[0] + "</h1>";
+	  medialist.innerHTML = "<h1 class=mainmenu" + cssres[css_nr][Set_Res] + ">" + Lang[0] + "</h1>";
 	  switchtimer.style.opacity = 0;
 	  setTimeout("DelRec2(); getRecList(); showMediaList();",100)
 	default:
@@ -4033,13 +4011,13 @@ try {
 	}
 	if (nrMedia!==0) { getRecOK = 1; } else {
 	getRecOK = 0;
-	medialist.innerHTML = "<h1 class=mainmenu>" + Lang[38] + "</center><pre>\n\n\n" + Lang[37] + "</pre></h1>";
+	medialist.innerHTML = "<h1 class=mainmenu" + cssres[css_nr][Set_Res] + ">" + Lang[38] + "</center><pre>\n\n\n" + Lang[37] + "</pre></h1>";
 	}
 
   } catch(e) {
     alert("Get Recordings problem: " + e);
 	getRecOK = 0;
-	medialist.innerHTML = "<h1 class=mainmenu>" + Lang[38] + "</center><pre>\n\n\n" + Lang[39] + "</pre></h1>";
+	medialist.innerHTML = "<h1 class=mainmenu" + cssres[css_nr][Set_Res] + ">" + Lang[38] + "</center><pre>\n\n\n" + Lang[39] + "</pre></h1>";
   }
 }
 
@@ -4210,7 +4188,7 @@ try {
 	//popup for confirm
 	switchtimer.style.background = "red";
 	switchtimer.style.opacity = 1;
-	switchtimer.innerHTML = "<pre class=deletefile>" + Lang[44] +"\n" + Lang[45] + "\n\n " + Left(recTitl[currMed],30) + "</pre>"; // Recording Name
+	switchtimer.innerHTML = "<pre class=deletefile" + cssres[css_nr][Set_Res] + ">" + Lang[44] +"\n" + Lang[45] + "\n\n " + Left(recTitl[currMed],30) + "</pre>"; // Recording Name
 	DelisOK = 1
   } catch(e) {
     alert("Delete Recordings problem: " + e);
@@ -4484,10 +4462,10 @@ function showMediaList() {
 	var MaxMed = -1;
 
 	if (getRecOK == 1) {
-		var htmlstring = "<h1 class=mainmenu>" + Lang[38] + "(" + Lang[46] + (100 - perc_space) + "%, " + (free_space/1024).toFixed(0) + " GB) </h1><pre class=mediamenu>";
+		var htmlstring = "<h1 class=mainmenu" + cssres[css_nr][Set_Res] + ">" + Lang[38] + "(" + Lang[46] + (100 - perc_space) + "%, " + (free_space/1024).toFixed(0) + " GB) </h1><pre class=mediamenu" + cssres[css_nr][Set_Res] + ">";
 
 		if (subgroup) {
-			htmlstring = "<h1 class=mainmenu>" + Group_Header[Number(recGroup[currMed])] + "</h1><pre class=mediamenu>";
+			htmlstring = "<h1 class=mainmenu" + cssres[css_nr][Set_Res] + ">" + Group_Header[Number(recGroup[currMed])] + "</h1><pre class=mediamenu" + cssres[css_nr][Set_Res] + ">";
 			if (MaxInGroup < 14){ MaxMed = MaxInGroup; } else {MaxMed = 14; }
 		}
 		if (!subgroup) { 
@@ -4499,7 +4477,7 @@ function showMediaList() {
 	} else {
 
 		if (nrMedia < 14) {MaxMed = nrMedia; } else {MaxMed = 14; }
-		var htmlstring = "<h1 class=mainmenu>" + Lang[11] + channelsnames[currChan] + " </h1><pre class=mediamenu>";
+		var htmlstring = "<h1 class=mainmenu" + cssres[css_nr][Set_Res] + ">" + Lang[11] + channelsnames[currChan] + " </h1><pre class=mediamenu" + cssres[css_nr][Set_Res] + ">";
 	}
 
 	if (MaxMed > 14) { MaxMed = 14; }
@@ -4519,7 +4497,7 @@ function showMediaList() {
 		if (listMed > nrMedia) { recList[listMed] = ""; }
 
 		if (recList[listMed]) { //Solves empty string at the end.
-			if ( listMed == currMed) { htmlstring += "<span class=mediaselect>"; }
+			if ( listMed == currMed) { htmlstring += "<span class=mediaselect" + cssres[css_nr][Set_Res] + ">"; }
 			htmlstring += "\uE003" + Left(recList[listMed],60) + "\uE003\uE003\n";
 			if ( listMed == currMed) { htmlstring += "</span>";}
 		}
@@ -4594,7 +4572,7 @@ try {
   } catch(e) {
     alert("Get EPG problem: " + e);
 	getRecOK = 0;
-	medialist.innerHTML = "<h1 class=mainmenu>" + Lang[50] + "</center><pre>\n\n\n" + Lang[51] + "</pre></h1>";
+	medialist.innerHTML = "<h1 class=mainmenu" + cssres[css_nr][Set_Res] + ">" + Lang[50] + "</center><pre>\n\n\n" + Lang[51] + "</pre></h1>";
   }
 }
 
@@ -4648,16 +4626,16 @@ function getSchedule(schchan){
 	} else {
 	getRecOK = 0;
 
-	medialist.innerHTML = "<h1 class=mainmenu>" + Lang[11] + "</center><pre>\n\n\n" + Lang[52] + "</pre></h1>";
+	medialist.innerHTML = "<h1 class=mainmenu" + cssres[css_nr][Set_Res] + ">" + Lang[11] + "</center><pre>\n\n\n" + Lang[52] + "</pre></h1>";
 
 	if (experimental) {
-	medialist.innerHTML += "<img src='" + channels[schchan] + ".jpg' style='width:100%; position:absolute; left:0%; top:-11%;'>";
+	medialist.innerHTML += "<img src='experimental/" + channels[schchan] + ".jpg' style='width:100%; position:absolute; left:0%; top:-11%;'>";
 	}
 
 	}
   } catch(e) {
 	getRecOK = 0;
-	medialist.innerHTML = "<h1 class=mainmenu>" + Lang[11] + "</center><pre>\n\n\n" + Lang[53] + "</pre></h1>";
+	medialist.innerHTML = "<h1 class=mainmenu" + cssres[css_nr][Set_Res] + ">" + Lang[11] + "</center><pre>\n\n\n" + Lang[53] + "</pre></h1>";
   }
 
 }
@@ -4906,12 +4884,12 @@ if (get_recordings == 1) {
 	date_time();
 	osdmediatime.innerHTML = result;
 	date_time_rec();
-	osdmedia.innerHTML = "<pre class=media> \n  " + (pos/60).toFixed(0) + " / " + x + "  " + Left(recTitl[currMed],40) + "\n  " + pos4 + "\n " + result + " </pre>";
+	osdmedia.innerHTML = "<pre class=media" + cssres[css_nr][Set_Res] + "> \n  " + (pos/60).toFixed(0) + " / " + x + "  " + Left(recTitl[currMed],40) + "\n  " + pos4 + "\n " + result + " </pre>";
 } else if ( get_recordings == 2) {
 	var pos = position + (mediaPlayer.getPosition()/1000);
 	date_time();
 	osdmediatime.innerHTML = result;
-	osdmedia.innerHTML = "<pre class=media> \n  " + (pos/60).toFixed(0) + " \n " + Left(recTitl[currMed],40) + "\n  \n " + recStrt[currMed] + " </pre>";
+	osdmedia.innerHTML = "<pre class=media" + cssres[css_nr][Set_Res] + "> \n  " + (pos/60).toFixed(0) + " \n " + Left(recTitl[currMed],40) + "\n  \n " + recStrt[currMed] + " </pre>";
 }
 }
 

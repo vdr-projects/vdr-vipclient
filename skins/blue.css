@@ -2,60 +2,159 @@
 	backgroundColor : #ccc;
 	}
 
+	videoplane#videoplane {
+		position:absolute;
+		left:0px;
+		top:0px;
+		height:100%;
+		width:100%;
+		z-index:500;
+	}
+
 	.bluekey {
 	color	: blue;
 	}
 	.redkey {
 	color	: red;
 	}
+
 	.yellowkey {
 	color	:yellow;
 	}
+
 	.greenkey {
 	color	:green;
 	}
-	.mainfont {
-	font-size:49px;
+
+	.mainfont576 {
+	font-size:26px;
 	color:black;
 	}
 	
+	.mainfont720 {
+	font-size:33px;
+	color:black;
+	}
+
+	.mainfont1080 {
+	font-size:49px;
+	color:black;
+	}
+
+	.osdnr576 {
+	font-size:43px;
+	}
+
+	.osdnr720 {
+	font-size:54px;
+	}
+
+	.osdnr1080 {
+	font-size:81px;
+	}
+
 	.notset {
 	color	:grey;
 	}
 
-	.select {
+	.select576 {
+	background	:#fc5;
+	-webkit-border-radius:25px;
+	color:black;
+	font-size:26px;
+	}
+
+	.select720 {
+	background	:#fc5;
+	-webkit-border-radius:25px;
+	color:black;
+	font-size:33px;
+	}
+
+	.select1080 {
 	background	:#fc5;
 	-webkit-border-radius:25px;
 	color:black;
 	font-size:49px;
 	}
 
-	.mediaselect {
+	.mediaselect576 {
+	background	:#fc5;
+	-webkit-border-radius:25px;
+	color:black;
+	font-size:21px;
+	}
+
+	.mediaselect720 {
+	background	:#fc5;
+	-webkit-border-radius:25px;
+	color:black;
+	font-size:26px;
+	}
+
+	.mediaselect1080 {
 	background	:#fc5;
 	-webkit-border-radius:25px;
 	color:black;
 	font-size:38px;
 	}
 
-	pre.mediamenu {
+	pre.mediamenu576 {
+	font-size:21px;
+	color:black;
+	}
+
+	pre.mediamenu720 {
+	font-size:26px;
+	color:black;
+	}
+
+	pre.mediamenu1080 {
 	font-size:38px;
 	color:black;
 	}
 
-	pre.deletefile {
+	pre.deletefile576 {
+	text-align	: center;
+	color		:white;
+	font-size	:19px;
+	background	:red;
+	}
+
+	pre.deletefile720 {
+	text-align	: center;
+	color		:white;
+	font-size	:24px;
+	background	:red;
+	}
+
+	pre.deletefile1080 {
 	text-align	: center;
 	color		:white;
 	font-size	:36px;
 	background	:red;
 	}
 
-	pre.nonfree {
+	pre.nonfree576 {
+	text-align	: center;
+	color		:white;
+	font-size	:19px;
+	background	:red;
+	}
+
+	pre.nonfree720 {
+	text-align	: center;
+	color		:white;
+	font-size	:24px;
+	background	:red;
+	}
+
+	pre.nonfree1080 {
 	text-align	: center;
 	color		:white;
 	font-size	:36px;
 	background	:red;
 	}
-
 
 	p.epg_head { 
 	color:white;
@@ -89,34 +188,68 @@
 	background		: red;
 	}
 
-
-
-	videoplane#videoplane {
-		position:absolute;
-		left:0px;
-		top:0px;
-		height:100%;
-		width:100%;
-		z-index:500;
+	h1.mainmenu576 {
+	font-size:35px;
+	color:white;
+	text-align: center;
 	}
 
-	h1.mainmenu {
+	h1.mainmenu720 {
+	font-size:44px;
+	color:white;
+	text-align: center;
+	}
+
+	h1.mainmenu1080 {
 	font-size:66px;
 	color:white;
 	text-align: center;
 	}
 
-	pre.mainmenu {
+	pre.mainmenu576 {
+	font-size:26px;
+	color:black;
+	}
+
+	pre.mainmenu720 {
+	font-size:33px;
+	color:black;
+	}
+
+	pre.mainmenu1080 {
 	font-size:49px;
 	color:black;
 	}
-	pre.mainhead {
+
+	pre.mainhead576 {
+	font-size:35px;
+	color:white;
+	text-align: center;
+	}
+
+	pre.mainhead720 {
+	font-size:44px;
+	color:white;
+	text-align: center;
+	}
+
+	pre.mainhead1080 {
 	font-size:66px;
 	color:white;
 	text-align: center;
 	}
 
-	pre.media {
+	pre.media576 {
+	color:white;
+	font-size:26px;
+	}
+
+	pre.media720 {
+	color:white;
+	font-size:33px;
+	}
+
+	pre.media1080 {
 	color:white;
 	font-size:49px;
 	}
@@ -130,7 +263,7 @@
 	text-align: center;
 	}
 
-
+/*    */
 	p.epg {
 	font-size:36px;
 	color:black;
@@ -170,7 +303,6 @@
 	-webkit-border-radius	: 25px;
 	background		: red;
 	color			: black;
-		font-size:81px;
 	text-align: center;
 	}
 	

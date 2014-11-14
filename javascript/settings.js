@@ -15,6 +15,10 @@ langfile = new Array ("languages/lang_eng.js", "languages/lang_dut.js","language
 lang_prio = new Array("dut,eng,und","ger,deu,eng","eng,und","fre,fra,eng");
 
 cssfile = new Array ("blue.css","black.css");
+cssres = new Array();
+cssres[0] = new Array ("576","720","1080"); //blue.css
+cssres[1] = new Array ("","",""); //black.css
+
 var css_nr;
 
 var subs_prio = "dut,eng"; //Subtitle prio
@@ -106,20 +110,6 @@ VideoOutputModes_txt = new Array("NO_VIDEO_MODE","480I60","576I50","480P60","576
 
 var videoConfig;
 var Set_Res;
-var Xfactor = new Array();
-var Yfactor = new Array();
-
-// keep scale compliant with Videooutputmodes!!
-//  720x576
-Xfactor[0] = 720 / 720;
-Yfactor[0] = 576 / 576;
-// 1280x720
-Xfactor[1] = 1280 / 720; 
-Yfactor[1] = 720 / 576;
-// 1920x1080
-Xfactor[2] = 1920 / 720;
-Yfactor[2] = 1080 / 576;
-
 
 var audio = 0;
 var audio_dyn = 0;
