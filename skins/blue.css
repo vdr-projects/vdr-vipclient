@@ -26,8 +26,20 @@
 	color	:green;
 	}
 
+	pre.colorkeys576 {
+		font-size:19px;
+	}
+
+	pre.colorkeys720 {
+		font-size:24px;
+	}
+
+	pre.colorkeys1080 {
+		font-size:36px;
+	}
+
 	.mainfont576 {
-	font-size:26px;
+	font-size:18px;
 	color:black;
 	}
 	
@@ -42,7 +54,7 @@
 	}
 
 	.osdnr576 {
-	font-size:43px;
+	font-size:36px;
 	}
 
 	.osdnr720 {
@@ -71,7 +83,7 @@
 
 	.osdtime576 {
 		color		: white;
-		font-size:17px;
+		font-size:12px;
 		text-align: right;
 	}
 
@@ -104,7 +116,7 @@
 
 	.osdca576 {
 		color		: black;
-		font-size:32px;
+		font-size:20px;
 	}
 
 	.osdca720 {
@@ -119,7 +131,7 @@
 
 	pre.osdvolume576 {
 		color		: green;
-		font-size:35px;
+		font-size:26px;
 	}
 
 	pre.osdvolume720 {
@@ -139,11 +151,11 @@
 
 	pre.osdepg720 {
 		color		: white;
-		font-size:23px;
+		font-size:25px;
 	}
 	pre.osdepg1080 {
 		color		: white;
-		font-size:36px;
+		font-size:40px;
 	}
 
 	.notset {
@@ -176,6 +188,7 @@
 	-webkit-border-radius:25px;
 	color:black;
 	font-size:21px;
+	overflow:hidden;
 	}
 
 	.mediaselect720 {
@@ -183,6 +196,7 @@
 	-webkit-border-radius:25px;
 	color:black;
 	font-size:26px;
+	overflow:hidden;
 	}
 
 	.mediaselect1080 {
@@ -190,21 +204,25 @@
 	-webkit-border-radius:25px;
 	color:black;
 	font-size:38px;
+	overflow:hidden;
 	}
 
 	pre.mediamenu576 {
 	font-size:21px;
 	color:black;
+	overflow:hidden;
 	}
 
 	pre.mediamenu720 {
 	font-size:26px;
 	color:black;
+	overflow:hidden;
 	}
 
 	pre.mediamenu1080 {
 	font-size:38px;
 	color:black;
+	overflow:hidden;
 	}
 
 	pre.deletefile576 {
@@ -249,34 +267,40 @@
 	background	:red;
 	}
 
+	.osdepginfo576 {
+	font-size:19px;
+	text-align: center;
+	}
+
+	.osdepginfo720 {
+	font-size:26px;
+	text-align: center;
+	}
+
+	.osdepginfo1080 {
+	font-size:39px;
+	text-align: center;
+	}
+
+
 	p.epg_head { 
 	color:white;
-	text-align: center;
-	font-size:39px;
 	}
 
 	p.epg_avinfo {
 	color:black;
-	text-align: center;
-	font-size:39px;
 	}
 
 	p.epg_title {
 	color:white;
-	text-align: center;
-	font-size:39px;
 	}
 
 	p.epg_info {
 	color:yellow;
-	text-align: center;
-	font-size:39px;
 	}
 
 	p.epg_info_long {
 	color:yellow;
-	text-align: center;
-	font-size:39px;
 	}
 
 	pre.color_switchtimer576 {
@@ -335,7 +359,7 @@
 
 
 	h1.mainmenu576 {
-	font-size:35px;
+	font-size:28px;
 	color:white;
 	text-align: center;
 	}
@@ -353,7 +377,7 @@
 	}
 
 	pre.mainmenu576 {
-	font-size:26px;
+	font-size:25px;
 	color:black;
 	}
 
@@ -387,7 +411,7 @@
 
 	pre.media576 {
 	color:white;
-	font-size:26px;
+	font-size:18px;
 	}
 
 	pre.media720 {
@@ -398,15 +422,6 @@
 	pre.media1080 {
 	color:white;
 	font-size:49px;
-	}
-
-	pre.epgtimerinfo {
-	color:white;
-	text-align: center;
-	}
-
-	p.epgtimerinfo {
-	text-align: center;
 	}
 
 	p.epg576 {
@@ -488,9 +503,10 @@
 	z-index			: 505;
 		position	: absolute;
 		width		: 69%;
-		height		: 4%;
+		height		: 20%;
 		left		: 3%;
 		top 		: 20%;
+		overflow:hidden;
 	}
 
 
@@ -506,16 +522,17 @@
 	z-index			: 505;
 		position	: absolute;
 		width		: 42%;
-		right		: 5%;
+		right		: 3%;
 		top		: 7%;
 	}
 
 	div#osdepg {
 	z-index			: 505;
 		position	: absolute;
-		width		: 63%;
+		width		: 78%;
 		left		: 17%;
 		top		: 30%;
+		overflow:hidden;
 	}
 	
 	div#osdca { 
@@ -536,24 +553,19 @@
 	background		: #bbb;
 	}
 
-/*    */
-
 	div#colorkeys { 
 	z-index			: 401;
 		position	: absolute;
 		width		: 100%;
 		left		: 10%;
 		top		: 84%;
-		font-size:36px;
 	}
-
-/*    */
 
 	div#osdmediatime {
 	z-index			: 506;
 		position	: absolute;
 		width		: 42%;
-		right		: 15%;
+		right		: 5%;
 		top		: 63%;
 		color		: white;
 	}
@@ -580,7 +592,7 @@
 		position	: absolute;
 		width		: 63%;
 		left		: 10%;
-		top		: 80%;
+		top		: 75%;
 		opacity		: 0;
 	}
 
@@ -593,6 +605,7 @@
 		opacity		:0;
 		-webkit-border-radius:50px;
 	background		: #3366ff;
+		overflow:hidden;
 	}
 
 	div#schedule {
@@ -626,6 +639,7 @@
 	opacity		:0;
 	-webkit-border-radius:50px;
 	background		: #3366ff;
+	overflow:hidden;
 	}
 
 	div#medialist {
@@ -645,10 +659,12 @@
 	position	:absolute;
 	left		:21%;
 	top		:26%;
+	height		:18%;
 	z-index		:530;
 	opacity		:0;
 	-webkit-border-radius:25px;
 	background	:lightblue;
+		overflow:hidden;
 	}
 
 	div#osdepginfo {

@@ -65,7 +65,7 @@ function onLoad() {
 	setOSDtimer();
 	showOSD();
 	videoplane.subtitles = Boolean(ShowSubs);
-	colorkeys.innerHTML = "<span class=redkey> " +  NN[4] + " </span><span class=greenkey > " + NN[1] + " </span><span class=yellowkey> " + NN[2] + " </span><span class=bluekey> " + NN[5] + " </span>";
+	colorkeys.innerHTML = "<pre class=colorkeys" + cssres[css_nr][Set_Res] + ">" + "<span class=redkey> " +  NN[4] + " </span><span class=greenkey > " + NN[1] + " </span><span class=yellowkey> " + NN[2] + " </span><span class=bluekey> " + NN[5] + " </span></pre>";
 	medialist.innerHTML = "<h1 class=mainmenu" + cssres[css_nr][Set_Res] + ">" + Lang[0] + "</h1>";
 }
 
@@ -237,7 +237,7 @@ function loadcss(filename){
 	var oScript= document.createElement("link");
 	oScript.type = "text/css";
 	oScript.rel = "stylesheet";
-	oScript.href = "skins/" + filename;
+	oScript.href = "skins/" + filename + ".css";
 	oHead.appendChild( oScript);
 }
 
@@ -357,6 +357,7 @@ function VolumeMute() {
 	state = aos.getMuteState(AudioOut);
 	aos.setMuteState(AudioOut, !state);
 	mute = 1 - state;
+	osdmute.innerHTML = "<img src='images/" + cssfile[css_nr] + "/mute.png'>";
         osdmute.style.opacity = mute; 
 }
 
@@ -785,12 +786,12 @@ function onKeyDown(event) {
 			if (lang_prio_dyn.length > 1) {
 				is.setObject("cfg.media.audio.languagepriority",lang_prio_dyn[audio_dyn] + "," + lang_prio[audio],is.STORAGE_PERMANENT);
 				osdlang.style.opacity = 1;
-				osdlang.innerHTML = "<pre class=osdvolume" + cssres[css_nr][Set_Res] + ">" + "<img src='unmute.png'> " + lang_prio_dyn[audio_dyn] + " </pre>";
+				osdlang.innerHTML = "<pre class=osdlang" + cssres[css_nr][Set_Res] + ">" + "<img src='images/" + cssfile[css_nr] + "/unmute.png'>\n" + lang_prio_dyn[audio_dyn] + " </pre>";
 				setTimeout("osdlang.style.opacity = 0; ", 3000);
 			}
 		}
 	} else if(isSchedule == 0 && !epgactive){
-		colorkeys.innerHTML = "<span class=redkey> " +  NN[3 + NowNext] + " </span><span class=greenkey > " + NN[NowNext] + " </span><span class=yellowkey> " + NN[2] + " </span><span class=bluekey> " + NN[5] + " </span>";
+		colorkeys.innerHTML = "<pre class=colorkeys" + cssres[css_nr][Set_Res] + ">" + "<span class=redkey> " +  NN[3 + NowNext] + " </span><span class=greenkey > " + NN[NowNext] + " </span><span class=yellowkey> " + NN[2] + " </span><span class=bluekey> " + NN[5] + " </span></pre>";
 		NowNext = 1 - NowNext;
 		showChannelList();
 	}
@@ -818,9 +819,9 @@ function onKeyDown(event) {
 		schedule.style.opacity = 1 - schedule.style.opacity;
 		isSchedule = schedule.style.opacity;
 		if(isSchedule == 1){
-			colorkeys.innerHTML = "<span class=redkey> " +  NN[4] + " </span><span class=greenkey > " + NN[4] + " </span><span class=yellowkey> " + NN[6] + " </span><span class=bluekey> " + NN[4] + " </span>";
+			colorkeys.innerHTML = "<pre class=colorkeys" + cssres[css_nr][Set_Res] + ">" + "<span class=redkey> " +  NN[4] + " </span><span class=greenkey > " + NN[4] + " </span><span class=yellowkey> " + NN[6] + " </span><span class=bluekey> " + NN[4] + " </span></pre>";
 			} else {
-			colorkeys.innerHTML = "<span class=redkey> " +  NN[3 + (1 - NowNext)] + " </span><span class=greenkey > " + NN[1 - NowNext] + " </span><span class=yellowkey> " + NN[2] + " </span><span class=bluekey> " + NN[5] + " </span>";
+			colorkeys.innerHTML = "<pre class=colorkeys" + cssres[css_nr][Set_Res] + ">" + "<span class=redkey> " +  NN[3 + (1 - NowNext)] + " </span><span class=greenkey > " + NN[1 - NowNext] + " </span><span class=yellowkey> " + NN[2] + " </span><span class=bluekey> " + NN[5] + " </span></pre>";
 			}
 	}
 	break;
@@ -864,9 +865,10 @@ function onKeyDown(event) {
 		if(isSchedule) {
 			isSchedule = 0;
 			schedule.style.opacity = 0;
-			colorkeys.innerHTML = "<span class=redkey> " +  NN[3 + (1 - NowNext)] + " </span><span class=greenkey > " 
+			colorkeys.innerHTML = "<pre class=colorkeys" + cssres[css_nr][Set_Res] + ">" + "<span class=redkey> " 
+				+  NN[3 + (1 - NowNext)] + " </span><span class=greenkey > " 
 				+ NN[1 - NowNext] + " </span><span class=yellowkey> " + NN[2] + " </span><span class=bluekey> " 
-				+ NN[5] + " </span>";
+				+ NN[5] + " </span></pre>";
 			break;
 		}
 
@@ -915,7 +917,7 @@ function onKeyDown(event) {
 		showOSD();
 	        GetEPG(currChan);
 		updateOSDtime(currChan);
-		osdepg.innerHTML = "<pre class=osdepg" + cssres[css_nr][Set_Res] + ">" + EPG[0][7][currChan] + "\n" + EPG[1][7][currChan] + "</pre>";
+		osdepg.innerHTML = "<pre class=osdepg" + cssres[css_nr][Set_Res] + ">" + EPG[0][7][currChan] + "</pre>\n<pre class=osdepg" + cssres[css_nr][Set_Res] + ">" + EPG[1][7][currChan] + "</pre>";
 //		showOSD();
 		} else {
 			CheckChannel(Change);
@@ -1382,13 +1384,13 @@ function OSDchannr(channr) {
 function OSDhtml(){
     osdtime.innerHTML = "<span class=osdtime" + cssres[css_nr][Set_Res] + ">" + result + "</span>";
 	if (ShowSource == 1) {
-	    osdname.innerHTML = "<span class=osdname" + cssres[css_nr][Set_Res] + ">" + channels[currChan].split("-")[0] + "\uE003" + Left(channelsnames[currChan],30) + "</span>";
+	    osdname.innerHTML = "<span class=osdname" + cssres[css_nr][Set_Res] + ">" + channels[currChan].split("-")[0] + "\uE003" + channelsnames[currChan] + "</span>";
 	} else {
-	    osdname.innerHTML = "<span class=osdname" + cssres[css_nr][Set_Res] + ">" + Left(channelsnames[currChan],30) + "</span>";
+	    osdname.innerHTML = "<span class=osdname" + cssres[css_nr][Set_Res] + ">" + channelsnames[currChan] + "</span>";
 	}
-    osdepg.innerHTML = "<pre class=osdepg" + cssres[css_nr][Set_Res] + ">" + EPG[0][7][currChan] + "\n" + EPG[1][7][currChan] + "</pre>";
-    osdepginfo.innerHTML =  "<p class=epg_head>" + currChan + "\uE003" + channelsnames[currChan] + "</p><p class=epg_avinfo>" + AvInfo[currChan] + "</p><p class=epg_title>" + EPG[0][7][currChan] + EPG[0][9][currChan] + EPG[0][8][currChan] + "</p>\n<p class=epg_info>" + EPG[0][4][currChan] + "</p>\n<p class=epg_info_long>" + Left(EPG[0][5][currChan],750) + "</p>";
-    osdepginfonext.innerHTML =  "<p class=epg_head>"  + currChan + "\uE003" + channelsnames[currChan] + "</p><p class=epg_title>" +  EPG[1][7][currChan] + EPG[1][9][currChan] + EPG[1][8][currChan] + "</p>\n<p class=epg_info>" + EPG[1][4][currChan] + "</p>\n<p class=epg_info_long>" + Left(EPG[1][5][currChan],750) + "</p>";
+    osdepg.innerHTML = "<pre class=osdepg" + cssres[css_nr][Set_Res] + ">" + EPG[0][7][currChan] + "</pre>\n<pre class=osdepg" + cssres[css_nr][Set_Res] + ">" + EPG[1][7][currChan] + "</pre>";
+    osdepginfo.innerHTML =  "<span class=osdepginfo" + cssres[css_nr][Set_Res] + ">" + "<p class=epg_head>" + currChan + "\uE003" + channelsnames[currChan] + "</p><p class=epg_avinfo>" + AvInfo[currChan] + "</p><p class=epg_title>" + EPG[0][7][currChan] + EPG[0][9][currChan] + EPG[0][8][currChan] + "</p>\n<p class=epg_info>" + EPG[0][4][currChan] + "</p>\n<p class=epg_info_long>" + Left(EPG[0][5][currChan],750) + "</p></span>";
+    osdepginfonext.innerHTML =  "<span class=osdepginfo" + cssres[css_nr][Set_Res] + ">" + "<p class=epg_head>"  + currChan + "\uE003" + channelsnames[currChan] + "</p><p class=epg_title>" +  EPG[1][7][currChan] + EPG[1][9][currChan] + EPG[1][8][currChan] + "</p>\n<p class=epg_info>" + EPG[1][4][currChan] + "</p>\n<p class=epg_info_long>" + Left(EPG[1][5][currChan],750) + "</p></span>";
 }
 
 function updateOSDtime(timchan) {
@@ -1481,7 +1483,7 @@ if (!BackGroundColor) { BackGroundColor = color_default;}
 	}
 
 //	switchtimer.style.background = BackGroundColor;
-	switchtimer.innerHTML = "<pre class=" + BackGroundColor + cssres[css_nr][Set_Res] + ">" + Lang[2] + Left(ProgName,30) + "\n" + Lang[3] + channelsnames[currChan] + "\n" + x + "</pre>";
+	switchtimer.innerHTML = "<pre class=" + BackGroundColor + cssres[css_nr][Set_Res] + ">" + Lang[2] + ProgName + "\n" + Lang[3] + channelsnames[currChan] + "\n" + x + "</pre>";
 	setOSDtimer();
 
 	switchtimer.style.opacity = 1;
@@ -1736,7 +1738,8 @@ function GetEPG(epgchan)
 	var th = tijd.getHours();
 	th=addzero(th);
 	tm=addzero(tm);
-	 EPG[1][7][epgchan] = th + ":" + tm + " (" + (event.duration/60).toFixed(0) + ")" + "          " + event.name + " ";
+//	 EPG[1][7][epgchan] = th + ":" + tm + " (" + (event.duration/60).toFixed(0) + ")" + "          " + event.name + " ";
+	 EPG[1][7][epgchan] = th + ":" + tm + " (" + (event.duration/60).toFixed(0) + ") " + event.name + " ";
 
 	if (!event.time) 
 	{
@@ -2211,13 +2214,13 @@ function onKeyMenu(keyCode) {
 	if (menu == 5) {
 		// Show EPG info Timer
 		osdepginfo.style.opacity = 1 - osdepginfo.style.opacity;
-		osdepginfo.innerHTML = "<pre class=epgtimerinfo>\n\n\n" + Lang[0] + "\n\n\n </pre>" ;
+		osdepginfo.innerHTML = "<span class=osdepginfo" + cssres[css_nr][Set_Res] + ">" + "<p class=epg_head>\n\n\n" + Lang[0] + "\n\n\n </p></span>" ;
 		setTimeout("ShowTimerInfo();",100);
 	}
 	if (menu == 7) {
 		// Show more info Current SearchTimer
 		osdepginfo.style.opacity = 1 - osdepginfo.style.opacity;
-	       	osdepginfo.innerHTML = "<h1 class=mainmenu" + cssres[css_nr][Set_Res] + ">" + searchtimersSearch[timerID] + "\n\n\n\n" + Lang[0] + "</h1>" ;
+	       	osdepginfo.innerHTML = "<span class=osdepginfo" + cssres[css_nr][Set_Res] + ">" + "<p class=epg_head>" + searchtimersSearch[timerID] + "\n\n\n\n" + Lang[0] + "</p></span>" ;
 		setTimeout("ShowSearchTimerInfo();",100);
 	}
 
@@ -2359,8 +2362,6 @@ function onKeyMenu(keyCode) {
 		css_nr += 1;
 		if (css_nr > (cssfile.length - 1)) { css_nr = 0;}
 		loadcss(cssfile[css_nr]);
-		alert(css_nr);
-		alert(cssfile[css_nr]);
 		is.setObject("vip.css_nr",css_nr.toString(),is.STORAGE_PERMANENT)
 		setTimeout("InitMenu(menu);",100);
 	} else if (menu == 2) {
@@ -2368,15 +2369,20 @@ function onKeyMenu(keyCode) {
 		var x = ss.getBookingIds("*", 0, 0);
 		var y = Number(ss.getParameter(x[timerID-1], "Channel"));
 		osdepginfo.style.opacity = 1 - osdepginfo.style.opacity;
-	       	osdepginfo.innerHTML = "<pre class=epgtimerinfo>" + ss.getParameter(x[timerID-1], "Title") + "\n " + "\n" + y + " - " + channelsnames[y] + "(" + ss.getParameter(x[timerID-1], "Eventid") + ")" + "\n </pre><p class=epg_info>" + ss.getParameter(x[timerID-1], "Info") + "</p>" ;
+	       	osdepginfo.innerHTML = "<span class=osdepginfo" + cssres[css_nr][Set_Res] + ">" + "<p class=epg_head>" 
+					+ ss.getParameter(x[timerID-1], "Title") + "\n " + "\n" + y + " - "
+					+ channelsnames[y] + "(" + ss.getParameter(x[timerID-1], "Eventid") + ")" 
+					+ "\n </p><p class=epg_info>" + ss.getParameter(x[timerID-1], "Info") + "</p></span>" ;
 	} else 	if (menu == 5) {
 		// Show EPG info Timer
 		osdepginfo.style.opacity = 1 - osdepginfo.style.opacity;
-		osdepginfo.innerHTML = "<pre class=epgtimerinfo>\n\n\n" + Lang[0] + "\n\n\n </pre>" ;
+		osdepginfo.innerHTML = "<span class=osdepginfo" + cssres[css_nr][Set_Res] + ">" + "<p class=epg_head>\n\n\n" 
+					+ Lang[0] + "\n\n\n </p></span>" ;
 		setTimeout("ShowTimerInfo();",100);
 	} else 	if (menu == 7) {
 		// Show info SearchTimers
-	       	osdepginfo.innerHTML = "<pre class=epgtimerinfo>" + SearchTimer[timerID] + "</pre>";
+	       	osdepginfo.innerHTML = "<span class=osdepginfo" + cssres[css_nr][Set_Res] + ">" + "<p class=epg_head>" 
+					+ SearchTimer[timerID] + "</p></span>";
 		osdepginfo.style.opacity = 1 - osdepginfo.style.opacity;
 	} else if (menu == 10) {
 		if (protChn[ChanGroup] !== 1 && ChanGroup !== Fav_group) {
@@ -2727,7 +2733,7 @@ if(menu == 1) { // settings menu
 	htmltext += "\n\n   <span class=redkey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> -" + Lang[20];
 	htmltext += "</span><span class=greenkey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> - " + VideoOutputModes_txt[VideoOutputModes[Set_Res]] + " ";  
 	htmltext += "</span><span class=yellowkey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> -" + Lang[35];
-	htmltext += "</span><span class=bluekey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> - " + Left(cssfile[css_nr].split(".")[0],8) +"</pre>";
+	htmltext += "</span><span class=bluekey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> - " + Left(cssfile[css_nr],8) +"</pre>";
 //	htmltext += "\n   0 -" + Lang[9] +"</pre>";
 	mainmenu.innerHTML = htmltext;
 }
@@ -3108,8 +3114,10 @@ function ShowTimerInfo() {
   } else {
 	info3 = Lang[37];
   }
-       	osdepginfo.innerHTML = "<pre class=epgtimerinfo>" + Left(info1,60) + "\n " + timersDays[timerID] + " " + 
-	timersStrt[timerID] + " - " + timersStop[timerID] + "\n" + info2 + "\n </pre><p class=epgtimerinfo>" + info3 + Left(info4,750) + "</p>" ;
+       	osdepginfo.innerHTML = "<span class=osdepginfo" + cssres[css_nr][Set_Res] + ">" + "<p class=epg_head>" 
+				+ Left(info1,60) + "\n " + timersDays[timerID] + " " + 
+				timersStrt[timerID] + " - " + timersStop[timerID] + "\n" 
+				+ info2 + "\n " + info3 + Left(info4,750) + "</p></span>" ;
  }
 }
 
@@ -3245,7 +3253,8 @@ function ShowSearchTimerInfo() {
 
 	  }
 
-       	osdepginfo.innerHTML = "<pre class=mainhead" + cssres[css_nr][Set_Res] + ">" + searchtimersSearch[timerID] + "\n " + info1 + "</pre>" ;
+       	osdepginfo.innerHTML = "<span class=osdepginfo" + cssres[css_nr][Set_Res] + ">"
+				+ "<p class=epg_head>" + searchtimersSearch[timerID] + "\n " + info1 + "</p></span>" ;
 
 }
 
@@ -3608,7 +3617,7 @@ if (DelisOK) {
 	if (lang_prio_dyn.length > 1) {
 		is.setObject("cfg.media.audio.languagepriority",lang_prio_dyn[audio_dyn] + "," + lang_prio[audio],is.STORAGE_PERMANENT);
 		osdlang.style.opacity = 1;
-		osdlang.innerHTML = "<pre class=osdvolume" + cssres[css_nr][Set_Res] + ">" + "<img src='unmute.png'> " + lang_prio_dyn[audio_dyn] + " </pre>";
+		osdlang.innerHTML = "<pre class=osdlang" + cssres[css_nr][Set_Res] + ">" + "<img src='images/" + cssfile[css_nr] + "/unmute.png'>\n" + lang_prio_dyn[audio_dyn] + " </pre>";
 		setTimeout("osdlang.style.opacity = 0; ", 3000);
 	}
 	break;
@@ -4187,7 +4196,7 @@ try {
 	//popup for confirm
 	switchtimer.style.background = "red";
 	switchtimer.style.opacity = 1;
-	switchtimer.innerHTML = "<pre class=deletefile" + cssres[css_nr][Set_Res] + ">" + Lang[44] +"\n" + Lang[45] + "\n\n " + Left(recTitl[currMed],30) + "</pre>"; // Recording Name
+	switchtimer.innerHTML = "<pre class=deletefile" + cssres[css_nr][Set_Res] + ">" + Lang[44] +"\n" + Lang[45] + "\n\n " + recTitl[currMed] + "</pre>"; // Recording Name
 	DelisOK = 1
   } catch(e) {
     alert("Delete Recordings problem: " + e);
@@ -4497,7 +4506,7 @@ function showMediaList() {
 
 		if (recList[listMed]) { //Solves empty string at the end.
 			if ( listMed == currMed) { htmlstring += "<span class=mediaselect" + cssres[css_nr][Set_Res] + ">"; }
-			htmlstring += "\uE003" + Left(recList[listMed],60) + "\uE003\uE003\n";
+			htmlstring += "\uE003" + recList[listMed] + "\uE003\uE003\n";
 			if ( listMed == currMed) { htmlstring += "</span>";}
 		}
 
@@ -4897,11 +4906,12 @@ function ShowInfo() {
   if ( medialist.style.opacity == 0 ) { updateStreamInfo(currMed);} else { AvInfo[currMed] = "";}
   if (get_recordings == 2) {
 	result = recStrt[currMed]
-       	osdepginfo.innerHTML = "<p class=epg_head>" + Left(recTitl[currMed],60) 
-				+ "\n </p><p class=epg_avinfo>" + AvInfo[currMed] 
-				+ "</p><p class=epg_title> " + result + "\n " 
+       	osdepginfo.innerHTML = "<span class=osdepginfo" + cssres[css_nr][Set_Res] + ">"
+				+ "<p class=epg_head>" + Left(recTitl[currMed],60) 
+				+ "</p><p class=epg_avinfo>" + AvInfo[currMed] 
+				+ "</p><p class=epg_title> " + result + "<br>" 
 				+ "???" + Lang[54]
-				+ "</p><p class=epg_info> Sorry STREAMDEV-plugin : " + Lang[37] + "</p>";
+				+ "</p><p class=epg_info> Sorry STREAMDEV-plugin : " + Lang[37] + "</p></span>";
   } else {
         date = new Date(Number(recStrt[currMed])*1000);
         year = date.getFullYear();
@@ -4915,15 +4925,17 @@ function ShowInfo() {
         result = '' + days[day] + ' ' + d + ' ' + months[month] + ' ' + year + ' ' + h + ':' + m;
 
 	if (year!==1970) { 	
-       		osdepginfo.innerHTML = "<p class=epg_head>" + Left(recTitl[currMed],60) 
+       		osdepginfo.innerHTML = "<span class=osdepginfo" + cssres[css_nr][Set_Res] + ">"
+					+ "<p class=epg_head>" + Left(recTitl[currMed],60) 
 					+ "</p><p class=epg_avinfo>" + AvInfo[currMed] 
-					+ "</p><p class=epg_title> " + result + "\n " 
-					+ (recDura[currMed] / 60).toFixed(0) + Lang[54] + "\n " + recChan[currMed] + "  "
-					+ "\n </p><p class=epg_info_long>" + Left(recDesc[currMed],750) + "</p>";
+					+ "</p><p class=epg_title> " + result + "<br>" 
+					+ (recDura[currMed] / 60).toFixed(0) + Lang[54] + "<br>" + recChan[currMed]
+					+ "</p><p class=epg_info_long>" + Left(recDesc[currMed],750) + "</p></span>";
 	} else {
 		//info for non-vdr recordings
-	       	osdepginfo.innerHTML = "<p class=epg_head>" + Left(recTitl[currMed],60) 
-					+ "\n </p><p class=epg_avinfo>" + AvInfo[currMed] + " " + "\n \n </p>";
+	       	osdepginfo.innerHTML = "<span class=osdepginfo" + cssres[css_nr][Set_Res] + ">"
+					+ "<p class=epg_head>" + Left(recTitl[currMed],60) 
+					+ "</p><p class=epg_avinfo>" + AvInfo[currMed] + " " + "<br><br></p></span>";
 	}
   }
 }

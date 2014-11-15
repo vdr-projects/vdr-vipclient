@@ -25,9 +25,10 @@ function GuideView_start() {
 			isFullscreen = 0;
 			ClearScreen();
 			channellist.style.opacity = 1;
-			colorkeys.innerHTML = "<span class=redkey> " +  NN[3 + (1 - NowNext)] + " </span><span class=greenkey > " 
+			colorkeys.innerHTML = "<pre class=colorkeys" + cssres[css_nr][Set_Res] + ">" + "<span class=redkey> "
+				+  NN[3 + (1 - NowNext)] + " </span><span class=greenkey > " 
 				+ NN[1 - NowNext] + " </span><span class=yellowkey> " + NN[2] + " </span><span class=bluekey> " 
-				+ NN[5] + " </span>";
+				+ NN[5] + " </span></pre>";
 			colorkeys.style.opacity = 1;
 			showChannelList();
 			if(!SwitchGuide) {
