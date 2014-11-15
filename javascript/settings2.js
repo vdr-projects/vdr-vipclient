@@ -138,7 +138,7 @@ function showChannelList() {
 	}
 	htmlstring = htmlstring + "</table>";
 	channellist.innerHTML = htmlstring;
-        chanlistepg.innerHTML = "<p class=epg>" + EPG[NowNext][1][currChan] + "</p><p class=list>" + Left(EPG[NowNext][4][currChan],250) + "</p>" ;
+        chanlistepg.innerHTML = "<p class=epg" + cssres[css_nr][Set_Res] + ">" + EPG[NowNext][1][currChan] + "</p><p class=list" + cssres[css_nr][Set_Res] + ">" + Left(EPG[NowNext][4][currChan],250) + "</p>" ;
 
 }
 

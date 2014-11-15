@@ -53,6 +53,102 @@
 	font-size:81px;
 	}
 
+
+	.osdname576{
+	color		: black;
+	font-size:26px;
+	}
+
+	.osdname720{
+	color		: black;
+	font-size:34px;
+	}
+
+	.osdname1080{
+	color		: black;
+	font-size:51px;
+	}
+
+	.osdtime576 {
+		color		: white;
+		font-size:17px;
+		text-align: right;
+	}
+
+	.osdtime720 {
+		color		: white;
+		font-size:22px;
+		text-align: right;
+	}
+
+	.osdtime1080 {
+		color		: white;
+		font-size:35px;
+		text-align: right;
+	}
+
+	pre.osdlang576 {
+	color		:white;
+		font-size:16px;
+	}
+
+	pre.osdlang720 {
+	color		:white;
+		font-size:20px;
+	}
+
+	pre.osdlang1080 {
+	color		:white;
+		font-size:30px;
+	}
+
+
+
+	.osdca576 {
+		color		: black;
+		font-size:32px;
+	}
+
+	.osdca720 {
+		color		: black;
+		font-size:40px;
+	}
+
+	.osdca1080 {
+		color		: black;
+		font-size:60px;
+	}
+
+	pre.osdvolume576 {
+		color		: green;
+		font-size:35px;
+	}
+
+	pre.osdvolume720 {
+		color		: green;
+		font-size:44px;
+	}
+
+	pre.osdvolume1080 {
+		color		: green;
+		font-size:66px;
+	}
+
+
+	pre.osdepg576 {
+		color		: white;
+		font-size:18px;
+	}
+
+	pre.osdepg720 {
+		color		: white;
+		font-size:23px;
+	}
+	pre.osdepg1080 {
+		color		: white;
+		font-size:36px;
+	}
+
 	.notset {
 	color	:grey;
 	}
@@ -174,19 +270,70 @@
 	p.epg_info {
 	color:yellow;
 	text-align: center;
+	font-size:39px;
 	}
 
-	pre.color_switchtimer {
+	p.epg_info_long {
+	color:yellow;
+	text-align: center;
+	font-size:39px;
+	}
+
+
+	pre.color_switchtimer576 {
 	background		: #660066;
+	font-size:19px;
+	color		:white;
 	}
 
-	pre.color_default {
+	pre.color_switchtimer720 {
+	background		: #660066;
+	font-size:24px;
+	color		:white;
+	}
+
+	pre.color_switchtimer1080 {
+	background		: #660066;
+	font-size:36px;
+	color		:white;
+	}
+
+	pre.color_default576 {
 	background		: green;
+	font-size:19px;
+	color		:white;
 	}
 
-	pre.color_error {
-	background		: red;
+	pre.color_default720 {
+	background		: green;
+	font-size:24px;
+	color		:white;
 	}
+
+	pre.color_default1080 {
+	background		: green;
+	font-size:36px;
+	color		:white;
+	}
+
+	pre.color_error576 {
+	background		: red;
+	font-size:19px;
+	color		:white;
+	}
+
+	pre.color_error720 {
+	background		: red;
+	font-size:24px;
+	color		:white;
+	}
+
+	pre.color_error1080 {
+	background		: red;
+	font-size:36px;
+	color		:white;
+	}
+
 
 	h1.mainmenu576 {
 	font-size:35px;
@@ -263,24 +410,56 @@
 	text-align: center;
 	}
 
-/*    */
-	p.epg {
-	font-size:36px;
+	p.epg576 {
+	font-size:19px;
 	color:black;
 	text-align: center;
 	}
 	
-	p.list {
+	p.epg720 {
+	font-size:24px;
+	color:black;
+	text-align: center;
+	}
+
+	p.epg1080 {
+	font-size:36px;
+	color:black;
+	text-align: center;
+	}
+
+	p.list576 {
+	font-size:18px;
+	color:black;
+	text-align: center;
+	}
+
+	p.list720 {
+	font-size:23px;
+	color:black;
+	text-align: center;
+	}
+
+	p.list1080 {
 	font-size:34px;
 	color:black;
 	text-align: center;
 	}
 
-	p.osdtimer {
-	font-size:34px;
+	p.osdtimer576 {
+	font-size:18px;
 	color:black;
 	}
 
+	p.osdtimer720 {
+	font-size:23px;
+	color:black;
+	}
+
+	p.osdtimer1080 {
+	font-size:34px;
+	color:black;
+	}
 
 	div#osdmain {
 	position		: absolute;
@@ -305,7 +484,7 @@
 	color			: black;
 	text-align: center;
 	}
-	
+
 	div#osdname {
 	z-index			: 505;
 		position	: absolute;
@@ -313,8 +492,6 @@
 		height		: 4%;
 		left		: 3%;
 		top 		: 20%;
-		color		: black;
-		font-size:51px;
 	}
 
 
@@ -332,20 +509,14 @@
 		width		: 42%;
 		right		: 5%;
 		top		: 7%;
-		color		: white;
-		font-size:35px;
-		text-align: right;
 	}
 
-	
 	div#osdepg {
 	z-index			: 505;
 		position	: absolute;
 		width		: 63%;
 		left		: 17%;
 		top		: 30%;
-		color		: white;
-		font-size:36px;
 	}
 	
 	div#osdca { 
@@ -354,10 +525,7 @@
 		width		: 5%;
 		left		: 75%;
 		top		: 20%;
-		color		: black;
-		font-size:60px;
 	}
-
 
 	div#channellist { 
 	z-index			: 400;
@@ -369,6 +537,8 @@
 	background		: #bbb;
 	}
 
+/*    */
+
 	div#colorkeys { 
 	z-index			: 401;
 		position	: absolute;
@@ -376,6 +546,26 @@
 		left		: 10%;
 		top		: 84%;
 		font-size:36px;
+	}
+
+/*    */
+
+	div#osdmediatime {
+	z-index			: 506;
+		position	: absolute;
+		width		: 42%;
+		right		: 15%;
+		top		: 63%;
+		color		: white;
+	}
+
+	div#osdlang {
+	width		:7%;
+	position	:absolute;
+	left		:76%;
+	top		:9%;
+	z-index		:515;
+	opacity		:0;
 	}
 
 	div#chanlistepg { 
@@ -393,8 +583,6 @@
 		left		: 10%;
 		top		: 80%;
 		opacity		: 0;
-		color		: green;
-		font-size:66px;
 	}
 
 	div#osdmedia { 
@@ -407,19 +595,6 @@
 		-webkit-border-radius:50px;
 	background		: #3366ff;
 	}
-
-	div#osdmediatime {
-	z-index			: 506;
-		position	: absolute;
-		width		: 42%;
-		right		: 15%;
-		top		: 63%;
-		color		: white;
-		font-size:35px;
-		text-align: right;
-	}
-
-
 
 	div#schedule {
 	width		:50%;
@@ -440,17 +615,6 @@
 	top		:9%;
 	z-index		:515;
 	opacity		:0;
-	}
-
-	div#osdlang {
-	width		:7%;
-	position	:absolute;
-	left		:76%;
-	top		:9%;
-	z-index		:515;
-	opacity		:0;
-	color		:white;
-		font-size:30px;
 	}
 
 	div#mainmenu {
@@ -485,9 +649,7 @@
 	z-index		:530;
 	opacity		:0;
 	-webkit-border-radius:25px;
-	color		:white;
-		font-size:36px;
-	background	:green;
+	background	:lightblue;
 	}
 
 	div#osdepginfo {
@@ -499,7 +661,6 @@
 	opacity		:0;
 	-webkit-border-radius:50px;
 	background		: #3366ff;
-		font-size:39px;
 	}
 
 	div#osdepginfonext {
@@ -511,6 +672,5 @@
 	opacity		:0;
 	-webkit-border-radius:50px;
 	background		: #3366ff;
-		font-size:39px;
 	}
 
