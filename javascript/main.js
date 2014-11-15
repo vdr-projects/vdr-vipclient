@@ -2214,13 +2214,15 @@ function onKeyMenu(keyCode) {
 	if (menu == 5) {
 		// Show EPG info Timer
 		osdepginfo.style.opacity = 1 - osdepginfo.style.opacity;
-		osdepginfo.innerHTML = "<span class=osdepginfo" + cssres[css_nr][Set_Res] + ">" + "<p class=epg_head>\n\n\n" + Lang[0] + "\n\n\n </p></span>" ;
+		osdepginfo.innerHTML = "<span class=osdepginfo" + cssres[css_nr][Set_Res] + ">" + "<p class=epg_head><br><br><br>"
+					+ Lang[0] + "</p></span>" ;
 		setTimeout("ShowTimerInfo();",100);
 	}
 	if (menu == 7) {
 		// Show more info Current SearchTimer
 		osdepginfo.style.opacity = 1 - osdepginfo.style.opacity;
-	       	osdepginfo.innerHTML = "<span class=osdepginfo" + cssres[css_nr][Set_Res] + ">" + "<p class=epg_head>" + searchtimersSearch[timerID] + "\n\n\n\n" + Lang[0] + "</p></span>" ;
+	       	osdepginfo.innerHTML = "<span class=osdepginfo" + cssres[css_nr][Set_Res] + ">" + "<p class=epg_head><br><br><br>"
+					+ searchtimersSearch[timerID] + Lang[0] + "</p></span>" ;
 		setTimeout("ShowSearchTimerInfo();",100);
 	}
 
@@ -2376,8 +2378,8 @@ function onKeyMenu(keyCode) {
 	} else 	if (menu == 5) {
 		// Show EPG info Timer
 		osdepginfo.style.opacity = 1 - osdepginfo.style.opacity;
-		osdepginfo.innerHTML = "<span class=osdepginfo" + cssres[css_nr][Set_Res] + ">" + "<p class=epg_head>\n\n\n" 
-					+ Lang[0] + "\n\n\n </p></span>" ;
+		osdepginfo.innerHTML = "<span class=osdepginfo" + cssres[css_nr][Set_Res] + ">" + "<p class=epg_head><br><br><br>" 
+					+ Lang[0] + "</p></span>" ;
 		setTimeout("ShowTimerInfo();",100);
 	} else 	if (menu == 7) {
 		// Show info SearchTimers
