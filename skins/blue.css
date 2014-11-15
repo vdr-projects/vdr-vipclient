@@ -102,8 +102,6 @@
 		font-size:30px;
 	}
 
-
-
 	.osdca576 {
 		color		: black;
 		font-size:32px;
@@ -133,7 +131,6 @@
 		color		: green;
 		font-size:66px;
 	}
-
 
 	pre.osdepg576 {
 		color		: white;
@@ -255,16 +252,19 @@
 	p.epg_head { 
 	color:white;
 	text-align: center;
+	font-size:39px;
 	}
 
 	p.epg_avinfo {
 	color:black;
 	text-align: center;
+	font-size:39px;
 	}
 
 	p.epg_title {
 	color:white;
 	text-align: center;
+	font-size:39px;
 	}
 
 	p.epg_info {
@@ -278,7 +278,6 @@
 	text-align: center;
 	font-size:39px;
 	}
-
 
 	pre.color_switchtimer576 {
 	background		: #660066;
