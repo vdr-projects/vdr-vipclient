@@ -303,6 +303,24 @@
 	color:yellow;
 	}
 
+	pre.searchtimers576 {
+	color	:black;
+	text-align: left;
+	font-size:19px;
+	}
+
+	pre.searchtimers720 {
+	color	:black;
+	text-align: left;
+	font-size:24px;
+	}
+
+	pre.searchtimers1080 {
+	color	:black;
+	text-align: left;
+	font-size:36px;
+	}
+
 	pre.color_switchtimer576 {
 	background		: #660066;
 	font-size:19px;

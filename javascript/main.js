@@ -3107,7 +3107,7 @@ function ShowTimerInfo() {
 		info1 = x[0].getElementsByTagName("param")[1].childNodes[0].nodeValue;
 		info2 = x[0].getElementsByTagName("param")[5].childNodes[0].nodeValue;
 		info4 = x[0].getElementsByTagName("param")[3].childNodes[0].nodeValue;
-		info3 = x[0].getElementsByTagName("param")[2].childNodes[0].nodeValue + "</p><p>";
+		info3 = x[0].getElementsByTagName("param")[2].childNodes[0].nodeValue; // + "</p><p>";
 
 	  } catch(e) {
 	    alert("Get EPG problem: " + e);
@@ -3117,9 +3117,9 @@ function ShowTimerInfo() {
 	info3 = Lang[37];
   }
        	osdepginfo.innerHTML = "<span class=osdepginfo" + cssres[css_nr][Set_Res] + ">" + "<p class=epg_head>" 
-				+ Left(info1,60) + "\n " + timersDays[timerID] + " " + 
-				timersStrt[timerID] + " - " + timersStop[timerID] + "\n" 
-				+ info2 + "\n " + info3 + Left(info4,750) + "</p></span>" ;
+				+ Left(info1,60) + "<br>" + timersDays[timerID] + " " + 
+				timersStrt[timerID] + " - " + timersStop[timerID] + "<br>" 
+				+ info2 + "</p><p class=epg_info>" + info3 + "<br>" + Left(info4,750) + "</p></span>" ;
  }
 }
 
@@ -3148,7 +3148,7 @@ try {
 	  }
 
 		// Extended INFO
-		SearchTimer[i] = "<pre class=mainhead" + cssres[css_nr][Set_Res] + ">" + x[i].getElementsByTagName("search")[0].childNodes[0].nodeValue + "\n </pre><pre>";
+		SearchTimer[i] = "<pre class=mainhead" + cssres[css_nr][Set_Res] + ">" + x[i].getElementsByTagName("search")[0].childNodes[0].nodeValue + "\n </pre><pre class=searchtimers" + cssres[css_nr][Set_Res] + ">";
 		if ((x[i].getElementsByTagName("use_as_searchtimer")[0].childNodes[0].nodeValue) == 0) {
 			SearchTimer[i]  += "\uE003\uE016\uE003" + Lang[40] + "\n";
 		} else {
@@ -3255,8 +3255,9 @@ function ShowSearchTimerInfo() {
 
 	  }
 
-       	osdepginfo.innerHTML = "<span class=osdepginfo" + cssres[css_nr][Set_Res] + ">"
-				+ "<p class=epg_head>" + searchtimersSearch[timerID] + "\n " + info1 + "</p></span>" ;
+       	osdepginfo.innerHTML = "<h1 class=mainmenu" + cssres[css_nr][Set_Res] + ">"
+				+ searchtimersSearch[timerID] + "</h1><pre class=searchtimers" 
+				+ cssres[css_nr][Set_Res] + ">" + info1 + "</pre>" ;
 
 }
 

@@ -11,7 +11,7 @@ VDR 1.7.29+
 	Fixed show ext epg info if ext info != short info.
 	Moved script to main.js
 	Display shows R/F + channelnumber ('R' for Radio, 'F' for favorite)
-	Skinning, CSS styling
+	Skinning, CSS styling (<menu> <1> <blue> changes skin, restart needed sometimes)
 	In osd timeleft can't be more 24h (Gives a long number when box has no internet or time is totally wrong)
 	Timed change, set to 0 for old behavior (press ok for change)
 	
