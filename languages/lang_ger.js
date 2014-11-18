@@ -81,7 +81,7 @@ Lang[42] = "Kanal Mode";
 Lang[43] = " Fehler beim Suchtimer von ";
 Lang[47] = "Verwenden Tag der Woche";
 
-Lang[44] = " OK, um zu loschen ";
+Lang[44] = " OK, zum loschen";
 Lang[45] = " anderen abbrechen ";
 Lang[46] = "Frei ";
 Lang[48] = " Loschen   ";

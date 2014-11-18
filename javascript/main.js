@@ -3148,7 +3148,7 @@ try {
 	  }
 
 		// Extended INFO
-		SearchTimer[i] = "<pre class=mainhead" + cssres[css_nr][Set_Res] + ">" + x[i].getElementsByTagName("search")[0].childNodes[0].nodeValue + "\n </pre><pre class=searchtimers" + cssres[css_nr][Set_Res] + ">";
+		SearchTimer[i] = "<h1 class=mainhead" + cssres[css_nr][Set_Res] + ">" + x[i].getElementsByTagName("search")[0].childNodes[0].nodeValue + "\n </h1><pre class=searchtimers" + cssres[css_nr][Set_Res] + ">";
 		if ((x[i].getElementsByTagName("use_as_searchtimer")[0].childNodes[0].nodeValue) == 0) {
 			SearchTimer[i]  += "\uE003\uE016\uE003" + Lang[40] + "\n";
 		} else {
@@ -3642,6 +3642,8 @@ if (DelisOK) {
    case "Menu":
 	osdepginfo.style.opacity = 0;
 	osdepginfonext.style.opacity = 0;
+	osdmedia.style.opacity = 0;
+	osdmediatime.style.opacity = 0;
 	isSetupMenu = 1;
 	mainmenu.style.opacity = 0.8;
 	menu = 6;
@@ -4199,7 +4201,7 @@ try {
 	//popup for confirm
 	switchtimer.style.background = "red";
 	switchtimer.style.opacity = 1;
-	switchtimer.innerHTML = "<pre class=deletefile" + cssres[css_nr][Set_Res] + ">" + Lang[44] +"\n" + Lang[45] + "\n\n " + recTitl[currMed] + "</pre>"; // Recording Name
+	switchtimer.innerHTML = "<pre class=deletefile" + cssres[css_nr][Set_Res] + ">" + Lang[44] + "," + Lang[45] + "\n\n" + recTitl[currMed] + "</pre>"; // Recording Name
 	DelisOK = 1
   } catch(e) {
     alert("Delete Recordings problem: " + e);
@@ -4879,17 +4881,17 @@ if (get_recordings == 1) {
 	var pos5 = "\uE007" + new Array(pos2 - 1).join("\uE008") + new Array(140 - pos2).join("\uE009") + "\uE00A"
 	var pos4 = "";
 	var pos6 = pos5;
-	var fontc = color_progress1;
+	var fontc = "<span class=color_progress1>";
 	var x = 0;
 	  for (var i=0; i<recMark.length; i++) {
 		var pos3 = recMark[i] / Number(recDura[currMed]) * 100;
 		pos3 = ((pos3 * 140) / 100).toFixed(0); // make it 40% bigger
 		pos4 += fontc + Left(pos6,pos3 - x);
-		if (fontc == "</font>" + color_progress2) { fontc = "</font>" + color_progress1; } else { fontc = "</font>" + color_progress2;}
+		if (fontc == "</span><span class=color_progress2>") { fontc = "</span><span class=color_progress1>"; } else { fontc = "</span><span class=color_progress2>";}
 		x = pos3;
 		pos6 = Right(pos5,140 - pos3);
 		}
-	pos4 += "</font>" + color_progress1 + pos6 + "</font>";
+	pos4 += "</span><span class=color_progress1>" + pos6 + "</span>";
 	var x = (Number(recDura[currMed])/60).toFixed(0);
 	if (pos/60 > x) { x = (pos/60).toFixed(0);}
 	date_time();

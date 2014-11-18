@@ -26,6 +26,14 @@
 	color	:green;
 	}
 
+	.color_progress1 {
+		color:red;
+	}
+
+	.color_progress2 {
+		color:white;
+	}
+
 	pre.colorkeys576 {
 		font-size:19px;
 	}
@@ -524,7 +532,7 @@
 		height		: 20%;
 		left		: 3%;
 		top 		: 20%;
-		overflow:hidden;
+		overflow	:hidden;
 	}
 
 
@@ -550,7 +558,7 @@
 		width		: 78%;
 		left		: 17%;
 		top		: 30%;
-		overflow:hidden;
+		overflow	:hidden;
 	}
 	
 	div#osdca { 
@@ -622,8 +630,8 @@
 		z-index		:506;
 		opacity		:0;
 		-webkit-border-radius:50px;
-	background		: #3366ff;
-		overflow:hidden;
+		background	: #3366ff;
+		overflow	:hidden;
 	}
 
 	div#schedule {
@@ -656,8 +664,8 @@
 	z-index		:520;
 	opacity		:0;
 	-webkit-border-radius:50px;
-	background		: #3366ff;
-	overflow:hidden;
+	background	: #3366ff;
+	overflow	:hidden;
 	}
 
 	div#medialist {
@@ -682,7 +690,7 @@
 	opacity		:0;
 	-webkit-border-radius:25px;
 	background	:lightblue;
-		overflow:hidden;
+	overflow	:hidden;
 	}
 
 	div#osdepginfo {

@@ -81,7 +81,7 @@ Lang[42] = "Channel Mode";
 Lang[43] = " ERROR Getting SearchTimers from ";
 Lang[47] = "Use day of the week";
 
-Lang[44] = " OK to delete ";
+Lang[44] = " OK to delete";
 Lang[45] = " other to abort ";
 Lang[46] = "free ";
 //Lang[47]

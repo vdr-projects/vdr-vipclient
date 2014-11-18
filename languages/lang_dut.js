@@ -81,7 +81,7 @@ Lang[42] = "Channel Mode";
 Lang[43] = " Problemen met het opvragen van ZoekTimers ";
 Lang[47] = "Gebruik dag van de week";
 
-Lang[44] = " OK om te wissen ";
+Lang[44] = " OK om te wissen";
 Lang[45] = " andere toets om dit niet te doen ";
 Lang[46] = "vrij ";
 //Lang[47]
