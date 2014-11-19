@@ -434,7 +434,7 @@ function play(uri) {
 
     if (mediaPlayer.getState() != mediaPlayer.STATE_IDLE) { mediaPlayer.close(); }
     if (isSchedule) { schedule.style.opacity = 0; isSchedule = 0;}
-    if (epgactive) { osdepginfo.style.opacity = 0; osdepginfonext.style.opacity = 0; epgactive = 0;}
+    if (epgactive) { epg_unactive();}
 
     if (ServerAdres[ChanGroup] == "MultiCast" ) { SI=channels[currChan].split("-"); uri = SI[4];
     } else if (ServerAdres[ChanGroup] == "FullURL" ) {	// uri = ready!
@@ -464,7 +464,7 @@ function preview(urip) {
 	}
 
 	if (isSchedule) { schedule.style.opacity = 0; isSchedule = 0;}
-	if (epgactive) { osdepginfo.style.opacity = 0; osdepginfonext.style.opacity = 0; epgactive = 0;}
+	if (epgactive) { epg_unactive();}
 	showChannelList();
 }
 
@@ -806,11 +806,7 @@ function onKeyDown(event) {
 	break;
    case "Yellow":
 	if(isFullscreen) {
-		if(epgactive) {
-			osdepginfo.style.opacity = 0;
-			osdepginfonext.style.opacity = 0;
-			epgactive = 0;
-		}
+		if(epgactive) { epg_unactive(); }
 		medialist.style.opacity = 0.9;
 		set_yellow_key = 1;
 		setTimeout("getSchedule(currChan);LoadMediaSettings();",100);
@@ -846,9 +842,7 @@ function onKeyDown(event) {
 				}			
 			epgactive = 1;		
 			} else {
-			osdepginfo.style.opacity = 0;
-			osdepginfonext.style.opacity = 0;
-			epgactive = 0;
+			epg_unactive();
 			}
 //		setTimeout("epgactive = 0; osdepginfo.style.opacity = 0; osdepginfonext.style.opacity = 0;", 5000);
 	}
@@ -880,15 +874,11 @@ function onKeyDown(event) {
 //			osdepginfonext.style.opacity = 0;
 //			epgactive = 1;		
 			} else {
-			osdepginfo.style.opacity = 0;
-			osdepginfonext.style.opacity = 0;
-			epgactive = 0;
+			epg_unactive();
 			}
 //		setTimeout("epgactive = 0; osdepginfo.style.opacity = 0; osdepginfonext.style.opacity = 0;", 5000);
 		} else if(!isFullscreen){
-			osdepginfo.style.opacity = 0;
-			osdepginfonext.style.opacity = 0;
-			epgactive = 0;
+			epg_unactive();
 			isFullscreen = 1;
 			FullScreen();
 			currChan = preChan;
@@ -953,8 +943,7 @@ function onKeyDown(event) {
 				showDisplay(currChan.toString(), false, 100, 0 );
 				Change = 0;
 			}
-		osdepginfo.style.opacity = 0;
-		osdepginfonext.style.opacity = 0;
+		epg_unactive();
 		isSetupMenu = 1;
 		mainmenu.style.opacity = 0.8;
 		menu = 0;
@@ -1053,8 +1042,7 @@ function onKeyDown(event) {
 			showDisplay(currChan.toString(), false, 100, 0 );
 			Change = 0;
 		}
-		osdepginfo.style.opacity = 0;
-		osdepginfonext.style.opacity = 0;
+		epg_unactive();
 		isSetupMenu = 1;
 		mainmenu.style.opacity = 0.8;
 		menu = 10;
@@ -1202,8 +1190,7 @@ function onKeyDown(event) {
 				showDisplay(currChan.toString(), false, 100, 0 );
 				Change = 0;
 			}
-		osdepginfo.style.opacity = 0;
-		osdepginfonext.style.opacity = 0;
+		epg_unactive();
 		medialist.style.opacity = 0.9;
 		mainmenu.style.opacity = 0;
 		recPath = "/recordings.xml";
@@ -1344,6 +1331,13 @@ function showOSD() {
 	OSD(opacity);
 	osdtimeout = setTimeout("fadeOut(); osdtimeout = 0;", ShowOsdTime);
 }
+
+function epg_unactive() {
+			osdepginfo.style.opacity = 0;
+			osdepginfonext.style.opacity = 0;
+			epgactive = 0;
+}
+
 
 function showVolume() {
 	if (osdVolumetimeout) {
@@ -2137,11 +2131,11 @@ function onKeyMenu(keyCode) {
   switch(keyCode) {
     case "BrowserBack":
 	if ((menu == 5 || menu == 7) && osdepginfo.style.opacity == 1) {
-		osdepginfo.style.opacity = 0;
+		epg_unactive();
 	} else if (menu == 10 || menu == MainMenu) {
 		isSetupMenu = 0;
 		mainmenu.style.opacity = 0;
-		osdepginfo.style.opacity = 0;
+		epg_unactive();
 	} else if (menu !== MainMenu) {
 		if (menu == 3 ) { isFullscreen = 0; play(channels[currChan]); isFullscreen = 1;MPDListener = 0;}
 		menu = MainMenu;
@@ -2152,7 +2146,7 @@ function onKeyMenu(keyCode) {
 	if (menu == 3 ) { play(channels[currChan]);MPDListener = 0;}
 	isSetupMenu = 0;
 	mainmenu.style.opacity = 0;
-	osdepginfo.style.opacity = 0;
+	epg_unactive();
     break;
 
     case "Left":
@@ -2209,7 +2203,7 @@ function onKeyMenu(keyCode) {
 		GotoFav((timerID + Fav_base + 1));
 		isSetupMenu = 0;
 		mainmenu.style.opacity = 0;
-		osdepginfo.style.opacity = 0;
+		epg_unactive();
 	}
 	if (menu == 5) {
 		// Show EPG info Timer
@@ -2269,7 +2263,7 @@ function onKeyMenu(keyCode) {
 			InitMenu(menu);
 		}
 	} else 	if (menu == 5 && smartTVplugin) {
-		osdepginfo.style.opacity = 0;
+		epg_unactive();
 		mainmenu.innerHTML = "<h1 class=mainmenu" + cssres[css_nr][Set_Res] + ">" + Lang[7] + "</h1><pre class=mainmenu" + cssres[css_nr][Set_Res] + ">\n\n\n" + Lang[0] + "</pre>";
 		DeleteTimers();
 		setTimeout("LoadTimersServer();InitMenu(menu);",100);
@@ -2389,6 +2383,7 @@ function onKeyMenu(keyCode) {
 	} else if (menu == 10) {
 		if (protChn[ChanGroup] !== 1 && ChanGroup !== Fav_group) {
 			AddtoFav();
+			InitMenu(menu);
 		}
 	}
     break;
@@ -2647,7 +2642,7 @@ function onKeyMenu(keyCode) {
 	if (menu == 10 ) {
 		isSetupMenu = 0;
 		mainmenu.style.opacity = 0;
-		osdepginfo.style.opacity = 0;
+		epg_unactive();
 	}
         break;
     case KEY_D:// >@ key on old long kpn 1710/1760 remote
@@ -2673,7 +2668,7 @@ function InitMenu(menu) {
 // 9 = INFO2 menu
 // 10 = Favorite Edit menu
 
-osdepginfo.style.opacity = 0;
+epg_unactive;
 
 if(menu == 0) { // Main Menu
 	MainMenu = 0;
@@ -3341,7 +3336,7 @@ function UnloadMediaSettings() {
 	medialist.style.opacity = 0;
 	osdmedia.style.opacity = 0;
 	osdmediatime.style.opacity = 0;
-	osdepginfo.style.opacity = 0;
+	epg_unactive();
 	medialist.innerHTML = "<h1 class=mainmenu" + cssres[css_nr][Set_Res] + ">" + Lang[0] + "</h1>";
 	showDisplay(currChan.toString(), false, 100, 0 );
 	isMediaMenu = 0;
@@ -3382,7 +3377,7 @@ if (DelisOK) {
 		setTimeout("showMediaList();",100)
 		break;
 	}
-	if (osdepginfo.style.opacity == 1) { osdepginfo.style.opacity = 0; break; }
+	if (osdepginfo.style.opacity == 1) { epg_unactive(); break; }
     case "TV":
 	UnloadMediaSettings();
         break;
@@ -3640,8 +3635,7 @@ if (DelisOK) {
 	break;
 
    case "Menu":
-	osdepginfo.style.opacity = 0;
-	osdepginfonext.style.opacity = 0;
+	epg_unactive();
 	osdmedia.style.opacity = 0;
 	osdmediatime.style.opacity = 0;
 	isSetupMenu = 1;
@@ -3681,12 +3675,12 @@ if (DelisOK) {
 		    if (localRecording == 1) { 
 			ss.setParameter(recDummy[0], "resume", mediaPlayer.getPosition().toString());
 		    }
-		    osdepginfo.style.opacity = 0;
+		    epg_unactive();
 		    isFullscreen = 1; play(channels[currChan]); 
 		    UnloadMediaSettings();		
 	    } else {
 		    setResume();
-		    osdepginfo.style.opacity = 0;
+		    epg_unactive();
 		    isFullscreen = 0; play(channels[currChan]); isFullscreen = 1;
 		    medialist.style.opacity = 0.9;
 		    showDisplay("STOP", false, 100, 0 );
@@ -4196,7 +4190,7 @@ try {
 
 
 function DelRec() {
-	if (osdepginfo.style.opacity == 1) {osdepginfo.style.opacity = 0;}
+	if (osdepginfo.style.opacity == 1) {epg_unactive();}
 try {
 	//popup for confirm
 	switchtimer.style.background = "red";
@@ -4467,7 +4461,7 @@ function AddInfo(info) {
 }
 
 function showMediaList() {
-	if (osdepginfo.style.opacity == 1) {osdepginfo.style.opacity = 0;}
+	if (osdepginfo.style.opacity == 1) {epg_unactive();}
 	osdmedia.style.opacity = 0;
 	osdmediatime.style.opacity = 0;
 	var liststyle = "";
@@ -4674,7 +4668,7 @@ function playRec(uri,posrec) {
     if (mediaPlayer.getState() != mediaPlayer.STATE_IDLE) {
       mediaPlayer.close();
     }
-	if (osdepginfo.style.opacity == 1) {osdepginfo.style.opacity = 0;}
+	if (osdepginfo.style.opacity == 1) {epg_unactive();}
 	mediaPlayer.open(uri);
 	if (posrec) {
 		mediaPlayer.playFromPosition(posrec,1000);
@@ -4694,7 +4688,7 @@ function pauseRec(uri) {
     if (mediaPlayer.getState() != mediaPlayer.STATE_IDLE) {
       mediaPlayer.close();
     }
-	if (osdepginfo.style.opacity == 1) {osdepginfo.style.opacity = 0;}
+	if (osdepginfo.style.opacity == 1) {epg_unactive();}
 	mediaPlayer.open(uri);
 	mediaPlayer.play(0);
 	showDisplay("PAUS", false, 100, 0 );
@@ -5034,9 +5028,7 @@ function onScheduledStop(event) {
 function ClearScreen() {
 	isSchedule = 0; schedule.style.opacity = 0;
 	isSetupMenu = 0;
-	epgactive = 0;
-	osdepginfonext.style.opacity = 0;
-	osdepginfo.style.opacity = 0;
+	epg_unactive();
 	mainmenu.style.opacity = 0;
 }
 

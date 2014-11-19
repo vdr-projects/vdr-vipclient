@@ -14,7 +14,8 @@ VDR 1.7.29+
 	Skinning, CSS styling (<menu> <1> <blue> changes skin, restart needed sometimes)
 	In osd timeleft can't be more 24h (Gives a long number when box has no internet or time is totally wrong)
 	Timed change, set to 0 for old behavior (press ok for change)
-	
+	epginfo box was left active but invisible when pressed menu(green key didn't change audio but show epginfonext)
+	add to favorite now refreshes view
 
 0.25	Get recordings from Streamdev, Restfulapi or SmartTVweb.
 	Check if SmartTVweb is on the server if not turn SmartTVweb options off
