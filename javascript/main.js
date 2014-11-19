@@ -3115,9 +3115,8 @@ function ShowTimerInfo() {
   } else {
 	info3 = Lang[37];
   }
-       	osdepginfo.innerHTML = "<span class=osdepginfo" + cssres[css_nr][Set_Res] + ">" 
-				+ "<pre class=mainhead" + cssres[css_nr][Set_Res] + ">" +  Left(info1,60) 
-				+ "</pre><p class=epg_head>" + timersDays[timerID] + " " 
+       	osdepginfo.innerHTML = "<span class=osdepginfo" + cssres[css_nr][Set_Res] + ">" + "<p class=epg_head>" 
+				+ Left(info1,60) + "<br>" + timersDays[timerID] + " " 
 				+ timersStrt[timerID] + " - " + timersStop[timerID] + "<br>" 
 				+ info2 + "</p><p class=epg_info>" + info3 + "<br>" + Left(info4,750) + "</p></span>" ;
  }
