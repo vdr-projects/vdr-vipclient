@@ -1372,7 +1372,7 @@ function OSDchannr(channr) {
 //	osdnr.innerHTML = "<img src='" + channels[currChan] + ".logo.jpg' style='width:80%; max-height:100%; position:absolute; left:10%;' >";
 	}
 	osdnr.innerHTML = "<span class=osdnr" + cssres[css_nr][Set_Res] + ">" + Right(channr,3) + "</span>";
-	alert(cssres[css_nr][Set_Res]);
+//	alert(cssres[css_nr][Set_Res]);
 }
 
 function OSDhtml(){
@@ -2161,7 +2161,8 @@ function onKeyMenu(keyCode) {
 	    timerID -= 1;
 		    if (timerID < 0) { timerID = 0; }
 	}
-		InitMenu(menu);
+	epg_unactive();
+	InitMenu(menu);
     break;
     case "Down":
 	if (menu == 2) {
@@ -2172,7 +2173,8 @@ function onKeyMenu(keyCode) {
 	    timerID += 1;
 			if (timerID > (maxTimers - 1) && maxTimers !== 0) { timerID = maxTimers - 1; }
 	}
-		InitMenu(menu);
+	epg_unactive();
+	InitMenu(menu);
     break;
     case KEY_OK:
     	if (menu == 2 && isMediaMenu !== 1) {
@@ -2216,7 +2218,7 @@ function onKeyMenu(keyCode) {
 		// Show more info Current SearchTimer
 		osdepginfo.style.opacity = 1 - osdepginfo.style.opacity;
 	       	osdepginfo.innerHTML = "<span class=osdepginfo" + cssres[css_nr][Set_Res] + ">" + "<p class=epg_head><br><br><br>"
-					+ searchtimersSearch[timerID] + Lang[0] + "</p></span>" ;
+					+ Lang[0] + "</p></span>" ;
 		setTimeout("ShowSearchTimerInfo();",100);
 	}
 
@@ -2377,8 +2379,7 @@ function onKeyMenu(keyCode) {
 		setTimeout("ShowTimerInfo();",100);
 	} else 	if (menu == 7) {
 		// Show info SearchTimers
-	       	osdepginfo.innerHTML = "<span class=osdepginfo" + cssres[css_nr][Set_Res] + ">" + "<p class=epg_head>" 
-					+ SearchTimer[timerID] + "</p></span>";
+	       	osdepginfo.innerHTML = SearchTimer[timerID];
 		osdepginfo.style.opacity = 1 - osdepginfo.style.opacity;
 	} else if (menu == 10) {
 		if (protChn[ChanGroup] !== 1 && ChanGroup !== Fav_group) {
@@ -3114,9 +3115,10 @@ function ShowTimerInfo() {
   } else {
 	info3 = Lang[37];
   }
-       	osdepginfo.innerHTML = "<span class=osdepginfo" + cssres[css_nr][Set_Res] + ">" + "<p class=epg_head>" 
-				+ Left(info1,60) + "<br>" + timersDays[timerID] + " " + 
-				timersStrt[timerID] + " - " + timersStop[timerID] + "<br>" 
+       	osdepginfo.innerHTML = "<span class=osdepginfo" + cssres[css_nr][Set_Res] + ">" 
+				+ "<pre class=mainhead" + cssres[css_nr][Set_Res] + ">" +  Left(info1,60) 
+				+ "</pre><p class=epg_head>" + timersDays[timerID] + " " 
+				+ timersStrt[timerID] + " - " + timersStop[timerID] + "<br>" 
 				+ info2 + "</p><p class=epg_info>" + info3 + "<br>" + Left(info4,750) + "</p></span>" ;
  }
 }
@@ -3146,7 +3148,7 @@ try {
 	  }
 
 		// Extended INFO
-		SearchTimer[i] = "<h1 class=mainhead" + cssres[css_nr][Set_Res] + ">" + x[i].getElementsByTagName("search")[0].childNodes[0].nodeValue + "\n </h1><pre class=searchtimers" + cssres[css_nr][Set_Res] + ">";
+		SearchTimer[i] = "<pre class=mainhead" + cssres[css_nr][Set_Res] + ">" + x[i].getElementsByTagName("search")[0].childNodes[0].nodeValue + "\n </pre><pre class=searchtimers" + cssres[css_nr][Set_Res] + ">";
 		if ((x[i].getElementsByTagName("use_as_searchtimer")[0].childNodes[0].nodeValue) == 0) {
 			SearchTimer[i]  += "\uE003\uE016\uE003" + Lang[40] + "\n";
 		} else {
@@ -3272,6 +3274,9 @@ if (MPDListener == 0) {
 		if (ev.reason == "CommandClose" && ErrorAgain == 0) {
 			setTimeout("mediaPlayer.open(URL);mediaPlayer.play(1000);GetEPG(currChan);ExtraStuff();",500);
 			ErrorAgain = 1;
+		} else if (ev.reason == "CommandClose" && ErrorAgain == 1) {
+			setTimeout("mediaPlayer.open(URL);mediaPlayer.play(1000);GetEPG(currChan);ExtraStuff();",105000);
+			ErrorAgain = 2;
 		} else {
 			ErrorAgain = 0;
 			alert("Media player state changed: state=" + ev.state + ", reason=" + ev.reason + ", code=" + ev.code);
@@ -4928,7 +4933,8 @@ function ShowInfo() {
 
 	if (year!==1970) { 	
        		osdepginfo.innerHTML = "<span class=osdepginfo" + cssres[css_nr][Set_Res] + ">"
-					+ "<p class=epg_head>" + Left(recTitl[currMed],60) 
+					+ "<p class=epg_head>"
+					+ Left(recTitl[currMed],60) 
 					+ "</p><p class=epg_avinfo>" + AvInfo[currMed] 
 					+ "</p><p class=epg_title> " + result + "<br>" 
 					+ (recDura[currMed] / 60).toFixed(0) + Lang[54] + "<br>" + recChan[currMed]
@@ -4936,7 +4942,8 @@ function ShowInfo() {
 	} else {
 		//info for non-vdr recordings
 	       	osdepginfo.innerHTML = "<span class=osdepginfo" + cssres[css_nr][Set_Res] + ">"
-					+ "<p class=epg_head>" + Left(recTitl[currMed],60) 
+					+ "<p class=epg_head>"
+					+ Left(recTitl[currMed],60) 
 					+ "</p><p class=epg_avinfo>" + AvInfo[currMed] + " " + "<br><br></p></span>";
 	}
   }
