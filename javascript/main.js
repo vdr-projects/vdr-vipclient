@@ -2383,7 +2383,10 @@ function onKeyMenu(keyCode) {
 	} else if (menu == 10) {
 		if (protChn[ChanGroup] !== 1 && ChanGroup !== Fav_group) {
 			AddtoFav();
-			InitMenu(menu);
+			timerID = 0; maxTimers = Fav_max_channel;
+			if (ChanGroup !== Fav_group) { Fav_key1 = Lang[86]; }
+			setTimeout("InitMenu(menu);",500);
+
 		}
 	}
     break;
