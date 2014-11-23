@@ -570,6 +570,15 @@
 		top		: 20%;
 	}
 
+	div#osdlogo { 
+	z-index			: 505;
+		position	: absolute;
+		width		: 10%;
+		height		: 30%;
+		left		: 4%;
+		top		: 55%;
+	}
+
 	div#channellist { 
 	z-index			: 400;
 		position	: absolute;

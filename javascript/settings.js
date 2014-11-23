@@ -75,7 +75,7 @@ var RecCmdsIcon = new Array("","\uE005","","","","","","","","");
 
 var preRecTime = 300 ;// for local recordings time before recording in seconds
 var afterRecTime = 600 ; // for local recordings time after recording in seconds
-
+var No_rec_key = 1; // 0 = use rec_keys, 1 = don't use rec_keys, no server recording possible
 
 //
 // No need to change anything from here on.
@@ -167,10 +167,17 @@ var KEY_6 = "U+0036";
 var KEY_7 = "U+0037";
 var KEY_8 = "U+0038";
 var KEY_9 = "U+0039";
-var KEY_REC = "U+00bd";
-var KEY_REC2 = "MediaRecord";
+if (No_rec_key) {
+	var KEY_REC = "";
+	var KEY_REC2 = "";
+} else {
+	var KEY_REC = "U+00bd";
+	var KEY_REC2 = "MediaRecord";
+}
 var KEY_OK = "Accept";
 //Extra keys
+var KEY_DOWN1 = "ChannelDown";
+var KEY_UP1 = "ChannelUp";
 // Comhem Remote
 var KEY_FAV = "U+e0003";
 var KEY_FILM = "U+e0033";
@@ -192,7 +199,11 @@ var KEY_MPT = "MediaPreviousTrack";
 var KEY_MNT = "MediaNextTrack";
 // Comx remote
 
-
+// Motorola NYX remote
+var KEY_RIGHT2 = "ScrollRight";
+var KEY_LEFT2 = "ScrollLeft";
+var KEY_UP2 = "ScrollUp";
+var KEY_DOWN2 = "ScrollDown";
 
 var eitCache = null;
 var events = null;

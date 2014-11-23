@@ -657,7 +657,8 @@ function onKeyDown(event) {
 
     switch(event.keyIdentifier) {
 
-    case "ChannelUp":
+    case KEY_UP1:
+    case KEY_UP2:
     case "Up":
 	if(isFullscreen) {
 		count = 0; Change = 0;
@@ -679,7 +680,9 @@ function onKeyDown(event) {
 	        preview(channels[currChan]);
 	}
         break;
-    case "ChannelDown":
+
+    case KEY_DOWN1:
+    case KEY_DOWN2:
     case "Down":
 	if(isFullscreen) {
 		count = 0; Change = 0;
@@ -701,6 +704,8 @@ function onKeyDown(event) {
 	        preview(channels[currChan]);
 	}
 	break;
+
+    case KEY_LEFT2:
     case "Left":
 	count = 0; Change = 0;
 	if(isFullscreen) {
@@ -732,6 +737,8 @@ function onKeyDown(event) {
         preview(channels[currChan]);
 	}
 	break;
+
+    case KEY_RIGHT2:
     case "Right":
 	count = 0; Change = 0;
 	if(isFullscreen) {
@@ -1369,7 +1376,7 @@ function onCacheUpdated() {
 function OSDchannr(channr) {
 //	Show logo's
 	if (experimental) {
-//	osdnr.innerHTML = "<img src='" + channels[currChan] + ".logo.jpg' style='width:80%; max-height:100%; position:absolute; left:10%;' >";
+		osdlogo.innerHTML = "<img src='experimental/logo/" + channels[currChan] + ".png' >";
 	}
 	osdnr.innerHTML = "<span class=osdnr" + cssres[css_nr][Set_Res] + ">" + Right(channr,3) + "</span>";
 //	alert(cssres[css_nr][Set_Res]);
@@ -3273,9 +3280,9 @@ if (MPDListener == 0) {
 		if (ev.reason == "CommandClose" && ErrorAgain == 0) {
 			setTimeout("mediaPlayer.open(URL);mediaPlayer.play(1000);GetEPG(currChan);ExtraStuff();",500);
 			ErrorAgain = 1;
-		} else if (ev.reason == "CommandClose" && ErrorAgain == 1) {
-			setTimeout("mediaPlayer.open(URL);mediaPlayer.play(1000);GetEPG(currChan);ExtraStuff();",105000);
-			ErrorAgain = 2;
+		//} else if (ev.reason == "CommandClose" && ErrorAgain == 1) {
+		//	setTimeout("mediaPlayer.open(URL);mediaPlayer.play(1000);GetEPG(currChan);ExtraStuff();",105000);
+		//	ErrorAgain = 2;
 		} else {
 			ErrorAgain = 0;
 			alert("Media player state changed: state=" + ev.state + ", reason=" + ev.reason + ", code=" + ev.code);
