@@ -75,7 +75,7 @@ var RecCmdsIcon = new Array("","\uE005","","","","","","","","");
 
 var preRecTime = 300 ;// for local recordings time before recording in seconds
 var afterRecTime = 600 ; // for local recordings time after recording in seconds
-var No_rec_key = 1; // 0 = use rec_keys, 1 = don't use rec_keys, no server recording possible
+var No_rec_key = 0; // 0 = use rec_keys, 1 = don't use rec_keys, no server recording possible
 
 //
 // No need to change anything from here on.
@@ -156,6 +156,7 @@ var ChangeOK = 0;
 var Extok = 0;
 var count = 0;
 
+//Remote settings
 //keys
 var KEY_0 = "U+0030";
 var KEY_1 = "U+0031";
@@ -167,6 +168,7 @@ var KEY_6 = "U+0036";
 var KEY_7 = "U+0037";
 var KEY_8 = "U+0038";
 var KEY_9 = "U+0039";
+var KEY_MENU = "Menu";
 if (No_rec_key) {
 	var KEY_REC = "";
 	var KEY_REC2 = "";
@@ -204,6 +206,8 @@ var KEY_RIGHT2 = "ScrollRight";
 var KEY_LEFT2 = "ScrollLeft";
 var KEY_UP2 = "ScrollUp";
 var KEY_DOWN2 = "ScrollDown";
+
+//End of Remote settings
 
 var eitCache = null;
 var events = null;

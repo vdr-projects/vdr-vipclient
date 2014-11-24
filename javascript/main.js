@@ -942,7 +942,7 @@ function onKeyDown(event) {
 	}
         break;
 
-   case "Menu":
+   case KEY_MENU:
 		if(isFullscreen) {
 			if(count) {
 				count = 0;
@@ -2149,7 +2149,7 @@ function onKeyMenu(keyCode) {
 		InitMenu(menu);
 	}
 	break;
-    case "Menu":
+    case KEY_MENU:
 	if (menu == 3 ) { play(channels[currChan]);MPDListener = 0;}
 	isSetupMenu = 0;
 	mainmenu.style.opacity = 0;
@@ -3588,10 +3588,6 @@ if (DelisOK) {
   } // end of switch
 } else { 
   switch(keyCode) {
-    case "BrowserBack":
-//		ShowInfo();
-//		osdepginfo.style.opacity = 1 - osdepginfo.style.opacity;
-		break;
     case "TV":
 	setResume();
 	play(channels[currChan]);
@@ -3648,7 +3644,7 @@ if (DelisOK) {
 	ShowMediaOSD();
 	break;
 
-   case "Menu":
+   case KEY_MENU:
 	epg_unactive();
 	osdmedia.style.opacity = 0;
 	osdmediatime.style.opacity = 0;
@@ -3668,10 +3664,6 @@ if (DelisOK) {
 	VolumeDown();
 	break;
 
-
-    case KEY_REC:
-    case KEY_REC2:
-	break;
     case "MediaRewind":
 	    if (mediaPlayer.getState() != mediaPlayer.STATE_IDLE) {
 	      mediaPlayer.play(-4000);
@@ -3684,6 +3676,11 @@ if (DelisOK) {
 	    showDisplay("FF", false, 100, 0 );
 	    }
     break;
+
+    case KEY_REC:
+    case KEY_REC2:
+	break;
+    case "BrowserBack":
     case "MediaStop":
 	    if (currMed == -1 || isPause == 1 || localRecording == 1) {
 		    if (localRecording == 1) { 
@@ -3760,7 +3757,6 @@ if (DelisOK) {
 
 	}
 	break;
-
     case KEY_5:
 	if (localRecording != 1 ) {
 	if (recMark.length>posMark && get_recordings == 1) {	
@@ -3787,9 +3783,6 @@ if (DelisOK) {
 	}
 	}
 	break;
-
-
-
     case KEY_3:
 	if (localRecording != 1 ) {
 		position += (mediaPlayer.getPosition()/1000) + 30;
