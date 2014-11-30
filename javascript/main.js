@@ -2815,7 +2815,6 @@ if(menu == 4) { // INFO Menu
 
 if(menu == 5) { // Timers from Server
 	if (timerOK) {
-	//	booking = "<center>" + Lang[32] + "</center>";
 	booking = "<span class=select" + cssres[css_nr][Set_Res] + ">";
 	var x = timerID - 1;
 	for (var i=0;i<10;i++) {
@@ -2834,7 +2833,6 @@ if(menu == 5) { // Timers from Server
 
 if(menu == 7) { // SearchTimers from Server
 	if (timerOK) {
-	// 	booking = "<center>" + Lang[32] + "</center>";
 	booking = "<span class=select" + cssres[css_nr][Set_Res] + ">";
 	var x = timerID - 1;
 	for (var i=0;i<10;i++) {
@@ -3040,6 +3038,10 @@ try {
    timerOK = 1;
   }
  }
+
+   if (timerOK == 0) {
+    mainmenu.innerHTML = "<h1 class=mainmenu" + cssres[css_nr][Set_Res] + ">" + Lang[7] + "</h1><pre class=mainmenu" + cssres[css_nr][Set_Res] + ">\n  " + Lang[37] + ": \n " + server_ip + "</pre>";
+   }
   } catch(e) {
     timerOK = 0;
     alert("Get Timers problem: " + e);
@@ -3201,11 +3203,16 @@ try {
     }
 	  timerOK = 1;
    }
+   if (timerOK == 0) {
+    mainmenu.innerHTML = "<h1 class=mainmenu" + cssres[css_nr][Set_Res] + ">" + Lang[8] + "</h1><pre class=mainmenu" + cssres[css_nr][Set_Res] + ">\n  " + Lang[37] + ": \n " + server_ip + RestFulAPI + "</pre>";
+   }
+
   } catch(e) {
     timerOK = 0;
     alert("Get SearchTimers problem: " + e);
     mainmenu.innerHTML = "<h1 class=mainmenu" + cssres[css_nr][Set_Res] + ">" + Lang[8] + "</h1><pre class=mainmenu" + cssres[css_nr][Set_Res] + ">\n  " + Lang[43] + ": \n " + server_ip + RestFulAPI + "</pre>";
   }
+
 }
 
 function ShowSearchTimerInfo() {
