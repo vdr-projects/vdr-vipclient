@@ -18,7 +18,8 @@ VDR 1.7.29+
 	add to favorite now refreshes view
 	added keys from Motorola NYX remote. (Both up/down/left/right keys do the same)
 	Turn record key off
-	NYX remote hase no stopkey so key 'back' does the same as stop. 
+	NYX remote hase no stopkey so key 'back' does the same as stop.
+	Fixed Standby while playback
 
 0.25	Get recordings from Streamdev, Restfulapi or SmartTVweb.
 	Check if SmartTVweb is on the server if not turn SmartTVweb options off

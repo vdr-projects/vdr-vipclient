@@ -259,17 +259,17 @@ var numObjs = event.objectNames.length;
 	} else if(event.objectNames[i] == "var.io.state" && is.getObject(event.objectNames[i]) == "normal" && KillStream == 1){
 		play(channels[currChan]);
 		if(isMediaMenu) {
-			if (mediaList.style.opacity == 0) {
-			if (get_recordings == 1) {
-			setTimeout("GetMarks(); getResume(); playRec(recLink[currMed]+ '?mode=streamtoend&time=' + position);",100);
-			} else if (get_recordings == 2) {
+		  if (medialist.style.opacity == 0) {
+		    if (get_recordings == 1) {
+			setTimeout("GetMarks(); getResume(); playRec(recLink[currMed] + '?mode=streamtoend&time=' + position);",100);
+		    } else if (get_recordings == 2) {
 			setTimeout("playRec(recLink[currMed]+ '?pos=time.' + position);",100);
-			}
+		    }
 
-			} else {
-				showDisplay("STOP", false, 100, 0 );
-				showMediaList();
-			}
+		  } else {
+			showDisplay("STOP", false, 100, 0 );
+			showMediaList();
+		  }
 		}
 	}
   }
