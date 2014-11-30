@@ -2217,15 +2217,13 @@ function onKeyMenu(keyCode) {
 	if (menu == 5) {
 		// Show EPG info Timer
 		osdepginfo.style.opacity = 1 - osdepginfo.style.opacity;
-		osdepginfo.innerHTML = "<span class=osdepginfo" + cssres[css_nr][Set_Res] + ">" + "<p class=epg_head><br><br><br>"
-					+ Lang[0] + "</p></span>" ;
+		osdepginfo.innerHTML = "<h1 class=mainmenu" + cssres[css_nr][Set_Res] + ">" + Lang[0] + "</h1>";
 		setTimeout("ShowTimerInfo();",100);
 	}
 	if (menu == 7) {
 		// Show more info Current SearchTimer
 		osdepginfo.style.opacity = 1 - osdepginfo.style.opacity;
-	       	osdepginfo.innerHTML = "<span class=osdepginfo" + cssres[css_nr][Set_Res] + ">" + "<p class=epg_head><br><br><br>"
-					+ Lang[0] + "</p></span>" ;
+		osdepginfo.innerHTML = "<h1 class=mainmenu" + cssres[css_nr][Set_Res] + ">" + Lang[0] + "</h1>";
 		setTimeout("ShowSearchTimerInfo();",100);
 	}
 
@@ -2273,7 +2271,7 @@ function onKeyMenu(keyCode) {
 		}
 	} else 	if (menu == 5 && smartTVplugin) {
 		epg_unactive();
-		mainmenu.innerHTML = "<h1 class=mainmenu" + cssres[css_nr][Set_Res] + ">" + Lang[7] + "</h1><pre class=mainmenu" + cssres[css_nr][Set_Res] + ">\n\n\n" + Lang[0] + "</pre>";
+		mainmenu.innerHTML = "<h1 class=mainmenu" + cssres[css_nr][Set_Res] + ">" + Lang[0] + "</h1>";
 		DeleteTimers();
 		setTimeout("LoadTimersServer();InitMenu(menu);",100);
 	} else 	if (menu == 10) {
@@ -2381,8 +2379,7 @@ function onKeyMenu(keyCode) {
 	} else 	if (menu == 5) {
 		// Show EPG info Timer
 		osdepginfo.style.opacity = 1 - osdepginfo.style.opacity;
-		osdepginfo.innerHTML = "<span class=osdepginfo" + cssres[css_nr][Set_Res] + ">" + "<p class=epg_head><br><br><br>" 
-					+ Lang[0] + "</p></span>" ;
+		osdepginfo.innerHTML = "<h1 class=mainmenu" + cssres[css_nr][Set_Res] + ">" + Lang[0] + "</h1>";
 		setTimeout("ShowTimerInfo();",100);
 	} else 	if (menu == 7) {
 		// Show info SearchTimers
@@ -2510,7 +2507,7 @@ function onKeyMenu(keyCode) {
 	break;
 	case KEY_5:
 		if (menu == MainMenu && (Restfulapiplugin || smartTVplugin)) {
-			mainmenu.innerHTML = "<h1 class=mainmenu" + cssres[css_nr][Set_Res] + ">" + Lang[7] + "</h1><pre class=mainmenu" + cssres[css_nr][Set_Res] + ">\n\n\n" + Lang[0] + "</pre>";
+			mainmenu.innerHTML = "<h1 class=mainmenu" + cssres[css_nr][Set_Res] + ">" + Lang[0] + "</h1>";
 			timerID = 0;
 			menu = 5;
 			setTimeout("LoadTimersServer();InitMenu(menu);",200);
@@ -2586,7 +2583,7 @@ function onKeyMenu(keyCode) {
 	break;
 	case KEY_8:
 	if (menu == MainMenu && Restfulapiplugin) {
-			mainmenu.innerHTML = "<h1 class=mainmenu" + cssres[css_nr][Set_Res] + ">" + Lang[8] + "</h1><pre class=mainmenu" + cssres[css_nr][Set_Res] + ">\n\n\n" + Lang[0] + "</pre>";
+			mainmenu.innerHTML = "<h1 class=mainmenu" + cssres[css_nr][Set_Res] + ">" + Lang[0] + "</h1>";
 			timerID = 0;
 			menu = 7;
 			setTimeout("LoadSearchTimersServer();InitMenu(menu);",200);
