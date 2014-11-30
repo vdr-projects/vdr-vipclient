@@ -3000,8 +3000,8 @@ try {
 
 	  timers[i] += timersDays[i] + "\uE003" + timersStrt[i] + "\uE003" + timersStop[i] + "\uE003" + Left(timersName[i],8) + "\uE003" + Left(timersFile[i],15) + "\n" ;
     }
-   }
     timerOK = 1;
+   }
  } else if (get_timer == 0) {
    xmlhttp=new XMLHttpRequest();
    xmlhttp.open("GET",(server_ip + RestFulAPI + "/timers.xml"),false);  // ?" + new Date().getTime()),false);
@@ -3037,8 +3037,8 @@ try {
 	  }
 	  timers[i] += timersDays[i] + "\uE003" + timersStrt[i] + "\uE003" + timersStop[i] + "\uE003" + Left(timersName[i],8) + "\uE003" + Left(timersFile[i],15) + "\n" ;
    } 
-  }
    timerOK = 1;
+  }
  }
   } catch(e) {
     timerOK = 0;
