@@ -4515,6 +4515,7 @@ function showMediaList() {
 		if (listMed > nrMedia) { recList[listMed] = ""; }
 
 		if (recList[listMed]) { //Solves empty string at the end.
+			htmlstring += "\uE003";
 			if ( listMed == currMed) { htmlstring += "<span class=mediaselect" + cssres[css_nr][Set_Res] + ">"; }
 			htmlstring += "\uE003" + recList[listMed] + "\uE003\uE003\n";
 			if ( listMed == currMed) { htmlstring += "</span>";}
