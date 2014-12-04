@@ -159,6 +159,9 @@ function GetSettings() {
 	lang_nr = Number(is.getObject("vip.OSDlanguage"));
 	loadjs(langfile[lang_nr]);
 
+	MACaddress = is.getObject("const.ip.eth0.mac");
+	loadjs(conf_dir + MACaddress + ".js");
+
 	experimental = Number(is.getObject("vip.testing"));// Use some experimental code
 	testing2 = Number(is.getObject("vip.testing2"));// Use some experimental code
 	ShowSubs = Number(is.getObject("vip.showsubs"));
@@ -2791,6 +2794,7 @@ if(menu == 4) { // INFO Menu
 		htmltext += "\n   Product name: " + is.getObject("config.productdisplayname");
 		htmltext += "\n   Build date : " + is.getObject("config.build.date");
 		htmltext += "\n\n   IP address : " + is.getObject("config.ipaddress");
+		htmltext += "\n   MACaddress : " + MACaddress;
 
 		var x = is.getObject("cfg.ip.eth0.mode");
 		if (x == "DHCP") { htmltext += "\n \uE003\uE017 "; } else { htmltext += "\n \uE003\uE016 "; }
