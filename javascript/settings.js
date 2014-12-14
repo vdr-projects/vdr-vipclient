@@ -7,6 +7,8 @@ var Version = "0.26.9";
 server_ip_array = new Array("http://192.168.1.15","http://192.168.3.15","http://192.168.178.56","http://192.168.3.100","http://192.168.178.19","http://192.168.1.21","http://192.168.2.100","http://192.168.178.52");
 
 var server_ip = server_ip_array[0]; // default server
+var PowerDownServer = 0; // Power Down server from menu by sending cmds. (0 = no /1 = yes)
+var PowerDown = 9; //With Easyvdr 0.806 it is cmds 9.
 var StartVolume = 15; // Volume on (re)start of the portal.
 var currChan = 10; // default channel
 
@@ -83,6 +85,7 @@ var No_rec_key = 0; // 0 = use rec_keys, 1 = don't use rec_keys, no server recor
 //
 
 var experimental;// Use some experimental code
+var Exp_Multi;// Use some experimental code for multicast streams
 var lang_nr;
 var testing2;
 var ShowSubs; //Flash stored
@@ -122,6 +125,7 @@ var subs_prio_dyn = new Array(); //Used for dynamic subs track selection
 
 
 var ChanGroup = Number(String((currChan / 1000)).substring(0,1)); // default group
+var OldChanGroup = ChanGroup;
 var minChan = new Array();var minchan = new Array(); var maxChan = new Array(); var defChan = new Array(); var baseChn = new Array(); var protChn = new Array(); var ServerAdres = new Array(); // Define settings for Channels.
 
 
@@ -374,4 +378,4 @@ var test_ip; // Used for testing plugins
 var color_switchtimer = "color_switchtimer";
 var color_default = "color_default";
 var color_error = "color_error";
-
+var MACaddress; //BOX mac address, used for uniq box config loading

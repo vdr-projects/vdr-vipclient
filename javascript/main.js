@@ -113,6 +113,13 @@ function GetSettings() {
 	}
 
 	try {
+		if (!is.getObject("vip.testing3")) {} 
+	} catch(e) {
+		is.setObject("vip.testing3","0",is.STORAGE_PERMANENT)
+		// Use some experimental code for multicast streams 0/1
+	}
+
+	try {
 		if (!is.getObject("vip.fav_max_channel")) {} 
 	} catch(e) {
 		is.setObject("vip.fav_max_channel","0",is.STORAGE_PERMANENT)
@@ -164,6 +171,7 @@ function GetSettings() {
 
 	experimental = Number(is.getObject("vip.testing"));// Use some experimental code
 	testing2 = Number(is.getObject("vip.testing2"));// Use some experimental code
+	Exp_Multi = Number(is.getObject("vip.testing3"));// Use some experimental code for multicast streams
 	ShowSubs = Number(is.getObject("vip.showsubs"));
 	css_nr = Number(is.getObject("vip.css_nr"));
 	loadcss(cssfile[css_nr]);
@@ -442,6 +450,12 @@ function play(uri) {
     if (ServerAdres[ChanGroup] == "MultiCast" ) { SI=channels[currChan].split("-"); uri = SI[4];
     } else if (ServerAdres[ChanGroup] == "FullURL" ) {	// uri = ready!
     } else { uri = ServerAdres[ChanGroup] + uri; }
+
+    Exp_Multi = Number(is.getObject("vip.testing3"));// Use some experimental code for multicast streams
+    if (Exp_Multi && (currChan < 20)) {
+	uri = "239.255.0." + currChan.toString() + ":11111";
+	initialDelayPlay = 0;
+    }
 
     URL = uri;
     initialDelayPlayID = setTimeout("mediaPlayer.open(URL);mediaPlayer.play(1000);GetEPG(currChan);ExtraStuff();",initialDelayPlay);
@@ -974,13 +988,14 @@ function onKeyDown(event) {
 		if(ChanGroup !== 9) {
 		//Radio
 		defChan[ChanGroup] = currChan;
+		OldChanGroup = ChanGroup;
 		ChanGroup = 9;
 		currChan = defChan[9];
 		} else {
 		//TV
 		defChan[ChanGroup] = currChan;
-		ChanGroup = 0;
-		currChan = defChan[0];
+		ChanGroup = OldChanGroup;
+		currChan = defChan[ChanGroup];
 		}
 		isSetupMenu = 0;
 		mainmenu.style.opacity = 0;
@@ -1379,7 +1394,7 @@ function onCacheUpdated() {
 function OSDchannr(channr) {
 //	Show logo's
 	if (experimental) {
-		osdlogo.innerHTML = "<img src='experimental/logo/" + channels[currChan] + ".png' >";
+		//osdlogo.innerHTML = "<img src='experimental/logo/" + channels[currChan] + ".png' >";
 	}
 	osdnr.innerHTML = "<span class=osdnr" + cssres[css_nr][Set_Res] + ">" + Right(channr,3) + "</span>";
 //	alert(cssres[css_nr][Set_Res]);
@@ -1929,6 +1944,12 @@ function StreamInfo(si) {
 	is.setObject("cfg.locale.ui","cze",is.STORAGE_VOLATILE);
 	}
 
+	if(SI[1]=="3" && SI[2]=="3226" && SI[3]=="732") {
+	// Brava HDTV
+	is.setObject("cfg.locale.ui","hun",is.STORAGE_VOLATILE);
+	}
+
+
 	if(SI[1]=="3" && SI[2]=="3211" && ( SI[3]=="20863" || SI[3]=="20865") ) {
 	//MGM & Film+ CZ
 	is.setObject("cfg.locale.ui","cze",is.STORAGE_VOLATILE);
@@ -2232,8 +2253,13 @@ function onKeyMenu(keyCode) {
 
     break;
     case "Red":
-
-    	if (menu == 1) {
+	if (menu == 0) {
+		ServerPowerDown();
+		isSetupMenu = 0;
+		mainmenu.style.opacity = 0;
+		epg_unactive();
+		break;		
+    	} else if (menu == 1) {
 		if (subs_dyn < (subs_prio_dyn.length -1)) { subs_dyn += 1} else { subs_dyn = 0 }
 		if (subs_prio_dyn.length > 0) {
 			is.setObject("cfg.media.subtitling.languagepriority", (subs_prio_dyn[subs_dyn] + "," + subs_prio),is.STORAGE_PERMANENT);
@@ -2711,7 +2737,14 @@ if(menu == 0) { // Main Menu
 		htmltext += "<span class=notset>" + "\n   9 -" + Lang[17] + "</span>" ; 
 	}
 
-	htmltext += "\n   0 - " + Lang[83] + "\n\n   <span class=redkey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> -" + Lang[19] + "</span><span class=greenkey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> -" + Lang[19] + "</span><span class=yellowkey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> -" + Lang[35] + "   </span><span class=bluekey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> -" + Lang[18] + "</pre>";
+	htmltext += "\n   0 - " + Lang[83] + "\n\n   <span class=redkey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> - ";
+	if (PowerDownServer) { 
+		htmltext += Lang[31] + Left(Lang[19],Lang[31].length); 
+	} else { 
+		htmltext += Lang[19]; 
+	}
+
+	htmltext += "</span><span class=greenkey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> -" + Lang[19] + "</span><span class=yellowkey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> -" + Lang[35] + "   </span><span class=bluekey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> -" + Lang[18] + "</pre>";
 	mainmenu.innerHTML = htmltext;
 }
 
@@ -2870,6 +2903,9 @@ if(menu == 9) { // INFO2 Menu
 		htmltext += "Experimental";
 		if (Number(is.getObject("vip.testing2"))) { htmltext += "\n \uE017 "; } else { htmltext += "\n \uE016 "; }
 		htmltext += "Experimental 2 (Info box 'not in package')";
+		if (Number(is.getObject("vip.testing3"))) { htmltext += "\n \uE017 "; } else { htmltext += "\n \uE016 "; }
+		htmltext += "Experimental 3 (Multicast testing)";
+
 		if (Restfulapiplugin) { htmltext += "\n \uE017 "; } else { htmltext += "\n \uE016 "; }
 		htmltext += "Has Restfulapiplugin"
 		if (smartTVplugin) { htmltext += "\n \uE017 "; } else { htmltext += "\n \uE016 "; }
@@ -4786,6 +4822,21 @@ function ServerPause() {
 	ServerRecord();
 	settimer(EPG[NowNext][2][currChan],Lang[70],0,2);
 	setTimeout("getPauseFile();",6000);
+//end of function
+}
+
+function ServerPowerDown() {
+//Power Down Server
+ if (smartTVplugin && PowerDownServer) {
+  try {
+	xmlhttp=new XMLHttpRequest();
+	xmlhttp.open('GET',(server_ip + recServ + '/execcmd?cmd=' + PowerDown));
+	xmlhttp.send();
+  } catch(e) {
+   alert("Sending key to server problem: " + e);
+   settimer(0,Lang[55],0,2,color_error);
+  }
+ }
 //end of function
 }
 

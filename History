@@ -5,7 +5,7 @@ VDR 1.7.29+
 
 0.26	Fix for [undefined] in (search)timer menu when there are no (search)timers on server
 	Changed Plugin check, only check if digit 1,2,3 from server ip & box ip are the same.
-	Updated epgfilter for CDS on 19.2E
+	Updated epgfilter for CDS on 19.2E, Brava HDTV on 23.2E
 	Updated remote keys in settings file.
 	Added parameter to script, if set script uses 'svdrpsend.pl', if not 'svdrpsend'
 	Fixed show ext epg info if ext info != short info.
@@ -20,6 +20,7 @@ VDR 1.7.29+
 	Turn record key off
 	NYX remote hase no stopkey so key 'back' does the same as stop.
 	Fixed Standby while playback
+	(For Easyvdr & SmartWebTV plugin) Menu + red send Server Power Down. (Define it in vdr's 'commands.conf')
 
 0.25	Get recordings from Streamdev, Restfulapi or SmartTVweb.
 	Check if SmartTVweb is on the server if not turn SmartTVweb options off
