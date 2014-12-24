@@ -2,7 +2,7 @@
 // Default settings
 // 
 
-var Version = "0.26.9";
+var Version = "0.26.10";
 
 server_ip_array = new Array("http://192.168.1.15","http://192.168.3.15","http://192.168.178.56","http://192.168.3.100","http://192.168.178.19","http://192.168.1.21","http://192.168.2.100","http://192.168.178.52");
 
@@ -11,6 +11,7 @@ var PowerDownServer = 0; // Power Down server from menu by sending cmds. (0 = no
 var PowerDown = 9; //With Easyvdr 0.806 it is cmds 9.
 var StartVolume = 15; // Volume on (re)start of the portal.
 var currChan = 10; // default channel
+var Global_Multicast = 0;// 1 = use only MultiCast
 
 OSDLang = new Array ("English", "Nederlands", "Deutsch");
 langfile = new Array ("languages/lang_eng.js", "languages/lang_dut.js","languages/lang_ger.js");
@@ -78,7 +79,6 @@ var RecCmdsIcon = new Array("","\uE005","","","","","","","","");
 
 var preRecTime = 300 ;// for local recordings time before recording in seconds
 var afterRecTime = 600 ; // for local recordings time after recording in seconds
-var No_rec_key = 0; // 0 = use rec_keys, 1 = don't use rec_keys, no server recording possible
 
 //
 // No need to change anything from here on.
@@ -174,13 +174,8 @@ var KEY_7 = "U+0037";
 var KEY_8 = "U+0038";
 var KEY_9 = "U+0039";
 var KEY_MENU = "Menu";
-if (No_rec_key) {
-	var KEY_REC = "";
-	var KEY_REC2 = "";
-} else {
-	var KEY_REC = "U+00bd";
-	var KEY_REC2 = "MediaRecord";
-}
+var KEY_REC = "U+00bd";
+var KEY_REC2 = "MediaRecord";
 var KEY_OK = "Accept";
 //Extra keys
 var KEY_DOWN1 = "ChannelDown";

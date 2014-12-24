@@ -17,10 +17,13 @@ VDR 1.7.29+
 	epginfo box was left active but invisible when pressed menu(green key didn't change audio but show epginfonext)
 	add to favorite now refreshes view
 	added keys from Motorola NYX remote. (Both up/down/left/right keys do the same)
-	Turn record key off
 	NYX remote hase no stopkey so key 'back' does the same as stop.
 	Fixed Standby while playback
 	(For Easyvdr & SmartWebTV plugin) Menu + red send Server Power Down. (Define it in vdr's 'commands.conf')
+	Added global multicast setting
+	Added config/custom.js, override global settings, define local settings (setting file isn't included in the download/distro)
+	Added config/<macaddress>.js settings for a single box, read after all other settings.
+	
 
 0.25	Get recordings from Streamdev, Restfulapi or SmartTVweb.
 	Check if SmartTVweb is on the server if not turn SmartTVweb options off

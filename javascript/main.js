@@ -457,6 +457,13 @@ function play(uri) {
 	initialDelayPlay = 0;
     }
 
+    if (Global_Multicast) {
+	var x = Math.floor(currChan / 256);
+	uri = "239.255." + x.toString() + "." + (currChan - ( x * 256)).toString() + ":11111";
+	initialDelayPlay = 0;
+    }
+
+
     URL = uri;
     initialDelayPlayID = setTimeout("mediaPlayer.open(URL);mediaPlayer.play(1000);GetEPG(currChan);ExtraStuff();",initialDelayPlay);
     initialDelayPlay = 500; // wait 500 ms before zap to next channel
@@ -1405,7 +1412,7 @@ function OSDhtml(){
 	if (ShowSource == 1) {
 	    osdname.innerHTML = "<span class=osdname" + cssres[css_nr][Set_Res] + ">" + channels[currChan].split("-")[0] + "\uE003" + channelsnames[currChan] + "</span>";
 	} else {
-	    osdname.innerHTML = "<span class=osdname" + cssres[css_nr][Set_Res] + ">" + channelsnames[currChan] + "</span>";
+	    osdname.innerHTML = "<span class=osdname" + cssres[css_nr][Set_Res] + "> \uE003 " + channelsnames[currChan] + "</span>";
 	}
     osdepg.innerHTML = "<pre class=osdepg" + cssres[css_nr][Set_Res] + ">" + EPG[0][7][currChan] + "</pre>\n<pre class=osdepg" + cssres[css_nr][Set_Res] + ">" + EPG[1][7][currChan] + "</pre>";
     osdepginfo.innerHTML =  "<span class=osdepginfo" + cssres[css_nr][Set_Res] + ">" + "<p class=epg_head>" + currChan + "\uE003" + channelsnames[currChan] + "</p><p class=epg_avinfo>" + AvInfo[currChan] + "</p><p class=epg_title>" + EPG[0][7][currChan] + EPG[0][9][currChan] + EPG[0][8][currChan] + "</p>\n<p class=epg_info>" + EPG[0][4][currChan] + "</p>\n<p class=epg_info_long>" + Left(EPG[0][5][currChan],750) + "</p></span>";
@@ -2253,7 +2260,7 @@ function onKeyMenu(keyCode) {
 
     break;
     case "Red":
-	if (menu == 0) {
+	if (menu == 0 && PowerDownServer) {
 		ServerPowerDown();
 		isSetupMenu = 0;
 		mainmenu.style.opacity = 0;
@@ -4827,7 +4834,7 @@ function ServerPause() {
 
 function ServerPowerDown() {
 //Power Down Server
- if (smartTVplugin && PowerDownServer) {
+ if (smartTVplugin) {
   try {
 	xmlhttp=new XMLHttpRequest();
 	xmlhttp.open('GET',(server_ip + recServ + '/execcmd?cmd=' + PowerDown));
