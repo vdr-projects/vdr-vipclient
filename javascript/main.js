@@ -730,7 +730,7 @@ function onKeyDown(event) {
 	break;
 
     case KEY_LEFT2:
-    case "Left":
+    case KEY_LEFT:
 	count = 0; Change = 0;
 	if(isFullscreen) {
 	defChan[ChanGroup] = currChan;
@@ -763,7 +763,7 @@ function onKeyDown(event) {
 	break;
 
     case KEY_RIGHT2:
-    case "Right":
+    case KEY_RIGHT:
 	count = 0; Change = 0;
 	if(isFullscreen) {
 	defChan[ChanGroup] = currChan;
@@ -2187,9 +2187,9 @@ function onKeyMenu(keyCode) {
 	epg_unactive();
     break;
 
-    case "Left":
+    case KEY_LEFT:
     break;
-    case "Right":
+    case KEY_RIGHT:
     break;
     case "Up":
 	if (menu == 2) {
@@ -3452,7 +3452,7 @@ if (DelisOK) {
 		UnloadMediaSettings();
 	}
 	break;
-    case "Right":
+    case KEY_RIGHT:
 	if (getRecOK !== 0) {
            for (var i=0;i<10;i++) {
 		do
@@ -3465,7 +3465,7 @@ if (DelisOK) {
 	showMediaList();
 	}
 	break;
-    case "Left":
+    case KEY_LEFT:
 	if (getRecOK !== 0) {
            for (var i=0;i<10;i++) {
 		do

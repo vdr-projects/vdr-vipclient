@@ -177,6 +177,8 @@ var KEY_MENU = "Menu";
 var KEY_REC = "U+00bd";
 var KEY_REC2 = "MediaRecord";
 var KEY_OK = "Accept";
+var KEY_LEFT = "Left";
+var KEY_RIGHT = "Right";
 //Extra keys
 var KEY_DOWN1 = "ChannelDown";
 var KEY_UP1 = "ChannelUp";
