@@ -1,7 +1,7 @@
 #! /bin/bash
 #
 # Script by rekordc@gmail.com
-# 0.37 12/sept/2014
+# 0.38 25/dec/2014
 # $1 script with pl extension : "1" or "0"
 
 
@@ -68,16 +68,16 @@ do
 done
 
 echo "
-defChan[0] = 10  ; protChn[0] = 0;
-defChan[1] = 1001; protChn[1] = 0;
-defChan[2] = 2000; protChn[2] = 0;
-defChan[3] = 3000; protChn[3] = 0;
-defChan[4] = 4145; protChn[4] = 0;
-defChan[5] = 5000; protChn[5] = 0;
-defChan[6] = 6001; protChn[6] = 1;
-defChan[7] = 7000; protChn[7] = 0;
-defChan[8] = 8001; protChn[8] = 0;
-defChan[9] = 9051; protChn[9] = 0;"
+defChan[0] = minChan[0]; protChn[0] = 0;
+defChan[1] = minChan[1]; protChn[1] = 0;
+defChan[2] = minChan[2]; protChn[2] = 0;
+defChan[3] = minChan[3]; protChn[3] = 0;
+defChan[4] = minChan[4]; protChn[4] = 0;
+defChan[5] = minChan[5]; protChn[5] = 0;
+defChan[6] = minChan[6]; protChn[6] = 1;
+defChan[7] = minChan[7]; protChn[7] = 0;
+defChan[8] = minChan[8]; protChn[8] = 0;
+defChan[9] = minChan[9]; protChn[9] = 0;"
 
 timestamp=$(date +"%D %T")
 

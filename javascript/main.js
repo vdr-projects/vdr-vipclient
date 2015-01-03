@@ -116,7 +116,7 @@ function GetSettings() {
 		if (!is.getObject("vip.testing3")) {} 
 	} catch(e) {
 		is.setObject("vip.testing3","0",is.STORAGE_PERMANENT)
-		// Use some experimental code for multicast streams 0/1
+		// Unused at the moment
 	}
 
 	try {
@@ -171,7 +171,7 @@ function GetSettings() {
 
 	experimental = Number(is.getObject("vip.testing"));// Use some experimental code
 	testing2 = Number(is.getObject("vip.testing2"));// Use some experimental code
-	Exp_Multi = Number(is.getObject("vip.testing3"));// Use some experimental code for multicast streams
+
 	ShowSubs = Number(is.getObject("vip.showsubs"));
 	css_nr = Number(is.getObject("vip.css_nr"));
 	loadcss(cssfile[css_nr]);
@@ -447,20 +447,17 @@ function play(uri) {
     if (isSchedule) { schedule.style.opacity = 0; isSchedule = 0;}
     if (epgactive) { epg_unactive();}
 
-    if (ServerAdres[ChanGroup] == "MultiCast" ) { SI=channels[currChan].split("-"); uri = SI[4];
-    } else if (ServerAdres[ChanGroup] == "FullURL" ) {	// uri = ready!
-    } else { uri = ServerAdres[ChanGroup] + uri; }
-
-    Exp_Multi = Number(is.getObject("vip.testing3"));// Use some experimental code for multicast streams
-    if (Exp_Multi && (currChan < 20)) {
-	uri = "239.255.0." + currChan.toString() + ":11111";
-	initialDelayPlay = 0;
-    }
-
-    if (Global_Multicast) {
+    //Server address setup
+    if (ServerAdres[ChanGroup] == "MultiCast" ) { 
+	SI=channels[currChan].split("-"); uri = SI[4];
+    } else if (ServerAdres[ChanGroup] == "FullURL" ) {
+	;// uri = ready!
+    } else if (Global_Multicast) {
 	var x = Math.floor(currChan / 256);
 	uri = "239.255." + x.toString() + "." + (currChan - ( x * 256)).toString() + ":11111";
 	initialDelayPlay = 0;
+    } else {
+	uri = ServerAdres[ChanGroup] + uri; 
     }
 
 
@@ -2833,7 +2830,7 @@ if(menu == 4) { // INFO Menu
 	try {
 		htmltext += "\n   Product name: " + is.getObject("config.productdisplayname");
 		htmltext += "\n   Build date : " + is.getObject("config.build.date");
-		htmltext += "\n\n   IP address : " + is.getObject("config.ipaddress");
+		htmltext += "\n   IP address : " + is.getObject("config.ipaddress");
 		htmltext += "\n   MACaddress : " + MACaddress;
 
 		var x = is.getObject("cfg.ip.eth0.mode");
@@ -2841,8 +2838,12 @@ if(menu == 4) { // INFO Menu
 		htmltext += "DHCP";
 		var x = is.getObject("var.capabilities.dvr");
 		if (x !== "FALSE") { htmltext += "\n \uE003\uE017 "; } else { htmltext += "\n \uE003\uE016 "; }
-		htmltext += "DVR \n";
-		htmltext += "\n   VDR address : " + server_ip;
+		htmltext += "DVR";
+		if (Global_Multicast) {
+			htmltext += "\n   VDR address : MultiCast";
+		} else {
+			htmltext += "\n   VDR address : " + server_ip;
+		}
 		htmltext += "\n   Vip Client\uE003\uE003\uE003: " + Version;
 		htmltext += "\n   Channel list\uE003: " + Chan_Ver;
 
@@ -2911,7 +2912,7 @@ if(menu == 9) { // INFO2 Menu
 		if (Number(is.getObject("vip.testing2"))) { htmltext += "\n \uE017 "; } else { htmltext += "\n \uE016 "; }
 		htmltext += "Experimental 2 (Info box 'not in package')";
 		if (Number(is.getObject("vip.testing3"))) { htmltext += "\n \uE017 "; } else { htmltext += "\n \uE016 "; }
-		htmltext += "Experimental 3 (Multicast testing)";
+		htmltext += "Experimental 3 (Unused)";
 
 		if (Restfulapiplugin) { htmltext += "\n \uE017 "; } else { htmltext += "\n \uE016 "; }
 		htmltext += "Has Restfulapiplugin"
