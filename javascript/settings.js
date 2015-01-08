@@ -2,7 +2,7 @@
 // Default settings
 // 
 
-var Version = "0.26.11";
+var Version = "0.26.12";
 
 server_ip_array = new Array("http://192.168.1.15","http://192.168.3.15","http://192.168.178.56","http://192.168.3.100","http://192.168.178.19","http://192.168.1.21","http://192.168.2.100","http://192.168.178.52");
 
@@ -11,6 +11,8 @@ var PowerDownServer = 0; // Power Down server from menu by sending cmds. (0 = no
 var PowerDown = 9; //With Easyvdr 0.806 it is cmds 9.
 var StartVolume = 15; // Volume on (re)start of the portal.
 var currChan = 10; // default channel
+var Global_Server = 1;// 1 = old style. 0 = every channel needs server_address[channel_number]
+var Server_Address = new Array();
 var Global_Multicast = 0;// 1 = use only MultiCast
 
 OSDLang = new Array ("English", "Nederlands", "Deutsch");
@@ -137,7 +139,6 @@ var isFullscreen = 1;
 var Volume = StartVolume;
 var AudioOut = 3; // AUDIO_CONNECTION_TYPE_ANALOG = 0; AUDIO_CONNECTION_TYPE_SPDIF = 1; AUDIO_CONNECTION_TYPE_HDMI = 2;AUDIO_CONNECTION_TYPE_DECODER = 3;AUDIO_CONNECTION_TYPE_BUFFER = 4;AUDIO_CONNECTION_TYPE_I2S = 5;
 
-//var epgchan = currChan;
 var prevChan = currChan;
 var oldChan;
 

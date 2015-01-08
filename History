@@ -25,6 +25,7 @@ VDR 1.7.29+
 	Added config/<macaddress>.js settings for a single box, read after all other settings.
 	Bash Script update, default channel of a group is now the first channel (override this in config\custom.js)
 	'timed' 0 to swap previous <> current channel, first channel of a group can't be 0 (1000,2000 etc) anymore
+	Added global server setting (default = 1, act as before. 0 = set for every channel server address)
 
 
 

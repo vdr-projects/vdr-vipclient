@@ -456,8 +456,10 @@ function play(uri) {
 	var x = Math.floor(currChan / 256);
 	uri = "239.255." + x.toString() + "." + (currChan - ( x * 256)).toString() + ":11111";
 	initialDelayPlay = 0;
-    } else {
+    } else if (Global_Server) {
 	uri = ServerAdres[ChanGroup] + uri; 
+    } else {
+	uri = Server_Address[currChan] + StreamPort + uri;
     }
 
 
@@ -1449,17 +1451,14 @@ function updateOSDtime(timchan) {
 	tm=addzero(tm);
 
 	EPG[0][7][timchan] =  th + ":" + tm + " (";
-
-	alert (Number(EPGminutes));
-
 	if (Number(EPGminutes) > 1440 || Number(EPGminutes) < -1440 ) { 
 		// Duration is >24h, maybe current time isn't right.
 		EPG[0][7][timchan] += EPG[0][3][timchan];
 	} else {
 		EPG[0][7][timchan] += EPGminutes + " / " + ((EPG[0][3][timchan])-EPGminutes).toFixed(0);
 	}
-
 	EPG[0][7][timchan] += ")" + " " + EPG[0][1][timchan] + " ";
+
 	if (!EPG[0][2][timchan] || ((EPG[0][3][timchan]-EPGminutes) < 0))
 	{
 		EPG[0][7][timchan] = " ";
