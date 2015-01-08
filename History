@@ -6,8 +6,7 @@ VDR 1.7.29+
 0.26	Fix for [undefined] in (search)timer menu when there are no (search)timers on server
 	Changed Plugin check, only check if digit 1,2,3 from server ip & box ip are the same.
 	Updated epgfilter for CDS on 19.2E, Brava HDTV on 23.2E
-	Updated remote keys in settings file.
-	Added parameter to script, if set script uses 'svdrpsend.pl', if not 'svdrpsend'
+	Added parameter to bash script, if set script uses 'svdrpsend.pl', if not 'svdrpsend'
 	Fixed show ext epg info if ext info != short info.
 	Moved script to main.js
 	Display shows R/F + channelnumber ('R' for Radio, 'F' for favorite)
@@ -16,14 +15,18 @@ VDR 1.7.29+
 	Timed change, set to 0 for old behavior (press ok for change)
 	epginfo box was left active but invisible when pressed menu(green key didn't change audio but show epginfonext)
 	add to favorite now refreshes view
+	Updated remote keys in settings file.
 	added keys from Motorola NYX remote. (Both up/down/left/right keys do the same)
 	NYX remote hase no stopkey so key 'back' does the same as stop.
-	Fixed Standby while playback
+	Fixed Standby while playback.
 	(For Easyvdr & SmartWebTV plugin) Menu + red send Server Power Down. (Define it in vdr's 'commands.conf')
 	Added global multicast setting, removed testing3 (multicasting test)
 	Added config/custom.js, override global settings, define local settings (setting file isn't included in the download/distro)
 	Added config/<macaddress>.js settings for a single box, read after all other settings.
-	Script update, default channel of a group is now the first channel (override this in config\custom.js)
+	Bash Script update, default channel of a group is now the first channel (override this in config\custom.js)
+	'timed' 0 to swap previous <> current channel, first channel of a group can't be 0 (1000,2000 etc) anymore
+
+
 
 0.25	Get recordings from Streamdev, Restfulapi or SmartTVweb.
 	Check if SmartTVweb is on the server if not turn SmartTVweb options off

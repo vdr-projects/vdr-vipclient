@@ -1051,10 +1051,16 @@ function onKeyDown(event) {
         break;
    case KEY_B:// hh key on old long kpn 1710/1760 remote
 	if (prevChan !== currChan) {
-		currChan = [prevChan, prevChan = currChan][0];
-		count = 0;
-		play(channels[currChan]);
+		// check if Group isn't protected
+		var i = Number(Left((prevChan / 1000),1));
+		if ((protChn[i] == 1) && (ShowProtectedChannels == 1)) {
+			// if protected don't do it ;)
+		} else {
+			currChan = [prevChan, prevChan = currChan][0];
+			count = 0;
+			play(channels[currChan]);
 		}
+	}
 	break;
    case KEY_C:// @ key on old long kpn 1710/1760 remote
 	if(isFullscreen && Fav_max_channel !== 0 && ChanGroup !== Fav_group) {
@@ -1268,7 +1274,7 @@ function Read_Fav() {
 
 function Makedigit() {
     if (TimedChangeID != -1) { clearTimeout(TimedChangeID); TimedChangeID = -1; }
-
+	oldChan = prevChan; // used for swap last channels with 0
 	prevChan = currChan;
 	Change = (Change*10) + digit;
 	count += 1;
@@ -1297,22 +1303,35 @@ function Makedigit() {
 
 function CheckChannel(CheckThis) {
 // function to check if channel exists
-	CheckThis = baseChn[ChanGroup] + CheckThis;
-	if(channels[CheckThis]) {
-		ChangeOK = 1;
-		currChan = CheckThis;
+// or swap prev <> currchan
+
+	if (CheckThis == 0 && oldChan !== currChan) {
+		// check if Group isn't protected
+		var i = Number(Left((oldChan / 1000),1));
+		if ((protChn[i] == 1) && (ShowProtectedChannels == 1)) {
+			ChangeOK = 0;
+		} else {
+			currChan = oldChan;
+			ChangeOK = 1;
+		}
 	} else {
-		ChangeOK = 0;
+		CheckThis = baseChn[ChanGroup] + CheckThis;
+		if(channels[CheckThis]) {
+			ChangeOK = 1;
+			currChan = CheckThis;
+		} else {
+			ChangeOK = 0;
+		}
+		if(prevChan == currChan) { 
+			ChangeOK = 0 ;
+		}
 	}
-	if(prevChan == currChan) { 
-	ChangeOK = 0 ;
-	}
+
 	osdmain.style.opacity = 0;
 	if(isFullscreen) {
-	showDisplay(currChan.toString(), false, 100, 0 );
+		showDisplay(currChan.toString(), false, 100, 0 );
 	}
 	Change = 0;
-
 }
 
 function TimedChange() {
@@ -1424,15 +1443,23 @@ function updateOSDtime(timchan) {
 	tijd = new Date(tijd);
 	dateCurrent = new Date();
 	var EPGminutes = Math.floor((dateCurrent.getTime() - date.getTime()) /1000/60);
-	if (EPGminutes > 1440) { 
-		EPGminutes = 0; // Duration is >24h, maybe current time isn't right.
-	}
 	var tm = tijd.getMinutes();
 	var th = tijd.getHours();
 	th=addzero(th);
 	tm=addzero(tm);
 
-	EPG[0][7][timchan] =  th + ":" + tm + " (" + EPGminutes + " / " + ((EPG[0][3][timchan])-EPGminutes).toFixed(0) + ")" + " " + EPG[0][1][timchan] + " ";
+	EPG[0][7][timchan] =  th + ":" + tm + " (";
+
+	alert (Number(EPGminutes));
+
+	if (Number(EPGminutes) > 1440 || Number(EPGminutes) < -1440 ) { 
+		// Duration is >24h, maybe current time isn't right.
+		EPG[0][7][timchan] += EPG[0][3][timchan];
+	} else {
+		EPG[0][7][timchan] += EPGminutes + " / " + ((EPG[0][3][timchan])-EPGminutes).toFixed(0);
+	}
+
+	EPG[0][7][timchan] += ")" + " " + EPG[0][1][timchan] + " ";
 	if (!EPG[0][2][timchan] || ((EPG[0][3][timchan]-EPGminutes) < 0))
 	{
 		EPG[0][7][timchan] = " ";

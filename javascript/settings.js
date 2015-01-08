@@ -2,7 +2,7 @@
 // Default settings
 // 
 
-var Version = "0.26.10";
+var Version = "0.26.11";
 
 server_ip_array = new Array("http://192.168.1.15","http://192.168.3.15","http://192.168.178.56","http://192.168.3.100","http://192.168.178.19","http://192.168.1.21","http://192.168.2.100","http://192.168.178.52");
 
@@ -55,7 +55,7 @@ var fullupdate = 1; // If guideview is too slow, set it to 0 (for 1910/1960), fa
 
 var ShowOsdTime = 5000; //Time to show OSD, in seconds * 1000
 var ShowSetTimer = 3000; //Time to show set timer popup, in seconds * 1000
-var ChangeTime = 2000; // Time before the channel change happens (was only with OK)
+var ChangeTime = 1000; // Time before the channel change happens (was only with OK)
 
 var serverEPGdays = 3 * (60 * 60 * 24); // the higher the longer you wait while getting the epg info
 
@@ -137,8 +137,9 @@ var isFullscreen = 1;
 var Volume = StartVolume;
 var AudioOut = 3; // AUDIO_CONNECTION_TYPE_ANALOG = 0; AUDIO_CONNECTION_TYPE_SPDIF = 1; AUDIO_CONNECTION_TYPE_HDMI = 2;AUDIO_CONNECTION_TYPE_DECODER = 3;AUDIO_CONNECTION_TYPE_BUFFER = 4;AUDIO_CONNECTION_TYPE_I2S = 5;
 
-var epgchan = currChan;
+//var epgchan = currChan;
 var prevChan = currChan;
+var oldChan;
 
 var channels = new Array();
 var channelsnames = new Array();
