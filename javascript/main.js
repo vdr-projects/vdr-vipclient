@@ -3360,8 +3360,9 @@ if (MPDListener == 0) {
 			setTimeout("mediaPlayer.open(URL);mediaPlayer.play(1000);GetEPG(currChan);ExtraStuff();",500);
 			ErrorAgain = 1;
 		} else if (KeepTrying) {
-			ErrorAgain = 0;		
-			setTimeout("mediaPlayer.close();mediaPlayer.open(URL);mediaPlayer.play(1000);GetEPG(currChan);ExtraStuff();",TryingInterval);
+			ErrorAgain = 0;
+			settimer(0,Lang[63],0,2,color_error);		
+			initialDelayPlayID = setTimeout("mediaPlayer.close();mediaPlayer.open(URL);mediaPlayer.play(1000);GetEPG(currChan);ExtraStuff();",TryingInterval);
 		} else {
 			ErrorAgain = 0;
 			//alert("Media player state changed: state=" + ev.state + ", reason=" + ev.reason + ", code=" + ev.code);
