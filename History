@@ -26,7 +26,9 @@ VDR 1.7.29+
 	Bash Script update, default channel of a group is now the first channel (override this in config\custom.js)
 	'timed' 0 to swap previous <> current channel, first channel of a group can't be 0 (1000,2000 etc) anymore
 	Added global server setting (default = 1, act as before. 0 = set for every channel server address)
-
+	Added option to select how TXT start, 50/50 txt/tv or 100% txt
+	Retry url after 30 sec in case of error (can be switched off, interval can be set in settings.js)
+	
 
 
 0.25	Get recordings from Streamdev, Restfulapi or SmartTVweb.

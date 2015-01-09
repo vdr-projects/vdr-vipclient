@@ -2079,18 +2079,18 @@ function embedTeletextPlugin() {
   teletext.id = "teletext";
   teletext.type = "application/motorola-teletext-plugin";
   teletext.style.position = "absolute";
-  teletext.style.width = "100%";
   teletext.style.height = "100%";
   teletext.style.top = "10px"; // has to be 1 rather than 0
   teletext.style.left = "10px"; // has to be 1 rather than 0
   teletext.style.zIndex = "501";
   teletext.style.visibility = "hidden";
-  document.body.appendChild(teletext);
+ return teletext;
 }
 
 
 function setVisible(isVisible) {
   if (isVisible) {
+    document.body.appendChild(teletext);
 	if (txtfull_screen) {
 	    teletext.style.width = "100%";
 	} else {
@@ -3359,12 +3359,12 @@ if (MPDListener == 0) {
 		if (ev.reason == "CommandClose" && ErrorAgain == 0) {
 			setTimeout("mediaPlayer.open(URL);mediaPlayer.play(1000);GetEPG(currChan);ExtraStuff();",500);
 			ErrorAgain = 1;
-		//} else if (ev.reason == "CommandClose" && ErrorAgain == 1) {
-		//	setTimeout("mediaPlayer.open(URL);mediaPlayer.play(1000);GetEPG(currChan);ExtraStuff();",105000);
-		//	ErrorAgain = 2;
+		} else if (KeepTrying) {
+			ErrorAgain = 0;		
+			setTimeout("mediaPlayer.close();mediaPlayer.open(URL);mediaPlayer.play(1000);GetEPG(currChan);ExtraStuff();",TryingInterval);
 		} else {
 			ErrorAgain = 0;
-			alert("Media player state changed: state=" + ev.state + ", reason=" + ev.reason + ", code=" + ev.code);
+			//alert("Media player state changed: state=" + ev.state + ", reason=" + ev.reason + ", code=" + ev.code);
 			showDisplay("ERRR", false, 100, 0 ); 
 			if (experimental) {
 				settimer(0,ev.reason,0,2,color_error);
@@ -3373,7 +3373,6 @@ if (MPDListener == 0) {
 			}
 		}
 	}
-	
 } else {
 	if ( ev.state == 6 && ev.reason == "HostUnreachable" ) {
 	    showDisplay("ERRR", false, 100, 0 );

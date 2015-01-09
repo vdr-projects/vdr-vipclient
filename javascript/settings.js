@@ -2,7 +2,7 @@
 // Default settings
 // 
 
-var Version = "0.26.12";
+var Version = "0.26.13";
 
 server_ip_array = new Array("http://192.168.1.15","http://192.168.3.15","http://192.168.178.56","http://192.168.3.100","http://192.168.178.19","http://192.168.1.21","http://192.168.2.100","http://192.168.178.52");
 
@@ -15,6 +15,8 @@ var Global_Server = 1;// 1 = old style. 0 = every channel needs server_address[c
 var Server_Address = new Array();
 var Global_Multicast = 0;// 1 = use only MultiCast
 var txtfull_screen = 1;// 0 = 50/50 % txt/tv, 1 = 100% txt
+var KeepTrying = 1;//No display of error, but keep trying to restart the stream 
+var TryingInterval = 30 * 1000; // 30 Seconds.
 
 OSDLang = new Array ("English", "Nederlands", "Deutsch");
 langfile = new Array ("languages/lang_eng.js", "languages/lang_dut.js","languages/lang_ger.js");
@@ -88,7 +90,6 @@ var afterRecTime = 600 ; // for local recordings time after recording in seconds
 //
 
 var experimental;// Use some experimental code
-var Exp_Multi;// Use some experimental code for multicast streams
 var lang_nr;
 var testing2;
 var ShowSubs; //Flash stored
