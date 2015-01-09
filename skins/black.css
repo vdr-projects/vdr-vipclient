@@ -3,10 +3,11 @@
 	padding: 0;
 	border: 0;
 	vertical-align: baseline;
+	font-family		: 'Ubuntu', sans-serif;
 }
 
 body {
-	background		: url(../images/background.png) repeat #000;
+	background		: url(../images/black/background.png) repeat #000;
 	width			: 100%;
 	height			: 100%;
 	margin			: 0;
@@ -30,17 +31,17 @@ div#osdmain {
 	font-weight		: 400;
 	position		: absolute;
 	z-index			: 505;
-	background		: url(../images/osd-bg.png) top center repeat-x rgba(0,0,0,0.8);
-	width			: 94%;
+	background		: url(../images/black/osd-bg.png) top center repeat-x rgba(0,0,0,0.8);
+	width			: 94.2%;
 	height			: 25%;
-	bottom			: 3%;
-	left			: 3%;
+	bottom			: 3.1%;
+	left			: 3.1%;
 	color			: #FFF;
 	overflow		: hidden;
 }
 
 	div#osdnr {
-		font-size		: 58px;
+		font-size		: 56px;
 		display			: table;
 		font-weight		: 700;
 		color			: #feb900;
@@ -93,11 +94,11 @@ div#osdmain {
 		height			: 55%;
 		left			: 20%;
 		top				: 45%;
-		line-height		: 28px;
+		line-height		: 50px;
 		white-space		: nowrap;
 		overflow		: hidden;
 		text-overflow	: ellipsis;
-		font-size		: 28px;
+		font-size		: 32px;
 	}
 	
 	div#osdtime {
@@ -154,17 +155,15 @@ div#osdmain {
 	}
 
 	.select {
-	background	:#fc5;
-	-webkit-border-radius:25px;
-	color:black;
-	font-size:49px;
+		background	: rgba(0,0,0,0.8);
+		color		: #feb900;
+		font-size	: 40px;
 	}
 
 	.mediaselect {
-	background	:#fc5;
-	-webkit-border-radius:25px;
-	color:black;
-	font-size:38px;
+		background	: rgba(0,0,0,0.8);
+		color		: #feb900;
+		font-size	: 40px;
 	}
 
 	pre.mediamenu {
@@ -203,28 +202,7 @@ div#osdmain {
 	pre.color_error {
 	background		: #ad0806;
 	}
-
-
-
-	videoplane#videoplane {
-		position:absolute;
-		left:0px;
-		top:0px;
-		height:100%;
-		width:100%;
-		z-index:500;
-	}
-
-	h1.mainmenu {
-	font-size:66px;
-	color:white;
-	text-align: center;
-	}
-
-	pre.mainmenu {
-	font-size:49px;
-	color:black;
-	}
+	
 	pre.mainhead {
 	font-size:66px;
 	color:white;
@@ -245,7 +223,6 @@ div#osdmain {
 	text-align: center;
 	}
 
-
 	p.epg {
 	font-size:36px;
 	color:black;
@@ -253,53 +230,59 @@ div#osdmain {
 	}
 	
 	p.list {
-	font-size:34px;
-	color:black;
-	text-align: center;
-	}
-
-	p.osdtimer {
-	font-size:34px;
-	color:black;
+		font-size:34px;
+		color:black;
+		text-align: center;
 	}
 
 	div#channellist { 
-	z-index			: 400;
+		z-index			: 400;
 		position	: absolute;
 		width		: 100%;
 		height		: 48%;
 		left		: 7%;
 		top		: 4%;
-	background		: #bbb;
+		background		: #bbb;
 	}
 
 	div#colorkeys { 
-	z-index			: 401;
-		position	: absolute;
-		width		: 100%;
-		left		: 10%;
-		top		: 84%;
-		font-size:36px;
+		z-index			: 401;
+		position		: absolute;
+		width			: 100%;
+		left			: 10%;
+		top				: 84%;
+		font-size		: 36px;
 	}
 
 	div#chanlistepg { 
-	z-index			: 402;
+		z-index		: 402;
 		position	: absolute;
-		width		: 42%;
-		left		: 7%;
-		top		: 50%;
+		width		: 50%;
+		left		: 10%;
+		top			: 50%;
 	}
 
 	div#osdvolume { 
-	z-index			: 501;
-		position	: absolute;
-		width		: 63%;
-		left		: 10%;
-		top		: 80%;
-		opacity		: 0;
-		color		: green;
-		font-size:66px;
+		opacity			: 0;
+		font-family		: 'Ubuntu', sans-serif;
+		font-weight		: 400;
+		position		: absolute;
+		z-index			: 506;
+		background		: rgba(0,0,0,0.8);
+		border-top		: 1px solid #444;
+		width			: 94.2%;
+		bottom			: 3.1%;
+		left			: 3.1%;
+		color			: #FFF;
+		overflow		: hidden;
+		padding			: 25px 0;
 	}
+	
+		div#osdvolume pre {
+			width		: 100%;
+			font-size	: 48px;
+			text-align	: center;
+		}
 
 	div#osdmedia { 
 		width		:80%;
@@ -338,12 +321,12 @@ div#osdmain {
 	}
 
 	div#osdmute {
-	width		:7%; 
-	position	:absolute; 
-	left		:76%; 
-	top		:9%;
-	z-index		:515;
-	opacity		:0;
+		width		: 7%; 
+		position	: absolute; 
+		right		: 10%; 
+		top			: 10%;
+		z-index		: 515;
+		opacity		: 0;
 	}
 
 	div#osdlang {
@@ -367,8 +350,24 @@ div#osdmain {
 		top			: 3%;
 		z-index		: 520;
 		opacity		: 0;
-		background	: url(../images/osd-bg.png) top center repeat-x rgba(0,0,0,0.8);
+		background	: url(../images/black/osd-bg.png) top center repeat-x rgba(0,0,0,0.8);
+		color		: #FFF;
+		padding		: 30px;
 	}
+	
+		div#mainmenu h1 {
+			font-size	: 53px;
+			color		: #FFF;
+			text-align	: left;
+			margin		: 0 0 30px 0;
+		}
+		
+			div#mainmenu pre {
+				font-size	: 35px;
+				color		: #FFF;
+				margin		: 0;
+				padding		: 0;
+			}
 
 	div#medialist {
 		width		: 80%;
@@ -383,38 +382,42 @@ div#osdmain {
 	}
 
 	div#switchtimer {
-		width		: 45%;
+		width		: 50%;
 		position	: absolute;
-		left		: 21%;
-		top			: 26%;
+		left		: 25%;
+		top			: 25%;
 		z-index		: 530;
 		opacity		: 0;
-		-webkit-border-radius: 25px;
-		color		: white;
+		color		: #FFF;
 		font-size 	: 36px;
 		background	: green;
+		text-align	: center;
 	}
 
 	div#osdepginfo {
 		width		: 80%;
 		position	: absolute;
-		left		: 10%;
+		left		: 5%;
 		top			: 10%;
 		z-index		: 525;
 		opacity		: 0;
 		-webkit-border-radius :0 25px 0 25px;
-		background	: #3366ff;
+		background	: #000;
 		font-size	: 39px;
+		color		: #FFF;
+		padding		: 30px 5%;
 	}
 
 	div#osdepginfonext {
 		width		: 80%;
 		position	: absolute;
-		left		: 10%;
+		left		: 5%;
 		top			: 10%;
 		z-index		: 525;
 		opacity		: 0;
 		-webkit-border-radius :0 25px 0 25px;
-		background	: #3366ff;
+		background	: #000;
 		font-size	: 39px;
+		color		: #FFF;
+		padding		: 30px 5%;
 	}
