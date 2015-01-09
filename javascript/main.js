@@ -2084,16 +2084,20 @@ function embedTeletextPlugin() {
   teletext.style.top = "10px"; // has to be 1 rather than 0
   teletext.style.left = "10px"; // has to be 1 rather than 0
   teletext.style.zIndex = "501";
-  return teletext;
+  teletext.style.visibility = "hidden";
+  document.body.appendChild(teletext);
 }
 
 
 function setVisible(isVisible) {
   if (isVisible) {
-    videoplane.style.width = "50%";
-    videoplane.style.left = "50%";
-    document.body.appendChild(teletext);
-    teletext.style.width = "50%";
+	if (txtfull_screen) {
+	    teletext.style.width = "100%";
+	} else {
+	    videoplane.style.width = "50%";
+	    videoplane.style.left = "50%";
+	    teletext.style.width = "50%";
+	}
     teletext.style.visibility = "visible";
     channellist.style.visibility = "hidden";
     colorkeys.style.visibility = "hidden";
@@ -2177,9 +2181,6 @@ function onKeyTeletext(keyCode) {
 	case KEY_9:
 	    teletext.api.inputDigit(9);
 	break;
-
-
-
   }
 }
 

@@ -14,6 +14,7 @@ var currChan = 10; // default channel
 var Global_Server = 1;// 1 = old style. 0 = every channel needs server_address[channel_number]
 var Server_Address = new Array();
 var Global_Multicast = 0;// 1 = use only MultiCast
+var txtfull_screen = 1;// 0 = 50/50 % txt/tv, 1 = 100% txt
 
 OSDLang = new Array ("English", "Nederlands", "Deutsch");
 langfile = new Array ("languages/lang_eng.js", "languages/lang_dut.js","languages/lang_ger.js");
