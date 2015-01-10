@@ -4,7 +4,7 @@
 
 var Version = "0.26.14";
 
-server_ip_array = new Array("http://192.168.1.15","http://192.168.3.15","http://192.168.178.56","http://192.168.3.100","http://192.168.178.19","http://192.168.1.21","http://192.168.2.100","http://192.168.178.52");
+server_ip_array = new Array("http://192.168.1.15","http://192.168.3.15","http://192.168.178.56","http://192.168.3.100","http://192.168.178.19","http://192.168.1.21","http://192.168.2.100","http://192.168.3.225");
 
 var server_ip = server_ip_array[0]; // default server
 var PowerDownServer = 0; // Power Down server from menu by sending cmds. (0 = no /1 = yes)

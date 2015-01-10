@@ -459,7 +459,7 @@ function play(uri) {
     } else if (Global_Server) {
 	uri = ServerAdres[ChanGroup] + uri; 
     } else {
-	uri = Server_Address[currChan] + StreamPort + uri;
+	uri = Server_Address[currChan] + uri;
     }
 
 
