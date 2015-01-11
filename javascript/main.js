@@ -61,12 +61,43 @@ function onLoad() {
 	    ss.setCategorySubscription(onScheduledStart, "*");
 	    ss.setCategorySubscription(onScheduledStop, "*");
 
-	setOSDscale();
+	setOSDscale();// Still used in 'guide_view.js'
 	setOSDtimer();
 	showOSD();
 	videoplane.subtitles = Boolean(ShowSubs);
 	colorkeys.innerHTML = "<pre class=colorkeys" + cssres[css_nr][Set_Res] + ">" + "<span class=redkey> " +  NN[4] + " </span><span class=greenkey > " + NN[1] + " </span><span class=yellowkey> " + NN[2] + " </span><span class=bluekey> " + NN[5] + " </span></pre>";
 	medialist.innerHTML = "<h1 class=mainmenu" + cssres[css_nr][Set_Res] + ">" + Lang[0] + "</h1>";
+
+	//Make daily event to switch channel, reload or go to standby
+	var today = new Date;
+	today = today / 1000;
+	var x = ss.getBookingIds("Cron", today, 0)
+	if (x.length == 0) {
+		var today = new Date();
+		var crontime = new Date(today);
+		if (crontime.getHours() > (Cron_hour - 1) ) {
+			crontime.setDate(today.getDate()+1);
+		}	
+		crontime.setHours(Cron_hour);
+		crontime.setMinutes(Cron_min);
+		settimer(crontime.getTime()/1000,"-",0,5,"-","-",Cron_Action.toString()); // Cron_Action 
+		}
+
+	if (Cron_reload) {
+		var today = new Date;
+		today = today / 1000;
+		var x = ss.getBookingIds("Reload", today, 0)
+		if (x.length == 0) {
+			var today = new Date();
+			var crontime = new Date(today);
+			if (crontime.getHours() > (Cron_hour - 1) ) {
+				crontime.setDate(today.getDate()+1);
+			}	
+			crontime.setHours(Cron_hour);
+			crontime.setMinutes(Cron_min-1);
+			settimer(crontime.getTime()/1000,"-",0,6); // Reload 
+		}
+	}
 }
 
 
@@ -452,7 +483,10 @@ function play(uri) {
 	SI=channels[currChan].split("-"); uri = SI[4];
     } else if (ServerAdres[ChanGroup] == "FullURL" ) {
 	;// uri = ready!
-    } else if (Global_Multicast) {
+    }
+
+
+    if (Global_Multicast) {
 	var x = Math.floor(currChan / 256);
 	uri = "239.255." + x.toString() + "." + (currChan - ( x * 256)).toString() + ":11111";
 	initialDelayPlay = 0;
@@ -1470,7 +1504,7 @@ function updateOSDtime(timchan) {
 function settimer(ProgTime,ProgName,ProgDura,SwitchTimer,BackGroundColor,ProgDesc,ProgEvID) {
 
 if (!BackGroundColor) { BackGroundColor = color_default;}
-// 1 - switchonly, 2 - record on server (display info only), 3 - record local
+// 1 - switchonly, 2 - record on server (display info only), 3 - record local, 4 - sleeptimer, 5 - Actions, 6 - reload
 	if(SwitchTimer == 1) {	
 		  try {
 		    var x = ss.schedule("SwitchOnly","notification", ProgTime , ProgDura);
@@ -1513,31 +1547,83 @@ if (!BackGroundColor) { BackGroundColor = color_default;}
 		  } catch (e) {
 		    alert(e);
 		  }
+	} else 	if(SwitchTimer == 4) {	
+		  try {
+		    var x = ss.schedule("SleepTimer","notification", ProgTime , ProgDura);
+			    ss.setParameter(x, "Channel", currChan.toString() );
+			    ss.setParameter(x, "Title", " " );
+			    ss.setParameter(x, "Info", " ");
+			    ss.setParameter(x, "active", "False");
+			    ss.setParameter(x, "Type", "\uE00C");//Timer Symbol
+			    ss.setParameter(x, "resume", "0");
+			    ss.setParameter(x, "Eventid", "0");
+		  }
+		  catch (e) {
+			    ProgName = "ERROR" ;
+			    BackGroundColor = color_error;
+		  }
+	} else 	if(SwitchTimer == 5) {	
+		  try { 
+			var x = ss.schedule("Cron","notification", ProgTime , ProgDura);  
+			if (Cron_switch_channel) {
+			    	ss.setParameter(x, "Channel", Cron_switch_channel.toString() );
+			} else {
+				ss.setParameter(x, "Channel", currChan.toString() );
+			}
+			if (ProgEvID == 1) {
+				ss.setParameter(x, "Title", "Standby" );
+			} else if (ProgEvID == 2) {
+				ss.setParameter(x, "Title", "Switchto" );
+			} else {
+				ss.setParameter(x, "Title", "No Action" );
+			}
+			ss.setParameter(x, "Info", "-");
+			ss.setParameter(x, "active", "False");
+			ss.setParameter(x, "Type", "\uE01A");//Bomb Symbol
+			ss.setParameter(x, "resume", "0");
+			ss.setParameter(x, "Eventid", ProgEvID);
+			}
+		  catch (e) {  }
+	} else 	if(SwitchTimer == 6) {	
+		  try { 
+			var x = ss.schedule("Reload","notification", ProgTime , ProgDura);  
+			ss.setParameter(x, "Channel", currChan.toString() );
+			ss.setParameter(x, "Title", "Reload" );
+			ss.setParameter(x, "Info", "-");
+			ss.setParameter(x, "active", "False");
+			ss.setParameter(x, "Type", "\uE01A");//Bomb Symbol
+			ss.setParameter(x, "resume", "0");
+			ss.setParameter(x, "Eventid", "0");
+			}
+		  catch (e) {  }
 	}
 
-	if ( ProgTime == 0 && SwitchTimer == 2 && ProgDura !== 0 ) {
-		var x = Lang[3] + ProgDura + "</pre>";
-	} else if ( ProgTime == 0 && SwitchTimer == 2) {
-		var x = "</pre>";
-	} else {
-		tijd = ProgTime;
-		date = new Date(tijd*1000); 
-		tijd = date.toUTCString();
-		tijd = new Date(tijd);
-		var tm = tijd.getMinutes();
-		var th = tijd.getHours();
-		th=addzero(th);
-		tm=addzero(tm);
-		var x = Lang[4] + th + ":" + tm  + "</pre>";
+
+	if (SwitchTimer !== 5 && SwitchTimer !== 6 ) {
+		if ( ProgTime == 0 && SwitchTimer == 2 && ProgDura !== 0 ) {
+			var x = Lang[3] + ProgDura + "</pre>";
+		} else if ( ProgTime == 0 && SwitchTimer == 2) {
+			var x = "</pre>";
+		} else {
+			tijd = ProgTime;
+			date = new Date(tijd*1000); 
+			tijd = date.toUTCString();
+			tijd = new Date(tijd);
+			var tm = tijd.getMinutes();
+			var th = tijd.getHours();
+			th=addzero(th);
+			tm=addzero(tm);
+			var x = Lang[4] + th + ":" + tm  + "</pre>";
+		}
+
+		//	switchtimer.style.background = BackGroundColor;
+			switchtimer.innerHTML = "<pre class=" + BackGroundColor + cssres[css_nr][Set_Res] + ">" + Lang[2] + ProgName 
+						+ "\n" + Lang[3] + channelsnames[currChan] + "\n" + x + "</pre>";
+			setOSDtimer();
+
+			switchtimer.style.opacity = 1;
+			setTimeout("switchtimer.style.opacity = 0;", ShowSetTimer);
 	}
-
-//	switchtimer.style.background = BackGroundColor;
-	switchtimer.innerHTML = "<pre class=" + BackGroundColor + cssres[css_nr][Set_Res] + ">" + Lang[2] + ProgName + "\n" + Lang[3] + channelsnames[currChan] + "\n" + x + "</pre>";
-	setOSDtimer();
-
-	switchtimer.style.opacity = 1;
-	setTimeout("switchtimer.style.opacity = 0;", ShowSetTimer);
-
 }
 
 
@@ -5048,45 +5134,63 @@ function onScheduledStart(event) {
     var timertype = event.booking.category;
 
   if ( timertype == "SwitchOnly") {
-	ClearScreen();
-	isFullscreen = 1; FullScreen(); 
-	isVisible = 0; setVisible(isVisible); 
-
-	//Switch from recordings
-	if (isMediaMenu) { 
-		if (medialist.style.opacity == 0) {setResume();} // No mediamenu on screen so set resume.
-		UnloadMediaSettings();
-	}
-
 	prevChan = currChan;
 	currChan = Number(ss.getParameter(event.booking.id, "Channel"));
-	ChanGroup = Number(Left((currChan / 1000),1));
-
-	// check if Group isn't protected
-	if ((protChn[ChanGroup] == 1) && (ShowProtectedChannels == 1)) {
-		currChan = prevChan;
-		ChanGroup = Number(Left((currChan / 1000),1));
-	}
-
-	// switch only if not already on that channel.
-	if (currChan !== prevChan) {
-		play(channels[currChan]);
-	} 
+	ss.remove(event.booking.id);
+	SwitchEvent();
+	setOSDtimer();
+  } else if ( timertype == "SleepTimer") {
 	ss.remove(event.booking.id);
 	setOSDtimer();
-  } else {
+	toi.platformService.setStandby(true);
+  } else if ( timertype == "Cron") {
+	var today = new Date();
+	var crontime = new Date(today);
+	crontime.setDate(today.getDate()+1);	
+	crontime.setMinutes(Cron_min);
+	crontime.setHours(Cron_hour);
+	var action = Number(ss.getParameter(event.booking.id, "Eventid"));
+	// 1 = standby, 2 = switch to channel
+	settimer(crontime.getTime()/1000,"-",0,5,"-","-",action.toString());
+	if (action == 1) {
+		toi.platformService.setStandby(true);
+	} else if (action == 2) {
+		prevChan = currChan;
+		currChan = Number(ss.getParameter(event.booking.id, "Channel"));
+    		SwitchEvent();
+	} 
+	ss.remove(event.booking.id);
+  } else if ( timertype == "Reload") {
+	var today = new Date();
+	var crontime = new Date(today);
+	crontime.setDate(today.getDate()+1);	
+	crontime.setMinutes(Cron_min-1);
+	crontime.setHours(Cron_hour);
+	settimer(crontime.getTime()/1000,"-",0,6); // Reload 
+	ss.remove(event.booking.id);
+	RestartPortal();
+  } else if ( timertype == "RecLocal") {
 	  try {
 	    createNewAsset();
 
 		var recChannr = Number(ss.getParameter(event.booking.id, "Channel"));
 		var recGroup = Number(Left((recChannr / 1000),1));
-		var recChan = 0;
-		if (ServerAdres[recGroup] == "MultiCast" ) {
-		 	SI=channels[recChannr].split("-");
-			recChan = SI[4];
-		} else {
-			recChan = ServerAdres[recGroup] + channels[recChannr];
-		}
+		var recChan;
+
+	    if (ServerAdres[recGroup] == "MultiCast" ) { 
+		SI=channels[recChannr].split("-"); recChan = SI[4];
+	    } else if (ServerAdres[recGroup] == "FullURL" ) {
+		recChan = channels[recChannr];
+	    }
+
+	    if (Global_Multicast) {
+		var x = Math.floor(recChannr / 256);
+		recChan = "239.255." + x.toString() + "." + (recChannr - ( x * 256)).toString() + ":11111";
+	    } else if (Global_Server) {
+		recChan = ServerAdres[recGroup] + channels[recChannr]; 
+	    } else {
+		recChan = Server_Address[recChannr] + channels[recChannr];
+	    }
 
 	    mediaRecorder.open(recChan, assetId);
 
@@ -5112,7 +5216,7 @@ function onScheduledStart(event) {
 
 function onScheduledStop(event) {
     var timertype = event.booking.category;
-	if ( timertype == "SwitchOnly") {
+	if ( timertype == "SwitchOnly" || timertype == "SleepTimer") {
 	    ss.remove(event.booking.id);
 	    setOSDtimer();
 	} else {
@@ -5127,6 +5231,32 @@ function onScheduledStop(event) {
 	} 
 
 }
+
+function SwitchEvent() {
+	ClearScreen();
+	isFullscreen = 1; FullScreen(); 
+	isVisible = 0; setVisible(isVisible); 
+
+	//Switch from recordings
+	if (isMediaMenu) { 
+		if (medialist.style.opacity == 0) {setResume();} // No mediamenu on screen so set resume.
+		UnloadMediaSettings();
+	}
+
+	ChanGroup = Number(Left((currChan / 1000),1));
+
+	// check if Group isn't protected
+	if ((protChn[ChanGroup] == 1) && (ShowProtectedChannels == 1)) {
+		currChan = prevChan;
+		ChanGroup = Number(Left((currChan / 1000),1));
+	}
+
+	// switch only if not already on that channel.
+	if (currChan !== prevChan) {
+		play(channels[currChan]);
+	} 
+}
+
 
 
 function ClearScreen() {

@@ -28,7 +28,8 @@ VDR 1.7.29+
 	Added global server setting (default = 1, act as before. 0 = set for every channel server address)
 	Added option to select how TXT start, 50/50 txt/tv or 100% txt
 	Retry url after 30 sec in case of error (can be switched off, interval can be set in settings.js)
-	
+	Updated local recording to the new global multicast & server switches
+	Added Switch to turn box off at 05:00 or switch to preset channel.
 
 
 0.25	Get recordings from Streamdev, Restfulapi or SmartTVweb.
