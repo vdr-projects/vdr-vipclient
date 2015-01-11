@@ -17,9 +17,9 @@ var Global_Multicast = 0;// 1 = use only MultiCast
 var txtfull_screen = 1;// 0 = 50/50 % txt/tv, 1 = 100% txt
 var KeepTrying = 1;//No display of error, but keep trying to restart the stream 
 var TryingInterval = 30 * 1000; // 30 Seconds.
-var Cron_Action = 1; //0= off, 1 = box turns standby, 2 switch to preset channel
-var Cron_reload = 0; // if set reload script at cron_hour / cron_min -1
-var Cron_switch_channel = 9051; //Channel to switch to
+var Cron_Action; //0= off, 1 = box turns standby, 2 switch to preset channel
+var Cron_reload; // if set reload script at cron_hour / cron_min -1
+var Cron_switch_channel; //Channel to switch to, if not set current channel.
 var Cron_hour = 05;// Hour for cron job
 var Cron_min = 00; // Minute for cron job
 

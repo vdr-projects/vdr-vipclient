@@ -68,21 +68,22 @@ function onLoad() {
 	colorkeys.innerHTML = "<pre class=colorkeys" + cssres[css_nr][Set_Res] + ">" + "<span class=redkey> " +  NN[4] + " </span><span class=greenkey > " + NN[1] + " </span><span class=yellowkey> " + NN[2] + " </span><span class=bluekey> " + NN[5] + " </span></pre>";
 	medialist.innerHTML = "<h1 class=mainmenu" + cssres[css_nr][Set_Res] + ">" + Lang[0] + "</h1>";
 
-	//Make daily event to switch channel, reload or go to standby
-	var today = new Date;
-	today = today / 1000;
-	var x = ss.getBookingIds("Cron", today, 0)
-	if (x.length == 0) {
-		var today = new Date();
-		var crontime = new Date(today);
-		if (crontime.getHours() > (Cron_hour - 1) ) {
-			crontime.setDate(today.getDate()+1);
-		}	
-		crontime.setHours(Cron_hour);
-		crontime.setMinutes(Cron_min);
-		settimer(crontime.getTime()/1000,"-",0,5,"-","-",Cron_Action.toString()); // Cron_Action 
-		}
-
+	if (Cron_Action) {
+		//Make daily event to switch channel, reload or go to standby
+		var today = new Date;
+		today = today / 1000;
+		var x = ss.getBookingIds("Cron", today, 0)
+		if (x.length == 0) {
+			var today = new Date();
+			var crontime = new Date(today);
+			if (crontime.getHours() > (Cron_hour - 1) ) {
+				crontime.setDate(today.getDate()+1);
+			}	
+			crontime.setHours(Cron_hour);
+			crontime.setMinutes(Cron_min);
+			settimer(crontime.getTime()/1000,"-",0,5,"-","-",Cron_Action.toString()); // Cron_Action 
+			}
+	}
 	if (Cron_reload) {
 		var today = new Date;
 		today = today / 1000;
@@ -1573,7 +1574,7 @@ if (!BackGroundColor) { BackGroundColor = color_default;}
 			if (ProgEvID == 1) {
 				ss.setParameter(x, "Title", "Standby" );
 			} else if (ProgEvID == 2) {
-				ss.setParameter(x, "Title", "Switchto" );
+				ss.setParameter(x, "Title", "Switch to" );
 			} else {
 				ss.setParameter(x, "Title", "No Action" );
 			}
