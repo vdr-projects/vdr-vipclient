@@ -717,7 +717,7 @@ function onKeyDown(event) {
 
     case KEY_UP1:
     case KEY_UP2:
-    case "Up":
+    case KEY_UP:
 	if(isFullscreen) {
 		count = 0; Change = 0;
 		prevChan = currChan;
@@ -741,7 +741,7 @@ function onKeyDown(event) {
 
     case KEY_DOWN1:
     case KEY_DOWN2:
-    case "Down":
+    case KEY_DOWN:
 	if(isFullscreen) {
 		count = 0; Change = 0;
 		prevChan = currChan;
@@ -2302,7 +2302,7 @@ function onKeyMenu(keyCode) {
     break;
     case KEY_RIGHT:
     break;
-    case "Up":
+    case KEY_UP:
 	if (menu == 2) {
 	    timerID -= 1;
 		    if (timerID < 1) { timerID = 1; }
@@ -2313,7 +2313,7 @@ function onKeyMenu(keyCode) {
 	epg_unactive();
 	InitMenu(menu);
     break;
-    case "Down":
+    case KEY_DOWN:
 	if (menu == 2) {
 	    timerID += 1;
 		var x = ss.getBookingIds("*", 0, 0);
@@ -3593,7 +3593,7 @@ if (DelisOK) {
 	showMediaList();
 	}
 	break;
-    case "Down":
+    case KEY_DOWN:
 	if (getRecOK !== 0) {
 	do
 	{
@@ -3604,7 +3604,7 @@ if (DelisOK) {
 	showMediaList();
 	}
         break;
-    case "Up":
+    case KEY_UP:
 	if (getRecOK !== 0) {
 	do
 	{
@@ -3760,13 +3760,13 @@ if (DelisOK) {
 	UnloadMediaSettings();
         break;
     break;
-    case "Down":
+    case KEY_DOWN:
 	if (mediaPlayer.getState() != mediaPlayer.STATE_PAUSED) {
 	      showDisplay("PAUS", false, 100, 0 );
 	      mediaPlayer.play(0);
 	}
         break;
-    case "Up":
+    case KEY_UP:
 	if (mediaPlayer.getState() != mediaPlayer.STATE_PLAYING) {
 		if (currMed == -1 || localRecording == 1 ) {
 		      showDisplay("PLAY", false, 100, 0 );
