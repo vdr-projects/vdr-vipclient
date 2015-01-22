@@ -2,7 +2,7 @@
 // Default settings
 // 
 
-var Version = "0.26.15";
+var Version = "0.26";
 
 server_ip_array = new Array("http://192.168.1.15","http://192.168.3.15","http://192.168.178.56","http://192.168.3.100","http://192.168.178.19","http://192.168.1.21","http://192.168.2.100","http://192.168.3.225");
 
@@ -36,6 +36,10 @@ cssres[1] = new Array ("","",""); //black.css
 var css_nr;
 
 var subs_prio = "dut,eng"; //Subtitle prio
+
+var PromoChannel;//Special option for promo channel, normal not needed.
+var PromoChannelNR;//Channel number for promo channel, normal not needed.
+
 
 var get_timer = 1; // gettimersserver 1 = smarttvweb, 0 = restfulapi
 var get_recordings = 1; // getrecordings 0 = restfulapi(only showing no play), 1 = smarttvweb, 2 = streamdev

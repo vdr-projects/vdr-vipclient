@@ -3460,6 +3460,8 @@ if (MPDListener == 0) {
 				settimer(0,Lang[67],0,2,color_error);
 			}
 		}
+	} else if ( ev.state == 2 && ev.reason == "PositionEnd" && PromoChannel) {
+		if (currChan == PromoChannelNR) { play(channels[PromoChannelNR]);}
 	}
 } else {
 	if ( ev.state == 6 && ev.reason == "HostUnreachable" ) {
