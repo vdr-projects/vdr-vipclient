@@ -1,6 +1,10 @@
 Tested on 
 Motorola Vip : 1960, 1910, 1903, 1963.
 
+Thnx to all the testers and to  
+Martin N for the german translation.
+Marc E for the black skin.
+
 VDR 1.7.29+
 
 0.26	Fix for [undefined] in (search)timer menu when there are no (search)timers on server
