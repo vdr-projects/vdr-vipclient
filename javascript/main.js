@@ -25,7 +25,11 @@ function onLoad() {
 	aos.setVolume(AudioOut, StartVolume);
 	aos.setMuteState(AudioOut, false);
 	showDisplay(currChan.toString(), false, 100, 0 );
-	play(channels[currChan]);
+
+	//if box is in standby don't start a stream.
+	if (is.getObject("var.io.state") == "normal") {
+		play(channels[currChan]);
+	}
 
 	if (EPGMode) {
 		eitCache.setFilterMode(eitCache.FILTER_MODE_PF_AND_SCHEDULE);
@@ -170,6 +174,8 @@ function GetSettings() {
 		is.setObject("vip.css_nr","0",is.STORAGE_PERMANENT)
 	}
 
+	GetServerIP();
+
 	var sel_group;
 	for (var i=0;i<10;i++) {
 		sel_group = "vip.group." + i;
@@ -191,7 +197,6 @@ function GetSettings() {
 	}
 
 	audio = Number(is.getObject("vip.languagepriority"));
-	server_ip = server_ip_array[Number(is.getObject("vip.serveraddress"))];
 	for (var i=0;i<10;i++) { if (ServerAdres[i] !== "FullURL" && ServerAdres[i] !== "MultiCast") {ServerAdres[i] = server_ip + StreamPort;} }
 	ServerAdres[Fav_group] = server_ip + StreamPort;
 
@@ -265,6 +270,24 @@ function GetSettings() {
 		// Restfulapiplugin NO
 		get_recordings = 2; //from streamdev
 	}
+}
+
+function GetServerIP(){
+	server_ip = "";
+	if (Number(is.getObject("vip.serveraddress")) == 0) {
+		try {
+			var txt = is.getObject("cfg.portal.whitelisturls");
+			parser=new DOMParser();
+			xmlDoc=parser.parseFromString(txt,"text/xml");
+			var x = xmlDoc.getElementsByTagName("PortalURL")[0].childNodes[0].nodeValue.split("/");
+			server_ip = "http://" + x[2];
+		} catch(e) {;}
+	} 
+
+	if (server_ip == "") {
+		server_ip = server_ip_array[Number(is.getObject("vip.serveraddress"))];
+	}
+
 }
 
 function loadjs(filename){
@@ -953,9 +976,6 @@ function onKeyDown(event) {
 	break;
    case "Enter":
 	// OK key on frontpanel
-	if (experimental) {
-		RestartPortal();
-	}
    case KEY_OK:
 	if(isFullscreen) {
 	// fullscreen
@@ -2436,7 +2456,10 @@ function onKeyMenu(keyCode) {
 	}
     break;
     case "Green":
-    	if (menu == 1) {
+	if (menu == MainMenu) {
+		menu = 11; // Weather menu
+		InitMenu(menu);
+	} else if (menu == 1) {
 		Set_Res = Set_Res + 1;
 		if (Set_Res > (VideoOutputModes.length-1)) { Set_Res = 0;}
 		// save the info
@@ -2661,12 +2684,11 @@ function onKeyMenu(keyCode) {
 		}
 
 	if (menu == 1) {
-		var x = is.getObject("vip.serveraddress");
-		x = Number(x);
+		var x = Number(is.getObject("vip.serveraddress"));
 		if (x < (server_ip_array.length -1)) { x += 1} else { x = 0 }
 		is.setObject("vip.serveraddress",x.toString(),is.STORAGE_PERMANENT);
+		GetServerIP();
 
-		server_ip = server_ip_array[x];
 		for (var i=0;i<10;i++) {
 			if (ServerAdres[i] !== "FullURL" && ServerAdres[i] !== "MultiCast") {ServerAdres[i] = server_ip + StreamPort;}
 		}
@@ -2822,6 +2844,8 @@ function InitMenu(menu) {
 // 8 = ChannelGroups enable/disable
 // 9 = INFO2 menu
 // 10 = Favorite Edit menu
+// 11 = Weather
+
 
 epg_unactive;
 
@@ -2879,7 +2903,11 @@ if(menu == 1) { // settings menu
 	if (subs_prio_dyn.length > 0) { htmltext += " (" + (subs_dyn + 1 ) + "/" + subs_prio_dyn.length + ") "; }
 	htmltext += "\n   2 - \uE003" + Lang[22] + (is.getObject("cfg.media.subtitling.modepriority"));
 	htmltext += "\n   3 - \uE003" + Lang[24] + (is.getObject("cfg.media.audio.languagepriority")); 
-	htmltext += "\n   4 - " + Lang[82] + "\n   5 - VDR : " + server_ip + "\n   6 - ";
+	htmltext += "\n   4 - " + Lang[82];
+	var x = Number(is.getObject("vip.serveraddress"));
+	htmltext += "\n   5 - VDR : ";
+	if (x == 0) { htmltext += Lang[88] + "-> " + server_ip;} else { htmltext += server_ip_array[x];}
+	htmltext += "\n   6 - ";
 	if (showClock) { htmltext += "\uE017"; } else { htmltext += "\uE016"; }
 	htmltext += Lang[25] + "\n   7 - ";
 	if (ShowProtectedChannels) { htmltext += "\uE017"; } else { htmltext += "\uE016"; }
@@ -3077,6 +3105,11 @@ if(menu == 10) { // Favorite edit Menu
 	htmltext += "</span><span class=bluekey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> -" + Fav_key1 + "</pre>";
 	mainmenu.innerHTML = htmltext;
 }
+
+if(menu == 11) { // Weather info
+	WeatherInfo();
+}
+
 
 } // end of initmenu
 

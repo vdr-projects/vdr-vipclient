@@ -11,7 +11,7 @@ NN[5] = "INFO";
 NN[6] = "ZURUCK";
 
 lang_prio_lang = new Array("Hollaendisch", "Deutsch", "Englisch", "Franzoesisch");
-months = new Array("Januar", "Februar", "Maerz", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember ");
+months = new Array('Januar', 'Februar', 'Maerz', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember');
 days = new Array("Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag");
 
 searchmode = new Array('Ausdruck', 'alle Woerter', 'zumindest ein Wort','genau uebereinstimmen', 'regex', 'Fuzzy');
@@ -114,6 +114,7 @@ Lang[84] = " Nach oben ";
 Lang[85] = " Nach unten ";
 Lang[86] = " hinzufugen ";
 Lang[87] = " Loschen ";
-
+Lang[88] = "Gefunden ";
 
 Lang[90] = "Kein Abo fur diesen Kanal";
+

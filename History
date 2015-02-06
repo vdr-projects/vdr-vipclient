@@ -7,6 +7,11 @@ Marc E for the black skin.
 
 VDR 1.7.29+
 
+0.27	Weather info from openweathermap.org added.
+	Don't start the stream on boot or reload of the script if box is in standby
+	Fixed error getting german languages file.
+	Get server ip from flash
+
 0.26	Fix for [undefined] in (search)timer menu when there are no (search)timers on server
 	Changed Plugin check, only check if digit 1,2,3 from server ip & box ip are the same.
 	Updated epgfilter for CDS on 19.2E, Brava HDTV on 23.2E

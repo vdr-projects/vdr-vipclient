@@ -2,11 +2,12 @@
 // Default settings
 // 
 
-var Version = "0.26";
+var Version = "0.27.1";
 
 server_ip_array = new Array("http://192.168.1.15","http://192.168.3.15","http://192.168.178.56","http://192.168.3.100","http://192.168.178.19","http://192.168.1.21","http://192.168.2.100","http://192.168.3.225");
+//server_ip_array[0] isn't used, when set to 0 script tries to find the server
 
-var server_ip = server_ip_array[0]; // default server
+var server_ip; // default server
 var PowerDownServer = 0; // Power Down server from menu by sending cmds. (0 = no /1 = yes)
 var PowerDown = 9; //With Easyvdr 0.806 it is cmds 9.
 var StartVolume = 15; // Volume on (re)start of the portal.

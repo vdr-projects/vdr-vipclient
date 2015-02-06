@@ -115,6 +115,6 @@ Lang[84] = " Move UP ";
 Lang[85] = " Move Down ";
 Lang[86] = " ADD ";
 Lang[87] = " Delete ";
-
+Lang[88] = "Found ";
 
 Lang[90] = "No subscription for this channel";
