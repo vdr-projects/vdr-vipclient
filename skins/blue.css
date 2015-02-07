@@ -11,6 +11,42 @@
 		z-index:500;
 	}
 
+	.weather576 {
+		color		: black;
+		font-size:10px;
+		text-align: left;
+	}
+
+	.weather720 {
+		color		: black;
+		font-size:19px;
+		text-align: left;
+	}
+
+	.weather1080 {
+		color		: black;
+		font-size:29px;
+		text-align: left;
+	}
+
+	table.center {
+	    margin-left:auto; 
+	    margin-right:auto;
+	  }
+
+	.imgsize576 {
+	height: 100%;
+	}
+
+	.imgsize720 {
+	height: 125%;
+	}
+
+	.imgsize1080 {
+	height: 188%;
+	}
+
+
 	.bluekey {
 	color	: blue;
 	}
