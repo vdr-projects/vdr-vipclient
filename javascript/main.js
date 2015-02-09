@@ -3671,11 +3671,13 @@ if (DelisOK) {
 			recList[currMed] = "\u0003" + recList[currMed].substring(1);
 			medialist.style.opacity = 0;
 			if (get_recordings == 1) {
-			setTimeout("GetMarks(); getResume(); playRec(recLink[currMed]+ '?mode=streamtoend&time=' + position);",100);
+			   if (initialDelayPlayID != -1) { clearTimeout(initialDelayPlayID); initialDelayPlayID = -1; }
+			   setTimeout("GetMarks(); getResume(); playRec(recLink[currMed]+ '?mode=streamtoend&time=' + position);",100);
 			} else if (get_recordings == 2) {
-//			setTimeout("playRec(recLink[currMed]+ '?pos=resume');position = (mediaPlayer.getPosition()/1000);",100)
-			position = 0;
-			setTimeout("playRec(recLink[currMed]);",100)
+//			   setTimeout("playRec(recLink[currMed]+ '?pos=resume');position = (mediaPlayer.getPosition()/1000);",100)
+			   if (initialDelayPlayID != -1) { clearTimeout(initialDelayPlayID); initialDelayPlayID = -1; }
+			   position = 0;
+			   setTimeout("playRec(recLink[currMed]);",100)
 			}
 		}
 	}

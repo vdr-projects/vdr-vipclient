@@ -11,6 +11,7 @@ VDR 1.7.29+
 	Don't start the stream on boot or reload of the script if box is in standby
 	Fixed error getting german languages file.
 	Get server ip from flash
+	Bugfix, removed delayed play (in case of error) when you already start to play a recording
 
 0.26	Fix for [undefined] in (search)timer menu when there are no (search)timers on server
 	Changed Plugin check, only check if digit 1,2,3 from server ip & box ip are the same.
