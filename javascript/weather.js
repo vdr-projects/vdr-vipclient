@@ -25,7 +25,7 @@ function WeatherInfo_current() {
 
 function WeatherInfo() {
 
-   var htmltext = "<h1 class=mainmenu" + cssres[css_nr][Set_Res] + "> Weather Forecast </h1>";
+   var htmltext = "<h1 class=mainmenu" + cssres[css_nr][Set_Res] + ">" + Lang[100] + "</h1>";
    htmltext += "\n\n"
 
    xmlhttp=new XMLHttpRequest();
@@ -60,13 +60,13 @@ function WeatherInfo() {
 
    htmltext += "<tr>";
    for (var i=0;i<x.length;i++) {
-	htmltext += "<th> " + Lang[100] + x[i].getElementsByTagName("temperature")[0].getAttribute('day') + "</th>";
+	htmltext += "<th> " + Lang[101] + x[i].getElementsByTagName("temperature")[0].getAttribute('day') + "</th>";
 	}
    htmltext += "</tr>";
 
    htmltext += "<tr>";
    for (var i=0;i<x.length;i++) {
-	htmltext += "<th> " + Lang[101] + x[i].getElementsByTagName("temperature")[0].getAttribute('night') + "</th>";
+	htmltext += "<th> " + Lang[102] + x[i].getElementsByTagName("temperature")[0].getAttribute('night') + "</th>";
 	}
    htmltext += "</tr>";
 
@@ -83,7 +83,7 @@ function WeatherInfo() {
 
    htmltext += "<tr>";
    for (var i=0;i<x.length;i++) {
-	htmltext += "<th> " + Lang[102] + x[i].getElementsByTagName("windDirection")[0].getAttribute('code');
+	htmltext += "<th> " + Lang[103] + x[i].getElementsByTagName("windDirection")[0].getAttribute('code');
 	htmltext += "<br> " + x[i].getElementsByTagName("windSpeed")[0].getAttribute('mps') + " m/s </th>";
 	}
    htmltext += "</tr>";
@@ -93,24 +93,24 @@ function WeatherInfo() {
    var x=xmlDoc.getElementsByTagName("location");
    htmltext += "<table class='center weather" + cssres[css_nr][Set_Res] + "'><tr>";
    htmltext += "<th>";
-   htmltext += Lang[103];
+   htmltext += Lang[104];
    htmltext += "</th><th> : ";
    htmltext += x[0].getElementsByTagName("name")[0].childNodes[0].nodeValue;
    htmltext += "," + x[0].getElementsByTagName("country")[0].childNodes[0].nodeValue;
    htmltext += "</th></tr><tr><th>";
-   htmltext += Lang[104];
+   htmltext += Lang[105];
    htmltext += "</th><th> : ";
    htmltext += x[0].getElementsByTagName("location")[0].getAttribute('latitude');
    htmltext += "</th></tr><tr><th>";
-   htmltext += Lang[105];
+   htmltext += Lang[106];
    htmltext += "</th><th> : ";
    htmltext += x[0].getElementsByTagName("location")[0].getAttribute('longitude');
    htmltext += "</th></tr><tr><th>";
-   htmltext += Lang[106];
+   htmltext += Lang[107];
    htmltext += "</th><th> : ";
    htmltext += Right(xmlDoc.getElementsByTagName("sun")[0].getAttribute('rise'),8);
    htmltext += "</th></tr><tr><th>";
-   htmltext += Lang[107];
+   htmltext += Lang[108];
    htmltext += "</th><th> : ";
    htmltext += Right(xmlDoc.getElementsByTagName("sun")[0].getAttribute('set'),8);
    htmltext += "</th></tr></table>";

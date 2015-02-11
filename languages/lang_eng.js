@@ -119,11 +119,13 @@ Lang[88] = "Found ";
 
 Lang[90] = "No subscription for this channel";
 
-Lang[100] = "Day: ";
-Lang[101] = "Night: ";
-Lang[102] = "Wind: ";
-Lang[103] = "Location";
-Lang[104] = "latitude";
-Lang[105] = "longitude";
-Lang[106] = "Sunrise";
-Lang[107] = "Sunset";
+Lang[99] = " Weather ";
+Lang[100] = "Weather Forecast";
+Lang[101] = "Day: ";
+Lang[102] = "Night: ";
+Lang[103] = "Wind: ";
+Lang[104] = "Location";
+Lang[105] = "latitude";
+Lang[106] = "longitude";
+Lang[107] = "Sunrise";
+Lang[108] = "Sunset";

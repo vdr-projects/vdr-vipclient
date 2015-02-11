@@ -2887,13 +2887,13 @@ if(menu == 0) { // Main Menu
 		htmltext += Lang[19]; 
 	}
 
-	htmltext += "</span><span class=greenkey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> -" + Lang[19] + "</span><span class=yellowkey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> -" + Lang[35] + "   </span><span class=bluekey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> -" + Lang[18] + "</pre>";
+	htmltext += "</span><span class=greenkey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> -" + Lang[99] + "</span><span class=yellowkey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> -" + Lang[35] + "   </span><span class=bluekey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> -" + Lang[18] + "</pre>";
 	mainmenu.innerHTML = htmltext;
 }
 
 if(menu == 6) { // Main Menu when watching recording
 	MainMenu = 6;
-	mainmenu.innerHTML = "<h1 class=mainmenu" + cssres[css_nr][Set_Res] + ">" + Lang[9] + "\n ( " + Version + " )</h1><pre class=mainmenu" + cssres[css_nr][Set_Res] + ">   1 -" + Lang[10] + "\n   2 -" + Lang[7] + "\n\n\n   5 -" + Lang[13] + "\n\n\n   8 -" + Lang[16] + "\n\n\n\n   <span class=redkey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> -" + Lang[19] + "</span><span class=greenkey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> -" + Lang[19] + "</span><span class=yellowkey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> -" + Lang[35] + "   </span><span class=bluekey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> -" + Lang[19] + "</pre>";
+	mainmenu.innerHTML = "<h1 class=mainmenu" + cssres[css_nr][Set_Res] + ">" + Lang[9] + "\n ( " + Version + " )</h1><pre class=mainmenu" + cssres[css_nr][Set_Res] + ">   1 -" + Lang[10] + "\n   2 -" + Lang[7] + "\n\n\n   5 -" + Lang[13] + "\n\n\n   8 -" + Lang[16] + "\n\n\n\n   <span class=redkey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> -" + Lang[19] + "</span><span class=greenkey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> -" + Lang[99] + "</span><span class=yellowkey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> -" + Lang[35] + "   </span><span class=bluekey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> -" + Lang[19] + "</pre>";
 }
 
 

@@ -119,13 +119,15 @@ Lang[88] = "Gevonden ";
 
 Lang[90] = "Deze zender zit niet in je pakket";
 
-Lang[100] = "Dag: ";
-Lang[101] = "Nacht: ";
-Lang[102] = "Wind: ";
-Lang[103] = "Lokatie";
-Lang[104] = "Breedte";
-Lang[105] = "lengte";
-Lang[106] = "Zon op";
-Lang[107] = "Zon onder";
+Lang[99] = " Weer ";
+Lang[100] = "Weersverwachting";
+Lang[101] = "Dag: ";
+Lang[102] = "Nacht: ";
+Lang[103] = "Wind: ";
+Lang[104] = "Lokatie";
+Lang[105] = "Breedte";
+Lang[106] = "lengte";
+Lang[107] = "Zon op";
+Lang[108] = "Zon onder";
 
 

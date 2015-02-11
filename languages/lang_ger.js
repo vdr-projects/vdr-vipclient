@@ -65,7 +65,7 @@ Lang[27] = " Vorschau Zeitplan ";
 Lang[28] = " INFO ";
 Lang[29] = " Sleeptimer : ";
 Lang[30] = " Minuten ";
-Lang[31] = "OFF";
+Lang[31] = "AUS";
 Lang[32] = " DRUECKE ROTE TASTE UM ZU LOESCHEN ";
 Lang[33] = " MPD verbinden ";
 Lang[34] = " Menue verlassen ";
@@ -118,12 +118,15 @@ Lang[88] = "Gefunden ";
 
 Lang[90] = "Kein Abo fur diesen Kanal";
 
-Lang[100] = "Tag: ";
-Lang[101] = "Nacht: ";
-Lang[102] = "Wind: ";
-Lang[103] = "Standort";
-Lang[104] = "Breite";
-Lang[105] = "Laenge";
-Lang[106] = "Sonnenaufgang";
-Lang[107] = "Sonnenuntergang";
+Lang[99] = " Wetter ";
+Lang[100] = "Wettervorhersage";
+Lang[101] = "Tag: ";
+Lang[102] = "Nacht: ";
+Lang[103] = "Wind: ";
+Lang[104] = "Standort";
+Lang[105] = "Breite";
+Lang[106] = "Laenge";
+Lang[107] = "Sonnenaufgang";
+Lang[108] = "Sonnenuntergang";
+
 
