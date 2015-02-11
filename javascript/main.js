@@ -2457,8 +2457,9 @@ function onKeyMenu(keyCode) {
     break;
     case "Green":
 	if (menu == MainMenu) {
+		mainmenu.innerHTML = "<h1 class=mainmenu" + cssres[css_nr][Set_Res] + ">" + Lang[0] + "</h1>";
 		menu = 11; // Weather menu
-		InitMenu(menu);
+		setTimeout("InitMenu(menu);",100);
 	} else if (menu == 1) {
 		Set_Res++;
 		if (Set_Res > (VideoOutputModes.length-1)) { Set_Res = 0;}

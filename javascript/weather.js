@@ -31,14 +31,14 @@ function WeatherInfo() {
    xmlhttp=new XMLHttpRequest();
    xmlhttp.open('GET','http://api.openweathermap.org/data/2.5/forecast/daily?q=' + city + '&type=accurate&mode=xml&units=metric&cnt=7',false);
    xmlhttp.send();
-   xmlDoc=xmlhttp.responseXML; 
   try {
+   xmlDoc=xmlhttp.responseXML; 
    var x=xmlDoc.getElementsByTagName("time");
 
    htmltext += "<table class='center weather" + cssres[css_nr][Set_Res] + "'><tr>";
 
-var date = new Date();
-var y = date.getDay();
+   var date = new Date();
+   var y = date.getDay();
    for (var i=0;i<x.length;i++) {
 	htmltext += "<th>" + days[y] + "</th>";
 	y++;if (y > 6) {y = 0} ;
