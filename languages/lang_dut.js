@@ -119,3 +119,13 @@ Lang[88] = "Gevonden ";
 
 Lang[90] = "Deze zender zit niet in je pakket";
 
+Lang[100] = "Dag: ";
+Lang[101] = "Nacht: ";
+Lang[102] = "Wind: ";
+Lang[103] = "Lokatie";
+Lang[104] = "Breedte";
+Lang[105] = "lengte";
+Lang[106] = "Zon op";
+Lang[107] = "Zon onder";
+
+

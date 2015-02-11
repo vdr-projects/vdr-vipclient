@@ -118,3 +118,12 @@ Lang[88] = "Gefunden ";
 
 Lang[90] = "Kein Abo fur diesen Kanal";
 
+Lang[100] = "Tag: ";
+Lang[101] = "Nacht: ";
+Lang[102] = "Wind: ";
+Lang[103] = "Standort";
+Lang[104] = "Breite";
+Lang[105] = "Laenge";
+Lang[106] = "Sonnenaufgang";
+Lang[107] = "Sonnenuntergang";
+

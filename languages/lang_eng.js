@@ -118,3 +118,12 @@ Lang[87] = " Delete ";
 Lang[88] = "Found ";
 
 Lang[90] = "No subscription for this channel";
+
+Lang[100] = "Day: ";
+Lang[101] = "Night: ";
+Lang[102] = "Wind: ";
+Lang[103] = "Location";
+Lang[104] = "latitude";
+Lang[105] = "longitude";
+Lang[106] = "Sunrise";
+Lang[107] = "Sunset";
