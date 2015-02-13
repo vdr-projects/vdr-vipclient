@@ -129,5 +129,7 @@ Lang[105] = "Breedte";
 Lang[106] = "lengte";
 Lang[107] = "Zon op";
 Lang[108] = "Zon onder";
-
-
+Lang[109] = "Luchtvochtigheid";
+Lang[110] = "Wolken";
+Lang[111] = "Temperatuur";
+Lang[112] = "Min/Max";

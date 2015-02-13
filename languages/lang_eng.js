@@ -129,3 +129,8 @@ Lang[105] = "latitude";
 Lang[106] = "longitude";
 Lang[107] = "Sunrise";
 Lang[108] = "Sunset";
+Lang[109] = "Humidity";
+Lang[110] = "Clouds";
+Lang[111] = "Temperature";
+Lang[112] = "Min/Max";
+

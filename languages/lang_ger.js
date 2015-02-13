@@ -128,5 +128,8 @@ Lang[105] = "Breite";
 Lang[106] = "Laenge";
 Lang[107] = "Sonnenaufgang";
 Lang[108] = "Sonnenuntergang";
-
+Lang[109] = "Luftfeuchtigkeit";
+Lang[110] = "Wolken";
+Lang[111] = "Temperatur";
+Lang[112] = "Min/Max";
 

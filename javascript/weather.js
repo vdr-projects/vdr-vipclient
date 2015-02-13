@@ -1,26 +1,51 @@
-function WeatherInfo_current() {
+function WeatherInfo1() {
+
+   var htmltext = "<h1 class=mainmenu" + cssres[css_nr][Set_Res] + ">" + Lang[100] + "</h1>";
+   htmltext += "\n\n"
 
    xmlhttp=new XMLHttpRequest();
-   xmlhttp.open("GET","http://api.openweathermap.org/data/2.5/weather?lat=" + lat + "&lon=" + lon + "&type=accurate&mode=xml&units=metric",false);
+   xmlhttp.open("GET","http://api.openweathermap.org/data/2.5/weather?q=" + city + "&type=accurate&mode=xml&units=metric",false);
    xmlhttp.send();
+  try {
    xmlDoc=xmlhttp.responseXML; 
-	htmltext = "<h1 class=mainmenu" + cssres[css_nr][Set_Res] + ">" + " Current Weather </h1><pre class=mainmenu" + cssres[css_nr][Set_Res] +">";
-	htmltext += "  Plaats      : " + xmlDoc.getElementsByTagName("city")[0].getAttribute("name") + ",";
-	htmltext += xmlDoc.getElementsByTagName("country")[0].childNodes[0].nodeValue + "\n";
-	htmltext += "  Temperatuur : " + Math.round(xmlDoc.getElementsByTagName("temperature")[0].getAttribute("value")*10)/10; 
-	htmltext += " " + xmlDoc.getElementsByTagName("temperature")[0].getAttribute("unit") + "\n";
-	htmltext += "  Min/Max     : " + xmlDoc.getElementsByTagName("temperature")[0].getAttribute("min") + "/";
-	htmltext += xmlDoc.getElementsByTagName("temperature")[0].getAttribute("max");
-	htmltext += " " + xmlDoc.getElementsByTagName("temperature")[0].getAttribute("unit") + "\n";
-	htmltext += "  Luchtvochth : " + xmlDoc.getElementsByTagName("humidity")[0].getAttribute("value");
-	htmltext += xmlDoc.getElementsByTagName("humidity")[0].getAttribute("unit") + "\n";
-	htmltext += "  Wind        : " + xmlDoc.getElementsByTagName("speed")[0].getAttribute("value") + " m/s, ";
-	htmltext += xmlDoc.getElementsByTagName("direction")[0].getAttribute("name") + "\n";
-	htmltext += "  Bewolking   : " + xmlDoc.getElementsByTagName("clouds")[0].getAttribute("value") + "%\n";
-	htmltext += "\n  Update      : " + xmlDoc.getElementsByTagName("lastupdate")[0].getAttribute("value") + "\n";
-	htmltext += "</pre>";
-	mainmenu.innerHTML = htmltext;
-
+   htmltext += "<table class='center weather" + cssres[css_nr][Set_Res] + "'><tr>";
+   htmltext += "<th>";
+   htmltext += Lang[104];
+   htmltext += "</th><th> : ";
+   htmltext += xmlDoc.getElementsByTagName("city")[0].getAttribute("name") + ",";
+   htmltext += xmlDoc.getElementsByTagName("country")[0].childNodes[0].nodeValue;
+   htmltext += "</th></tr><tr><th>";
+   htmltext += Lang[111];
+   htmltext += "</th><th> : ";
+   htmltext += Math.round(xmlDoc.getElementsByTagName("temperature")[0].getAttribute("value")*10)/10; 
+   htmltext += " " + xmlDoc.getElementsByTagName("temperature")[0].getAttribute("unit");
+   htmltext += "</th></tr><tr><th>";
+   htmltext += Lang[112];
+   htmltext += "</th><th> : ";
+   htmltext += xmlDoc.getElementsByTagName("temperature")[0].getAttribute("min") + "/";
+   htmltext += xmlDoc.getElementsByTagName("temperature")[0].getAttribute("max");
+   htmltext += " " + xmlDoc.getElementsByTagName("temperature")[0].getAttribute("unit");
+   htmltext += "</th></tr><tr><th>";
+   htmltext += Lang[109];
+   htmltext += "</th><th> : ";
+   htmltext += xmlDoc.getElementsByTagName("humidity")[0].getAttribute("value");
+   htmltext += xmlDoc.getElementsByTagName("humidity")[0].getAttribute("unit");
+   htmltext += "</th></tr><tr><th>";
+   htmltext += Lang[103];
+   htmltext += "</th><th> : ";
+   htmltext += xmlDoc.getElementsByTagName("speed")[0].getAttribute("value") + " m/s, ";
+   htmltext += xmlDoc.getElementsByTagName("direction")[0].getAttribute("name");
+   htmltext += "</th></tr><tr><th>";
+   htmltext += Lang[110];
+   htmltext += "</th><th> : ";
+   htmltext += xmlDoc.getElementsByTagName("clouds")[0].getAttribute("value");
+   htmltext += "</th></tr><tr><th>";
+   htmltext += "</th><th> : ";
+   htmltext += xmlDoc.getElementsByTagName("lastupdate")[0].getAttribute("value");
+  } catch(e) {
+   htmltext = "<h1 class=mainmenu" + cssres[css_nr][Set_Res] + "><pre>\n\n\n" + Lang[67] + "\n\n\n</pre></h1>";
+  alert(e);
+  }
 }
 
 function WeatherInfo() {
