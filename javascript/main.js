@@ -3989,6 +3989,7 @@ if (DelisOK) {
 	break;
     case KEY_3:
 	if (localRecording != 1 ) {
+		setResume();
 		position += (mediaPlayer.getPosition()/1000) + 30;
 		if (get_recordings == 1) {
 			if (position >= recDura[currMed]) {
@@ -4005,6 +4006,7 @@ if (DelisOK) {
 	break;
     case KEY_6:
 	if (localRecording != 1 ) {
+		setResume();
 		position += (mediaPlayer.getPosition()/1000) + 60;
 		if (get_recordings == 1) {
 			if (position >= recDura[currMed]) {
@@ -4021,6 +4023,7 @@ if (DelisOK) {
 	break;
     case KEY_9:
 	if (localRecording != 1 ) {
+		setResume();
 		position += (mediaPlayer.getPosition()/1000) + 240;
 		if (get_recordings == 1) {
 			if (position >= recDura[currMed]) {
@@ -4038,6 +4041,7 @@ if (DelisOK) {
    case KEY_0:
 	if (localRecording != 1 ) {
 	position = 0; posMark = 0;
+	setResumeNull();
 			if (get_recordings == 1) {
 			      playRec((recLink[currMed] + "?mode=streamtoend&time=" + position));
 			} else if (get_recordings == 2) {
@@ -4283,9 +4287,9 @@ if (get_marks==1) {
 function setResume() {
 if (get_recordings == 1) {
 try {
-	position += (mediaPlayer.getPosition()/1000)
+//	position += (mediaPlayer.getPosition()/1000)
         var xmlhttp = new XMLHttpRequest();
-        xmlhttp.open("POST", server_ip + recServ + "/setResume.xml?guid=" + recGUID[currMed] + "&resume=" + position, false);
+        xmlhttp.open("POST", server_ip + recServ + "/setResume.xml?guid=" + recGUID[currMed] + "&resume=" + (position + (mediaPlayer.getPosition()/1000)), false);
         xmlhttp.send();
 	recList[currMed] = "\uE003" + recList[currMed].substring(1);
   } catch(e) {

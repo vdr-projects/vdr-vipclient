@@ -2,7 +2,7 @@
 // Default settings
 // 
 
-var Version = "0.27.3";
+var Version = "0.27.4";
 
 //weather
 var city = "Almelo";
