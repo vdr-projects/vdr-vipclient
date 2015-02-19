@@ -974,8 +974,7 @@ function onKeyDown(event) {
 		}
 	}
 	break;
-   case "Enter":
-	// OK key on frontpanel
+   case "Enter": // OK key on frontpanel
    case KEY_OK:
 	if(isFullscreen) {
 	// fullscreen
@@ -2345,6 +2344,7 @@ function onKeyMenu(keyCode) {
 	epg_unactive();
 	InitMenu(menu);
     break;
+    case "Enter": // OK key on frontpanel
     case KEY_OK:
     	if (menu == 2 && isMediaMenu !== 1) {
 		var x = ss.getBookingIds("*", 0, 0);
@@ -3570,6 +3570,7 @@ function UnloadMediaSettings() {
 function onKeyMedia(keyCode) {
 if (DelisOK) {
 	switch(keyCode) {
+	case "Enter": // OK key on frontpanel
 	case KEY_OK:
 	  medialist.innerHTML = "<h1 class=mainmenu" + cssres[css_nr][Set_Res] + ">" + Lang[0] + "</h1>";
 	  switchtimer.style.opacity = 0;
@@ -3651,6 +3652,7 @@ if (DelisOK) {
 	showMediaList();
 	}
 	break;
+  case "Enter": // OK key on frontpanel
   case KEY_OK:
   case "MediaPlayPause":
 	if (getRecOK == 2) {
@@ -3819,6 +3821,7 @@ if (DelisOK) {
 		}
 	}
 	break;
+  case "Enter": // OK key on frontpanel
   case KEY_OK:
 	osdmedia.style.opacity = 1 - osdmedia.style.opacity;
 	osdmediatime.style.opacity = osdmedia.style.opacity;
