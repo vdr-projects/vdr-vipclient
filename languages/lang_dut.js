@@ -133,3 +133,5 @@ Lang[109] = "Luchtvochtigheid";
 Lang[110] = "Wolken";
 Lang[111] = "Temperatuur";
 Lang[112] = "Min/Max";
+
+Lang[120] = " Nieuws ";

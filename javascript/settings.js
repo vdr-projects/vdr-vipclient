@@ -2,10 +2,14 @@
 // Default settings
 // 
 
-var Version = "0.27.4";
+var Version = "0.27.5";
 
 //weather
 var city = "Almelo";
+//news
+newssite = new Array("http://www.nu.nl/rss/Algemeen","http://www.spiegel.de/international/index.rss","http://www.spiegel.de/schlagzeilen/index.rss","http://rss.dw.de/rdf/rss-en-all","http://rss.dw.de/rdf/rss-de-all");
+var newssiteID = 0;
+var newsID = 0;
 
 server_ip_array = new Array("http://192.168.1.15","http://192.168.3.15","http://192.168.178.56","http://192.168.3.100","http://192.168.178.19","http://192.168.1.21","http://192.168.2.100","http://192.168.3.225");
 //server_ip_array[0] isn't used, when set to 0 script tries to find the server

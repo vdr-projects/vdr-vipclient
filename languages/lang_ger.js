@@ -133,3 +133,4 @@ Lang[110] = "Wolken";
 Lang[111] = "Temperatur";
 Lang[112] = "Min/Max";
 
+Lang[120] = " Nachrichten ";

@@ -13,6 +13,9 @@ VDR 1.7.29+
 	Get server ip from flash
 	Bugfix, removed delayed play (in case of error) when you already start to play a recording
 	Save old position before jump forward. In case of ongoing recording and jump position isn't recorded yet you don't start replay at 0
+	News info from nu.nl (nl), dw.de (en/de), spiegel.de (en/de) 
+	Powerserverdown shares now blue button with restart script (almost nobody uses powerserverdown)
+
 
 0.26	Fix for [undefined] in (search)timer menu when there are no (search)timers on server
 	Changed Plugin check, only check if digit 1,2,3 from server ip & box ip are the same.

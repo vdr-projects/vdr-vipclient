@@ -2034,10 +2034,6 @@ function StreamInfo(si) {
 	is.setObject("cfg.locale.ui","dut",is.STORAGE_VOLATILE);
 	}
 
-	if(SI[0]=="S19.2E" && SI[2]=="1048" && SI[3]=="4320" ) {
-	//BVN
-	is.setObject("cfg.locale.ui","dut",is.STORAGE_VOLATILE);
-	}
 
 
 	if(SI[1]=="54") {
@@ -2165,12 +2161,20 @@ function StreamInfo(si) {
 	is.setObject("cfg.locale.ui","spa",is.STORAGE_VOLATILE);
 	}
 
+	if(SI[0]=="S19.2E" && SI[2]=="1048" && SI[3]=="4320" ) {
+	//BVN
+	    is.setObject("cfg.locale.ui","nld",is.STORAGE_VOLATILE);
+	    //doesn't work but dvbsnoop does show 'ISO639_2_language_code:  nld' 
+
+	}
+
 	//Russian
 	if(SI[0]=="S13.0E" && SI[2]=="8100") {
 		is.setObject("cfg.locale.ui","ger",is.STORAGE_VOLATILE);
 		//doesn't work but dvbsnoop does show 'ISO639_2_language_code:  ger' 
 	}
 
+	//alert("TAAL : " + is.getObject("cfg.locale.ui"));// Show what is set by the script
 
 }
 
@@ -2391,12 +2395,10 @@ function onKeyMenu(keyCode) {
 
     break;
     case "Red":
-	if (menu == 0 && PowerDownServer) {
-		ServerPowerDown();
-		isSetupMenu = 0;
-		mainmenu.style.opacity = 0;
-		epg_unactive();
-		break;		
+	if (menu == MainMenu) {
+		mainmenu.innerHTML = "<h1 class=mainmenu" + cssres[css_nr][Set_Res] + ">" + Lang[0] + "</h1>";
+		menu = 12; // Weather menu
+		setTimeout("InitMenu(menu);",100);
     	} else if (menu == 1) {
 		if (subs_dyn < (subs_prio_dyn.length -1)) { subs_dyn += 1} else { subs_dyn = 0 }
 		if (subs_prio_dyn.length > 0) {
@@ -2530,7 +2532,13 @@ function onKeyMenu(keyCode) {
 	}
     break;
     case "Blue":
-		if (menu == 0) {
+	if (menu == 0 && PowerDownServer) {
+		ServerPowerDown();
+		isSetupMenu = 0;
+		mainmenu.style.opacity = 0;
+		epg_unactive();
+		break;
+	} else if (menu == 0) {
 		RestartPortal();
 	} else if (menu == 1) {
 		css_nr++;
@@ -2615,8 +2623,9 @@ function onKeyMenu(keyCode) {
 		 is.setObject("vip.showsubs",ShowSubs.toString(),is.STORAGE_PERMANENT);
 		} else	if (menu == 8) {
 			SetGroup(1);
+		} else	if (menu == 12) {
+			newsID = 1;
 		}
-
 	InitMenu(menu);
 	break;
 	case KEY_2:
@@ -2638,7 +2647,10 @@ function onKeyMenu(keyCode) {
 		}
 
 		if (menu == 8) {
-		SetGroup(2);
+			SetGroup(2);
+		} 
+		if (menu == 12) {
+			newsID = 2;
 		}
 		InitMenu(menu);
 	break;
@@ -2656,6 +2668,9 @@ function onKeyMenu(keyCode) {
 	} else	if (menu == 8) {
 		SetGroup(3);
 		InitMenu(menu);
+	} else	if (menu == 12) {
+		newsID = 3;
+		InitMenu(menu);
 	} 
 
 	break;
@@ -2672,6 +2687,9 @@ function onKeyMenu(keyCode) {
 		InitMenu(menu);
 		} else if (menu == 8) {
 		SetGroup(4);
+		InitMenu(menu);
+		} else	if (menu == 12) {
+		newsID = 4;
 		InitMenu(menu);
 		}
 
@@ -2694,12 +2712,18 @@ function onKeyMenu(keyCode) {
 			if (ServerAdres[i] !== "FullURL" && ServerAdres[i] !== "MultiCast") {ServerAdres[i] = server_ip + StreamPort;}
 		}
 		InitMenu(menu);
-		}
+	}
 
-		if (menu == 8) {
+	if (menu == 8) {
 		SetGroup(5);
 		InitMenu(menu);
-		}
+	}
+
+	if (menu == 12) {
+		newsID = 5;
+		InitMenu(menu);
+	}
+
 	break;
 	case KEY_6:
 	if (menu == 0 && Restfulapiplugin) {
@@ -2719,10 +2743,14 @@ function onKeyMenu(keyCode) {
 		}
 		InitMenu(menu);
 	}
-		if (menu == 8) {
+	if (menu == 8) {
 		SetGroup(6);
 		InitMenu(menu);
-		}
+	}
+	if (menu == 12) {
+		newsID = 6;
+		InitMenu(menu);
+	}
 
 	break;
 	case KEY_7:
@@ -2749,6 +2777,10 @@ function onKeyMenu(keyCode) {
 		SetGroup(7);
 		InitMenu(menu);
 		}
+	if (menu == 12) {
+		newsID = 7;
+		InitMenu(menu);
+	}
 
 	break;
 	case KEY_8:
@@ -2770,6 +2802,10 @@ function onKeyMenu(keyCode) {
 		SetGroup(8);
 		InitMenu(menu);
 	}
+	if (menu == 12) {
+		newsID = 8;
+		InitMenu(menu);
+	}
 
 
 	break;
@@ -2784,8 +2820,9 @@ function onKeyMenu(keyCode) {
 			setTimeout("InitMenu(menu);",100);
 		} else if (menu == 8) {
 			SetGroup(9);
+		} else if (menu == 12) {
+			newsID = 9;
 		}
-
 		InitMenu(menu);
 	break;
 	case KEY_0:
@@ -2846,6 +2883,7 @@ function InitMenu(menu) {
 // 9 = INFO2 menu
 // 10 = Favorite Edit menu
 // 11 = Weather
+// 12 = News
 
 
 epg_unactive;
@@ -2880,14 +2918,13 @@ if(menu == 0) { // Main Menu
 		htmltext += "<span class=notset>" + "\n   9 -" + Lang[17] + "</span>" ; 
 	}
 
-	htmltext += "\n   0 - " + Lang[83] + "\n\n   <span class=redkey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> - ";
+	htmltext += "\n   0 - " + Lang[83] + "\n\n   <span class=redkey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> - " + Lang[120] + "</span><span class=greenkey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> -" + Lang[99] + "</span><span class=yellowkey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> -" + Lang[35] + "   </span><span class=bluekey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> -"
 	if (PowerDownServer) { 
 		htmltext += Lang[31] + Left(Lang[19],Lang[31].length); 
 	} else { 
-		htmltext += Lang[19]; 
+		htmltext += Lang[18]; 
 	}
-
-	htmltext += "</span><span class=greenkey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> -" + Lang[99] + "</span><span class=yellowkey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> -" + Lang[35] + "   </span><span class=bluekey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> -" + Lang[18] + "</pre>";
+	htmltext += "</pre>";
 	mainmenu.innerHTML = htmltext;
 }
 
@@ -3089,8 +3126,8 @@ if(menu == 9) { // INFO2 Menu
 }
 
 if(menu == 10) { // Favorite edit Menu
-	var htmltext = "<h1 class=mainmenu" + cssres[css_nr][Set_Res] + ">" + Lang[83]
-	htmltext += "</h1><pre class=mainmenu" + cssres[css_nr][Set_Res] + ">\n"
+	var htmltext = "<h1 class=mainmenu" + cssres[css_nr][Set_Res] + ">" + Lang[83];
+	htmltext += "</h1><pre class=mainmenu" + cssres[css_nr][Set_Res] + ">\n";
 	htmltext += "<span class=select" + cssres[css_nr][Set_Res] + ">";
 	var x = timerID;
 	for (var i=0;i<10;i++) {
@@ -3103,12 +3140,16 @@ if(menu == 10) { // Favorite edit Menu
 	if (timerID == 0) { htmltext += Lang[19] } else { htmltext += Lang[84] } //no move up
 	htmltext += "</span><span class=yellowkey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> -"
 	if (timerID == (maxTimers - 1) || x == 0) { htmltext += Lang[19] } else { htmltext += Lang[85] } //no move down
-	htmltext += "</span><span class=bluekey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> -" + Fav_key1 + "</pre>";
+	htmltext += "</span><span class=bluekey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> -" + Fav_key1 + "</span></pre>";
 	mainmenu.innerHTML = htmltext;
 }
 
 if(menu == 11) { // Weather info
 	WeatherInfo();
+}
+
+if(menu == 12) { // News 
+	NewsInfo();
 }
 
 

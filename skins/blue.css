@@ -206,11 +206,29 @@
 	color	:grey;
 	}
 
+	.newsinfo576 {
+	font-size:20px;
+	color	:white;
+	overflow:hidden;
+	}
+
+	.newsinfo720 {
+	font-size:27px;
+	color	:white;
+	overflow:hidden;
+	}
+
+	.newsinfo1080 {
+	font-size:40px;
+	color	:white;
+	overflow:hidden;
+	}
+
 	.select576 {
 	background	:#fc5;
 	-webkit-border-radius:25px;
 	color:black;
-	font-size:26px;
+	font-size:25px;
 	}
 
 	.select720 {
@@ -471,6 +489,26 @@
 	color:white;
 	text-align: center;
 	}
+
+	pre.newsmenu576 {
+	font-size:20px;
+	color:black;
+	overflow:hidden;
+	}
+
+	pre.newsmenu720 {
+	font-size:27px;
+	color:black;
+	overflow:hidden;
+	}
+
+	pre.newsmenu1080 {
+	font-size:40px;
+	color:black;
+	overflow:hidden;
+	}
+
+
 
 	pre.media576 {
 	color:white;

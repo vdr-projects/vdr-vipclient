@@ -51,7 +51,7 @@ function WeatherInfo1() {
 function WeatherInfo() {
 
    var htmltext = "<h1 class=mainmenu" + cssres[css_nr][Set_Res] + ">" + Lang[100] + "</h1>";
-   htmltext += "\n\n"
+   htmltext += "\n\n";
 
    xmlhttp=new XMLHttpRequest();
    xmlhttp.open('GET','http://api.openweathermap.org/data/2.5/forecast/daily?q=' + city + '&type=accurate&mode=xml&units=metric&cnt=7',false);
