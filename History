@@ -16,6 +16,9 @@ VDR 1.7.29+
 	News info from nu.nl (nl), dw.de (en/de), spiegel.de (en/de)
 	News can be scrolled with up/down, left/right for server selection 
 	Powerserverdown shares now blue button with restart script (almost nobody uses powerserverdown)
+	After stream state paused & positionend, script waits TryingInterval time and tries to restart stream 
+	  (if server is stopped/restarted you get this error)
+
 
 
 0.26	Fix for [undefined] in (search)timer menu when there are no (search)timers on server

@@ -3500,6 +3500,15 @@ function ShowSearchTimerInfo() {
 // MPD Section
 
 function MPD(ev) {
+// ev.state :
+// STATE_IDLE = 0
+// STATE_CONNECTING = 1
+// STATE_PAUSED = 2
+// STATE_PLAYING = 3
+// STATE_FASTFORWARDING = 4
+// STATE_REWINDING = 5
+// STATE_FAILED = 6
+
 //     alert("Media player state changed: " + ev);
 //     alert("Media player state changed: state=" + ev.state + ", reason=" + ev.reason + ", code=" + ev.code);
 //     alert("Media player error :" + mediaPlayer.getError().details);
@@ -3514,7 +3523,6 @@ if (MPDListener == 0) {
 			initialDelayPlayID = setTimeout("mediaPlayer.close();mediaPlayer.open(URL);mediaPlayer.play(1000);GetEPG(currChan);ExtraStuff();",TryingInterval);
 		} else {
 			ErrorAgain = 0;
-			//alert("Media player state changed: state=" + ev.state + ", reason=" + ev.reason + ", code=" + ev.code);
 			showDisplay("ERRR", false, 100, 0 ); 
 			if (experimental) {
 				settimer(0,ev.reason,0,2,color_error);
@@ -3522,8 +3530,13 @@ if (MPDListener == 0) {
 				settimer(0,Lang[67],0,2,color_error);
 			}
 		}
-	} else if ( ev.state == 2 && ev.reason == "PositionEnd" && PromoChannel) {
-		if (currChan == PromoChannelNR) { play(channels[PromoChannelNR]);}
+	} else if ( ev.state == 2 && ev.reason == "PositionEnd") {
+		if (PromoChannel && currChan == PromoChannelNR) { 
+			play(channels[PromoChannelNR]);
+		} else {
+			settimer(0,Lang[63],0,2,color_error);
+			initialDelayPlayID = setTimeout("mediaPlayer.close();mediaPlayer.open(URL);mediaPlayer.play(1000);GetEPG(currChan);ExtraStuff();",TryingInterval);
+		}
 	}
 } else {
 	if ( ev.state == 6 && ev.reason == "HostUnreachable" ) {
