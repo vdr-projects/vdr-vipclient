@@ -7,7 +7,7 @@ var Version = "0.27.5";
 //weather
 var city = "Almelo";
 //news
-newssite = new Array("http://www.nu.nl/rss/Algemeen","http://www.spiegel.de/international/index.rss","http://www.spiegel.de/schlagzeilen/index.rss","http://rss.dw.de/rdf/rss-en-all","http://rss.dw.de/rdf/rss-de-all");
+newssite = new Array("http://www.nu.nl/rss/Algemeen","http://www.nu.nl/rss/Economie","http://www.nu.nl/rss/Internet","http://www.spiegel.de/international/index.rss","http://www.spiegel.de/schlagzeilen/index.rss","http://rss.dw.de/rdf/rss-en-all","http://rss.dw.de/rdf/rss-de-all");
 var newssiteID = 0;
 var newsID = 0;
 

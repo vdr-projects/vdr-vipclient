@@ -224,6 +224,28 @@
 	overflow:hidden;
 	}
 
+	.newsselect576 {
+	background	:#fc5;
+	-webkit-border-radius:25px;
+	color:black;
+	font-size:20px;
+	}
+
+	.newsselect720 {
+	background	:#fc5;
+	-webkit-border-radius:25px;
+	color:black;
+	font-size:27px;
+	}
+
+	.newsselect1080 {
+	background	:#fc5;
+	-webkit-border-radius:25px;
+	color:black;
+	font-size:40px;
+	}
+
+
 	.select576 {
 	background	:#fc5;
 	-webkit-border-radius:25px;

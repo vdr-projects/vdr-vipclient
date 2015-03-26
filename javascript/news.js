@@ -1,5 +1,8 @@
 
 function NewsInfo() {
+   if (newssiteID > (newssite.length - 1)) { newssiteID = (newssite.length - 1) }
+   if (newssiteID < 0) { newssiteID = 0 }
+
    var htmltext = "<h1 class=mainmenu" + cssres[css_nr][Set_Res] + ">";
 
    xmlhttp=new XMLHttpRequest();
@@ -11,14 +14,21 @@ function NewsInfo() {
    htmltext += xmlDoc.getElementsByTagName("channel")[0].getElementsByTagName("title")[0].childNodes[0].nodeValue;
    htmltext += "</h1><pre class=newsmenu" + cssres[css_nr][Set_Res] + ">\n";
    var x=xmlDoc.getElementsByTagName("item");
+
+   if (newsID > x.length) { newsID = x.length }
+   if (newsID > 9) { newsID = 9 }
+   if (newsID < 0) { newsID = 0 }
+
    for (var i=0;i<x.length && i<10;i++) {
 	 if (x.length !== 0) {
-		if (i !== 0) {
-			htmltext += " \u0003 " + i; 
-		} else {
-			htmltext += " \u0003 - ";
+		if (i == newsID) {
+			//hi light selection
+			htmltext += "<span class=newsselect" + cssres[css_nr][Set_Res] + ">";
 		} 
 		htmltext += " \u0003 " + x[i].getElementsByTagName("title")[0].childNodes[0].nodeValue + " \u0003 \n";
+		if (i == newsID) {
+			htmltext += "</span>";
+		} 
 	 } else { 
 		htmltext += "\n";
 	 }

@@ -13,7 +13,8 @@ VDR 1.7.29+
 	Get server ip from flash
 	Bugfix, removed delayed play (in case of error) when you already start to play a recording
 	Save old position before jump forward. In case of ongoing recording and jump position isn't recorded yet you don't start replay at 0
-	News info from nu.nl (nl), dw.de (en/de), spiegel.de (en/de) 
+	News info from nu.nl (nl), dw.de (en/de), spiegel.de (en/de)
+	News can be scrolled with up/down, left/right for server selection 
 	Powerserverdown shares now blue button with restart script (almost nobody uses powerserverdown)
 
 

@@ -2322,8 +2322,18 @@ function onKeyMenu(keyCode) {
     break;
 
     case KEY_LEFT:
+	if (menu == 12) {
+		newsID = 0;
+		newssiteID -= 1;
+		InitMenu(menu);
+	} 
     break;
     case KEY_RIGHT:
+	if (menu == 12) {
+		newsID = 0;
+		newssiteID += 1;
+		InitMenu(menu);
+	} 
     break;
     case KEY_UP:
 	if (menu == 2) {
@@ -2332,7 +2342,11 @@ function onKeyMenu(keyCode) {
 	} else 	if (menu == 5 || menu == 7 || menu == 10) {
 	    timerID -= 1;
 		    if (timerID < 0) { timerID = 0; }
-	}
+	} else	if (menu == 12) {
+		newsID -= 1;
+		InitMenu(menu);
+	} 
+
 	epg_unactive();
 	InitMenu(menu);
     break;
@@ -2344,7 +2358,11 @@ function onKeyMenu(keyCode) {
 	} else 	if (menu == 5 || menu == 7 || menu == 10) {
 	    timerID++;
 			if (timerID > (maxTimers - 1) && maxTimers !== 0) { timerID = maxTimers - 1; }
-	}
+	} else	if (menu == 12) {
+		newsID += 1;
+		InitMenu(menu);
+	} 
+
 	epg_unactive();
 	InitMenu(menu);
     break;
@@ -2623,8 +2641,6 @@ function onKeyMenu(keyCode) {
 		 is.setObject("vip.showsubs",ShowSubs.toString(),is.STORAGE_PERMANENT);
 		} else	if (menu == 8) {
 			SetGroup(1);
-		} else	if (menu == 12) {
-			newsID = 1;
 		}
 	InitMenu(menu);
 	break;
@@ -2649,9 +2665,6 @@ function onKeyMenu(keyCode) {
 		if (menu == 8) {
 			SetGroup(2);
 		} 
-		if (menu == 12) {
-			newsID = 2;
-		}
 		InitMenu(menu);
 	break;
 	case KEY_3:
@@ -2667,9 +2680,6 @@ function onKeyMenu(keyCode) {
 		InitMenu(menu);
 	} else	if (menu == 8) {
 		SetGroup(3);
-		InitMenu(menu);
-	} else	if (menu == 12) {
-		newsID = 3;
 		InitMenu(menu);
 	} 
 
@@ -2687,9 +2697,6 @@ function onKeyMenu(keyCode) {
 		InitMenu(menu);
 		} else if (menu == 8) {
 		SetGroup(4);
-		InitMenu(menu);
-		} else	if (menu == 12) {
-		newsID = 4;
 		InitMenu(menu);
 		}
 
@@ -2719,11 +2726,6 @@ function onKeyMenu(keyCode) {
 		InitMenu(menu);
 	}
 
-	if (menu == 12) {
-		newsID = 5;
-		InitMenu(menu);
-	}
-
 	break;
 	case KEY_6:
 	if (menu == 0 && Restfulapiplugin) {
@@ -2745,10 +2747,6 @@ function onKeyMenu(keyCode) {
 	}
 	if (menu == 8) {
 		SetGroup(6);
-		InitMenu(menu);
-	}
-	if (menu == 12) {
-		newsID = 6;
 		InitMenu(menu);
 	}
 
@@ -2777,10 +2775,6 @@ function onKeyMenu(keyCode) {
 		SetGroup(7);
 		InitMenu(menu);
 		}
-	if (menu == 12) {
-		newsID = 7;
-		InitMenu(menu);
-	}
 
 	break;
 	case KEY_8:
@@ -2802,11 +2796,6 @@ function onKeyMenu(keyCode) {
 		SetGroup(8);
 		InitMenu(menu);
 	}
-	if (menu == 12) {
-		newsID = 8;
-		InitMenu(menu);
-	}
-
 
 	break;
 	case KEY_9:
@@ -2820,8 +2809,6 @@ function onKeyMenu(keyCode) {
 			setTimeout("InitMenu(menu);",100);
 		} else if (menu == 8) {
 			SetGroup(9);
-		} else if (menu == 12) {
-			newsID = 9;
 		}
 		InitMenu(menu);
 	break;
