@@ -3519,7 +3519,11 @@ if (MPDListener == 0) {
 			ErrorAgain = 1;
 		} else if (KeepTrying) {
 			ErrorAgain = 0;
-			settimer(0,Lang[63],0,2,color_error);		
+			if (experimental) {
+				settimer(0,ev.reason,0,2,color_error);
+			} else {
+				settimer(0,Lang[63],0,2,color_error);
+			}
 			initialDelayPlayID = setTimeout("mediaPlayer.close();mediaPlayer.open(URL);mediaPlayer.play(1000);GetEPG(currChan);ExtraStuff();",TryingInterval);
 		} else {
 			ErrorAgain = 0;
@@ -3534,7 +3538,11 @@ if (MPDListener == 0) {
 		if (PromoChannel && currChan == PromoChannelNR) { 
 			play(channels[PromoChannelNR]);
 		} else {
-			settimer(0,Lang[63],0,2,color_error);
+			if (experimental) {
+				settimer(0,ev.reason,0,2,color_error);
+			} else {
+				settimer(0,Lang[63],0,2,color_error);
+			}
 			initialDelayPlayID = setTimeout("mediaPlayer.close();mediaPlayer.open(URL);mediaPlayer.play(1000);GetEPG(currChan);ExtraStuff();",TryingInterval);
 		}
 	}
