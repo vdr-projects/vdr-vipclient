@@ -2415,7 +2415,7 @@ function onKeyMenu(keyCode) {
     case "Red":
 	if (menu == MainMenu) {
 		mainmenu.innerHTML = "<h1 class=mainmenu" + cssres[css_nr][Set_Res] + ">" + Lang[0] + "</h1>";
-		menu = 12; // Weather menu
+		menu = 12; // News menu
 		setTimeout("InitMenu(menu);",100);
     	} else if (menu == 1) {
 		if (subs_dyn < (subs_prio_dyn.length -1)) { subs_dyn += 1} else { subs_dyn = 0 }
@@ -2522,11 +2522,15 @@ function onKeyMenu(keyCode) {
 	} 
     break;
     case "Yellow":
-	if (menu == MainMenu) {
+	if (menu == 1) {
 		menu = 4; // INFO menu
 		InitMenu(menu);
-	} else 	if (menu == 1) {
+	} else 	if (menu == 4) {
 		menu = 9; // INFO2 menu
+		InitMenu(menu);
+		break;
+	} else 	if (menu == 9) {
+		menu = 4; // back to INFO menu
 		InitMenu(menu);
 	} else 	if (menu == 10) {
 		//move down
@@ -2905,19 +2909,19 @@ if(menu == 0) { // Main Menu
 		htmltext += "<span class=notset>" + "\n   9 -" + Lang[17] + "</span>" ; 
 	}
 
-	htmltext += "\n   0 - " + Lang[83] + "\n\n   <span class=redkey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> - " + Lang[120] + "</span><span class=greenkey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> -" + Lang[99] + "</span><span class=yellowkey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> -" + Lang[35] + "   </span><span class=bluekey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> -"
+	htmltext += "\n   0 - " + Lang[83] + "\n\n   <span class=redkey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> - " + Lang[120] + "</span><span class=greenkey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> -" + Lang[99] + "</span><span class=yellowkey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> -" + Lang[19] + "   </span><span class=bluekey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> -"
 	if (PowerDownServer) { 
 		htmltext += Lang[31] + Left(Lang[19],Lang[31].length); 
 	} else { 
 		htmltext += Lang[18]; 
 	}
-	htmltext += "</pre>";
+	htmltext += "</span></pre>";
 	mainmenu.innerHTML = htmltext;
 }
 
 if(menu == 6) { // Main Menu when watching recording
 	MainMenu = 6;
-	mainmenu.innerHTML = "<h1 class=mainmenu" + cssres[css_nr][Set_Res] + ">" + Lang[9] + "\n ( " + Version + " )</h1><pre class=mainmenu" + cssres[css_nr][Set_Res] + ">   1 -" + Lang[10] + "\n   2 -" + Lang[7] + "\n\n\n   5 -" + Lang[13] + "\n\n\n   8 -" + Lang[16] + "\n\n\n\n   <span class=redkey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> -" + Lang[19] + "</span><span class=greenkey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> -" + Lang[99] + "</span><span class=yellowkey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> -" + Lang[35] + "   </span><span class=bluekey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> -" + Lang[19] + "</pre>";
+	mainmenu.innerHTML = "<h1 class=mainmenu" + cssres[css_nr][Set_Res] + ">" + Lang[9] + "\n ( " + Version + " )</h1><pre class=mainmenu" + cssres[css_nr][Set_Res] + ">   1 -" + Lang[10] + "\n   2 -" + Lang[7] + "\n\n\n   5 -" + Lang[13] + "\n\n\n   8 -" + Lang[16] + "\n\n\n\n   <span class=redkey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> -" + Lang[120] + "</span><span class=greenkey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> -" + Lang[99] + "</span><span class=yellowkey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> -" + Lang[19] + "   </span><span class=bluekey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> -" + Lang[19] + "</span></pre>";
 }
 
 
@@ -2945,7 +2949,7 @@ if(menu == 1) { // settings menu
 	htmltext += "\n\n   <span class=redkey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> -" + Lang[20];
 	htmltext += "</span><span class=greenkey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> - " + VideoOutputModes_txt[VideoOutputModes[Set_Res]] + " ";  
 	htmltext += "</span><span class=yellowkey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> -" + Lang[35];
-	htmltext += "</span><span class=bluekey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> - " + Left(cssfile[css_nr],8) +"</pre>";
+	htmltext += "</span><span class=bluekey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> - " + Left(cssfile[css_nr],8) +"</span></pre>";
 //	htmltext += "\n   0 -" + Lang[9] +"</pre>";
 	mainmenu.innerHTML = htmltext;
 }
@@ -2985,7 +2989,7 @@ if(menu == 2) { // Timers menu
 	}
 	}
 	if (mediaRecorder) { var x = NN[3]; } else { var x =  Lang[19]; }
-	mainmenu.innerHTML = "<h1 class=mainmenu" + cssres[css_nr][Set_Res] + ">" + Lang[7] + "</h1><pre class=mainmenu" + cssres[css_nr][Set_Res] + ">\n   0 -" + Lang[9] + "\n" + booking + "   <span class=redkey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> -" + Lang[48] + "</span><span class=greenkey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> - " + x + "  </span><span class=yellowkey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> -" + Lang[19] + "</span><span class=bluekey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> - " + NN[5] + "</pre>";
+	mainmenu.innerHTML = "<h1 class=mainmenu" + cssres[css_nr][Set_Res] + ">" + Lang[7] + "</h1><pre class=mainmenu" + cssres[css_nr][Set_Res] + ">\n   0 -" + Lang[9] + "\n" + booking + "   <span class=redkey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> -" + Lang[48] + "</span><span class=greenkey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> - " + x + "  </span><span class=yellowkey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> -" + Lang[19] + "</span><span class=bluekey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> - " + NN[5] + "</span></pre>";
 }
 
 if(menu == 3) { // MPD Menu
@@ -3017,7 +3021,11 @@ if(menu == 4) { // INFO Menu
 	} catch(e) {
 		alert("Error : " + e);
 	}
-	htmltext += "\n\n   0 -" + Lang[9] + "</pre>";
+
+	htmltext += "\n\n   0 -" + Lang[9];
+//	htmltext += "\n\n";
+	htmltext += "\n   <span class=redkey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> -" + Lang[19] + "</span><span class=greenkey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> -" + Lang[19] + "</span><span class=yellowkey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> -" + Lang[35] + " 2  </span><span class=bluekey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> -" + Lang[19] + "</span></pre>";
+
 	mainmenu.innerHTML = htmltext;
 
 }
@@ -3032,9 +3040,9 @@ if(menu == 5) { // Timers from Server
 		if (i == 0) { booking += "</span>"; } 
 	}
 	if (get_timer) {
-	mainmenu.innerHTML = "<h1 class=mainmenu" + cssres[css_nr][Set_Res] + ">" + Lang[7] + "</h1><pre class=mainmenu" + cssres[css_nr][Set_Res] + ">\n" + booking + "\n   <span class=redkey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> -" + Lang[48] + "</span><span class=greenkey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> -" + Lang[49] + "</span><span class=yellowkey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> -" + Lang[19] + "   </span><span class=bluekey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> -" + Lang[28] + "</pre>";
+	mainmenu.innerHTML = "<h1 class=mainmenu" + cssres[css_nr][Set_Res] + ">" + Lang[7] + "</h1><pre class=mainmenu" + cssres[css_nr][Set_Res] + ">\n" + booking + "\n   <span class=redkey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> -" + Lang[48] + "</span><span class=greenkey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> -" + Lang[49] + "</span><span class=yellowkey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> -" + Lang[19] + "   </span><span class=bluekey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> -" + Lang[28] + "</span></pre>";
 	 } else {
-	mainmenu.innerHTML = "<h1 class=mainmenu" + cssres[css_nr][Set_Res] + ">" + Lang[7] + "</h1><pre class=mainmenu" + cssres[css_nr][Set_Res] + ">\n" + booking + "\n   <span class=redkey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> -" + Lang[19] + "</span><span class=greenkey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> -" + Lang[19] + "</span><span class=yellowkey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> -" + Lang[19] + "   </span><span class=bluekey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> -" + Lang[28] + "</pre>";
+	mainmenu.innerHTML = "<h1 class=mainmenu" + cssres[css_nr][Set_Res] + ">" + Lang[7] + "</h1><pre class=mainmenu" + cssres[css_nr][Set_Res] + ">\n" + booking + "\n   <span class=redkey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> -" + Lang[19] + "</span><span class=greenkey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> -" + Lang[19] + "</span><span class=yellowkey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> -" + Lang[19] + "   </span><span class=bluekey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> -" + Lang[28] + "</span></pre>";
 	 }
 	}
 }
@@ -3049,7 +3057,7 @@ if(menu == 7) { // SearchTimers from Server
 		if (maxTimers > x) { booking += searchtimers[x]; } else { booking += "\n"; }
 		if (i == 0) { booking += "</span>"; } 
 	}
-	mainmenu.innerHTML = "<h1 class=mainmenu" + cssres[css_nr][Set_Res] + ">" + Lang[8] + "</h1><pre class=mainmenu" + cssres[css_nr][Set_Res] + ">\n" + booking + "\n   <span class=redkey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> -" + Lang[19] + "</span><span class=greenkey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> -" + Lang[19] + "</span><span class=yellowkey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> -" + Lang[19] + "   </span><span class=bluekey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> -" + Lang[28] + "</pre>";
+	mainmenu.innerHTML = "<h1 class=mainmenu" + cssres[css_nr][Set_Res] + ">" + Lang[8] + "</h1><pre class=mainmenu" + cssres[css_nr][Set_Res] + ">\n" + booking + "\n   <span class=redkey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> -" + Lang[19] + "</span><span class=greenkey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> -" + Lang[19] + "</span><span class=yellowkey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> -" + Lang[19] + "   </span><span class=bluekey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> -" + Lang[28] + "</span></pre>";
 
 	}
 }
@@ -3068,7 +3076,7 @@ if(menu == 8) { // ChannelGroups enable/disable
 	}
 
 if(menu == 9) { // INFO2 Menu
-	var htmltext = "<h1 class=mainmenu" + cssres[css_nr][Set_Res] + ">" + Lang[35] + "</h1><pre class=mainmenu" + cssres[css_nr][Set_Res] + ">";
+	var htmltext = "<h1 class=mainmenu" + cssres[css_nr][Set_Res] + ">" + Lang[35] + "2 </h1><pre class=mainmenu" + cssres[css_nr][Set_Res] + ">";
 	try {
 		if (fullupdate !== 0) { htmltext += "\n \uE017 "; } else { htmltext += "\n \uE016 "; }
 		htmltext += "Full EPG Update ";
@@ -3107,7 +3115,10 @@ if(menu == 9) { // INFO2 Menu
 	} catch(e) {
 		alert("Error : " + e);
 	}
-	htmltext += "\n\n   0 -" + Lang[9] + "</pre>";
+	htmltext += "\n   0 -" + Lang[9];
+//	htmltext += "\n";
+	htmltext += "\n   <span class=redkey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> -" + Lang[19] + "</span><span class=greenkey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> -" + Lang[19] + "</span><span class=yellowkey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> -" + Lang[35] + " 1  </span><span class=bluekey>\u25CF</span><span class=mainfont" + cssres[css_nr][Set_Res] + "> -" + Lang[19] + "</span></pre>";
+
 	mainmenu.innerHTML = htmltext;
 
 }
