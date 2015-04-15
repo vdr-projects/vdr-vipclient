@@ -2621,6 +2621,7 @@ function onKeyMenu(keyCode) {
 			SleepTimer = 0;
 		} else {
 			SleepTimerID = setTimeout("SleepTimer = 0;toi.platformService.setStandby(true);", (SleepTimer * 60 * 1000));
+			SetLed(2,3,0);
 		}
 	} else if (menu == 2) {
 		var x = ss.getBookingIds("*", 0, 0);
