@@ -197,7 +197,14 @@ function GetSettings() {
 	}
 
 	audio = Number(is.getObject("vip.languagepriority"));
-	for (var i=0;i<10;i++) { if (ServerAdres[i] !== "FullURL" && ServerAdres[i] !== "MultiCast") {ServerAdres[i] = server_ip + StreamPort;} }
+	for (var i=0;i<10;i++) { 
+		if (ServerAdres[i] == "FullURL" || ServerAdres[i] == "MultiCast") {
+			// url ready
+		} else { 
+			ServerAdres[i] = server_ip + StreamPort;
+		}
+	}
+
 	ServerAdres[Fav_group] = server_ip + StreamPort;
 
 	lang_nr = Number(is.getObject("vip.OSDlanguage"));
@@ -475,14 +482,20 @@ try {
 	 }
 	if (PIPDelayID != -1) { clearTimeout(PIPDelayID); PIPDelayID = -1; }
 
-	if (ServerAdres[ChanGroup] == "MultiCast" ) {
- 	SI=channels[currChan].split("-");
-	uri = SI[4];
-	} else if (ServerAdres[ChanGroup] == "FullURL" ) {
-	// uri = ready!
-	} else {
-	uri = ServerAdres[ChanGroup] + uri;
-	}
+    if (Global_Multicast) {
+	var x = Math.floor(currChan / 256);
+	uri = "239.255." + x.toString() + "." + (currChan - ( x * 256)).toString() + ":11111";
+	initialDelayPlay = 0;
+    } else if (Global_Server && ServerAdres[ChanGroup] !== "MultiCast" && ServerAdres[ChanGroup] == "FullURL")) {
+	uri = ServerAdres[ChanGroup] + uri; 
+    } else if (ServerAdres[ChanGroup] == "MultiCast" ) { 
+	SI=channels[currChan].split("-"); uri = SI[4];
+    } else if (ServerAdres[ChanGroup] == "FullURL" ) {
+	;// uri = ready!
+    } else {
+	uri = Server_Address[currChan] + uri;
+    }
+
 	pipPlayer.open(uri);
 	PIPDelayID = setTimeout("pipPlayer.play(1000);", 500);
   } catch (e) {
@@ -503,22 +516,22 @@ function play(uri) {
     if (epgactive) { epg_unactive();}
 
     //Server address setup
-    if (ServerAdres[ChanGroup] == "MultiCast" ) { 
-	SI=channels[currChan].split("-"); uri = SI[4];
-    } else if (ServerAdres[ChanGroup] == "FullURL" ) {
-	;// uri = ready!
-    }
-
-
     if (Global_Multicast) {
 	var x = Math.floor(currChan / 256);
 	uri = "239.255." + x.toString() + "." + (currChan - ( x * 256)).toString() + ":11111";
 	initialDelayPlay = 0;
-    } else if (Global_Server) {
+    } else if (Global_Server && ServerAdres[ChanGroup] !== "MultiCast" && ServerAdres[ChanGroup] !== "FullURL") {
 	uri = ServerAdres[ChanGroup] + uri; 
+    } else if (ServerAdres[ChanGroup] == "MultiCast" ) { 
+	SI=channels[currChan].split("-"); uri = SI[4];
+    } else if (ServerAdres[ChanGroup] == "FullURL" ) {
+	;// uri = ready!
     } else {
 	uri = Server_Address[currChan] + uri;
     }
+
+alert(uri);
+alert(ChanGroup);
 
 
     URL = uri;
@@ -2720,8 +2733,12 @@ function onKeyMenu(keyCode) {
 		is.setObject("vip.serveraddress",x.toString(),is.STORAGE_PERMANENT);
 		GetServerIP();
 
-		for (var i=0;i<10;i++) {
-			if (ServerAdres[i] !== "FullURL" && ServerAdres[i] !== "MultiCast") {ServerAdres[i] = server_ip + StreamPort;}
+		for (var i=0;i<10;i++) { 
+			if (ServerAdres[i] == "FullURL" || ServerAdres[i] == "MultiCast") {
+				// url ready
+			} else { 
+				ServerAdres[i] = server_ip + StreamPort;
+			}
 		}
 		InitMenu(menu);
 	}
@@ -5284,17 +5301,15 @@ function onScheduledStart(event) {
 		var recGroup = Number(Left((recChannr / 1000),1));
 		var recChan;
 
-	    if (ServerAdres[recGroup] == "MultiCast" ) { 
-		SI=channels[recChannr].split("-"); recChan = SI[4];
-	    } else if (ServerAdres[recGroup] == "FullURL" ) {
-		recChan = channels[recChannr];
-	    }
-
 	    if (Global_Multicast) {
 		var x = Math.floor(recChannr / 256);
 		recChan = "239.255." + x.toString() + "." + (recChannr - ( x * 256)).toString() + ":11111";
-	    } else if (Global_Server) {
+	    } else if (Global_Server && ServerAdres[recGroup] !== "MultiCast" && ServerAdres[recGroup] !== "FullURL") {
 		recChan = ServerAdres[recGroup] + channels[recChannr]; 
+	    } else if (ServerAdres[recGroup] == "MultiCast" ) { 
+		SI=channels[recChannr].split("-"); recChan = SI[4];
+	    } else if (ServerAdres[recGroup] == "FullURL" ) {
+		recChan = channels[recChannr];
 	    } else {
 		recChan = Server_Address[recChannr] + channels[recChannr];
 	    }
