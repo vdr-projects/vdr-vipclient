@@ -486,7 +486,7 @@ try {
 	var x = Math.floor(currChan / 256);
 	uri = "239.255." + x.toString() + "." + (currChan - ( x * 256)).toString() + ":11111";
 	initialDelayPlay = 0;
-    } else if (Global_Server && ServerAdres[ChanGroup] !== "MultiCast" && ServerAdres[ChanGroup] == "FullURL")) {
+    } else if (Global_Server && ServerAdres[ChanGroup] !== "MultiCast" && ServerAdres[ChanGroup] !== "FullURL") {
 	uri = ServerAdres[ChanGroup] + uri; 
     } else if (ServerAdres[ChanGroup] == "MultiCast" ) { 
 	SI=channels[currChan].split("-"); uri = SI[4];
