@@ -3,7 +3,6 @@
 	padding: 0;
 	border: 0;
 	vertical-align: baseline;
-	font-family		: 'Ubuntu', sans-serif;
 }
 
 body {
@@ -12,7 +11,6 @@ body {
 	height			: 100%;
 	margin			: 0;
 	padding			: 0;
-	font-family		: 'Ubuntu', sans-serif;
 }
 
 videoplane#videoplane {
@@ -27,7 +25,6 @@ videoplane#videoplane {
 /* OSD Bottom of Decorder */
 
 div#osdmain {
-	font-family		: 'Ubuntu', sans-serif;
 	font-weight		: 400;
 	position		: absolute;
 	z-index			: 505;
@@ -73,6 +70,12 @@ div#osdmain {
 		overflow		: hidden;
 		text-overflow	: ellipsis; 
 	}
+
+	.osdname1080{
+	color		: white;
+	font-size:40px;
+	}
+
 
 	div#osdtimer {
 		color			: #feb900;
@@ -136,8 +139,8 @@ div#osdmain {
 	.bluekey {
 	color	: blue;
 	}
-	.#ad0806key {
-	color	: #ad0806;
+	.redkey {
+	color	: red;
 	}
 	.yellowkey {
 	color	:yellow;
@@ -145,30 +148,30 @@ div#osdmain {
 	.greenkey {
 	color	:green;
 	}
-	.mainfont {
-	font-size:49px;
-	color:black;
+	.mainfont1080 {
+	font-size:35px;
+	color:white;
 	}
 	
 	.notset {
 	color	:grey;
 	}
 
-	.select {
+	.select1080 {
 		background	: rgba(0,0,0,0.8);
 		color		: #feb900;
-		font-size	: 40px;
+		font-size	: 35px;
 	}
 
-	.mediaselect {
+	.mediaselect1080 {
 		background	: rgba(0,0,0,0.8);
 		color		: #feb900;
-		font-size	: 40px;
+		font-size	: 35px;
 	}
 
-	pre.mediamenu {
-	font-size:38px;
-	color:black;
+	pre.mediamenu1080 {
+	font-size:35px;
+	color:white;
 	}
 
 	p.epg_head { 
@@ -177,7 +180,7 @@ div#osdmain {
 	}
 
 	p.epg_avinfo {
-	color:black;
+	color:green;
 	text-align: center;
 	}
 
@@ -191,25 +194,25 @@ div#osdmain {
 	text-align: center;
 	}
 
-	pre.color_switchtimer {
+	pre.color_switchtimer1080 {
 	background		: #660066;
 	}
 
-	pre.color_default {
+	pre.color_default1080 {
 	background		: green;
 	}
 
-	pre.color_error {
+	pre.color_error1080 {
 	background		: #ad0806;
 	}
 	
-	pre.mainhead {
+	pre.mainhead1080 {
 	font-size:66px;
 	color:white;
 	text-align: center;
 	}
 
-	pre.media {
+	pre.media1080 {
 	color:white;
 	font-size:49px;
 	}
@@ -223,13 +226,13 @@ div#osdmain {
 	text-align: center;
 	}
 
-	p.epg {
+	p.epg1080 {
 	font-size:36px;
 	color:black;
 	text-align: center;
 	}
 	
-	p.list {
+	p.list1080 {
 		font-size:34px;
 		color:black;
 		text-align: center;
@@ -250,8 +253,11 @@ div#osdmain {
 		position		: absolute;
 		width			: 100%;
 		left			: 10%;
-		top				: 84%;
-		font-size		: 36px;
+		top			: 84%;
+	}
+
+	pre.colorkeys1080 {
+		font-size:36px;
 	}
 
 	div#chanlistepg { 
@@ -264,7 +270,6 @@ div#osdmain {
 
 	div#osdvolume { 
 		opacity			: 0;
-		font-family		: 'Ubuntu', sans-serif;
 		font-weight		: 400;
 		position		: absolute;
 		z-index			: 506;
@@ -278,32 +283,42 @@ div#osdmain {
 		padding			: 25px 0;
 	}
 	
-		div#osdvolume pre {
+		div#osdvolume1080 pre {
 			width		: 100%;
 			font-size	: 48px;
 			text-align	: center;
 		}
 
 	div#osdmedia { 
-		width		:80%;
-		position	:absolute;
-		left		:10%;
-		top		:60%;
-		z-index		:506;
-		opacity		:0;
-		-webkit-border-radius:50px;
-	background		: #3366ff;
+	font-weight		: 400;
+	position		: absolute;
+	z-index			: 506;
+	background		: url(../images/black/osd-bg.png) top center repeat-x rgba(0,0,0,0.8);
+	width			: 94.2%;
+	height			: 25%;
+	bottom			: 3.1%;
+	left			: 3.1%;
+	color			: #FFF;
+	overflow		: hidden;
+	opacity			:0;
 	}
 
 	div#osdmediatime {
-	z-index			: 506;
-		position	: absolute;
-		width		: 42%;
-		right		: 15%;
-		top		: 63%;
-		color		: white;
-		font-size:35px;
-		text-align: right;
+		font-size		: 28px;
+		line-height		: 45px;
+		color			: #FFF;
+		position		: absolute;
+		width			: 30%;
+		height			: 25%;
+		right			: 3%;
+		bottom			: 0%;
+		text-align		: right;
+		border-bottom	: 1px solid #444;
+		white-space		: nowrap;
+		overflow		: hidden;
+		text-overflow	: ellipsis;
+		z-index			: 506;
+		opacity			:0;
 	}
 
 
@@ -341,44 +356,43 @@ div#osdmain {
 	}
 
 	div#mainmenu {
-		width		: 40%;
+		width		: 50%;
 		height		: 100%;
-		color		: #FFF;
+/*		color		: #FFF;
 		text-align	: left;
+		padding		: 30px;
+*/ 
 		position	: absolute;
-		left		: 3%;
+		left		: 5%;
 		top			: 3%;
 		z-index		: 520;
 		opacity		: 0;
 		background	: url(../images/black/osd-bg.png) top center repeat-x rgba(0,0,0,0.8);
-		color		: #FFF;
-		padding		: 30px;
 	}
 	
-		div#mainmenu h1 {
+		h1.mainmenu1080 {
 			font-size	: 53px;
 			color		: #FFF;
 			text-align	: left;
 			margin		: 0 0 30px 0;
 		}
 		
-			div#mainmenu pre {
-				font-size	: 35px;
-				color		: #FFF;
-				margin		: 0;
-				padding		: 0;
-			}
+		pre.mainmenu1080 {
+			font-size	: 35px;
+			color		: #FFF;
+			margin		: 0;
+			padding		: 0;
+		}
 
 	div#medialist {
-		width		: 80%;
+		width		: 60%;
 		position	: absolute;
-		left		: 10%;
-		top			: 10%;
-		bottom		: 10%;
+		left		: 5%;
+		top		: 3%;
+		height		: 100%;
 		z-index		: 520;
 		opacity		: 0;
-		-webkit-border-radius:50px;
-		background	: #3366ff;
+		background	: url(../images/black/osd-bg.png) top center repeat-x rgba(0,0,0,0.8);
 	}
 
 	div#switchtimer {
@@ -421,3 +435,33 @@ div#osdmain {
 		color		: #FFF;
 		padding		: 30px 5%;
 	}
+
+	pre.newsmenu1080 {
+	font-size:35px;
+	color:white;
+	overflow:hidden;
+	}
+
+	.newsinfo1080 {
+	padding:60px 0px 0px 0px;
+	font-size:35px;
+	color	:white;
+	overflow:hidden;
+	}
+
+	.newsselect1080 {
+	background	: rgba(0,0,0,0.8);
+	color:yellow;
+	font-size:35px;
+	}
+
+	.weather1080 {
+		color		: white;
+		font-size:25px;
+		text-align: left;
+	}
+
+	.imgsize1080 {
+	height: 150%;
+	}
+

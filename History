@@ -18,7 +18,8 @@ VDR 1.7.29+
 	Powerserverdown shares now blue button with restart script (almost nobody uses powerserverdown)
 	After stream state paused & positionend, script waits TryingInterval time and tries to restart stream 
 	  (if server is stopped/restarted you get this error)
-
+	Black skin is getting completer
+	BVN has no epg (unknown language code)
 
 
 0.26	Fix for [undefined] in (search)timer menu when there are no (search)timers on server

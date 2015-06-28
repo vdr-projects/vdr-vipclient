@@ -2,7 +2,7 @@
 // Default settings
 // 
 
-var Version = "0.27.6";
+var Version = "0.27.7";
 
 //weather
 var city = "Almelo";
@@ -39,7 +39,7 @@ lang_prio = new Array("dut,eng,und","ger,deu,eng","eng,und","fre,fra,eng");
 cssfile = new Array ("blue","black");
 cssres = new Array();
 cssres[0] = new Array ("576","720","1080"); //blue.css
-cssres[1] = new Array ("","",""); //black.css
+cssres[1] = new Array ("","","1080"); //black.css
 
 var css_nr;
 
