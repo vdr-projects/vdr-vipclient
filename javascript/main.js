@@ -4924,7 +4924,7 @@ function getSchedule(schchan){
 		        m = date.getMinutes();
 			h=addzero(h);
 			m=addzero(m);
-			recList[i] = ' ' + days[day] + ' ' + d + ' ' + months[month] + ' ' + year + " " + h + ":" + m + " (" + (recDura[i]/60).toFixed(0) + ") " + recTitl[i]; //+ Left(recTitl[i],30);
+			recList[i] = ' ' + days[day] + ' ' + d + ' ' + months[month] + ' ' + year + " " + h + ":" + m + " (" + (recDura[i]/60).toFixed(0) + ") " + recTitl[i];
 		}
 	getRecOK = 2;
 	} else {
@@ -5204,13 +5204,11 @@ if (get_recordings == 1) {
 	osdmediatime.innerHTML = "<span class=osdtime" + cssres[css_nr][Set_Res] + ">" + result + "</span>";
 	date_time_rec();
 	osdmedia.innerHTML = "<pre class=media" + cssres[css_nr][Set_Res] + "> \n  " + (pos/60).toFixed(0) + " / " + x + "  " + recTitl[currMed] + "\n  " + pos4 + "\n " + result + " </pre>";
-// Left(recTitl[currMed],40) + "\n  " + pos4 + "\n " + result + " </pre>";
 } else if ( get_recordings == 2) {
 	var pos = position + (mediaPlayer.getPosition()/1000);
 	date_time();
 	osdmediatime.innerHTML = "<span class=osdtime" + cssres[css_nr][Set_Res] + ">" + result + "</span>";
 	osdmedia.innerHTML = "<pre class=media" + cssres[css_nr][Set_Res] + "> \n  " + (pos/60).toFixed(0) + " \n " + recTitl[currMed] + "\n  \n " + recStrt[currMed] + " </pre>";
-//+ Left(recTitl[currMed],40) + "\n  \n " + recStrt[currMed] + " </pre>";
 }
 }
 
@@ -5220,7 +5218,7 @@ function ShowInfo() {
   if (get_recordings == 2) {
 	result = recStrt[currMed]
        	osdepginfo.innerHTML = "<span class=osdepginfo" + cssres[css_nr][Set_Res] + ">"
-				+ "<p class=epg_head>" + Left(recTitl[currMed],60) 
+				+ "<p class=epg_head>" + recTitl[currMed]
 				+ "</p><p class=epg_avinfo>" + AvInfo[currMed] 
 				+ "</p><p class=epg_title> " + result + "<br>" 
 				+ "???" + Lang[54]
@@ -5239,8 +5237,7 @@ function ShowInfo() {
 
 	if (year!==1970) { 	
        		osdepginfo.innerHTML = "<span class=osdepginfo" + cssres[css_nr][Set_Res] + ">"
-					+ "<p class=epg_head>"
-					+ Left(recTitl[currMed],60) 
+					+ "<p class=epg_head>" + recTitl[currMed] 
 					+ "</p><p class=epg_avinfo>" + AvInfo[currMed] 
 					+ "</p><p class=epg_title> " + result + "<br>" 
 					+ (recDura[currMed] / 60).toFixed(0) + Lang[54] + "<br>" + recChan[currMed]
@@ -5248,8 +5245,7 @@ function ShowInfo() {
 	} else {
 		//info for non-vdr recordings
 	       	osdepginfo.innerHTML = "<span class=osdepginfo" + cssres[css_nr][Set_Res] + ">"
-					+ "<p class=epg_head>"
-					+ Left(recTitl[currMed],60) 
+					+ "<p class=epg_head>" + recTitl[currMed] 
 					+ "</p><p class=epg_avinfo>" + AvInfo[currMed] + " " + "<br><br></p></span>";
 	}
   }

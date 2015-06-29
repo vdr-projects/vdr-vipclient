@@ -421,6 +421,7 @@ div#osdmain {
 		font-size	: 39px;
 		color		: #FFF;
 		padding		: 30px 5%;
+		overflow	:hidden;
 	}
 
 	div#osdepginfonext {
@@ -435,6 +436,7 @@ div#osdmain {
 		font-size	: 39px;
 		color		: #FFF;
 		padding		: 30px 5%;
+		overflow	:hidden;
 	}
 
 	pre.newsmenu1080 {
