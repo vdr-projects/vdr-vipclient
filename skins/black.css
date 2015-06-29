@@ -393,6 +393,7 @@ div#osdmain {
 		z-index		: 520;
 		opacity		: 0;
 		background	: url(../images/black/osd-bg.png) top center repeat-x rgba(0,0,0,0.8);
+		overflow:hidden;
 	}
 
 	div#switchtimer {

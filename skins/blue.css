@@ -786,6 +786,7 @@
 	opacity		:0;
 	-webkit-border-radius:50px;
 	background		: #3366ff;
+	overflow:hidden;
 	}
 
 	div#switchtimer {

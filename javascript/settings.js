@@ -40,6 +40,10 @@ cssfile = new Array ("blue","black");
 cssres = new Array();
 cssres[0] = new Array ("576","720","1080"); //blue.css
 cssres[1] = new Array ("","","1080"); //black.css
+css_maxlines = new Array(); //Max number of lines show with epglist/ medialist/ recordingslist etc
+css_maxlines[0] = 14;
+css_maxlines[1] = 20;
+
 
 var css_nr;
 

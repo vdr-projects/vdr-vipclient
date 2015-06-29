@@ -4141,7 +4141,7 @@ if (DelisOK) {
 
 function getRecList() {
 	getVDRstatus();
-	MaxInGroup = 14;
+	MaxInGroup = css_maxlines[css_nr];
 	subgroup = 0;
 	subsubgroup = 0;
 try {
@@ -4769,7 +4769,7 @@ function showMediaList() {
 
 		if (subgroup) {
 			htmlstring = "<h1 class=mainmenu" + cssres[css_nr][Set_Res] + ">" + Group_Header[Number(recGroup[currMed])] + "</h1><pre class=mediamenu" + cssres[css_nr][Set_Res] + ">";
-			if (MaxInGroup < 14){ MaxMed = MaxInGroup; } else {MaxMed = 14; }
+			if (MaxInGroup < css_maxlines[css_nr]){ MaxMed = MaxInGroup; } else {MaxMed = css_maxlines[css_nr]; }
 		}
 		if (!subgroup) { 
 			for(var i=0; i<=nrMedia; i++) {
@@ -4779,11 +4779,11 @@ function showMediaList() {
 
 	} else {
 
-		if (nrMedia < 14) {MaxMed = nrMedia; } else {MaxMed = 14; }
+		if (nrMedia < css_maxlines[css_nr]) {MaxMed = nrMedia; } else {MaxMed = css_maxlines[css_nr]; }
 		var htmlstring = "<h1 class=mainmenu" + cssres[css_nr][Set_Res] + ">" + Lang[11] + channelsnames[currChan] + " </h1><pre class=mediamenu" + cssres[css_nr][Set_Res] + ">";
 	}
 
-	if (MaxMed > 14) { MaxMed = 14; }
+	if (MaxMed > css_maxlines[css_nr]) { MaxMed = css_maxlines[css_nr]; }
 	if (MaxMed < 0 ) { MaxMed = 0; }
 
 	for(var i=currMed; i<=currMed + MaxMed; i++) {
@@ -4901,8 +4901,8 @@ function getSchedule(schchan){
 	    nrMedia = events.infoSequence.length - 1;
 	    for (var i = 0; i < events.infoSequence.length; i++) {
 
-		// Double info or scrollbar twice on the screen if nrMedia < 14
-		while ((i > 0) && (events.infoSequence[i].eventId == events.infoSequence[(i-1)].eventId) && (nrMedia > 14)) {
+		// Double info or scrollbar twice on the screen if nrMedia < css_maxlines[css_nr]
+		while ((i > 0) && (events.infoSequence[i].eventId == events.infoSequence[(i-1)].eventId) && (nrMedia > css_maxlines[css_nr])) {
 			recList[i] = "";
 			i++;
 		}
@@ -4924,7 +4924,7 @@ function getSchedule(schchan){
 		        m = date.getMinutes();
 			h=addzero(h);
 			m=addzero(m);
-			recList[i] = ' ' + days[day] + ' ' + d + ' ' + months[month] + ' ' + year + " " + h + ":" + m + " (" + (recDura[i]/60).toFixed(0) + ") " + Left(recTitl[i],30);
+			recList[i] = ' ' + days[day] + ' ' + d + ' ' + months[month] + ' ' + year + " " + h + ":" + m + " (" + (recDura[i]/60).toFixed(0) + ") " + recTitl[i]; //+ Left(recTitl[i],30);
 		}
 	getRecOK = 2;
 	} else {
@@ -5203,12 +5203,14 @@ if (get_recordings == 1) {
 	date_time();
 	osdmediatime.innerHTML = "<span class=osdtime" + cssres[css_nr][Set_Res] + ">" + result + "</span>";
 	date_time_rec();
-	osdmedia.innerHTML = "<pre class=media" + cssres[css_nr][Set_Res] + "> \n  " + (pos/60).toFixed(0) + " / " + x + "  " + Left(recTitl[currMed],40) + "\n  " + pos4 + "\n " + result + " </pre>";
+	osdmedia.innerHTML = "<pre class=media" + cssres[css_nr][Set_Res] + "> \n  " + (pos/60).toFixed(0) + " / " + x + "  " + recTitl[currMed] + "\n  " + pos4 + "\n " + result + " </pre>";
+// Left(recTitl[currMed],40) + "\n  " + pos4 + "\n " + result + " </pre>";
 } else if ( get_recordings == 2) {
 	var pos = position + (mediaPlayer.getPosition()/1000);
 	date_time();
 	osdmediatime.innerHTML = "<span class=osdtime" + cssres[css_nr][Set_Res] + ">" + result + "</span>";
-	osdmedia.innerHTML = "<pre class=media" + cssres[css_nr][Set_Res] + "> \n  " + (pos/60).toFixed(0) + " \n " + Left(recTitl[currMed],40) + "\n  \n " + recStrt[currMed] + " </pre>";
+	osdmedia.innerHTML = "<pre class=media" + cssres[css_nr][Set_Res] + "> \n  " + (pos/60).toFixed(0) + " \n " + recTitl[currMed] + "\n  \n " + recStrt[currMed] + " </pre>";
+//+ Left(recTitl[currMed],40) + "\n  \n " + recStrt[currMed] + " </pre>";
 }
 }
 
