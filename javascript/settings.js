@@ -2,7 +2,7 @@
 // Default settings
 // 
 
-var Version = "0.27.7";
+var Version = "0.27.72";
 
 //weather
 var city = "Almelo";
@@ -41,9 +41,11 @@ cssres = new Array();
 cssres[0] = new Array ("576","720","1080"); //blue.css
 cssres[1] = new Array ("","","1080"); //black.css
 css_maxlines = new Array(); //Max number of lines show with epglist/ medialist/ recordingslist etc
+css_maxlines2 = new Array(); //Max number of lines show with timers, epg etc from server
 css_maxlines[0] = 14;
+css_maxlines2[0] = 10; // timers, epg etc from server
 css_maxlines[1] = 20;
-
+css_maxlines2[1] = 20;
 
 var css_nr;
 

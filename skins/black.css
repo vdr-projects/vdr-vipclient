@@ -232,6 +232,13 @@ div#osdmain {
 	text-align: center;
 	}
 	
+	pre.deletefile1080 {
+	text-align	: center;
+	color		:white;
+	font-size	:36px;
+	background	:red;
+	}
+
 	p.list1080 {
 		font-size:34px;
 		color:black;
@@ -368,6 +375,7 @@ div#osdmain {
 		z-index		: 520;
 		opacity		: 0;
 		background	: url(../images/black/osd-bg.png) top center repeat-x rgba(0,0,0,0.8);
+		overflow	:hidden;
 	}
 	
 		h1.mainmenu1080 {
@@ -407,6 +415,7 @@ div#osdmain {
 		font-size 	: 36px;
 		background	: green;
 		text-align	: center;
+		overflow	:hidden;
 	}
 
 	div#osdepginfo {

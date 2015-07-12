@@ -2977,7 +2977,7 @@ if(menu == 2) { // Timers menu
 	var x = timerID - 2;
 	var y = ss.getBookingIds("*", 0, 0);
 	if (y.length !== 0) {
-	for (var i=0;i<10;i++) {
+	for (var i=0;i<css_maxlines2[css_nr];i++) {
 		if (timer.length !== 0) { do { x++; } while (!timer[x] && (x < timer.length)) }
 
 			if (i == 0) {
@@ -3052,7 +3052,7 @@ if(menu == 5) { // Timers from Server
 	if (timerOK) {
 	booking = "<span class=select" + cssres[css_nr][Set_Res] + ">";
 	var x = timerID - 1;
-	for (var i=0;i<10;i++) {
+	for (var i=0;i<css_maxlines2[css_nr];i++) {
 		if (maxTimers !== 0) { do { x++; } while (!timers[x] && (x < maxTimers)) }
 		if (maxTimers > x) { booking += timers[x]; } else { booking += "\n"; }
 		if (i == 0) { booking += "</span>"; } 
@@ -3070,7 +3070,7 @@ if(menu == 7) { // SearchTimers from Server
 	if (timerOK) {
 	booking = "<span class=select" + cssres[css_nr][Set_Res] + ">";
 	var x = timerID - 1;
-	for (var i=0;i<10;i++) {
+	for (var i=0;i<css_maxlines2[css_nr];i++) {
 		if (maxTimers !== 0) { do { x++; } while (!searchtimers[x] && (x < maxTimers)) }
 		if (maxTimers > x) { booking += searchtimers[x]; } else { booking += "\n"; }
 		if (i == 0) { booking += "</span>"; } 
@@ -3146,7 +3146,7 @@ if(menu == 10) { // Favorite edit Menu
 	htmltext += "</h1><pre class=mainmenu" + cssres[css_nr][Set_Res] + ">\n";
 	htmltext += "<span class=select" + cssres[css_nr][Set_Res] + ">";
 	var x = timerID;
-	for (var i=0;i<10;i++) {
+	for (var i=0;i<css_maxlines2[css_nr];i++) {
 		if (maxTimers !== 0) { x++;}
 		if (maxTimers >= x && x !== 0) { htmltext += " \u0003\u0003 " + x + " \u0003\u0003 " + channelsnames[(x + Fav_base)] + " \u0003\u0003\u0003 \n"; } else { htmltext += "\n"; }
 		if (i == 0) { htmltext += "</span>"; } 
