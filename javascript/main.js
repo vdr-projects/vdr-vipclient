@@ -24,11 +24,14 @@ function onLoad() {
 	embedTeletextPlugin();
 	aos.setVolume(AudioOut, StartVolume);
 	aos.setMuteState(AudioOut, false);
-	showDisplay(currChan.toString(), false, 100, 0 );
 
-	//if box is in standby don't start a stream.
+	//if box is in standby don't start a stream or change frontdisplay.
 	if (is.getObject("var.io.state") == "normal") {
 		play(channels[currChan]);
+		showDisplay(currChan.toString(), false, 100, 0 );
+	} else {
+		SetLed(2,2,0);// At request no more blinking on standby.
+		showDisplay("", true, 50, 1 );
 	}
 
 	if (EPGMode) {
@@ -102,6 +105,11 @@ function onLoad() {
 			crontime.setMinutes(Cron_min-1);
 			settimer(crontime.getTime()/1000,"-",0,6); // Reload 
 		}
+	}
+
+	if (Use_DLNA) {
+		//		initDLNAPlugin();
+		//		find_dlna();
 	}
 }
 

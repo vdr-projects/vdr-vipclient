@@ -30,6 +30,8 @@ var Cron_reload; // if set reload script at cron_hour / cron_min -1
 var Cron_switch_channel; //Channel to switch to, if not set current channel.
 var Cron_hour = 05;// Hour for cron job
 var Cron_min = 00; // Minute for cron job
+var Use_DLNA;// DLNA testing
+
 
 OSDLang = new Array ("English", "Nederlands", "Deutsch");
 langfile = new Array ("languages/lang_eng.js", "languages/lang_dut.js","languages/lang_ger.js");

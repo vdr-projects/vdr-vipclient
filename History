@@ -8,7 +8,7 @@ Marc E for the black skin.
 VDR 1.7.29+
 
 0.27	Weather info from openweathermap.org added.
-	Don't start the stream on boot or reload of the script if box is in standby
+	Don't start the stream on boot or reload of the script if box is in standby and put clock back on.
 	Fixed error getting german languages file.
 	Get server ip from flash
 	Bugfix, removed delayed play (in case of error) when you already start to play a recording
