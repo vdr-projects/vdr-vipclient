@@ -20,6 +20,9 @@ VDR 1.7.29+
 	  (if server is stopped/restarted you get this error)
 	Black skin is getting completer
 	BVN has no epg (unknown language code)
+	Autoset number of digits lower if needed (default on but can be switched back to old behaviour)
+	Epg info update for non C/T/S channels
+	Changed key word 'FullURL' to 'IPTV'
 
 
 0.26	Fix for [undefined] in (search)timer menu when there are no (search)timers on server

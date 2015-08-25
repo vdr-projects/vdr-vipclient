@@ -206,7 +206,7 @@ function GetSettings() {
 
 	audio = Number(is.getObject("vip.languagepriority"));
 	for (var i=0;i<10;i++) { 
-		if (ServerAdres[i] == "FullURL" || ServerAdres[i] == "MultiCast") {
+		if (ServerAdres[i] == "IPTV" || ServerAdres[i] == "MultiCast") {
 			// url ready
 		} else { 
 			ServerAdres[i] = server_ip + StreamPort;
@@ -494,11 +494,11 @@ try {
 	var x = Math.floor(currChan / 256);
 	uri = "239.255." + x.toString() + "." + (currChan - ( x * 256)).toString() + ":11111";
 	initialDelayPlay = 0;
-    } else if (Global_Server && ServerAdres[ChanGroup] !== "MultiCast" && ServerAdres[ChanGroup] !== "FullURL") {
+    } else if (Global_Server && ServerAdres[ChanGroup] !== "MultiCast" && ServerAdres[ChanGroup] !== "IPTV") {
 	uri = ServerAdres[ChanGroup] + uri; 
     } else if (ServerAdres[ChanGroup] == "MultiCast" ) { 
 	SI=channels[currChan].split("-"); uri = SI[4];
-    } else if (ServerAdres[ChanGroup] == "FullURL" ) {
+    } else if (ServerAdres[ChanGroup] == "IPTV" ) {
 	;// uri = ready!
     } else {
 	uri = Server_Address[currChan] + uri;
@@ -528,18 +528,18 @@ function play(uri) {
 	var x = Math.floor(currChan / 256);
 	uri = "239.255." + x.toString() + "." + (currChan - ( x * 256)).toString() + ":11111";
 	initialDelayPlay = 0;
-    } else if (Global_Server && ServerAdres[ChanGroup] !== "MultiCast" && ServerAdres[ChanGroup] !== "FullURL") {
+    } else if (Global_Server && ServerAdres[ChanGroup] !== "MultiCast" && ServerAdres[ChanGroup] !== "IPTV") {
 	uri = ServerAdres[ChanGroup] + uri; 
     } else if (ServerAdres[ChanGroup] == "MultiCast" ) { 
 	SI=channels[currChan].split("-"); uri = SI[4];
-    } else if (ServerAdres[ChanGroup] == "FullURL" ) {
+    } else if (ServerAdres[ChanGroup] == "IPTV" ) {
 	;// uri = ready!
     } else {
 	uri = Server_Address[currChan] + uri;
     }
 
-alert(uri);
-alert(ChanGroup);
+	//alert(uri);
+	//alert(ChanGroup);
 
 
     URL = uri;
@@ -1361,7 +1361,11 @@ function Makedigit() {
 		showDisplay((Change.toString()), false, 100, 0 ); 
 	}
 
-    if (count>channeldigits) {
+    var x = channeldigits;
+    var y = (maxChan[ChanGroup] - baseChn[ChanGroup]).toString().length - 1;
+    if (autodigits && (y < x )) { x = y;}
+
+    if (count>x) {
 	CheckChannel(Change);
 	count = 0;
     } else {
@@ -1497,16 +1501,28 @@ function OSDchannr(channr) {
 		//osdlogo.innerHTML = "<img src='experimental/logo/" + channels[currChan] + ".png' >";
 	}
 	osdnr.innerHTML = "<span class=osdnr" + cssres[css_nr][Set_Res] + ">" + Right(channr,3) + "</span>";
-//	alert(cssres[css_nr][Set_Res]);
 }
 
 function OSDhtml(){
     osdtime.innerHTML = "<span class=osdtime" + cssres[css_nr][Set_Res] + ">" + result + "</span>";
+    var sx = channels[currChan].split("-")[0];
+	if (Left(sx,1) !== "S" && Left(sx,1) !== "C" && Left(sx,1) !== "T") {
+	  EPG[0][7][currChan] = sx;
+	  EPG[1][7][currChan] = Lang[52];
+	  EPG[0][8][currChan] = "";
+	  EPG[1][8][currChan] = "";
+	  EPG[0][9][currChan] = "";
+	  EPG[1][9][currChan] = "";
+	  EPG[1][5][currChan] = sx;
+	  sx = "IP";
+	}
+
 	if (ShowSource == 1) {
-	    osdname.innerHTML = "<span class=osdname" + cssres[css_nr][Set_Res] + ">" + channels[currChan].split("-")[0] + "\uE003" + channelsnames[currChan] + "</span>";
+	    osdname.innerHTML = "<span class=osdname" + cssres[css_nr][Set_Res] + ">" + sx + "\uE003" + channelsnames[currChan] + "</span>";
 	} else {
 	    osdname.innerHTML = "<span class=osdname" + cssres[css_nr][Set_Res] + "> \uE003 " + channelsnames[currChan] + "</span>";
 	}
+
     osdepg.innerHTML = "<pre class=osdepg" + cssres[css_nr][Set_Res] + ">" + EPG[0][7][currChan] + "</pre>\n<pre class=osdepg" + cssres[css_nr][Set_Res] + ">" + EPG[1][7][currChan] + "</pre>";
     osdepginfo.innerHTML =  "<span class=osdepginfo" + cssres[css_nr][Set_Res] + ">" + "<p class=epg_head>" + currChan + "\uE003" + channelsnames[currChan] + "</p><p class=epg_avinfo>" + AvInfo[currChan] + "</p><p class=epg_title>" + EPG[0][7][currChan] + EPG[0][9][currChan] + EPG[0][8][currChan] + "</p>\n<p class=epg_info>" + EPG[0][4][currChan] + "</p>\n<p class=epg_info_long>" + Left(EPG[0][5][currChan],750) + "</p></span>";
     osdepginfonext.innerHTML =  "<span class=osdepginfo" + cssres[css_nr][Set_Res] + ">" + "<p class=epg_head>"  + currChan + "\uE003" + channelsnames[currChan] + "</p><p class=epg_title>" +  EPG[1][7][currChan] + EPG[1][9][currChan] + EPG[1][8][currChan] + "</p>\n<p class=epg_info>" + EPG[1][4][currChan] + "</p>\n<p class=epg_info_long>" + Left(EPG[1][5][currChan],750) + "</p></span>";
@@ -2742,7 +2758,7 @@ function onKeyMenu(keyCode) {
 		GetServerIP();
 
 		for (var i=0;i<10;i++) { 
-			if (ServerAdres[i] == "FullURL" || ServerAdres[i] == "MultiCast") {
+			if (ServerAdres[i] == "IPTV" || ServerAdres[i] == "MultiCast") {
 				// url ready
 			} else { 
 				ServerAdres[i] = server_ip + StreamPort;
@@ -4512,8 +4528,8 @@ function DelRec2() {
 	   xmlhttp=new XMLHttpRequest();
 	   xmlhttp.open("POST",(server_ip + recServ + "/deleteRecording.xml?id=" + recGUID[currMed] ),false);
 	   xmlhttp.send();
-	   recList[currMed] = "";
 	   recGroup[currMed] = -1;
+	   recList[currMed] = "";
 	   recProt[currMed] = 0;
 	  } catch(e) {
 	    alert("Delete Recordings problem: " + e);
@@ -5310,11 +5326,11 @@ function onScheduledStart(event) {
 	    if (Global_Multicast) {
 		var x = Math.floor(recChannr / 256);
 		recChan = "239.255." + x.toString() + "." + (recChannr - ( x * 256)).toString() + ":11111";
-	    } else if (Global_Server && ServerAdres[recGroup] !== "MultiCast" && ServerAdres[recGroup] !== "FullURL") {
+	    } else if (Global_Server && ServerAdres[recGroup] !== "MultiCast" && ServerAdres[recGroup] !== "IPTV") {
 		recChan = ServerAdres[recGroup] + channels[recChannr]; 
 	    } else if (ServerAdres[recGroup] == "MultiCast" ) { 
 		SI=channels[recChannr].split("-"); recChan = SI[4];
-	    } else if (ServerAdres[recGroup] == "FullURL" ) {
+	    } else if (ServerAdres[recGroup] == "IPTV" ) {
 		recChan = channels[recChannr];
 	    } else {
 		recChan = Server_Address[recChannr] + channels[recChannr];

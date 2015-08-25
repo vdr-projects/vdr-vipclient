@@ -99,6 +99,7 @@ var StreamPort = ":" + "3000" + "/";
 //var StreamPort = ":" + "8000" + "/live/";
 
 var channeldigits = 2; // 0 - Max 9, 1 max 99, 2 max 999 or 3 max 9999 channels directly selectable by numbers
+var autodigits = 1; //0 like before, 1 if max in group is < 99 autoset digits to 1, if max < 9 autoset to 0. Autoset can't be > channeldigits
 
 var Fav_group = 10; // Favorite Group 10
 
