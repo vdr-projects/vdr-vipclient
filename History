@@ -3,6 +3,7 @@ Motorola Vip : 1960, 1910, 1903, 1963.
 
 Thnx to all the testers and to  
 Martin N for the german translation.
+Tomas N for the Finnish translation.
 Marc E for the black skin.
 
 VDR 1.7.29+
@@ -23,6 +24,7 @@ VDR 1.7.29+
 	Autoset number of digits lower if needed (default on but can be switched back to old behaviour)
 	Epg info update for non C/T/S channels
 	Changed key word 'FullURL' to 'IPTV'
+	Finnish translation by Tomas Nybondas
 
 
 0.26	Fix for [undefined] in (search)timer menu when there are no (search)timers on server

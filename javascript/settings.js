@@ -2,7 +2,7 @@
 // Default settings
 // 
 
-var Version = "0.27.72";
+var Version = "0.27.74";
 
 //weather
 var city = "Almelo";
@@ -33,10 +33,10 @@ var Cron_min = 00; // Minute for cron job
 var Use_DLNA;// DLNA testing
 
 
-OSDLang = new Array ("English", "Nederlands", "Deutsch");
-langfile = new Array ("languages/lang_eng.js", "languages/lang_dut.js","languages/lang_ger.js");
+OSDLang = new Array ("English", "Nederlands", "Deutsch", "Suomi");
+langfile = new Array ("languages/lang_eng.js", "languages/lang_dut.js","languages/lang_ger.js", "languages/lang_fin.js");
 var conf_dir = "config/";
-lang_prio = new Array("dut,eng,und","ger,deu,eng","eng,und","fre,fra,eng");
+lang_prio = new Array("dut,eng,und","ger,deu,eng","eng,und","fre,fra,eng","swe,eng","fin,eng");
 
 cssfile = new Array ("blue","black");
 cssres = new Array();

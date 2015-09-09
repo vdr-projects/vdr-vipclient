@@ -10,7 +10,7 @@ NN[4] = "-----";
 NN[5] = "INFO";
 NN[6] = "ZURUCK";
 
-lang_prio_lang = new Array("Hollaendisch", "Deutsch", "Englisch", "Franzoesisch");
+//lang_prio_lang = new Array("Hollaendisch", "Deutsch", "Englisch", "Finnisch");
 months = new Array('Januar', 'Februar', 'Maerz', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember');
 days = new Array("Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag");
 

@@ -11,8 +11,7 @@ NN[4] = "-----";
 NN[5] = "INFO";
 NN[6] = "BACK";
 
-//lang_prio = new Array("dut,eng,und","ger,deu,eng","eng,und","fre,fra,eng");
-lang_prio_lang = new Array("Dutch", "German", "English","French");
+//lang_prio_lang = new Array("Dutch", "German", "English","Finnish");
 months = new Array('January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December');
 days = new Array('Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday');
 
