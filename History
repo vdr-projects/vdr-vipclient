@@ -8,7 +8,7 @@ Marc E for the black skin.
 
 VDR 1.7.29+
 
-0.27	Weather info from openweathermap.org added.
+0.27	Weather info from openweathermap.org added. You can add your own api key, see settings.js
 	Don't start the stream on boot or reload of the script if box is in standby and put clock back on.
 	Fixed error getting german languages file.
 	Get server ip from flash
@@ -25,6 +25,8 @@ VDR 1.7.29+
 	Epg info update for non C/T/S channels
 	Changed key word 'FullURL' to 'IPTV'
 	Finnish translation by Tomas Nybondas
+	Menu time out, menu is removed 1 minute after last key press (not for MPD menu)
+
 
 
 0.26	Fix for [undefined] in (search)timer menu when there are no (search)timers on server

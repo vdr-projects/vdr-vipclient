@@ -2,10 +2,13 @@
 // Default settings
 // 
 
-var Version = "0.27.74";
+var Version = "0.27.75";
 
 //weather
 var city = "Almelo";
+var api_key = "0ab9bddd602f50993f13bb67caf67c9a"; 
+// You can get your own key from http://home.openweathermap.org/users/sign_in
+
 //news
 newssite = new Array("http://www.nu.nl/rss/Algemeen","http://www.nu.nl/rss/Economie","http://www.nu.nl/rss/Internet","http://www.spiegel.de/international/index.rss","http://www.spiegel.de/schlagzeilen/index.rss","http://rss.dw.de/rdf/rss-en-all","http://rss.dw.de/rdf/rss-de-all");
 var newssiteID = 0;
@@ -31,7 +34,8 @@ var Cron_switch_channel; //Channel to switch to, if not set current channel.
 var Cron_hour = 05;// Hour for cron job
 var Cron_min = 00; // Minute for cron job
 var Use_DLNA;// DLNA testing
-
+var MenuOffID; //Menu remove timeout
+var MenuTimeOut = 1 * 60 * 1000; // 1 minutes TimeOut
 
 OSDLang = new Array ("English", "Nederlands", "Deutsch", "Suomi");
 langfile = new Array ("languages/lang_eng.js", "languages/lang_dut.js","languages/lang_ger.js", "languages/lang_fin.js");

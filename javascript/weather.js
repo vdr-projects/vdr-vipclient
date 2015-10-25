@@ -4,7 +4,7 @@ function WeatherInfo1() {
    htmltext += "\n\n"
 
    xmlhttp=new XMLHttpRequest();
-   xmlhttp.open("GET","http://api.openweathermap.org/data/2.5/weather?q=" + city + "&type=accurate&mode=xml&units=metric",false);
+   xmlhttp.open("GET","http://api.openweathermap.org/data/2.5/weather?q=" + city + "&type=accurate&mode=xml&units=metric&appid=" + api_key,false);
    xmlhttp.send();
   try {
    xmlDoc=xmlhttp.responseXML; 
@@ -54,7 +54,7 @@ function WeatherInfo() {
    htmltext += "\n\n";
 
    xmlhttp=new XMLHttpRequest();
-   xmlhttp.open('GET','http://api.openweathermap.org/data/2.5/forecast/daily?q=' + city + '&type=accurate&mode=xml&units=metric&cnt=7',false);
+   xmlhttp.open('GET','http://api.openweathermap.org/data/2.5/forecast/daily?q=' + city + '&type=accurate&mode=xml&units=metric&cnt=7&appid=' + api_key,false);
    xmlhttp.send();
   try {
    xmlDoc=xmlhttp.responseXML; 
