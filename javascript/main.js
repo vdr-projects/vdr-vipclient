@@ -348,7 +348,8 @@ var numObjs = event.objectNames.length;
 		    }
 
 		  } else {
-			MenuOffID = setTimeout("UnloadMediaSettings();", MenuTimeOut);
+//			if(MenuOffID) { clearTimeout(MenuOffID);}
+//			MenuOffID = setTimeout("UnloadMediaSettings();", MenuTimeOut);
 			showDisplay("STOP", false, 100, 0 );
 			showMediaList();
 		  }
@@ -757,8 +758,8 @@ function onKeyDown(event) {
 	if(!MPDListener) { MenuOffID = setTimeout("MenuOff(0);", MenuTimeOut);}
 	onKeyMenu(event.keyIdentifier);
     } else if(isMediaMenu) {
-	if(MenuOffID) { clearTimeout(MenuOffID);}
-	MenuOffID = setTimeout("UnloadMediaSettings();", MenuTimeOut);
+//	if(MenuOffID) { clearTimeout(MenuOffID);}
+//	MenuOffID = setTimeout("UnloadMediaSettings();", MenuTimeOut);
 	onKeyMedia(event.keyIdentifier);
     } else {
 
@@ -3621,7 +3622,8 @@ function playMPD(uri) {
 // Media Player Section
 
 function LoadMediaSettings() {
-		MenuOffID = setTimeout("UnloadMediaSettings();", MenuTimeOut);
+//		if(MenuOffID) { clearTimeout(MenuOffID);}
+//		MenuOffID = setTimeout("UnloadMediaSettings();", MenuTimeOut);
 		subgroup = 0;
 		subsubgroup = 0;
 		isMediaMenu = 1;
@@ -3634,7 +3636,7 @@ function LoadMediaSettings() {
 }
 
 function UnloadMediaSettings() {
-	if(MenuOffID) { clearTimeout(MenuOffID);}
+//	if(MenuOffID) { clearTimeout(MenuOffID);}
 	mediaPlayer.removeEventListener(mediaPlayer.ON_POSITION_CHANGED, ShowMediaOSD);
 	mediaPlayer.removeEventListener(mediaPlayer.ON_STATE_CHANGED, onStateChanged);
 	medialist.style.opacity = 0;
@@ -5407,10 +5409,11 @@ function MenuOff(menu_on) {
 
 function MediaMenuOff(menu_on) {
 	if (menu_on) {
-		MenuOffID = setTimeout("UnloadMediaSettings();", MenuTimeOut);
+//		if(MenuOffID) { clearTimeout(MenuOffID);}
+//		MenuOffID = setTimeout("UnloadMediaSettings();", MenuTimeOut);
 		medialist.style.opacity = 0.9;
 	} else {
-		if(MenuOffID) { clearTimeout(MenuOffID);}
+//		if(MenuOffID) { clearTimeout(MenuOffID);}
 		medialist.style.opacity = 0;
 	}
 }
