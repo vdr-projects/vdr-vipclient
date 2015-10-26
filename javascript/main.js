@@ -348,6 +348,7 @@ var numObjs = event.objectNames.length;
 		    }
 
 		  } else {
+			MenuOffID = setTimeout("UnloadMediaSettings();", MenuTimeOut);
 			showDisplay("STOP", false, 100, 0 );
 			showMediaList();
 		  }
@@ -2416,7 +2417,7 @@ function onKeyMenu(keyCode) {
 			currMed = 0;
 			getRecOK = 0;
 			LoadMediaSettings();
-			medialist.style.opacity = 0;
+			MediaMenuOff(0);
 			MenuOff(0);
 			playRec(recLink[0],resume_position);
 			} catch(e) {
@@ -3759,7 +3760,7 @@ if (DelisOK) {
 			subsubgroup = 1;
 		} else {
 			recList[currMed] = "\u0003" + recList[currMed].substring(1);
-			medialist.style.opacity = 0;
+			MediaMenuOff(0);
 			if (get_recordings == 1) {
 			   if (initialDelayPlayID != -1) { clearTimeout(initialDelayPlayID); initialDelayPlayID = -1; }
 			   setTimeout("GetMarks(); getResume(); playRec(recLink[currMed]+ '?mode=streamtoend&time=' + position);",100);
@@ -3985,7 +3986,7 @@ if (DelisOK) {
 		    setResume();
 		    epg_unactive();
 		    isFullscreen = 0; play(channels[currChan]); isFullscreen = 1;
-		    medialist.style.opacity = 0.9;
+		    MediaMenuOff(1);
 		    showDisplay("STOP", false, 100, 0 );
 		    showMediaList();
 	    }
@@ -5149,7 +5150,7 @@ function BackToTV() {
 	    if (isPause == 1 || localRecording == 1) { 
 		UnloadMediaSettings(); 
 	    } else {
-	    	medialist.style.opacity = 0.9;
+		MediaMenuOff(1);
 	    	showDisplay("STOP", false, 100, 0 );
 	    	showMediaList();
 		AvInfo.length = 0;
@@ -5404,3 +5405,12 @@ function MenuOff(menu_on) {
 	}
 }
 
+function MediaMenuOff(menu_on) {
+	if (menu_on) {
+		MenuOffID = setTimeout("UnloadMediaSettings();", MenuTimeOut);
+		medialist.style.opacity = 0.9;
+	} else {
+		if(MenuOffID) { clearTimeout(MenuOffID);}
+		medialist.style.opacity = 0;
+	}
+}
