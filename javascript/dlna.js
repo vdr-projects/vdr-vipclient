@@ -1,3 +1,6 @@
+//
+// Note to self : root directory : ./minidlnad -v -d -p 999 -f minidlna.conf 
+//
 var cdsService;
 var operationManager;
 var resultData;
@@ -14,7 +17,7 @@ function initDLNAPlugin() {
 
 // Get mediaserver
 function find_dlna() {
-	Dlna_serverId = toi.DlnaService.getMediaServers();
+	Dlna_serverId = toi.dlnaService.getMediaServers();
 	alert(Dlna_serverId[0]);
 
 }
@@ -55,6 +58,7 @@ function onOperationResult(event) {
       }
       // Break loop if all objects are fetched
       if (!resultData.hasMore) {
+	alert(i);
         break;
       }
     }
@@ -86,6 +90,10 @@ function openItem(itemIndex) {
 
   // Get the value for PROPERTY_RES
   for (var i = 0; i< item.properties.length; i++) {
+alert(item.properties[i]);
+alert(item.properties[i].id);
+alert(item.properties[i].value);
+
     if (item.properties[i].id == cdsService.PROPERTY_RES) {
       url_dlna = item.properties[i].value;
     }
@@ -98,7 +106,6 @@ function openItem(itemIndex) {
   if (classTypes[2] == "audioItem") {
     // Play the item url
     try {
-	alert(url_dlna);
 //      player.open(url_dlna);
 //      player.play(1000);
     }

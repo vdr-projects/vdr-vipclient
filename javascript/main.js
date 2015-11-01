@@ -108,8 +108,7 @@ function onLoad() {
 	}
 
 	if (Use_DLNA) {
-		//		initDLNAPlugin();
-		//		find_dlna();
+				initDLNAPlugin();
 	}
 }
 
@@ -222,7 +221,8 @@ function GetSettings() {
 	loadjs(conf_dir + MACaddress + ".js");
 
 	experimental = Number(is.getObject("vip.testing"));// Use some experimental code
-	testing2 = Number(is.getObject("vip.testing2"));// Use some experimental code
+	experimental2 = Number(is.getObject("vip.testing2"));// Use some experimental code
+	experimental3 = Number(is.getObject("vip.testing3"));// Use some experimental code
 
 	ShowSubs = Number(is.getObject("vip.showsubs"));
 	css_nr = Number(is.getObject("vip.css_nr"));
@@ -707,7 +707,7 @@ function ExtraStuff(){
 	if(TimeShift){
 	    initialDelayID = setTimeout("startTimeshiftBuffering();", 5000);
 	}
-	if(testing2) {
+	if(experimental2) {
 			if (CAdelayID != -1) { clearTimeout(CAdelayID); CAdelayID = -1; switchtimer.style.opacity = 0;}
 		if ( 	(currChan > 10 && currChan < 26 )  || (currChan > 40 && currChan < 50 )   || (currChan > 50 && currChan < 120 ) ||
 			(currChan > 151 && currChan < 200) || (currChan > 604 && currChan < 612 ) || (currChan > 624 && currChan < 631) ||
@@ -1498,7 +1498,7 @@ function onCacheUpdated() {
 
 function OSDchannr(channr) {
 //	Show logo's
-	if (experimental) {
+	if (experimental3) {
 		//osdlogo.innerHTML = "<img src='experimental/logo/" + channels[currChan] + ".png' >";
 	}
 	osdnr.innerHTML = "<span class=osdnr" + cssres[css_nr][Set_Res] + ">" + Right(channr,3) + "</span>";
@@ -2626,17 +2626,10 @@ function onKeyMenu(keyCode) {
 	}
     break;
     case "MediaRewind":
-	 if (menu == 1) {
-		if (experimental) { // mute output 0 (analog out), keep output 3 'decoder output' unmuted
-			aos.setVolume(0, 0); 
-			}
-	}
+	aos.setVolume(0, 0); // Mute external speakers
     break;
     case "MediaForward":
-	 if (menu == 1) {
-		if (experimental) { aos.setVolume(0, 100); }
-	}
-
+	aos.setVolume(0, 100); // Unmute external speakers
     break;
     case "MediaStop":
 	if (menu == 1) {
@@ -2663,6 +2656,15 @@ function onKeyMenu(keyCode) {
 	InitMenu(menu);
     break;
     case "Teletext":
+	if (Use_DLNA) {
+		find_dlna();
+		if (Dlna_serverId[0]) {
+			setup(Dlna_serverId[0]);
+			browse("64");
+			openItem("0");
+		}
+	}
+
     break;
     case "TV":
     break;
@@ -3110,11 +3112,11 @@ if(menu == 9) { // INFO2 Menu
 
 		experimental = Number(is.getObject("vip.testing"));
 		if (experimental) { htmltext += "\n \uE017 "; } else { htmltext += "\n \uE016 "; }
-		htmltext += "Experimental";
+		htmltext += "Experimental (Debug Connection Error)";
 		if (Number(is.getObject("vip.testing2"))) { htmltext += "\n \uE017 "; } else { htmltext += "\n \uE016 "; }
 		htmltext += "Experimental 2 (Info box 'not in package')";
 		if (Number(is.getObject("vip.testing3"))) { htmltext += "\n \uE017 "; } else { htmltext += "\n \uE016 "; }
-		htmltext += "Experimental 3 (Unused)";
+		htmltext += "Experimental 3 (Unused, show logo's)";
 
 		if (Restfulapiplugin) { htmltext += "\n \uE017 "; } else { htmltext += "\n \uE016 "; }
 		htmltext += "Has Restfulapiplugin"
@@ -4942,7 +4944,7 @@ function getSchedule(schchan){
 
 	medialist.innerHTML = "<h1 class=mainmenu" + cssres[css_nr][Set_Res] + ">" + Lang[11] + "<pre>\n\n\n" + Lang[52] + "</pre></h1>";
 
-	if (experimental) {
+	if (experimental3) {
 	medialist.innerHTML += "<img src='experimental/" + channels[schchan] + ".jpg' style='width:100%; position:absolute; left:0%; top:-11%;'>";
 	}
 

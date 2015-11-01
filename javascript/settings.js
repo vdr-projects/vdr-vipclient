@@ -119,9 +119,7 @@ var afterRecTime = 600 ; // for local recordings time after recording in seconds
 // No need to change anything from here on.
 //
 
-var experimental;// Use some experimental code
 var lang_nr;
-var testing2;
 var ShowSubs; //Flash stored
 
 VideoOutputModes = new Array(4,5,7); // Modes for the portal.
