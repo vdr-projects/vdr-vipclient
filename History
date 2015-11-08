@@ -27,6 +27,7 @@ VDR 1.7.29+
 	Finnish translation by Tomas Nybondas
 	Menu time out, menu is removed 1 minute after last key press (not for MPD menu or recordings)
 	(un)Mute external speakers with << or >> within menu (was experimental and settings menu only)
+	Updated epgfilter for SRG channels on 13.0E
 
 
 

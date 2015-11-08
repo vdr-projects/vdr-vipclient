@@ -2125,6 +2125,12 @@ function StreamInfo(si) {
 	is.setObject("cfg.locale.ui","cze",is.STORAGE_VOLATILE);
 	}
 
+	if((SI[0]=="S13.0E" && SI[3]=="17201") || (SI[0]=="S13.0E" && SI[3]=="17202") || (SI[0]=="S13.0E" && SI[2]=="8500")) {
+	//Swiss GER channels
+	//Set ger before ita so LA2 HD is set to ita
+		is.setObject("cfg.locale.ui","ger",is.STORAGE_VOLATILE);
+	}
+
 	if((SI[0]=="S13.0E" && SI[3]=="14003") || (SI[0]=="S13.0E" && SI[3]=="14009") || (SI[0]=="S13.0E" && SI[3]=="14051") || (SI[0]=="S13.0E" && SI[3]=="951")) {
 	//Swiss ITA channels
 		is.setObject("cfg.locale.ui","ita",is.STORAGE_VOLATILE);
@@ -2137,11 +2143,6 @@ function StreamInfo(si) {
 	if((SI[0]=="S13.0E" && SI[3]=="14002") || (SI[0]=="S13.0E" && SI[3]=="14008") || (SI[0]=="S13.0E" && SI[3]=="17203") || (SI[0]=="S13.0E" && SI[3]=="17204") ) {
 	//Swiss FRA channels
 		is.setObject("cfg.locale.ui","fra",is.STORAGE_VOLATILE);
-	}
-
-	if((SI[0]=="S13.0E" && SI[3]=="17201") || (SI[0]=="S13.0E" && SI[3]=="17202") || (SI[0]=="S13.0E" && SI[3]=="901") || (SI[0]=="S13.0E" && SI[3]=="907") || (SI[0]=="S13.0E" && SI[3]=="911") ) {
-	//Swiss GER channels
-		is.setObject("cfg.locale.ui","ger",is.STORAGE_VOLATILE);
 	}
 
 	if((SI[0]=="S19.2E" && SI[2]=="1111" && SI[3]=="7290") ) {

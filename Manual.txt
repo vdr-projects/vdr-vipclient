@@ -1,5 +1,5 @@
 TV mode
-0-9	- Channels 3 digits or OK
+0-9	- Channels
 TXT	- Teletext
 rec	- start recording current channel
 menu	- menu
