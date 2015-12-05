@@ -546,7 +546,7 @@ function play(uri) {
 
     URL = uri;
     initialDelayPlayID = setTimeout("mediaPlayer.open(URL);mediaPlayer.play(1000);GetEPG(currChan);ExtraStuff();",initialDelayPlay);
-    initialDelayPlay = 500; // wait 500 ms before zap to next channel
+    initialDelayPlay = initialDelayPlayTime;
     PlayDelayID = setTimeout("initialDelayPlay = 0;",5000);
     SetLed(1,1,0);
 

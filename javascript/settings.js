@@ -2,7 +2,7 @@
 // Default settings
 // 
 
-var Version = "0.27.77";
+var Version = "0.27.78";
 
 //weather
 var city = "Almelo";
@@ -308,6 +308,8 @@ var preGrp = 0;
 var timerChan = 10;
 var TimerActions;
 var initialDelayID = 0;
+var initialDelayPlayTime = 1000; // wait 1000 ms before zap to next channel
+//var initialDelayPlayTime = 0; // no wait before zap to next channel
 var CAdelayID = 0;
 var ProtectID = 0;
 var SleepTimer = 0;
