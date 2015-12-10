@@ -182,6 +182,7 @@ var DelisOK = 0;
 var recPath = "/recordings.xml";
 
 var menu = 0;
+var menuitem = 0;
 var isMediaMenu = 0;
 var isVisible = 0;
 var isSetupMenu = 0;
@@ -310,6 +311,7 @@ var TimerActions;
 var initialDelayID = 0;
 var initialDelayPlayTime = 1000; // wait 1000 ms before zap to next channel
 //var initialDelayPlayTime = 0; // no wait before zap to next channel
+var initialDelayPlayNormal = 5000; // back to normal after 5000ms
 var CAdelayID = 0;
 var ProtectID = 0;
 var SleepTimer = 0;

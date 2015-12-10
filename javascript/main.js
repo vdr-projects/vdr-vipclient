@@ -547,7 +547,7 @@ function play(uri) {
     URL = uri;
     initialDelayPlayID = setTimeout("mediaPlayer.open(URL);mediaPlayer.play(1000);GetEPG(currChan);ExtraStuff();",initialDelayPlay);
     initialDelayPlay = initialDelayPlayTime;
-    PlayDelayID = setTimeout("initialDelayPlay = 0;",5000);
+    PlayDelayID = setTimeout("initialDelayPlay = 0;",initialDelayPlayNormal);
     SetLed(1,1,0);
 
     if(isFullscreen) { showOSD(); }
@@ -1056,6 +1056,7 @@ function onKeyDown(event) {
 			}
 		MenuOff(1);
 		menu = 0;
+		menuitem = 0;
 		InitMenu(menu);
 		}
 		break;
@@ -2380,8 +2381,9 @@ function onKeyMenu(keyCode) {
 	} else	if (menu == 12) {
 		newsID -= 1;
 		InitMenu(menu);
-	} 
-
+	} else if (menu == MainMenu) {
+		menuitem -= 1; if (menuitem < 0) { menuitem = 0};
+	}
 	epg_unactive();
 	InitMenu(menu);
     break;
@@ -2396,8 +2398,9 @@ function onKeyMenu(keyCode) {
 	} else	if (menu == 12) {
 		newsID += 1;
 		InitMenu(menu);
-	} 
-
+	} else if (menu == MainMenu) {
+		menuitem += 1; if (menuitem > 9) { menuitem = 9};
+	}
 	epg_unactive();
 	InitMenu(menu);
     break;
@@ -3556,7 +3559,7 @@ function MPD(ev) {
 if (MPDListener == 0) {
 	if (ev.state == 6 ) { 
 		if (ev.reason == "CommandClose" && ErrorAgain == 0) {
-			setTimeout("mediaPlayer.open(URL);mediaPlayer.play(1000);GetEPG(currChan);ExtraStuff();",500);
+			setTimeout("mediaPlayer.open(URL);mediaPlayer.play(1000);GetEPG(currChan);ExtraStuff();",initialDelayPlay);
 			ErrorAgain = 1;
 		} else if (KeepTrying) {
 			ErrorAgain = 0;
