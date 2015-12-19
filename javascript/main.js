@@ -152,7 +152,7 @@ function GetSettings() {
 		if (!is.getObject("vip.testing2")) {} 
 	} catch(e) {
 		is.setObject("vip.testing2","0",is.STORAGE_PERMANENT)
-		//show info if channel is on hardcoded list of non free
+		// Unused at the moment
 	}
 
 	try {
@@ -707,19 +707,20 @@ function ExtraStuff(){
 	if(TimeShift){
 	    initialDelayID = setTimeout("startTimeshiftBuffering();", 5000);
 	}
-	if(experimental2) {
-			if (CAdelayID != -1) { clearTimeout(CAdelayID); CAdelayID = -1; switchtimer.style.opacity = 0;}
-		if ( 	(currChan > 10 && currChan < 26 )  || (currChan > 40 && currChan < 50 )   || (currChan > 50 && currChan < 120 ) ||
-			(currChan > 151 && currChan < 200) || (currChan > 604 && currChan < 612 ) || (currChan > 624 && currChan < 631) ||
-			(currChan > 632 && currChan < 700) || (currChan > 8004 && currChan < 8027) )
-		{
-			//Show info if set nonfree
-			switchtimer.style.background = "red";
-			switchtimer.innerHTML = "<pre class=nonfree" + cssres[css_nr][Set_Res] + ">\n" + Lang[90] +"\n\n </pre>"; // Non free channel message
-			switchtimer.style.opacity = 1;
-			CAdelayID = setTimeout("switchtimer.style.opacity = 0;",ShowSetTimer);
-		}
-	}
+//	if(experimental2) {
+//			if (CAdelayID != -1) { clearTimeout(CAdelayID); CAdelayID = -1; switchtimer.style.opacity = 0;}
+//		if ( 	(currChan > 10 && currChan < 26 )  || (currChan > 40 && currChan < 50 )   || (currChan > 50 && currChan < 120 ) ||
+//			(currChan > 151 && currChan < 200) || (currChan > 604 && currChan < 612 ) || (currChan > 624 && currChan < 631) ||
+//			(currChan > 632 && currChan < 700) || (currChan > 8004 && currChan < 8027) )
+//		{
+//			//Show info if set nonfree
+//			switchtimer.style.background = "red";
+//			switchtimer.innerHTML = "<pre class=nonfree" + cssres[css_nr][Set_Res] + ">\n" + Lang[90] +"\n\n </pre>"; 
+//			// Non free channel message
+//			switchtimer.style.opacity = 1;
+//			CAdelayID = setTimeout("switchtimer.style.opacity = 0;",ShowSetTimer);
+//		}
+//	}
 
 }
 
@@ -1441,6 +1442,7 @@ function showDisplay(showtxt,colonState,intensity,currentMode) {
 	try {
 	 fps.setSegmentDisplayState(toi.statics.ToiFrontPanelServiceSegmentDisplayState.create(showtxt,colonState,intensity,currentMode));
 	} catch (e) {
+	alert(e);
 	// Display error, maybe no display...
 	 }
 	}
