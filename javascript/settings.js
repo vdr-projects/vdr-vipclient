@@ -2,7 +2,7 @@
 // Default settings
 // 
 
-var Version = "0.27";
+var Version = "0.28.01";
 
 //weather
 var city = "Almelo";
@@ -87,13 +87,14 @@ var fullupdate = 1; // If guideview is too slow, set it to 0 (for 1910/1960), fa
 // to force the use on boxes other then 19x3 use 2!!
 
 
-var ShowOsdTime = 5000; //Time to show OSD, in seconds * 1000
-var ShowSetTimer = 3000; //Time to show set timer popup, in seconds * 1000
-var ChangeTime = 1000; // Time before the channel change happens (was only with OK)
+var ShowOsdTime = 5 * 1000; //Time to show OSD, in seconds * 1000
+var ShowSetTimer = 3 * 1000; //Time to show set timer popup, in seconds * 1000
+var ChangeTime = 1 * 1000; // Time before the channel change happens (was only with OK)
 
 var serverEPGdays = 3 * (60 * 60 * 24); // the higher the longer you wait while getting the epg info
 
 var VolumeStep = 5; // Steps the volume buttons make
+var ShowVolumeTime = 1 * 1000; //Time to show Volume OSD, in seconds * 1000
 
 // Server for Recordings
 var recServ = ":" + "8000";

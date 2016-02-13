@@ -678,6 +678,7 @@ videoConfig = vos.getVideoConfiguration();
     // create the session
     session = vos.createVideoConfigurationSession();
     session.setDefaultVideoMode(videoConfig.getVideoOutputs()[currentOutput], desiredMode);
+//    session.SetDviMode(videoConfig.getVideoOutputs()[currentOutput], desiredMode);
     session.apply();
     session.releaseInstance();
 
@@ -1463,6 +1464,11 @@ function showOSD() {
 	opacity = 0.8;
 	OSD(opacity);
 	osdtimeout = setTimeout("fadeOut(); osdtimeout = 0;", ShowOsdTime);
+	if (Number(currChan) > 8999 && Number(currChan) < 10000) {
+		// show channel name
+	} else {
+		// not a radio channel so hide it
+	}
 }
 
 function epg_unactive() {
@@ -1478,7 +1484,7 @@ function showVolume() {
 	}
 	osdvolume.innerHTML = "<pre class=osdvolume" + cssres[css_nr][Set_Res] + ">" + Lang[1] + " : " + Volume + "% \n\uE007" + (new Array(Volume)).join("\uE008") + (new Array(100 - Volume)).join("\uE009") + "\uE00A";
 	osdvolume.style.opacity = 1;
-	osdVolumetimeout = setTimeout("osdvolume.style.opacity = 0;", ShowOsdTime);
+	osdVolumetimeout = setTimeout("osdvolume.style.opacity = 0;", ShowVolumeTime);
 }
 
 
