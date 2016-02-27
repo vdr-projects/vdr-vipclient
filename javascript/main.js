@@ -1075,16 +1075,22 @@ function onKeyDown(event) {
 	if(isFullscreen) {
 		if(ChanGroup !== 9) {
 		//Radio
-		defChan[ChanGroup] = currChan;
-		OldChanGroup = ChanGroup;
-		ChanGroup = 9;
-		currChan = defChan[9];
+			defChan[ChanGroup] = currChan;
+			if ((protChn[ChanGroup] !== 1)) {
+				//If group is protected don't saving current channel
+				OldChanGroup = ChanGroup;
+			}
+			ChanGroup = 9;
+			currChan = defChan[9];
 		} else {
-		//TV
-		defChan[ChanGroup] = currChan;
-		ChanGroup = OldChanGroup;
-		currChan = defChan[ChanGroup];
-		}
+			//TV
+			defChan[ChanGroup] = currChan;
+			if ((protChn[OldChanGroup] !== 1)) {
+				//If group is protected don't saving current channel
+				ChanGroup = OldChanGroup;
+			}
+			currChan = defChan[ChanGroup];
+			}
 		MenuOff(0);
 		play(channels[currChan]);
 	}

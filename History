@@ -9,7 +9,7 @@ Marc E for the black skin.
 VDR 1.7.29+
 
 0.28	Time to display volume info can be set independant from other OSD timeout.
-
+	Key_TV/RADIO - Don't save current channel if current group is protected.
 
 
 0.27	Weather info from openweathermap.org added. You can add your own api key, see settings.js
