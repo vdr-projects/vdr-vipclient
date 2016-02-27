@@ -2,7 +2,7 @@
 // Default settings
 // 
 
-var Version = "0.28.01";
+var Version = "0.28.02";
 
 //weather
 var city = "Almelo";
@@ -36,6 +36,8 @@ var Cron_min = 00; // Minute for cron job
 var Use_DLNA;// DLNA testing
 var MenuOffID; //Menu remove timeout
 var MenuTimeOut = 1 * 60 * 1000; // 1 minutes TimeOut
+
+var RadioGroup = 9;
 
 OSDLang = new Array ("English", "Nederlands", "Deutsch", "Suomi");
 langfile = new Array ("languages/lang_eng.js", "languages/lang_dut.js","languages/lang_ger.js", "languages/lang_fin.js");

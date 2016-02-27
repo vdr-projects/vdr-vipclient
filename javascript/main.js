@@ -1073,15 +1073,15 @@ function onKeyDown(event) {
     case "TV":
     case "RADIO":
 	if(isFullscreen) {
-		if(ChanGroup !== 9) {
+		if(ChanGroup !== RadioGroup) {
 		//Radio
 			defChan[ChanGroup] = currChan;
 			if ((protChn[ChanGroup] !== 1)) {
 				//If group is protected don't saving current channel
 				OldChanGroup = ChanGroup;
 			}
-			ChanGroup = 9;
-			currChan = defChan[9];
+			ChanGroup = RadioGroup;
+			currChan = defChan[RadioGroup];
 		} else {
 			//TV
 			defChan[ChanGroup] = currChan;
