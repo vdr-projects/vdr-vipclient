@@ -2,7 +2,7 @@
 // Default settings
 // 
 
-var Version = "0.28.02";
+var Version = "0.28.03";
 
 //weather
 var city = "Almelo";
@@ -36,6 +36,8 @@ var Cron_min = 00; // Minute for cron job
 var Use_DLNA;// DLNA testing
 var MenuOffID; //Menu remove timeout
 var MenuTimeOut = 1 * 60 * 1000; // 1 minutes TimeOut
+
+var Delay_Play = 0; // Patched VDR or Only FTA channels = 0, Unpatched VDR = 1
 
 var RadioGroup = 9;
 
@@ -313,7 +315,6 @@ var timerChan = 10;
 var TimerActions;
 var initialDelayID = 0;
 var initialDelayPlayTime = 1000; // wait 1000 ms before zap to next channel
-//var initialDelayPlayTime = 0; // no wait before zap to next channel
 var initialDelayPlayNormal = 5000; // back to normal after 5000ms
 var CAdelayID = 0;
 var ProtectID = 0;
@@ -417,3 +418,7 @@ var color_switchtimer = "color_switchtimer";
 var color_default = "color_default";
 var color_error = "color_error";
 var MACaddress; //BOX mac address, used for uniq box config loading
+
+Sw_Timer = new Array("None", "SwitchOnly", "Record Server", "Record Local" , "Sleeptimer");
+
+

@@ -517,9 +517,11 @@ try {
 
 function play(uri) {
   try {
-    if (initialDelayID != -1) { clearTimeout(initialDelayID); initialDelayID = -1; }
-    if (PlayDelayID != -1) { clearTimeout(PlayDelayID); PlayDelayID = -1; }
-    if (initialDelayPlayID != -1) { clearTimeout(initialDelayPlayID); initialDelayPlayID = -1; }
+    if (Delay_Play == 1) {
+    	if (initialDelayID != -1) { clearTimeout(initialDelayID); initialDelayID = -1; }
+	if (PlayDelayID != -1) { clearTimeout(PlayDelayID); PlayDelayID = -1; }
+	if (initialDelayPlayID != -1) { clearTimeout(initialDelayPlayID); initialDelayPlayID = -1; }
+    }
 
     if (mediaPlayer.getState() != mediaPlayer.STATE_IDLE) { mediaPlayer.close(); }
     if (isSchedule) { schedule.style.opacity = 0; isSchedule = 0;}
@@ -543,11 +545,17 @@ function play(uri) {
 	//alert(uri);
 	//alert(ChanGroup);
 
-
-    URL = uri;
-    initialDelayPlayID = setTimeout("mediaPlayer.open(URL);mediaPlayer.play(1000);GetEPG(currChan);ExtraStuff();",initialDelayPlay);
-    initialDelayPlay = initialDelayPlayTime;
-    PlayDelayID = setTimeout("initialDelayPlay = 0;",initialDelayPlayNormal);
+    if (Delay_Play == 0) {
+	    mediaPlayer.open(uri);
+	    mediaPlayer.play(1000);
+	    GetEPG(currChan);
+	    ExtraStuff();
+    } else {
+	    URL = uri;
+	    initialDelayPlayID = setTimeout("mediaPlayer.open(URL);mediaPlayer.play(1000);GetEPG(currChan);ExtraStuff();",initialDelayPlay);
+	    initialDelayPlay = initialDelayPlayTime;
+	    PlayDelayID = setTimeout("initialDelayPlay = 0;",initialDelayPlayNormal);
+    }
     SetLed(1,1,0);
 
     if(isFullscreen) { showOSD(); }
@@ -1690,8 +1698,10 @@ if (!BackGroundColor) { BackGroundColor = color_default;}
 		}
 
 		//	switchtimer.style.background = BackGroundColor;
-			switchtimer.innerHTML = "<pre class=" + BackGroundColor + cssres[css_nr][Set_Res] + ">" + Lang[2] + ProgName 
-						+ "\n" + Lang[3] + channelsnames[currChan] + "\n" + x + "</pre>";
+			
+			switchtimer.innerHTML = "<pre class=" + BackGroundColor + cssres[css_nr][Set_Res] + ">"
+//						+ Sw_Timer[SwitchTimer] + "\n"
+						+ Lang[2] + ProgName + "\n" + Lang[3] + channelsnames[currChan] + "\n" + x + "</pre>";
 			setOSDtimer();
 
 			switchtimer.style.opacity = 1;
