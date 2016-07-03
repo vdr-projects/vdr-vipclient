@@ -1700,7 +1700,7 @@ if (!BackGroundColor) { BackGroundColor = color_default;}
 		//	switchtimer.style.background = BackGroundColor;
 			
 			switchtimer.innerHTML = "<pre class=" + BackGroundColor + cssres[css_nr][Set_Res] + ">"
-//						+ Sw_Timer[SwitchTimer] + "\n"
+						+ Sw_Timer[SwitchTimer] + "\n"
 						+ Lang[2] + ProgName + "\n" + Lang[3] + channelsnames[currChan] + "\n" + x + "</pre>";
 			setOSDtimer();
 
@@ -1994,6 +1994,9 @@ function StreamInfo(si) {
 	// EPG Filter
 	// streaminfo
 	// SI[x] 0-sat,1-NID,2-TID,3-SID
+	//
+	// dvbsnoop -s sec -nph  -n 10  0x12 -adapter 2 |grep language
+	
  	SI=channels[si].split("-");
 
 	//default setting : English
@@ -2037,7 +2040,7 @@ function StreamInfo(si) {
 	is.setObject("cfg.locale.ui","DEU",is.STORAGE_VOLATILE);
 	}
 
-	if(SI[2]=="1107") {
+	if(SI[2]=="1107" || SI[2]=="1015") {
 	//Sat1/pro7 deutchland
 	is.setObject("cfg.locale.ui","DEU",is.STORAGE_VOLATILE);
 	}
@@ -2078,8 +2081,8 @@ function StreamInfo(si) {
 	}
 
 	if((SI[0]=="S19.2E" && SI[2]=="1059") ) {
-		//TVP transponder
-		is.setObject("cfg.locale.ui","pol",is.STORAGE_VOLATILE);
+	//TVP transponder
+	is.setObject("cfg.locale.ui","pol",is.STORAGE_VOLATILE);
 	}
 
 	if(SI[1]=="64511") {
@@ -2096,8 +2099,6 @@ function StreamInfo(si) {
 	//Canal Digitaal/ TV Vlaanderen 
 	is.setObject("cfg.locale.ui","dut",is.STORAGE_VOLATILE);
 	}
-
-
 
 	if(SI[1]=="54") {
 	//ZON / 30W
@@ -2129,11 +2130,11 @@ function StreamInfo(si) {
 	is.setObject("cfg.locale.ui","DEU",is.STORAGE_VOLATILE);
 	}
 
-	if(SI[1]=="3" && SI[2]=="3212" && ( SI[3]=="14052" || SI[3]=="14055" ) ) {
-	is.setObject("cfg.locale.ui","eng",is.STORAGE_VOLATILE);
+	if(SI[1]=="3" && SI[2]=="3212" && ( SI[3]=="14061" || SI[3]=="14055" ) ) {
+	is.setObject("cfg.locale.ui","cze",is.STORAGE_VOLATILE);
 	}
 
-	if(SI[1]=="3" && ( SI[2]=="3205" || SI[2]=="3209" || SI[2]=="3210" || SI[2]=="3221" || SI[2]=="3219" || SI[2]=="3226")) {
+	if(SI[1]=="3" && ( SI[2]=="3205" || SI[2]=="3209" || SI[2]=="3210" || SI[2]=="3221" || SI[2]=="3219" || SI[2]=="3226" || SI[2]=="3214")) {
 	//Canal Digitaal/ TV Vlaanderen use CZE channels on 23East
 	// Strangly set filter to cze but epg is in Dutch. (But not for JimJam)
 	is.setObject("cfg.locale.ui","cze",is.STORAGE_VOLATILE);
@@ -2144,7 +2145,6 @@ function StreamInfo(si) {
 	is.setObject("cfg.locale.ui","hun",is.STORAGE_VOLATILE);
 	}
 
-
 	if(SI[1]=="3" && SI[2]=="3211" && ( SI[3]=="20863" || SI[3]=="20865") ) {
 	//MGM & Film+ CZ
 	is.setObject("cfg.locale.ui","cze",is.STORAGE_VOLATILE);
@@ -2153,52 +2153,52 @@ function StreamInfo(si) {
 	if((SI[0]=="S13.0E" && SI[3]=="17201") || (SI[0]=="S13.0E" && SI[3]=="17202") || (SI[0]=="S13.0E" && SI[2]=="8500")) {
 	//Swiss GER channels
 	//Set ger before ita so LA2 HD is set to ita
-		is.setObject("cfg.locale.ui","ger",is.STORAGE_VOLATILE);
+	is.setObject("cfg.locale.ui","ger",is.STORAGE_VOLATILE);
 	}
 
 	if((SI[0]=="S13.0E" && SI[3]=="14003") || (SI[0]=="S13.0E" && SI[3]=="14009") || (SI[0]=="S13.0E" && SI[3]=="14051") || (SI[0]=="S13.0E" && SI[3]=="951")) {
 	//Swiss ITA channels
-		is.setObject("cfg.locale.ui","ita",is.STORAGE_VOLATILE);
+	is.setObject("cfg.locale.ui","ita",is.STORAGE_VOLATILE);
 	}
 
 	if((SI[0]=="S13.0E" && SI[2]=="12800")) {
-		is.setObject("cfg.locale.ui","eng",is.STORAGE_VOLATILE);
+	is.setObject("cfg.locale.ui","eng",is.STORAGE_VOLATILE);
 	}
 
 	if((SI[0]=="S13.0E" && SI[3]=="14002") || (SI[0]=="S13.0E" && SI[3]=="14008") || (SI[0]=="S13.0E" && SI[3]=="17203") || (SI[0]=="S13.0E" && SI[3]=="17204") ) {
 	//Swiss FRA channels
-		is.setObject("cfg.locale.ui","fra",is.STORAGE_VOLATILE);
+	is.setObject("cfg.locale.ui","fra",is.STORAGE_VOLATILE);
 	}
 
 	if((SI[0]=="S19.2E" && SI[2]=="1111" && SI[3]=="7290") ) {
-		//Sky News on WDR HD transponder
-		is.setObject("cfg.locale.ui","eng",is.STORAGE_VOLATILE);
+	//Sky News on WDR HD transponder
+	is.setObject("cfg.locale.ui","eng",is.STORAGE_VOLATILE);
 	}
 
 	if(SI[0]=="S19.2E" && ( (SI[2]=="1018") || (SI[2]=="1020") || (SI[2]=="1022") || (SI[2]=="1024") || (SI[2]=="1026") || (SI[2]=="1068") || (SI[2]=="1070") || (SI[2]=="1072") || (SI[2]=="1074") || (SI[2]=="1076") || (SI[2]=="1080") || (SI[2]=="1084") || (SI[2]=="1086") || (SI[2]=="1090") || (SI[2]=="1092") || (SI[2]=="1094") || (SI[2]=="1096") || (SI[2]=="1100") || (SI[2]=="1102") || (SI[2]=="1106") || (SI[2]=="1110") || (SI[2]=="1112") || (SI[2]=="1114") || (SI[2]=="1116") || (SI[2]=="1118") || (SI[2]=="1120"))) {
 	//CanalSat S19.2
-		is.setObject("cfg.locale.ui","fra",is.STORAGE_VOLATILE);
+	is.setObject("cfg.locale.ui","fra",is.STORAGE_VOLATILE);
 	}
 
 	// MTV transponder 1078 / 1066
 	if(SI[0]=="S19.2E" && SI[2]=="1078" && ( SI[3]=="28674" || SI[3]=="28675" || SI[3]=="28677" )) {
 	//Nick JR France
-		is.setObject("cfg.locale.ui","fra",is.STORAGE_VOLATILE);
+	is.setObject("cfg.locale.ui","fra",is.STORAGE_VOLATILE);
 	}
 	if(SI[0]=="S19.2E" && SI[2]=="1078" && SI[3]=="28679") {
 	//Nick NL
-		is.setObject("cfg.locale.ui","dut",is.STORAGE_VOLATILE);
+	is.setObject("cfg.locale.ui","dut",is.STORAGE_VOLATILE);
 	}
 	if(SI[0]=="S19.2E" && SI[2]=="1078" && ( SI[3]=="28673" || SI[3]=="28676" )) {
 	//Deutsch
-		is.setObject("cfg.locale.ui","ger",is.STORAGE_VOLATILE);
+	is.setObject("cfg.locale.ui","ger",is.STORAGE_VOLATILE);
 	}
 
 	if(SI[0]=="S19.2E" && SI[2]=="1066") {
-		is.setObject("cfg.locale.ui","eng",is.STORAGE_VOLATILE);
+	is.setObject("cfg.locale.ui","eng",is.STORAGE_VOLATILE);
 	}
 	if(SI[0]=="S19.2E" && SI[2]=="1066" && ( SI[3]=="28652" || SI[3]=="28661" )) {
-		is.setObject("cfg.locale.ui","fra",is.STORAGE_VOLATILE);
+	is.setObject("cfg.locale.ui","fra",is.STORAGE_VOLATILE);
 	}
 
 	//Canal Sat 
@@ -2225,20 +2225,35 @@ function StreamInfo(si) {
 	is.setObject("cfg.locale.ui","spa",is.STORAGE_VOLATILE);
 	}
 
+	if((SI[0]=="S19.2E" && SI[2]=="1105" && SI[3]=="4058") ) {
+	//Animax 19.2E
+	is.setObject("cfg.locale.ui","deu",is.STORAGE_VOLATILE);
+	}
+
+	//
+	// Next channels filter is set according to dvbsnoop but doesn't show EPG
+	// Wrong character set?
+
+	if(SI[0]=="S19.2E" && SI[2]=="1117" && ( SI[3]=="13019" || SI[3]=="13018") ) {
+	// Folx TV / RIC 19.2E
+	is.setObject("cfg.locale.ui","deu",is.STORAGE_VOLATILE);
+	}
+
 	if(SI[0]=="S19.2E" && SI[2]=="1048" && SI[3]=="4320" ) {
 	//BVN
-	    is.setObject("cfg.locale.ui","nld",is.STORAGE_VOLATILE);
-	    //doesn't work but dvbsnoop does show 'ISO639_2_language_code:  nld' 
-
+	is.setObject("cfg.locale.ui","nld",is.STORAGE_VOLATILE);
+	//doesn't work but dvbsnoop does show 'ISO639_2_language_code:  nld' 
 	}
 
 	//Russian
 	if(SI[0]=="S13.0E" && SI[2]=="8100") {
-		is.setObject("cfg.locale.ui","ger",is.STORAGE_VOLATILE);
-		//doesn't work but dvbsnoop does show 'ISO639_2_language_code:  ger' 
+	is.setObject("cfg.locale.ui","ger",is.STORAGE_VOLATILE);
+	//doesn't work but dvbsnoop does show 'ISO639_2_language_code:  ger' 
 	}
 
-	//alert("TAAL : " + is.getObject("cfg.locale.ui"));// Show what is set by the script
+	// 1-NID,2-TID,3-SID
+	alert("Source : " + SI[0] + " NID : " + SI[1] + " TID : " + SI[2] + " SID : " + SI[3]);
+	alert("TAAL : " + is.getObject("cfg.locale.ui"));// Show what is set by the script
 
 }
 

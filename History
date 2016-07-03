@@ -12,6 +12,9 @@ VDR 1.7.29+
 	Key_TV/RADIO - Don't save current channel if current group is protected.
 	Radio Group can be set from settings.
 	ZapDelay can be turned off, needs VDR patch
+	EPG filter updates
+	Timer infobox now also shows what happens, switch timer, record etc
+	
 
 
 0.27	Weather info from openweathermap.org added. You can add your own api key, see settings.js
