@@ -520,8 +520,9 @@ function play(uri) {
     if (Delay_Play == 1) {
     	if (initialDelayID != -1) { clearTimeout(initialDelayID); initialDelayID = -1; }
 	if (PlayDelayID != -1) { clearTimeout(PlayDelayID); PlayDelayID = -1; }
-	if (initialDelayPlayID != -1) { clearTimeout(initialDelayPlayID); initialDelayPlayID = -1; }
     }
+
+	if (initialDelayPlayID != -1) { clearTimeout(initialDelayPlayID); initialDelayPlayID = -1; }
 
     if (mediaPlayer.getState() != mediaPlayer.STATE_IDLE) { mediaPlayer.close(); }
     if (isSchedule) { schedule.style.opacity = 0; isSchedule = 0;}
@@ -3598,7 +3599,7 @@ function MPD(ev) {
 if (MPDListener == 0) {
 	if (ev.state == 6 ) { 
 		if (ev.reason == "CommandClose" && ErrorAgain == 0) {
-			setTimeout("mediaPlayer.open(URL);mediaPlayer.play(1000);GetEPG(currChan);ExtraStuff();",initialDelayPlay);
+			initialDelayPlayID = setTimeout("mediaPlayer.open(URL);mediaPlayer.play(1000);GetEPG(currChan);ExtraStuff();",TryingInterval);
 			ErrorAgain = 1;
 		} else if (KeepTrying) {
 			ErrorAgain = 0;
