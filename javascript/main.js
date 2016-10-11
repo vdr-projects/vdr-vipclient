@@ -3599,7 +3599,7 @@ function MPD(ev) {
 if (MPDListener == 0) {
 	if (ev.state == 6 ) { 
 		if (ev.reason == "CommandClose" && ErrorAgain == 0) {
-			initialDelayPlayID = setTimeout("mediaPlayer.open(URL);mediaPlayer.play(1000);GetEPG(currChan);ExtraStuff();",TryingInterval);
+			setTimeout("mediaPlayer.open(URL);mediaPlayer.play(1000);GetEPG(currChan);ExtraStuff();",initialDelayPlay);
 			ErrorAgain = 1;
 		} else if (KeepTrying) {
 			ErrorAgain = 0;
